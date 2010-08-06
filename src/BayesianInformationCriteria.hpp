@@ -13,18 +13,19 @@ namespace tops
     ProbabilisticModelCreatorPtr _creator;
   public:
     BayesianInformationCriteria (){}
-
     BayesianInformationCriteria (ProbabilisticModelCreatorPtr creator) : _creator(creator) {}
     virtual ~BayesianInformationCriteria () {};
+    //! Creates a new model using the received parameters
+    /*! 
+      \param parameters of the model's creators
+      \return An instance of ProbabilisticModel
+    */
     virtual ProbabilisticModelPtr create( ProbabilisticModelParameters & parameters) const ;
-    virtual std::string help() const {
-      std::string s;
-      return s;
 
-    }
-    virtual std::string factory_name() const {
-      return "BayesianInformationCriteria";
-    }
+    //! Returns a help message of this creator
+    virtual std::string help() const;
+
+    //! Set a creator 
     virtual void setCreator(ProbabilisticModelCreatorPtr creator)  {
       _creator = creator;
     }

@@ -4,6 +4,28 @@
 
 namespace tops 
 {
+  std::string BayesianInformationCriteria::help() const {
+    std::stringstream out;
+    out << "\nUSAGE: " << std::endl;
+    out << "Mandatory parameters: " << std::endl;
+    out << "\nbegin" << std::endl;
+    out << "\tend" << std::endl;
+    out << "\tstep" << std::endl;
+    out << "Example: " << std::endl;
+    out << "The configuration file below specify the BIC to select the WAM with the best order" << std::endl;
+    out << "training_algorithm=\"WeightArrayModel\"" << std::endl;
+    out << "training_set=\"dataset/sequences.txt\"" << std::endl;
+    out << "alphabet=(\"A\", \"C\", \"G\", \"T\")" << std::endl;
+    out << "length=31" << std::endl;
+    out << "vicinity_length = 0" << std::endl;
+    out << "pseudo_counts=0" << std::endl;
+    out << "model_selection_criteria = \"BIC\"" << std::endl;
+    out << "begin = (\"order\": 0)" << std::endl;
+    out << "end = (\"order\": 3)" << std::endl;
+    out << "step = (\"order\": 1)" << std::endl;
+    return out.str();
+  }
+
   ProbabilisticModelPtr BayesianInformationCriteria::create( ProbabilisticModelParameters & parameters) const 
   {
     ProbabilisticModelParameterValuePtr beginpar = parameters.getMandatoryParameterValue("begin");

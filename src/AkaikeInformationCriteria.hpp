@@ -8,7 +8,7 @@
 
 namespace tops
 {
-  //! This class contains the implementation of the Akaike information criteria. 
+  //! This class implements the Akaike Information Criteria. 
   class AkaikeInformationCriteria : public ProbabilisticModelCreator {
   private:
     ProbabilisticModelCreatorPtr _creator;
@@ -16,11 +16,17 @@ namespace tops
     AkaikeInformationCriteria (){}
     AkaikeInformationCriteria (ProbabilisticModelCreatorPtr creator) : _creator(creator) {}
     virtual ~AkaikeInformationCriteria () {};
+    //! Creates a new model using the received parameters
+    /*!
+      \param parameters of the model's creator
+      \return An instance of ProbabilisticModel 
+    */
     virtual ProbabilisticModelPtr create( ProbabilisticModelParameters & parameters) const ;
-    virtual std::string help() const {
-      std::string s;
-      return s;
-    }
+
+    //! returns a help message of this creator
+    virtual std::string help() const;
+
+    //! Set a creator 
     virtual void setCreator(ProbabilisticModelCreatorPtr creator)  {
       _creator = creator;
     }
