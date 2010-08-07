@@ -33,7 +33,7 @@ void generate_sequence(std::string & model_file, int nseq, int length, ostream &
       Sequence s;
       std::stringstream aux;
       model->choose(s, length);
-      aux << model_file << " " << i ;
+      aux << model_file << "_" << i ;
       SequenceEntry out(model->alphabet());
       out.setName(aux.str());
       out.setSequence(s);

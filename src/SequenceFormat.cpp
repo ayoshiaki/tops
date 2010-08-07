@@ -12,7 +12,7 @@
 namespace tops {
 
   std::ostream & SequenceFormat::saveSequence (std::ostream & stream, SequenceEntry & out){
-    stream << out.getName() << " " << out.getDescription() << ":\t" ;
+    stream << out.getName() << ":\t" ;
     if((out.getAlphabet())->size() > 0)
       for(int i = 0; i < (int)out.getSequence().size(); i+=1){
 	  stream << (out.getAlphabet())->getSymbol((out.getSequence())[i])->name() << out.getSeparator();
@@ -75,7 +75,7 @@ namespace tops {
   }
   std::ostream & FastaSequenceFormat::saveSequence (std::ostream & stream, SequenceEntry & out)
   {
-    stream << ">" << out.getName() << " " << out.getDescription() << std::endl;
+    stream << ">" << out.getName() << std::endl;
     if((out.getAlphabet())->size() > 0)
       for(int i = 0; i < (int)out.getSequence().size(); i+=1){
 	stream << (out.getAlphabet())->getSymbol((out.getSequence())[i])->name() ;
