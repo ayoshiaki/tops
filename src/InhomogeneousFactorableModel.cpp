@@ -41,8 +41,12 @@ namespace tops {
       double t = _precision[p][end + 1] - _precision[p][begin];
       if (t > 0)
 	return -HUGE;
-
-      assert(_alpha[p][end + 1] - _alpha[p][begin] < 0);
+      if(_alpha[p][end + 1] - _alpha[p][begin] > 0) 
+	{
+	  std::cerr << "ERROR: InhomogeneousFactorableModel" << _alpha[p][end + 1] << " " <<  _alpha[p][begin] << " " << t << std::endl;
+	}
+      assert(_alpha[p][end + 1] - _alpha[p][begin] <= 0);
+      
       return _alpha[p][end + 1] - _alpha[p][begin];
     } else {
       if ((begin < (int) _scores.size()) && (begin >= 0))
