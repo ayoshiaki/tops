@@ -4,7 +4,6 @@
 #include "Symbol.hpp"
 #include "GHMMStates.hpp"
 #include "util.hpp"
-
 #include <sys/types.h>
 #include <sys/time.h>
 
@@ -169,6 +168,7 @@ double GeneralizedHiddenMarkovModel::backward(const Sequence & s, Matrix &beta) 
 	double e = 0.0;
 	if (i < (int) sequence.size())
 	  e = _all_states[to]->observation()->prefix_sum_array_compute(i, i);
+	assert (e <= 0);
 	double v = gamma(i - 1, from)
 	  + _all_states[from]->transition()->log_probability_of(
 								to) + e;
@@ -216,16 +216,17 @@ void GeneralizedHiddenMarkovModel::findBestPredecessorSignalStates(int i,
     if (i < (_signal_states[s]->size() - 1))
       continue;
     double prob = _all_states[_signal_states[s]->id()]->observation()->prefix_sum_array_compute(i-_signal_states[s]->size() + 1, i);
-
+    assert(prob <= 0);
     double null_prob = 0;
-#if 1
+
     null_prob = _signal_states[s]->nullModel()->prefix_sum_array_compute(i- _signal_states[s]->size() + 1, i);
     double score = prob - null_prob;    
     if(prob < -1e38)
       continue;
     if (score < _signal_states[s]->getThreshold())
       continue;
-#endif;
+
+
     CandidateSignalPtr sig = CandidateSignalPtr(new CandidateSignal( _signal_states[s]->id(), 
 								     i - _signal_states[s]->size() + 1, i,
 								     i + 1, prob, null_prob));
@@ -278,20 +279,20 @@ void GeneralizedHiddenMarkovModel::findBestPredecessorSignalStates(int i,
 	  int duration = end - begin + 1;
 	  int phase = _all_states[explicitId]->getInputPhase();
 	  emission = _all_states[explicitId]->observation()->prefix_sum_array_compute(begin, end, phase);
-
+	  assert(emission <= 0);
 
 	  double duration_prob =
 	    _all_states[explicitId]->duration_probability(duration);
 
 
 
-	  if(((end -begin + 1) > 10000) || close(exp(emission), 0.0, 1e-10) ) {
+	  if(close(exp(emission), 0.0, 1e-10)) {
 	    toRemove.insert(predecessor); 
 	    continue;
 	  }
 
 	  if (close(exp(duration_prob), 0.0, 1e-10)) {
-	    continue;
+	    duration_prob = log(1e-20);
 	  }
 
 	  
@@ -380,7 +381,7 @@ void GeneralizedHiddenMarkovModel::findBestPredecessorSignalStatesFinish(int i,
 	  int phase = _all_states[explicitId]->getInputPhase();
 	  emission = _all_states[explicitId]->observation()->prefix_sum_array_compute(begin, end, phase);
 	  
-	  
+
 	  double duration_prob =
 	    _all_states[explicitId]->duration_probability(duration);
 	  
@@ -388,6 +389,28 @@ void GeneralizedHiddenMarkovModel::findBestPredecessorSignalStatesFinish(int i,
 	    + _all_states[fromSignal]->transition()->log_probability_of(explicitId) + duration_prob
 	    + emission
 	    + _all_states[explicitId]->transition()->log_probability_of(toSignal) ;
+
+
+#if 1
+	  if(emission > 0) {
+	  std::cerr << i << " " ;
+	  std::cerr << _all_states[fromSignal]->name() << "->";
+	  std::cerr << _all_states[explicitId]->name() << "->";
+	  std::cerr << _all_states[toSignal]->name() << ": ";
+	  std::cerr << "begin = " << begin  << ", ";
+	  std::cerr << "end = " << end  << ", ";
+	  std::cerr << "length = " << duration << ", ";
+	  std::cerr << "duration=" << duration_prob << ", ";
+	  std::cerr << _all_states[fromSignal]->name() << "->";
+	  std::cerr << _all_states[explicitId]->name() << " = " << exp(_all_states[fromSignal]->transition()->log_probability_of(explicitId)) << ", ";
+	  std::cerr << _all_states[explicitId]->name() << "->"; 
+	  std::cerr << _all_states[toSignal]->name() << " = " << exp(_all_states[explicitId]->transition()->log_probability_of(toSignal)) << ", ";
+	  std::cerr << "emission=" << emission  << ", "; 
+	  std::cerr << "gamma =" << gamma(begin -1, fromSignal)  << ", "; 
+	  std::cerr << "OPT =" << (v > gamma(i, toSignal))  << std::endl;
+	  }
+#endif
+	  assert(emission <= 0);
 	  if (v > gamma(i, toSignal)) {
 	    gamma(i, toSignal) = v;
 	    ptr[i][toSignal] = OptimalPredecessorPtr(

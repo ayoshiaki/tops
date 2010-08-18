@@ -39,7 +39,7 @@ namespace tops {
       if ((end + 1) >= (int) _precision[p].size())
 	end = _precision[p].size() - 2;
       double t = _precision[p][end + 1] - _precision[p][begin];
-      if (t > 0 || (begin > end))
+      if ((t > 0) || (begin > end))
 	return -HUGE;
       if(_alpha[p][end + 1] - _alpha[p][begin] > 0) 
 	{
