@@ -36,6 +36,9 @@ namespace tops {
 
   double FactorableModel::prefix_sum_array_compute(int begin, int end) 
   {
+    if(begin>end) 
+      return -HUGE;
+
     if((begin >= 0) && ((end + 1) < (int) _alpha.size())) 
       {
 	if((_precision[end+1] - _precision[begin]) > 0)

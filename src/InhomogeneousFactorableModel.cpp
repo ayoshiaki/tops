@@ -1,5 +1,5 @@
 #include "InhomogeneousFactorableModel.hpp"
-
+#include "Symbol.hpp"
 namespace tops {
   double InhomogeneousFactorableModel::evaluate(const Sequence & s, unsigned int begin, unsigned int end) const
   {
@@ -39,8 +39,14 @@ namespace tops {
       if ((end + 1) >= (int) _precision[p].size())
 	end = _precision[p].size() - 2;
       double t = _precision[p][end + 1] - _precision[p][begin];
-      if ((t > 0) && ((end - begin + 1) > 1))
+      if ((t > 0) || (begin > end))
 	return -HUGE;
+      if(_alpha[p][end + 1] - _alpha[p][begin] > 0) 
+	{
+	  std::cerr << "ERROR: InhomogeneousFactorableModel" << _alpha[p][end + 1] << " " <<  _alpha[p][begin] << " " << t << std::endl;
+	}
+      assert(_alpha[p][end + 1] - _alpha[p][begin] <= 0);
+      
       return _alpha[p][end + 1] - _alpha[p][begin];
     } else {
       if ((begin < (int) _scores.size()) && (begin >= 0))
@@ -97,6 +103,7 @@ namespace tops {
       for (int i = 0; i < (int) s.size(); i++) 
 	_scores[i] = evaluate(s, i, s.size() - 1);
     }
+    return true; 
   }
 
   Sequence & InhomogeneousFactorableModel::chooseWithHistory(Sequence & h, int i,  int initial_phase, int size) const{
