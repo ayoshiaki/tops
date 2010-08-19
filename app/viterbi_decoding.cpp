@@ -24,7 +24,7 @@ int main (int argc, char ** argv)
   desc.add_options()
     ("help,h", "produce help message")
     ("model,m", value<string> (), "a decodable model")
-    ("sequence,s", value<string> (), "sequence file")
+    //    ("sequence,s", value<string> (), "sequence file")
     ("fasta,F",  "use fasta format");
 
 
@@ -42,7 +42,7 @@ int main (int argc, char ** argv)
 	  SequenceFormatManager::instance()->setFormat(FastaSequenceFormatPtr(new FastaSequenceFormat()));
 
       string model_name = vm["model"].as<string>();
-      string fasta = vm["sequence"].as<string>();
+      //      string fasta = vm["sequence"].as<string>();
       ProbabilisticModelCreatorClient creator;
       ProbabilisticModelPtr model = creator.create(model_name);
       if(model == NULL)
@@ -52,17 +52,17 @@ int main (int argc, char ** argv)
         }
 
       AlphabetPtr alphabet = model->alphabet();
-      std::ifstream input(fasta.c_str());
-      if(!input.good()) {
-	cerr << "Cant open file " << fasta << endl;
-	exit(-1);
-      }
-      assert(input.good());
+      //      std::ifstream input(fasta.c_str());
+      //      if(!input.good()) {
+      //	cerr << "Cant open file " << fasta << endl;
+      //	exit(-1);
+      //      }
+      //      assert(input.good());
       SequenceEntry entry(alphabet);
       SequenceFormatManager::instance()->setFormat(SequenceFormatPtr(new SequenceFormat()));
       SequenceEntry output(model->decodable()->getStateNames());
-      while(!input.eof()) {
-	input >> entry;
+      while(!cin.eof()) {
+	cin >> entry;
 	if(entry.getSequence().size() == 0) 
 	  continue;
 	Matrix v;
@@ -77,7 +77,7 @@ int main (int argc, char ** argv)
 	output.setSequence(states);
 	cout << output;
       }
-      input.close();
+      //      input.close();
     }
   catch (boost::program_options::invalid_command_line_syntax &e)
     {
