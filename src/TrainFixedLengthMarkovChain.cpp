@@ -34,7 +34,7 @@ ProbabilisticModelPtr TrainFixedLengthMarkovChain::create(
 	ContextTreePtr tree = ContextTreePtr(new ContextTree(alphabet->size()));
 	tree->initializeCounter(sample_set, orderpar->getInt(), pseudocounts);
 	tree->normalize();
-	//	std::cerr << tree->str() << std::endl;
+
 	VariableLengthMarkovChainPtr m = VariableLengthMarkovChainPtr(
 								      new VariableLengthMarkovChain(tree));
 	m->setAlphabet(alphabet);

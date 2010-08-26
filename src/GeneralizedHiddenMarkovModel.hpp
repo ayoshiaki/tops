@@ -158,7 +158,7 @@ namespace tops {
 					 std::string state_name, int iphase, int ophase);
     void configureExplicitDurationState(std::string observation_model_name,
 					FiniteDiscreteDistributionPtr transition_distr,
-					std::string duration_model_name, std::string state_name, int iphase, int ophase);
+					std::string duration_model_name, std::string state_name, int iphase, int ophase, int start, int stop, int leftJoinable, int rightJoinable);
     void setInitialProbability(FiniteDiscreteDistributionPtr init);
     void setObservationSymbols(AlphabetPtr obs) {
       setAlphabet(obs);

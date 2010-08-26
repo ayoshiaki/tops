@@ -305,22 +305,25 @@ namespace tops
   void ContextTree::initializeCounter(const SequenceEntryList & sequences, int order, double pseudocounts)
   {
     if (order < 0) order = 0;
+
     ContextTreeNodePtr root = createContext();
+    if(pseudocounts > 0) {
+      for(int sym = 0; sym < root->alphabet_size(); sym++)
+	{
+	  root->setCount(sym,pseudocounts);
+	}
+    }
+
     for ( int l = 0; l < (int)sequences.size(); l ++){
       for( int i = order; i < (int)(sequences[l]->getSequence()).size(); i++)
 	{
 	  int currentSymbol = (sequences[l]->getSequence())[i];
 	  int j = i - 1;
-	  ContextTreeNodePtr w = root;
-	  if(pseudocounts > 0) {
-	    for(int sym = 0; sym < root->alphabet_size(); sym++)
-	      {
-		w->setCount(sym,pseudocounts);
-	      }
-	  }
-	  
+
+	  ContextTreeNodePtr w = getRoot();
 
 	  w->addCount(currentSymbol);
+
 	  while((j >= 0) &&  ((i - j) <= order))
 	    {
 	      int symbol = (sequences[l]->getSequence())[j];
@@ -347,6 +350,7 @@ namespace tops
 	    }
 	}
     }
+
   }
 
   void ContextTree::pruneTree(double delta) 

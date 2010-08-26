@@ -4,6 +4,10 @@
 #include "Symbol.hpp" 
 namespace tops{
   GHMMState::GHMMState() {
+    _start = 0;
+    _stop = 0;
+    isRightJoinable(0);
+    isLeftJoinable(0);
     }
   
   GHMMState:: ~GHMMState() {
@@ -94,6 +98,24 @@ namespace tops{
   void GHMMState::setInputPhase(int _inputPhase) {
     this->_inputPhase = _inputPhase;
   }
+
+
+  int GHMMState::getStart() const {
+    return _start;
+  }
+  
+  void GHMMState::setStart(int start) {
+    this->_start = start;
+  }
+
+
+  int GHMMState::getStop() const {
+    return _stop;
+  }
+  
+  void GHMMState::setStop(int stop) {
+    this->_stop = stop;
+  }
   
   int GHMMState::getOutputPhase() const {
     return _outputPhase;
@@ -110,6 +132,10 @@ namespace tops{
 
   
   GHMMSignalState::GHMMSignalState() {
+    setStart(0);
+    setStop(0);
+    isRightJoinable(0);
+    isLeftJoinable(0);
   }
   int GHMMSignalState::size() const {
     return _size;
@@ -168,10 +194,12 @@ namespace tops{
   }
 
 
-   GHMMExplicitDurationState::~GHMMExplicitDurationState() {
-    }
+  GHMMExplicitDurationState::~GHMMExplicitDurationState() {
+  }
   GHMMExplicitDurationState::GHMMExplicitDurationState() {
-    }
+    setStart(0);
+    setStop(0);
+  }
   void GHMMExplicitDurationState::durationModelName(std::string name){
     _durationModelName = name;
   }
@@ -199,6 +227,18 @@ namespace tops{
     std::string GHMMExplicitDurationState::str() const {
       std::stringstream out;
       out << name() << " = [\n observation = " << GHMMState::observationModelName() << std::endl;
+      if((getStart() > 0) || (getStop() > 0)) {
+	out << "extend_emission = 1" << std::endl;
+	out << "start = " << getStart() <<  std::endl;
+	out << "stop = " << getStop() << std::endl;
+      }
+      if(isLeftJoinable()) {
+	out << "left_joinable = " << isLeftJoinable() << std::endl;
+      }
+      if(isRightJoinable()) {
+	out << "right_joinable = " << isRightJoinable() << std::endl;
+      }
+
       out << "duration = " << durationModelName() << "]" << std::endl;
       
       return out.str();
@@ -208,7 +248,22 @@ namespace tops{
       ProbabilisticModelParameters answer;
       answer.add("observation" , StringParameterValuePtr(new StringParameterValue(GHMMState::observationModelName())));
       answer.add("duration", StringParameterValuePtr(new StringParameterValue(durationModelName())));
-       return answer;
+      return answer;
     }
+
+  void GHMMState::isLeftJoinable(int joinable){
+    this->_left_joinable = joinable;
+  }
+  int GHMMState::isLeftJoinable() const {
+    return this->_left_joinable;
+  }
+
+  void GHMMState::isRightJoinable(int joinable){
+    this->_right_joinable = joinable;
+  }
+  int GHMMState::isRightJoinable() const {
+    return this->_right_joinable;
+  }
+
 
 }

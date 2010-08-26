@@ -39,6 +39,19 @@ namespace tops {
     virtual void setInputPhase(int _inputPhase) ;
     virtual int getOutputPhase() const ;
     virtual void setOutputPhase(int _outputPhase) ;
+
+    virtual int getStart() const ;
+    virtual void setStart(int start) ;
+    virtual int getStop() const ;
+    virtual void setStop(int stop) ;
+
+    virtual void isLeftJoinable(int joinable);
+    virtual int isLeftJoinable() const;
+    
+    virtual void isRightJoinable(int joinable);
+    virtual int isRightJoinable() const;
+
+
     virtual ProbabilisticModelPtr nullModel()  const ;
     virtual void observationModelName(std::string name) ;
     virtual void durationModelName(std::string name) ;
@@ -55,6 +68,10 @@ namespace tops {
     std::vector<int> _successors;
     int _inputPhase; 
     int _outputPhase;
+    int _start;
+    int _stop;
+    bool _left_joinable;
+    bool _right_joinable;
     std::string _observationModelName;
   };
   //! GHMM signal states

@@ -99,10 +99,13 @@ void GeneralizedHiddenMarkovModel::configureGeometricDurationState(
   _geometric_duration_states.push_back(state);
 }
 
+
 void GeneralizedHiddenMarkovModel::configureExplicitDurationState(
 								  std::string observation_model_name,
 		FiniteDiscreteDistributionPtr transition_distr,
-								  std::string duration_model_name, std::string state_name, int iphase, int ophase) {
+								  std::string duration_model_name, std::string state_name, int iphase, int ophase, int start, int stop, int leftJoinable, int rightJoinable) 
+{
+
   ProbabilisticModelPtr model = _models[observation_model_name];
   ProbabilisticModelPtr duration = _models[duration_model_name];
   SymbolPtr symbol = _state_names->getSymbol(state_name);
@@ -113,9 +116,15 @@ void GeneralizedHiddenMarkovModel::configureExplicitDurationState(
   state->setDuration(duration);
   state->setInputPhase(iphase);
   state->setOutputPhase(ophase);
+  state->setStart(start);
+  state->setStop(stop);
+  state->isLeftJoinable(leftJoinable);
+  state->isRightJoinable(rightJoinable);
   _all_states[symbol->id()] = state;
   _explicit_duration_states.push_back(state);
+
 }
+
 
 double GeneralizedHiddenMarkovModel::forward(const Sequence & s, Matrix &alpha) const {
   std::cerr << "Forward not implemented" << std::endl;
@@ -170,12 +179,10 @@ double GeneralizedHiddenMarkovModel::backward(const Sequence & s, Matrix &beta) 
 	  e = _all_states[to]->observation()->prefix_sum_array_compute(i, i);
 	assert (e <= 0);
 	double v = gamma(i - 1, from)
-	  + _all_states[from]->transition()->log_probability_of(
-								to) + e;
+	  + _all_states[from]->transition()->log_probability_of(to) + e;
 	if (v > gamma(i, to)) {
 	  gamma(i, to) = v;
-	  ptr[i][to] = OptimalPredecessorPtr(new OptimalPredecessor(
-								    from, -1, i - 1));
+	  ptr[i][to] = OptimalPredecessorPtr(new OptimalPredecessor(from, -1, i - 1));
 	}
       }
     }
@@ -253,10 +260,8 @@ void GeneralizedHiddenMarkovModel::findBestPredecessorSignalStates(int i,
 	  + _all_states[from]->transition()->log_probability_of(toSignal) + prob;
 	if (v > gamma(i, toSignal)) {
 	  gamma(i, toSignal) = v;
-	  ptr[i][toSignal] = OptimalPredecessorPtr(
-						   new OptimalPredecessor(from, -1, begin - 1));
+	  ptr[i][toSignal] = OptimalPredecessorPtr(new OptimalPredecessor(from, -1, begin - 1));
 	}
-
       } else {
 	std::set<CandidateSignalPtr>::iterator it;
 	std::set<CandidateSignalPtr> toRemove;
@@ -279,13 +284,18 @@ void GeneralizedHiddenMarkovModel::findBestPredecessorSignalStates(int i,
 	  int duration = end - begin + 1;
 	  int phase = _all_states[explicitId]->getInputPhase();
 	  emission = _all_states[explicitId]->observation()->prefix_sum_array_compute(begin, end, phase);
-	  assert(emission <= 0);
+	  int offsetStart = _all_states[explicitId]->getStart();
+	  int offsetEnd = _all_states[explicitId]->getStop();
 
+	  assert(emission <= 0);
 	  double duration_prob =
 	    _all_states[explicitId]->duration_probability(duration);
 
-
-
+	  double check_cds = _all_states[explicitId]->observation()->prefix_sum_array_compute(begin-offsetStart, end+offsetEnd, phase);
+	  if(close(exp(check_cds), 0.0, 1e-10)) {
+	    toRemove.insert(predecessor); 
+	    continue;
+	  }
 	  if(close(exp(emission), 0.0, 1e-10)) {
 	    toRemove.insert(predecessor); 
 	    continue;
@@ -294,15 +304,12 @@ void GeneralizedHiddenMarkovModel::findBestPredecessorSignalStates(int i,
 	  if (close(exp(duration_prob), 0.0, 1e-10)) {
 	    duration_prob = log(1e-20);
 	  }
-
-	  
-	  
 	  double v =	gamma(begin - 1, fromSignal)
 	    + _all_states[fromSignal]->transition()->log_probability_of(explicitId) + duration_prob
 	    + emission
 	    + _all_states[explicitId]->transition()->log_probability_of(toSignal) + prob;
 
-#if 0
+#if 1
 	  std::cerr << i << " " ;
 	  std::cerr << _all_states[fromSignal]->name() << "->";
 	  std::cerr << _all_states[explicitId]->name() << "->";
@@ -327,6 +334,31 @@ void GeneralizedHiddenMarkovModel::findBestPredecessorSignalStates(int i,
 	    ptr[i][toSignal] = OptimalPredecessorPtr(
 						     new OptimalPredecessor(fromSignal, explicitId,
 									    begin - 1));
+	    if(_all_states[explicitId]->isLeftJoinable()) {
+	      int f = fromSignal;
+	      int k = begin -1;
+	      while((k>=0) && (ptr[k][f] != NULL)) {
+		int k1 = k;
+		int eid = ptr[k][f]->explicitDurationId();
+		if((eid >=0)   && _all_states[eid]->isRightJoinable()) {
+		  Sequence joinedSeq;
+		  std::cerr << k << " " << k + _all_states[eid]->getStop() << " " << begin -1 << " " << begin - _all_states[explicitId]->getStart() -1 << std::endl;
+#if 0
+		  for(int l = k; l <= k + _all_states[eid]->getStop(); l++)
+		    {
+		      joinedSeq.push_back(sequence[l]);
+		    }
+		  for(int l = begin-1; l <= begin - _all_states[explicitId]->getStart() - 1; l++)
+		    {
+		      joinedSeq.push_back(sequence[l]);
+		    }
+#endif		  
+		  break;
+		}
+		k = ptr[k1][f]->begin();
+		f = ptr[k1][f]->from();
+	      }
+	    }
 	  }
 
 	}
@@ -389,6 +421,8 @@ void GeneralizedHiddenMarkovModel::findBestPredecessorSignalStatesFinish(int i,
 	    + _all_states[fromSignal]->transition()->log_probability_of(explicitId) + duration_prob
 	    + emission
 	    + _all_states[explicitId]->transition()->log_probability_of(toSignal) ;
+
+
 
 
 #if 1
@@ -774,6 +808,22 @@ Sequence & GeneralizedHiddenMarkovModel::chooseObservation(Sequence & h, int i,
 	  statepars->getOptionalParameterValue("output_phase");
 	ProbabilisticModelParameterValuePtr inputphasepar =
 	  statepars->getOptionalParameterValue("input_phase");
+
+
+	ProbabilisticModelParameterValuePtr extend_emission_par =
+	  statepars->getOptionalParameterValue("extend_emission");
+	ProbabilisticModelParameterValuePtr start_extend_emission_par =
+	  statepars->getOptionalParameterValue("start");
+	ProbabilisticModelParameterValuePtr stop_extend_emission_par =
+	  statepars->getOptionalParameterValue("stop");
+	ProbabilisticModelParameterValuePtr l_joinable_par =
+	  statepars->getOptionalParameterValue("left_joinable");
+	ProbabilisticModelParameterValuePtr r_joinable_par =
+	  statepars->getOptionalParameterValue("right_joinable");
+
+
+
+
 	if (observationpar == NULL) {
 	  std::cerr << "ERROR: Missing  observation model for state "
 		    << state_names[i] << std::endl;
@@ -824,7 +874,20 @@ Sequence & GeneralizedHiddenMarkovModel::chooseObservation(Sequence & h, int i,
 	  // Explicit duration state
 	  std::string duration_model_name = durationpar->getString();
 	  restore_model(duration_model_name,  parameters);
-	  configureExplicitDurationState(model_name, transition, duration_model_name, state_names[i], iphase, ophase);
+	  int l_joinable = 0;
+	  int r_joinable = 0;
+	  if(l_joinable_par != NULL)
+	    l_joinable = l_joinable_par->getInt();
+	  if(r_joinable_par != NULL)
+	    r_joinable = r_joinable_par->getInt();
+	  
+	  if(extend_emission_par == NULL) {
+	    configureExplicitDurationState(model_name, transition, duration_model_name, state_names[i], iphase, ophase, 0, 0, l_joinable, r_joinable);
+	  } else {
+	    int start = start_extend_emission_par->getInt();
+	    int stop = stop_extend_emission_par->getInt();
+	    configureExplicitDurationState(model_name, transition, duration_model_name, state_names[i], iphase, ophase, start, stop, l_joinable, r_joinable);
+	  }
 	  
 	}
 	
