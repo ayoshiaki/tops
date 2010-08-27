@@ -120,7 +120,7 @@ namespace tops{
 
     ContextTreeNodePtr current = _context_trees[phase]->getContext(s,s.size()-1); 
 
-    current->getDistribution()->probability_of(s[s.size()-1], 0.0);
+    current->getDistribution()->log_probability_of(s[s.size()-1], -HUGE);
 
     std::vector <ContextTreeNodePtr> children = current->getChildren();
     if(current->isLeaf())
@@ -135,7 +135,7 @@ namespace tops{
       if(current == NULL)
 	continue;
       assert(current->getDistribution() != NULL);
-      current->getDistribution()->probability_of(s[s.size()-1], 0.0);
+      current->getDistribution()->log_probability_of(s[s.size()-1], -HUGE);
       if(current->isLeaf())
 	continue;
       children = current->getChildren();

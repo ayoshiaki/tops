@@ -138,7 +138,10 @@ namespace tops {
       not_implemented("probability_of(int s, double new_value)");
       return _dummy;
     }
-
+    virtual double evaluate(const Sequence & s, unsigned int begin, unsigned int end, int phase) const {
+      not_implemented("evaluate(const Sequence & s int begin, int end, int phase)");
+      return 0.0;
+    }
 
     virtual double prefix_sum_array_compute(int begin , int end) {
       return evaluate(_last, begin, end);

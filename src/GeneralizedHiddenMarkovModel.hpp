@@ -17,11 +17,13 @@ namespace tops {
     int _from;
     int _explicitDurationId;
     int _begin;
+    int _end;
   public:
-    OptimalPredecessor(int from, int explicitDurationId, int begin) {
+    OptimalPredecessor(int from, int explicitDurationId, int begin, int end) {
       _from = from;
       _explicitDurationId = explicitDurationId;
       _begin = begin;
+      _end = end;
     }
     int from() {
       return _from;
@@ -31,6 +33,9 @@ namespace tops {
     }
     int begin() {
       return _begin;
+    }
+    int end() {
+      return _end;
     }
   };
   typedef boost::shared_ptr<OptimalPredecessor> OptimalPredecessorPtr;

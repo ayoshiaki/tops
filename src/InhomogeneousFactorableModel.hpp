@@ -15,7 +15,8 @@ namespace tops {
   public:
      InhomogeneousFactorableModel() {};
     virtual double evaluate(const Sequence & s, unsigned int begin, unsigned int end) const; 
-    
+
+    virtual double evaluate(const Sequence & s, unsigned int begin, unsigned int end, int phase) const;
     virtual Sequence & choose(Sequence & h, int size) const;
 
     virtual Sequence & chooseWithHistory(Sequence & h, int i, int size) const;

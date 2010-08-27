@@ -15,6 +15,23 @@ namespace tops {
     }
     return result;
   }
+
+  double InhomogeneousFactorableModel::evaluate(const Sequence & s, unsigned int begin, unsigned int end, int phase) const
+  {
+    double result = 0.0;
+    int t = phase;
+    int maximumTime = maximumTimeValue();
+    for (int i = (int) begin; (i <= (int) end); i++) {
+      if (((i - (int) begin) > maximumTime)
+	  && (!isPhased()))
+	break;
+      result += evaluatePosition(s, i, t);
+      t = mod(t + 1, maximumTime + 1);
+    }
+    return result;
+  }
+
+
   Sequence & InhomogeneousFactorableModel::choose(Sequence & h, int size) const
   {
     chooseWithHistory(h,0,size);
