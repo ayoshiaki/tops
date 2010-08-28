@@ -15,27 +15,32 @@ namespace tops {
   class OptimalPredecessor {
   private:
     int _from;
-    int _explicitDurationId;
+    int _nextExplicitStateId;
+    int _prevExplicitStateId;
     int _begin;
-    int _end;
+    int _endOfExplicitStateId;
   public:
-    OptimalPredecessor(int from, int explicitDurationId, int begin, int end) {
+    OptimalPredecessor(int from, int nextEid, int prevEid, int begin, int end) {
       _from = from;
-      _explicitDurationId = explicitDurationId;
+      _nextExplicitStateId = nextEid;
+      _prevExplicitStateId = prevEid;
       _begin = begin;
-      _end = end;
+      _endOfExplicitStateId = end;
     }
     int from() {
       return _from;
     }
-    int explicitDurationId() {
-      return _explicitDurationId;
+    int nextExplicitStateId() {
+      return _nextExplicitStateId;
+    }
+    int prevExplicitStateId() {
+      return _prevExplicitStateId;
     }
     int begin() {
       return _begin;
     }
-    int end() {
-      return _end;
+    int endOfExplicitStateId() {
+      return _endOfExplicitStateId;
     }
   };
   typedef boost::shared_ptr<OptimalPredecessor> OptimalPredecessorPtr;

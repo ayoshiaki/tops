@@ -182,7 +182,9 @@ double GeneralizedHiddenMarkovModel::backward(const Sequence & s, Matrix &beta) 
 	  + _all_states[from]->transition()->log_probability_of(to) + e;
 	if (v > gamma(i, to)) {
 	  gamma(i, to) = v;
-	  ptr[i][to] = OptimalPredecessorPtr(new OptimalPredecessor(from, -1, i - 1, i-1));
+	  int eid = ptr[i-1][from]->prevExplicitStateId();
+	  int end = ptr[i-1][from]->endOfExplicitStateId();
+	  ptr[i][to] = OptimalPredecessorPtr(new OptimalPredecessor(from, -1, eid,  i - 1, end));
 	}
       }
     }
@@ -260,7 +262,9 @@ void GeneralizedHiddenMarkovModel::findBestPredecessorSignalStates(int i,
 	  + _all_states[from]->transition()->log_probability_of(toSignal) + prob;
 	if (v > gamma(i, toSignal)) {
 	  gamma(i, toSignal) = v;
-	  ptr[i][toSignal] = OptimalPredecessorPtr(new OptimalPredecessor(from, -1, begin - 1, begin-1));
+	  int eid = ptr[begin-1][from]->prevExplicitStateId();
+	  int end = ptr[begin-1][from]->endOfExplicitStateId();
+	  ptr[i][toSignal] = OptimalPredecessorPtr(new OptimalPredecessor(from, -1, eid, begin - 1, end));
 	}
       } else {
 	std::set<CandidateSignalPtr>::iterator it;
@@ -314,14 +318,15 @@ void GeneralizedHiddenMarkovModel::findBestPredecessorSignalStates(int i,
 	  if (v > gamma(i, toSignal)) {
 	    bool valid = true;
 	    if(_all_states[explicitId]->isLeftJoinable()) {
+
 	      int f = fromSignal;
 	      int k = begin -1;
-	      while((valid) && (k>=0) && (ptr[k][f] != NULL)) {
-		int eid = ptr[k][f]->explicitDurationId();
-		if((eid >=0)   && _all_states[eid]->isRightJoinable()) {
+	      int previousEid = ptr[k][f]->prevExplicitStateId();
+	      if(_all_states[previousEid]->isRightJoinable()) 
+		{
 		  Sequence joinedSeq;
-		  int leftstart = ptr[k][f]->end() + 1;
-		  int leftend = ptr[k][f]->end() + _all_states[eid]->getStop();
+		  int leftstart = ptr[k][f]->endOfExplicitStateId() + 1;
+		  int leftend = ptr[k][f]->endOfExplicitStateId() + _all_states[previousEid]->getStop();
 		  int rightstart = begin - _all_states[explicitId]->getStart();
 		  int rightend = begin - 1;
 		  for(int l = leftstart; l <= leftend; l++)
@@ -334,48 +339,16 @@ void GeneralizedHiddenMarkovModel::findBestPredecessorSignalStates(int i,
 		    }
 		  
 		  double check =  _all_states[explicitId]->observation()->evaluate(joinedSeq, 0, joinedSeq.size() -1, phase);
-#if 0
 		  
-		  std::cerr << i << " " ;
-		  std::cerr << "EMISSION: " << leftstart << " " << leftend << " " << rightstart << " " << rightend  << " "  << check << " " << phase << " ";
-		  std::cerr << _all_states[ptr[k][f]->from()]->name() << "->";
-		  std::cerr << _all_states[eid]->name() << "->";
-		  std::cerr << _all_states[f]->name() << "->";
-		  std::cerr << _all_states[fromSignal]->name() << "->";
-		  std::cerr << _all_states[explicitId]->name() << "->";
-		  std::cerr << _all_states[toSignal]->name() << ": ";
-		  std::cerr << "begin = " << begin  << ", ";
-		  std::cerr << "end = " << end  << ", ";
-		  std::cerr << "length = " << duration << ", ";
-		  std::cerr << "duration=" << duration_prob << ", ";
-		  std::cerr << _all_states[fromSignal]->name() << "->";
-		  std::cerr << _all_states[explicitId]->name() << " = " << exp(_all_states[fromSignal]->transition()->log_probability_of(explicitId)) << ", ";
-		  std::cerr << _all_states[explicitId]->name() << "->"; 
-		  std::cerr << _all_states[toSignal]->name() << " = " << exp(_all_states[explicitId]->transition()->log_probability_of(toSignal)) << ", ";
-		  std::cerr << "emission=" << emission  << ", "; 
-		  std::cerr << "gamma =" << gamma(begin -1, fromSignal)  << ", "; 
-		  std::cerr << "prob =" << prob  << ", "; 
-		  std::cerr << "OPT =" << (v > gamma(i, toSignal))  << std::endl;
-		  
-#endif
 		  if(close(exp(check), 0.0, 1e-10)) {
 		    valid = false;
 		    toRemove.insert(predecessor); 
 		  } 
-		  break;
 		}
-		int k1 = k;
-		k = ptr[k1][f]->begin();
-		f = ptr[k1][f]->from();
-		
-	      }
 	    }
-	    
-	    
 	    if(valid){
 	      gamma(i, toSignal) = v;
-	      ptr[i][toSignal] = OptimalPredecessorPtr(new OptimalPredecessor(fromSignal, explicitId,
-									      begin - 1, begin + duration -1));
+	      ptr[i][toSignal] = OptimalPredecessorPtr(new OptimalPredecessor(fromSignal, explicitId, explicitId, begin - 1, begin + duration -1));
 	    }
 	    
 	  }
@@ -410,7 +383,9 @@ void GeneralizedHiddenMarkovModel::findBestPredecessorSignalStatesFinish(int i,
 	double v = gamma(begin - 1, from) + _all_states[from]->transition()->log_probability_of(toSignal) ;
 	if (v > gamma(i, toSignal)) {
 	  gamma(i, toSignal) = v;
-	  ptr[i][toSignal] = OptimalPredecessorPtr(new OptimalPredecessor(from, -1, begin - 1, begin-1));
+	  int eid = ptr[begin-1][from]->prevExplicitStateId();
+	  int end = ptr[begin-1][from]->endOfExplicitStateId();
+	  ptr[i][toSignal] = OptimalPredecessorPtr(new OptimalPredecessor(from, -1,eid, begin - 1, end));
 	}
       } else {
 	std::set<CandidateSignalPtr>::iterator it;
@@ -463,8 +438,7 @@ void GeneralizedHiddenMarkovModel::findBestPredecessorSignalStatesFinish(int i,
 	  if (v > gamma(i, toSignal)) {
 	    gamma(i, toSignal) = v;
 	    ptr[i][toSignal] = OptimalPredecessorPtr(
-						     new OptimalPredecessor(fromSignal, explicitId,
-									    begin - 1, begin + duration - 1));
+						     new OptimalPredecessor(fromSignal, explicitId, explicitId, begin - 1, begin + duration - 1));
 	  }
 	}
       }
@@ -503,7 +477,7 @@ double GeneralizedHiddenMarkovModel::viterbi(const Sequence &s, Sequence &path,
   for (int i = 0; i < nstates; i++) {
     gamma(0, i) = getInitialProbabilities()->log_probability_of(i)
       + _all_states[i]->observation()->prefix_sum_array_compute(0, 0);
-    ptr[0][i] = OptimalPredecessorPtr(new OptimalPredecessor(0, -1, -1, -1));
+    ptr[0][i] = OptimalPredecessorPtr(new OptimalPredecessor(0, -1, -1, -1, -1));
   }
   
   for (int i = 1; i <= L; i++) {
@@ -530,7 +504,7 @@ double GeneralizedHiddenMarkovModel::viterbi(const Sequence &s, Sequence &path,
       if (ptr[i][k] != NULL) {
 	std::cerr << " "
 		  << _state_names->getSymbol(ptr[i][k]->from())->name()
-		  << " " << ptr[i][k]->explicitDurationId() << " "
+		  << " " << ptr[i][k]->nextExplicitStateId() << " "
 		  << ptr[i][k]->begin() << std::endl;
       } else
 	std::cerr << std::endl;
@@ -564,7 +538,7 @@ double GeneralizedHiddenMarkovModel::viterbi(const Sequence &s, Sequence &path,
     
     int begin = ptr[i][path[i]]->begin();
     int prev = ptr[i][path[i]]->from();
-    int state = ptr[i][path[i]]->explicitDurationId();
+    int state = ptr[i][path[i]]->nextExplicitStateId();
     if (state > -1) {
       int signal_size = _all_states[path[i]]->chooseDuration();
       for (int k = begin + 1; k < i - signal_size + 1; k++)
