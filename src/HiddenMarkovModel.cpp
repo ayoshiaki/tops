@@ -178,8 +178,9 @@ namespace tops {
 
 	    Matrix alpha(nstates, sample[s].size());
 	    Matrix beta(nstates, sample[s].size());
-	    
+
 	    double P = forward(sample[s], alpha);
+	    backward(sample[s], beta);
 
 	    double sum = alpha(0, 0) + beta(0, 0);
 	    for(int i = 1; i < nstates; i++)
@@ -418,7 +419,7 @@ namespace tops {
 	if(it2 != trans.end())
 	  t = FiniteDiscreteDistributionPtr(new FiniteDiscreteDistribution(it2->second));
 	else {
-	  std::cerr << "ERROR: Could not configure the " << state_name->name() << "!" << std::endl;
+	  std::cerr << "ERROR: Could not configure the state " << state_name->name() << "!" << std::endl;
 	  exit(-1);
 	}
 	HMMStatePtr statePtr = HMMStatePtr(new HMMState(state_list.size(), state_name, e, t));
@@ -445,10 +446,9 @@ namespace tops {
 	if((i != 0) || (j != 0)) {
 	  std::stringstream out2;
 	  out2 << getStateName(j) << "|" << getStateName(i) ;
-	  trans[out.str()] = exp(getState(i)->transitions()->log_probability_of(j));
+	  trans[out2.str()] = exp(getState(i)->transitions()->log_probability_of(j));
 	}
     answer.add("transitions", DoubleMapParameterValuePtr(new DoubleMapParameterValue(trans)));
-
 
     std::map <std::string, double> emission;
     std::stringstream out3;
