@@ -139,8 +139,9 @@ namespace tops {
       return _dummy;
     }
     virtual double evaluate(const Sequence & s, unsigned int begin, unsigned int end, int phase) const {
-      not_implemented("evaluate(const Sequence & s int begin, int end, int phase)");
-      return 0.0;
+      //      not_implemented("evaluate(const Sequence & s int begin, int end, int phase)");
+      return evaluate(s, begin, end);
+
     }
 
     virtual double prefix_sum_array_compute(int begin , int end) {

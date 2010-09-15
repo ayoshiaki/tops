@@ -8,7 +8,9 @@ TARGET_LINK_LIBRARIES(ToPS ${BOOST_REGEX_LIBRARY} ${RMATH_LIBRARY} )
 install(TARGETS ToPS
         RUNTIME DESTINATION bin
         LIBRARY DESTINATION lib
-        ARCHIVE DESTINATION lib/static)
+        ARCHIVE DESTINATION lib/static )
+install(FILES AkaikeInformationCriteria.hpp Alphabet.hpp BayesianInformationCriteria.hpp BernoulliModelCreator.hpp ConfigurationReader.hpp ContextTree.hpp DecodableModel.hpp DegenerateDistribution.hpp FactorableModel.hpp FactorableModelPrefixSumArray.hpp FiniteDiscreteDistribution.hpp FiniteDiscreteDistributionCreator.hpp FixedSequenceAtPosition.hpp FixedSequenceAtPositionCreator.hpp GHMMStates.hpp GeneralizedHiddenMarkovModel.hpp GeneralizedHiddenMarkovModelCreator.hpp HiddenMarkovModel.hpp HiddenMarkovModelCreator.hpp InhomogeneousFactorableModel.hpp InhomogeneousMarkovChain.hpp InhomogeneousMarkovChainCreator.hpp NullPrefixSumArray.hpp PhasedFactorableModelEvaluationAlgorithm.hpp PhasedRunLengthDistribution.hpp PhasedRunLengthDistributionCreator.hpp PrefixSumArray.hpp ProbabilisticModel.hpp ProbabilisticModelCreator.hpp ProbabilisticModelCreatorClient.hpp ProbabilisticModelDecorator.hpp ProbabilisticModelParameter.hpp RemoveSequenceFromModel.hpp ReverseComplementDNA.hpp ReverseComplementDNACreator.hpp Sequence.hpp SequenceEntry.hpp SequenceFactory.hpp SequenceFormat.hpp SmoothedHistogramBurge.hpp SmoothedHistogramKernelDensity.hpp SmoothedHistogramStanke.hpp Symbol.hpp TargetModel.hpp TargetModelCreator.hpp TrainFiniteDiscreteDistribution.hpp TrainFixedLengthMarkovChain.hpp TrainHMMBaumWelch.hpp TrainPhasedMarkovChain.hpp TrainPhasedMarkovChainContextAlgorithm.hpp TrainVariableLengthInhomogeneousMarkovChain.hpp TrainVariableLengthMarkovChain.hpp TrainWeightArrayModel.hpp VariableLengthMarkovChain.hpp VariableLengthMarkovChainCreator.hpp util.hpp DESTINATION include/tops)
+
 
 
 

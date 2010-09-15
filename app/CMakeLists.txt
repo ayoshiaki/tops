@@ -9,7 +9,9 @@ ADD_EXECUTABLE(bayes_classifier bayes_classifier.cpp)
 ADD_EXECUTABLE(one_file_model one_file_model.cpp)
 ADD_EXECUTABLE(sliding_window sliding_window.cpp)
 ADD_EXECUTABLE(test_read_seq test_read_seq.cpp)
+ADD_EXECUTABLE(evaluate evaluate.cpp) 
 
+TARGET_LINK_LIBRARIES(evaluate ToPS ${BOOST_REGEX_LIBRARY} ${RMATH_LIBRARY} ${BOOST_PROGRAM_OPTIONS_LIBRARY} )
 TARGET_LINK_LIBRARIES(train ToPS ${BOOST_REGEX_LIBRARY} ${RMATH_LIBRARY} ${BOOST_PROGRAM_OPTIONS_LIBRARY} )
 TARGET_LINK_LIBRARIES(test_read_seq ToPS ${BOOST_REGEX_LIBRARY} ${RMATH_LIBRARY} ${BOOST_PROGRAM_OPTIONS_LIBRARY} )
 TARGET_LINK_LIBRARIES(one_file_model ToPS ${BOOST_REGEX_LIBRARY} ${RMATH_LIBRARY} ${BOOST_PROGRAM_OPTIONS_LIBRARY} )
@@ -18,7 +20,7 @@ TARGET_LINK_LIBRARIES(simulate ToPS ${BOOST_REGEX_LIBRARY} ${RMATH_LIBRARY} ${BO
 TARGET_LINK_LIBRARIES(bayes_classifier ToPS ${BOOST_REGEX_LIBRARY} ${RMATH_LIBRARY} ${BOOST_PROGRAM_OPTIONS_LIBRARY} ) 
 TARGET_LINK_LIBRARIES(sliding_window ToPS ${BOOST_REGEX_LIBRARY} ${RMATH_LIBRARY} ${BOOST_PROGRAM_OPTIONS_LIBRARY} ) 
 
-install(TARGETS train viterbi_decoding simulate bayes_classifier one_file_model sliding_window 
+install(TARGETS train viterbi_decoding simulate bayes_classifier one_file_model sliding_window evaluate
         RUNTIME DESTINATION bin
        LIBRARY DESTINATION lib
        ARCHIVE DESTINATION lib/static)

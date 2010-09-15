@@ -263,10 +263,11 @@ namespace tops {
 	    diff = fabs(last - P);
 	    if(diff < diff_threshold)
 		break;
+#if 0
 	    std::cerr << "iteration: " << iterations << std::endl;
 	    fprintf(stderr, "LL: %lf\n" , P );
 	    std::cerr << "Diff: " << diff << std::endl;
-
+#endif 
 	    last = P;
 	  }
       }
