@@ -77,12 +77,12 @@ int main (int argc, char ** argv)
 
     options_description desc("Allowed options");
     desc.add_options()
-      ("help,h", "produce help message")
+      ("help,?", "produce help message")
       ("model,m", value<string> (), "model")
       ("length,l", value<int> (), "length of the sequences")
       ("numseq,n", value<int> (), "number of sequences")
       ("output,o", value<string>(), "file to store  the sequences")
-      ("hidden_states,p", value<string>(), "file to store hidden states")
+      ("hidden_states,h", value<string>(), "file to store hidden state sequence")
       ("fasta,F",  "use fasta format");
 
     try

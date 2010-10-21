@@ -1,21 +1,19 @@
-#ifndef GENERALIZED_HIDDEN_MARKOV_MODEL_CREATOR_HPP
-#define GENERALIZED_HIDDEN_MARKOV_MODEL_CREATOR_HPP
+#ifndef TRAIN_GHMM_TRANSITIONS_HPP
+#define TRAIN_GHMM_TRANSITIONS_HPP
 
 #include <boost/shared_ptr.hpp>
 #include "ProbabilisticModelCreator.hpp"
-
 namespace tops {
 
   class ProbabilisticModelParameters;
-  
+
   //! This class is  a factory for the finite discrete distribution
-  class GeneralizedHiddenMarkovModelCreator : public ProbabilisticModelCreator 
+  class TrainGHMMTransitionsCreator : public ProbabilisticModelCreator 
   {
   public:
-    GeneralizedHiddenMarkovModelCreator(){}
-    virtual ~GeneralizedHiddenMarkovModelCreator(){};
+    TrainGHMMTransitionsCreator(){}
+    virtual ~TrainGHMMTransitionsCreator(){};
     virtual ProbabilisticModelPtr create(ProbabilisticModelParameters & parameters) const ;
-
 
     virtual std::string help() const 
     {
@@ -26,7 +24,7 @@ namespace tops {
 
 
   };
-  typedef boost::shared_ptr < GeneralizedHiddenMarkovModelCreator> GeneralizedHiddenMarkovModelCreatorPtr;
+  typedef boost::shared_ptr < TrainGHMMTransitionsCreator> TrainGHMMTransitionsCreatorPtr;
 }
 
 #endif

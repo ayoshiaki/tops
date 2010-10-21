@@ -204,54 +204,16 @@ void GeneralizedHiddenMarkovModel::addSignalPredecessors(
 }
 void GeneralizedHiddenMarkovModel::fixStatesPredecessorSuccessor() {
   for (int i = 0; i < (int) _all_states.size(); i++) 
-    {
-      if (_all_states[i] != NULL)
-	{
-	  for (int j = 0; j < (int) _all_states.size(); j++) {
-	    if ((!close(exp(_all_states[i]->transition()->log_probability_of(j)), 0.0, 1e-1)) &&  (_all_states[j] != NULL)) {
-	      _all_states[j]->addPredecessor(i);
-	    }
-	    
-	    if ((_all_states[j] != NULL) && (!close(exp( _all_states[i]->transition()->log_probability_of(j)),
-						   0.0, 1e-1)))
-	      _all_states[i]->addSuccessor(j);
-	  }
-	}
-    }
-  for (int i = 0; i < (int) _all_states.size(); i++) 
-    {
     if (_all_states[i] != NULL)
-      {
-	_all_states[i]->fixTransitionDistribution();
-	_all_states[i]->clearPredecessorSuccessor();
-      }
-    }
-  for (int i = 0; i < (int) _all_states.size(); i++) 
-    {
-      if (_all_states[i] != NULL)
-	{
-
-	  for (int j = 0; j < (int) _all_states.size(); j++) {	  
-	    double transprob = exp(_all_states[i]->transition()->log_probability_of(j));
-	    if ((!close(transprob, 0.0, 1e-1)) &&  (_all_states[j] != NULL)) {
-	      _all_states[j]->addPredecessor(i);
-	      if((!_all_states[j]->isGeometricDuration())  && (!_all_states[i]->isGeometricDuration()))
-		{
-		  std::cerr << "WARNING: Transitions between two non-geometric run-length states are not supported: " << _all_states[i]->name() << "->" << _all_states[j]->name() << ": "  << transprob << std::endl;
-		}
-	    }
-	    
-	    if ((_all_states[j] != NULL) && (!close(transprob,0.0, 1e-1))) {
-	      _all_states[i]->addSuccessor(j);
-	      if((!_all_states[i]->isGeometricDuration())  && (!_all_states[j]->isGeometricDuration()))
-		{
-		  std::cerr << "WARNING: Transitions between two non-geometric run-length states are not supported: " << _all_states[i]->name() << "->" << _all_states[j]->name() << ": "  << transprob << std::endl;
-		}
-	    }
-	  }
+      for (int j = 0; j < (int) _all_states.size(); j++) {
+	if (!close(exp(_all_states[i]->transition()->log_probability_of(j)), 0.0, 1e-10) &&  (_all_states[j] != NULL)) {
+	  _all_states[j]->addPredecessor(i);
 	}
-    }
 
+	if ((_all_states[j] != NULL) && !close(exp( _all_states[i]->transition()->log_probability_of(j)),
+					       0.0, 1e-10))
+	  _all_states[i]->addSuccessor(j);
+      }
 }
 
 void GeneralizedHiddenMarkovModel::findBestPredecessorSignalStates(int i,
@@ -925,7 +887,6 @@ Sequence & GeneralizedHiddenMarkovModel::chooseObservation(Sequence & h, int i,
     setInitialProbability(pi);
     fixStatesPredecessorSuccessor();
     
-
   }
   
 }

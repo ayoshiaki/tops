@@ -31,6 +31,10 @@ namespace tops {
     virtual void addPredecessor(int id) ;
     virtual std::vector<int> & predecessors() ;
     virtual void addSuccessor(int id) ;
+    virtual void clearPredecessorSuccessor() {
+      _successors.clear();
+      _predecessors.clear();
+    }
     virtual std::vector<int> & successors() ;
     virtual double duration_probability(int l) const ;
     virtual bool isGeometricDuration() const ;
@@ -59,6 +63,7 @@ namespace tops {
     virtual std::string observationModelName() const;
     virtual std::string durationModelName() const;
     virtual std::string nullModelName() const;
+    virtual void fixTransitionDistribution () const {} ;
     virtual ProbabilisticModelParameters parameters() const;
   private:
     ProbabilisticModelPtr _observation;
@@ -95,6 +100,8 @@ namespace tops {
     virtual void nullModelName(std::string name) ;
     virtual std::string nullModelName() const;
     virtual ProbabilisticModelParameters parameters() const;
+    virtual void fixTransitionDistribution () const ;
+
   private:
     int _size;
     double _threshold;
@@ -123,6 +130,7 @@ namespace tops {
 
     virtual void durationModelName(std::string name); 
     virtual std::string durationModelName() const ;
+    virtual void fixTransitionDistribution () const;
 
     virtual ProbabilisticModelParameters parameters() const;
   private:

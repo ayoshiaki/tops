@@ -9,6 +9,7 @@
 #include "TrainVariableLengthMarkovChain.hpp"
 #include "TrainFiniteDiscreteDistribution.hpp"
 #include "TrainFixedLengthMarkovChain.hpp"
+#include "TrainGHMMTransitions.hpp"
 #include "TrainWeightArrayModel.hpp"
 #include "BayesianInformationCriteria.hpp"
 #include "AkaikeInformationCriteria.hpp"
@@ -44,6 +45,8 @@ int main(int argc, char ** argv) {
 	map<string, ProbabilisticModelCreatorPtr> decoratorCommand;
 	createModelCommand["ContextAlgorithm"] = TrainVariableLengthMarkovChainPtr(
 			new TrainVariableLengthMarkovChain());
+	createModelCommand["GHMMTransitions"] = TrainGHMMTransitionsCreatorPtr(
+			new TrainGHMMTransitionsCreator());
 	createModelCommand["FixedLengthMarkovChain"]
 			= TrainFixedLengthMarkovChainPtr(new TrainFixedLengthMarkovChain());
 	createModelCommand["BaumWelch"] = TrainHMMBaumWelchPtr(
@@ -178,8 +181,7 @@ int main(int argc, char ** argv) {
 				}
 				struct timeval start, stop;
 				gettimeofday(&start, (struct timezone *) NULL);
-				ProbabilisticModelPtr model = creator->create(
-									      *(readConfig.parameters()));
+				ProbabilisticModelPtr model = creator->create( *(readConfig.parameters()));
 				gettimeofday(&stop, (struct timezone *)NULL);
 				stop.tv_sec -= start.tv_sec;
 				stop.tv_usec -= start.tv_usec;

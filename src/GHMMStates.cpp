@@ -266,4 +266,54 @@ namespace tops{
   }
 
 
+  void GHMMSignalState::fixTransitionDistribution () const {
+    FiniteDiscreteDistributionPtr trans = transition();
+    DoubleVector probabilities = (trans->parameters()).getMandatoryParameterValue("probabilities")->getDoubleVector();
+    int j = id();
+    if(probabilities.size() <= 0) {
+      return;
+    }
+    probabilities[j] = 0.0;
+    double sum = 0.0;
+    for(int i = 0; i < (int)probabilities.size(); i++)
+      {
+	if (i == j) 
+	  continue;
+	sum += probabilities[i];
+      }
+    for(int i = 0; i < (int)probabilities.size(); i++)
+      {
+	if (i == j) 
+	  continue;
+	probabilities[i]  = probabilities[i]/sum;
+      }
+    trans->setProbabilities(probabilities);
+  }
+
+  void GHMMExplicitDurationState::fixTransitionDistribution () const {
+    FiniteDiscreteDistributionPtr trans = transition();
+    DoubleVector probabilities = (trans->parameters()).getMandatoryParameterValue("probabilities")->getDoubleVector();
+    int j = id();
+    if(probabilities.size() <= 0) {
+      return;
+    }
+    probabilities[j] = 0.0;
+    double sum = 0.0;
+    for(int i = 0; i < (int)probabilities.size(); i++)
+      {
+	if (i == j) 
+	  continue;
+	sum += probabilities[i];
+      }
+    for(int i = 0; i <(int) probabilities.size(); i++)
+      {
+	if (i == j) 
+	  continue;
+	probabilities[i]  = probabilities[i]/sum;
+      }
+    trans->setProbabilities(probabilities);
+  }
+
+
+
 }
