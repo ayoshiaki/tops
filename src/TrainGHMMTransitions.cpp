@@ -7,7 +7,7 @@
 #include "Alphabet.hpp"
 #include "Symbol.hpp"
 #include "ProbabilisticModelParameter.hpp"
-
+#include "TrainFixedLengthMarkovChain.hpp"
 #include <boost/algorithm/string.hpp>
 
 namespace tops {
@@ -30,13 +30,16 @@ namespace tops {
     trainFixedMarkovChain.add("order", IntParameterValuePtr(new IntParameterValue(1)));
     trainFixedMarkovChain.add("training_set", parameters.getMandatoryParameterValue("training_set"));
     trainFixedMarkovChain.add("pseudo_counts", IntParameterValuePtr(new IntParameterValue(0)));
-    ProbabilisticModelPtr markovChain = creator.create(trainFixedMarkovChain);
-    
+
 
     ProbabilisticModelParameters ghmmParameters = ghmm->parameters();
+
+    trainFixedMarkovChain.add("alphabet", ghmmParameters.getOptionalParameterValue("state_names"));
+    TrainFixedLengthMarkovChainPtr markovChainTraining = TrainFixedLengthMarkovChainPtr(new TrainFixedLengthMarkovChain());
+    ProbabilisticModelPtr markovChain  = markovChainTraining->create(trainFixedMarkovChain);
     ProbabilisticModelParameters markovChainParameters = markovChain->parameters();
-    
-    ProbabilisticModelParameterValuePtr probabilities_par = markovChainParameters.getOptionalParameterValue("probabilities");
+
+    ProbabilisticModelParameterValuePtr probabilities_par = markovChainParameters.getMandatoryParameterValue("probabilities");
 
     ghmmParameters.set("transitions", probabilities_par);
     

@@ -37,7 +37,7 @@ namespace tops {
   }
 
 ProbabilisticModelPtr TrainFiniteDiscreteDistribution::train(const SequenceEntryList & sample_set, AlphabetPtr alphabet) const{
-	ContextTreePtr tree = ContextTreePtr(new ContextTree(alphabet->size()));
+	ContextTreePtr tree = ContextTreePtr(new ContextTree(alphabet));
 	tree->initializeCounter(sample_set, 0);
 	tree->normalize();
 	FiniteDiscreteDistributionPtr m = tree->getRoot()->getDistribution();

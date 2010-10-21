@@ -18,7 +18,6 @@ namespace tops
 	aux.push_back(alphabet->getSymbol(current->symbol())->name() );
 	current = _all_context[current->getParent()];
       }
-    
     for(int k = 0; k < (int)alphabet->size(); k++)
       {
 	std::stringstream out;
@@ -136,20 +135,20 @@ namespace tops
   std::vector <ContextTreeNodePtr> ContextTreeNode::getChildren() {
     return _child;
   }
-
-
-
+  
+  
+  
   bool ContextTreeNode::isLeaf(){
     return _leaf;
   }
-
+  
   std::string ContextTreeNode::str() const {
     std::stringstream out;
     return out.str();
   }
-
-
-
+  
+  
+  
   void ContextTree::printTree(ContextTreeNodePtr node, std::stringstream & out) const
   {
     ContextTreeNodePtr current = node;
@@ -160,11 +159,12 @@ namespace tops
       }
     int sum = 0;
     out << ": ";
-    for(int k = 0; k < _alphabet_size; k++)
+    for(int k = 0; k < (int)_alphabet->size(); k++)
       {
 	sum += (node->getCounter())[k];
 	out << (node->getCounter())[k] << " " ;
       }
+    
     out << "("<< node->id() << ", "<<  sum << ") ";
     if(!node->isLeaf())
       out << "internal node" << std::endl;
@@ -175,9 +175,9 @@ namespace tops
 	if(node->getChild(l) != NULL)
 	  printTree(node->getChild(l), out);
   }
-
-  ContextTree::ContextTree(int alphabet_size){
-    _alphabet_size = alphabet_size;
+  
+  ContextTree::ContextTree(AlphabetPtr alphabet){
+    _alphabet = alphabet;
   }
 
   ContextTreeNodePtr ContextTree::getRoot() const {
@@ -186,7 +186,7 @@ namespace tops
 
 
   ContextTreeNodePtr ContextTree::createContext() {
-    ContextTreeNodePtr n = ContextTreeNodePtr(new ContextTreeNode(_alphabet_size));
+    ContextTreeNodePtr n = ContextTreeNodePtr(new ContextTreeNode(_alphabet->size()));
     n->setId(_all_context.size());
     if(n->id() == 0)
       {
@@ -243,7 +243,7 @@ namespace tops
 	    continue;
 	  ContextTreeNodePtr parent = _all_context[parent_id];
 	  bool levelOne = true;
-	  for(int l =0; l < _alphabet_size; l++)
+	  for(int l =0; l < (int)_alphabet->size(); l++)
 	    if(!parent->getChild(l)->isLeaf()) 
 	      levelOne = false;
 	  if(levelOne)
@@ -263,7 +263,7 @@ namespace tops
 	    _all_context[i]->setId(newAllVector.size());
 	    newAllVector.push_back(_all_context[i]);
 	    if((_all_context[i] != NULL) && (!_all_context[i]->isLeaf()))
-	      for(int  m = 0; m < _alphabet_size; m++)
+	      for(int  m = 0; m < (int)_alphabet->size(); m++)
 		_all_context[i]->getChild(m)->setParent(_all_context[i]->id());
 	  }
       }
@@ -277,13 +277,14 @@ namespace tops
     for(int i = 0; i  < (int)_all_context.size(); i++)
       {
 	double total = 0;
-	DoubleVector probs(_alphabet_size);
-	for(int l = 0; l < _alphabet_size; l++)
+	DoubleVector probs(_alphabet->size());
+	for(int l = 0; l < (int)_alphabet->size(); l++)
 	  total += (double)(_all_context[i]->getCounter())[l];
-	for(int l = 0; l < _alphabet_size; l++){
+	for(int l = 0; l < (int)_alphabet->size(); l++){
 	  probs[l] = (double)((_all_context[i]->getCounter())[l])/total;
 	}
 	FiniteDiscreteDistributionPtr distr = FiniteDiscreteDistributionPtr(new FiniteDiscreteDistribution(probs));
+	distr->setAlphabet(_alphabet);
 	_all_context[i]->setDistribution(distr);
       }
   }
@@ -357,12 +358,12 @@ namespace tops
   {
 
     double sample_size = 0.0;
-    for (int l = 0; l < _alphabet_size; l++)
+    for (int l = 0; l < (int)_alphabet->size(); l++)
       sample_size += (getRoot()->getCounter())[l];
     std::set<int> x = getLevelOneNodes();
     std::vector<int> nodesToPrune (x.begin(),x.end());
     std::set<int>::iterator it;
-    double small = ((double)_alphabet_size)*log(sample_size);
+    double small = ((double)_alphabet->size())*log(sample_size);
 
     while(nodesToPrune.size() > 0) 
       {
@@ -374,16 +375,16 @@ namespace tops
 	if(parentNode->isLeaf())
 	  break;
 
-	for(int m = 0; m < _alphabet_size; m++)
+	for(int m = 0; m < (int)_alphabet->size(); m++)
 	  total += (parentNode->getCounter())[m];
 	bool foundSmall = false;
-	for (int l = 0; l < _alphabet_size; l++)
+	for (int l = 0; l < (int)_alphabet->size(); l++)
 	  {	  
 	    ContextTreeNodePtr childNode = parentNode->getChild(l);
 	    double totalChild = 0.0;
-	    for(int m = 0; m < _alphabet_size; m++)
+	    for(int m = 0; m < (int)_alphabet->size(); m++)
 	      totalChild+= (childNode->getCounter())[m];
-	    for(int m = 0; m < _alphabet_size; m++)
+	    for(int m = 0; m < (int)_alphabet->size(); m++)
 	      {
 		double diff = (double)(parentNode->getCounter())[m] / total;
 		diff -= (double)(childNode->getCounter())[m] /totalChild;
@@ -409,7 +410,7 @@ namespace tops
 	    parentNode->deleteChildren();
 	    ContextTreeNodePtr parentNode2 = getContext(parentNode->getParent());
 	    bool toPrune = true;
-	    for(int l = 0; l < _alphabet_size; l++)
+	    for(int l = 0; l < (int)_alphabet->size(); l++)
 	      if((parentNode2->getChild(l) != NULL) && !(parentNode2->getChild(l)->isLeaf()))
 		{
 		  toPrune = false;
@@ -425,7 +426,7 @@ namespace tops
   void ContextTree::initializeContextTreeRissanen(const SequenceEntryList & sequences)
   {
     ContextTreeNodePtr root = createContext();
-    for(int i = 0; i < _alphabet_size; i++)
+    for(int i = 0; i < (int)_alphabet->size(); i++)
       root->addCount(i);
 
     for(int s = 0; s < (int)sequences.size(); s++)
@@ -436,7 +437,7 @@ namespace tops
 	    ContextTreeNodePtr w = root;
 	    if((!w->isLeaf()) && ((w->getCounter())[v] == 1.0))
 	      {
-		for(int l = 0; l < _alphabet_size; l++) 
+		for(int l = 0; l < (int)_alphabet->size(); l++) 
 		  {
 		    ContextTreeNodePtr n = w->getChild(l);
 		    n->addCount(v);
@@ -446,7 +447,7 @@ namespace tops
 	      }
 	    if(w->isLeaf() && ((w->getCounter())[v] == 1.0))
 	      {
-		for(int l = 0; l < _alphabet_size; l++)
+		for(int l = 0; l < (int)_alphabet->size(); l++)
 		  {
 		    ContextTreeNodePtr n = createContext();
 		    n->addCount(v);
@@ -465,7 +466,7 @@ namespace tops
 		w = w->getChild(u);
 		if((!w->isLeaf()) && (w->getCounter())[v] == 1.0) 
 		  {
-		    for(int l = 0; l < _alphabet_size; l++)
+		    for(int l = 0; l < (int)_alphabet->size(); l++)
 		      {
 			ContextTreeNodePtr n = w->getChild(l);
 			n->addCount(v);
@@ -475,7 +476,7 @@ namespace tops
 		  } 
 		if(w->isLeaf() && ((w->getCounter())[v] == 1.0) ) 
 		  {
-		    for(int l = 0; l  < _alphabet_size; l++)
+		    for(int l = 0; l  < (int)_alphabet->size(); l++)
 		      {
 			ContextTreeNodePtr n = createContext();
 			n->addCount(v);

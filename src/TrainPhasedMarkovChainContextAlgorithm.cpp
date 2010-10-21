@@ -71,7 +71,7 @@ ProbabilisticModelPtr TrainPhasedMarkovChainContextAlgorithm::create(
 		    }
 		}
 		double delta = (parameters.getOptionalParameterValue(cut[i])->getDouble());
-		ContextTreePtr tree = ContextTreePtr(new ContextTree(alphabet->size()));
+		ContextTreePtr tree = ContextTreePtr(new ContextTree(alphabet));
 		tree->initializeContextTreeRissanen(positionalSample);
 		tree->pruneTree(delta);
 		tree->removeContextNotUsed();

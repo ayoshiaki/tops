@@ -15,16 +15,16 @@ namespace tops {
   private:
     FiniteDiscreteDistributionPtr _distribution;
     ContextTreeNodeVector _child;
+    int _alphabet_size;
     int _symbol;
     bool _leaf;
-    int _alphabet_size;
     std::vector<double> _counter;
     int _id;
     int _parent_id;
   public:
     ~ContextTreeNode(){ }
     
-    //! \param alphabet_size is the size of the alphabet
+    //! \param alphabet is the alphabet to be used
     ContextTreeNode(int alphabet_size);
     
     //! Default constructor
@@ -94,7 +94,7 @@ namespace tops {
     ~ContextTree() {
     }
     ContextTree(){}
-    ContextTree(int alphabet_size);
+    ContextTree(AlphabetPtr alphabet);
 
     ContextTreeNodeVector & all_context() {
       return _all_context;
@@ -142,7 +142,7 @@ namespace tops {
     void printTree(ContextTreeNodePtr node, std::stringstream & out) const;
     void buildParameters(ContextTreeNodePtr node, std::map<std::string, double> & parameters) const;
     ContextTreeNodeVector _all_context;
-    int _alphabet_size;
+    AlphabetPtr _alphabet;
 
   };
   typedef boost::shared_ptr<ContextTree> ContextTreePtr;

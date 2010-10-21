@@ -38,7 +38,7 @@ ProbabilisticModelPtr TrainVariableLengthMarkovChain::create(
 	  sample_set.push_back(e);
 	}
 
-	ContextTreePtr tree = ContextTreePtr(new ContextTree(alphabet->size()));
+	ContextTreePtr tree = ContextTreePtr(new ContextTree(alphabet));
 	tree->initializeContextTreeRissanen(sample_set);
 	tree->pruneTree(delta_parameter->getDouble());
 	tree->removeContextNotUsed();
@@ -78,7 +78,7 @@ ProbabilisticModelPtr TrainVariableLengthMarkovChain::create(
 	SequenceEntryList sample_set;
 	readSequencesFromFile(sample_set, alphabet, training_set_parameter->getString());
 
-	ContextTreePtr tree = ContextTreePtr(new ContextTree(alphabet->size()));
+	ContextTreePtr tree = ContextTreePtr(new ContextTree(alphabet));
 	tree->initializeContextTreeRissanen(sample_set);
 	tree->pruneTree(delta_parameter->getDouble());
 	tree->removeContextNotUsed();

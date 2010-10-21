@@ -31,7 +31,7 @@ ProbabilisticModelPtr TrainFixedLengthMarkovChain::create(
 	alphabet ->initializeFromVector(alphapar->getStringVector());
 	SequenceEntryList sample_set;
 	readSequencesFromFile(sample_set, alphabet, trainpar->getString());
-	ContextTreePtr tree = ContextTreePtr(new ContextTree(alphabet->size()));
+	ContextTreePtr tree = ContextTreePtr(new ContextTree(alphabet));
 	tree->initializeCounter(sample_set, orderpar->getInt(), pseudocounts);
 	tree->normalize();
 

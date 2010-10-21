@@ -66,7 +66,7 @@ namespace tops{
 	      }
 	  }
 
-	ContextTreePtr tree = ContextTreePtr(new ContextTree(alphabet->size()));
+	ContextTreePtr tree = ContextTreePtr(new ContextTree(alphabet));
 	tree->initializeCounter(positionalSample, o, pseudocounts);
 	tree->normalize();
 	positional_distribution[i] = tree;

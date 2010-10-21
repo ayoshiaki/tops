@@ -98,7 +98,7 @@ namespace tops {
     AlphabetPtr alphabet = AlphabetPtr(new Alphabet());
     alphabet->initializeFromVector(symbols->getStringVector());
     ContextTreePtr tree =
-      ContextTreePtr(new ContextTree(alphabet->size()));
+      ContextTreePtr(new ContextTree(alphabet));
     ContextTreeNodePtr root = tree->createContext();
 
     std::string  root_str("");
