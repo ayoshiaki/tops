@@ -7,7 +7,7 @@
 
 namespace tops {
 
-  //! Creates a probabilistic model
+  //! Represents an algorithm to create a probabilistic model
   class ProbabilisticModelCreator {
   public:
     ProbabilisticModelCreator () {}

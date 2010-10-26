@@ -8,6 +8,7 @@
 
 namespace tops {
   class SequenceEntry;
+  //! Represents a  format for the sequence
   class SequenceFormat {
   public:
     SequenceFormat(){};
@@ -17,7 +18,7 @@ namespace tops {
   };
   typedef boost::shared_ptr<SequenceFormat> SequenceFormatPtr;
 
-
+  //! Fasta Format
   class FastaSequenceFormat : public SequenceFormat {
   private:
     std::string _nextFastaHeader;
@@ -30,10 +31,10 @@ namespace tops {
     virtual std::istream & readSequence (std::istream & stream, SequenceEntry & in) ;
   };
   typedef boost::shared_ptr <FastaSequenceFormat> FastaSequenceFormatPtr;
-
+  
   class SequenceFormatManager;
   typedef boost::shared_ptr <SequenceFormatManager> SequenceFormatManagerPtr;
-  
+  //! Sequence Format Manager
   class SequenceFormatManager {
   public:
     static SequenceFormatManagerPtr instance();

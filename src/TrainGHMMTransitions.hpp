@@ -7,7 +7,7 @@ namespace tops {
 
   class ProbabilisticModelParameters;
 
-  //! This class is  a factory for the finite discrete distribution
+  //! This class is  a factory for the Multinomial Distribution
   class TrainGHMMTransitionsCreator : public ProbabilisticModelCreator 
   {
   public:

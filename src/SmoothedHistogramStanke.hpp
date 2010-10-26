@@ -5,7 +5,7 @@
 namespace tops 
 {
 
-
+  //! Use this to create a smoothed histogram
   class SmoothedHistogramStanke:  public ProbabilisticModelCreator {
   public:
     SmoothedHistogramStanke () {}

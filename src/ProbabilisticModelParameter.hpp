@@ -21,7 +21,7 @@ namespace tops {
   typedef std::map <std::string, std::string> StringMap;
   class ProbabilisticModelParameterValue;
   typedef boost::shared_ptr <ProbabilisticModelParameterValue> ProbabilisticModelParameterValuePtr;
-  
+  //! This class registers a set of parameters
   class ProbabilisticModelParameters  {
     std::map <std::string, ProbabilisticModelParameterValuePtr> _parameters;
   public:

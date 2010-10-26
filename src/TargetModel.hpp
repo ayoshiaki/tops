@@ -13,7 +13,7 @@
 
 namespace tops {
 
-  //! This  represent  probability distributions  over a finite set of symbols
+  //! This class is the Target Model
   class TargetModel : public ProbabilisticModel
   {
   public:

@@ -5,7 +5,7 @@
 namespace tops 
 {
 
-  //! Estimates the variable length markov chain using the context algorithm
+  //! Estimates a smoothed histogram using kernel density estimation
   class SmoothedHistogramKernelDensity:  public ProbabilisticModelCreator {
   public:
     SmoothedHistogramKernelDensity () {}

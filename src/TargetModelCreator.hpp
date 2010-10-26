@@ -6,7 +6,7 @@
 #include <boost/shared_ptr.hpp>
 
 namespace tops {
-  //! This class is  a factory for the finite discrete distribution
+  //! This class is  a factory for the Target Model
   class TargetModelCreator : public ProbabilisticModelCreator 
   {
   public:

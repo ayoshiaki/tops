@@ -8,7 +8,7 @@
 
 namespace tops {
 
-  //! Creates a probabilistic model
+  //! Train a Phased Markov Chain using the Context Algorithm
   class TrainPhasedMarkovChainContextAlgorithm : public ProbabilisticModelCreator {
   public:
     TrainPhasedMarkovChainContextAlgorithm () {}

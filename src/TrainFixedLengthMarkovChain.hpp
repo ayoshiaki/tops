@@ -8,7 +8,7 @@
 
 namespace tops {
 
-  //! Creates a probabilistic model
+  //! Creates a fixed length markov chain
   class TrainFixedLengthMarkovChain : public ProbabilisticModelCreator {
   public:
     TrainFixedLengthMarkovChain () {}

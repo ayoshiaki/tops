@@ -10,7 +10,7 @@
 #include "Sequence.hpp"
 
 namespace tops {
-
+  //! Represent a sequence entry
   class SequenceEntry {
   private:
     friend std::ostream & operator << (std::ostream & stream, SequenceEntry & out);

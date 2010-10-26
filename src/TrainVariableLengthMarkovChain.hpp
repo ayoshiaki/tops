@@ -8,7 +8,7 @@
 
 namespace tops {
 
-  //! Train the variable length Markov chain using the context algorithm.
+  //! This class trains the Variable Length Markov Chain using the context algorithm.
   class TrainVariableLengthMarkovChain : public ProbabilisticModelCreator {
   public:
     TrainVariableLengthMarkovChain () {}

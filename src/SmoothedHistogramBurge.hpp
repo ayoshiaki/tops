@@ -5,7 +5,7 @@
 namespace tops 
 {
 
-
+  //! Creates a smoothed histogram using Burge algorithm
   class SmoothedHistogramBurge:  public ProbabilisticModelCreator {
   public:
     SmoothedHistogramBurge () {}

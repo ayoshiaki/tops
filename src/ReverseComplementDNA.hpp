@@ -5,7 +5,7 @@
 #include "FiniteDiscreteDistribution.hpp"
 #include "Symbol.hpp"
 namespace tops { 
-  //! A decorator that forces the emission of the same sequence at a fixed position of the sequence.
+
   class ReverseComplementDNA : public ProbabilisticModelDecorator {
   private:
     AlphabetPtr revAlphabet;

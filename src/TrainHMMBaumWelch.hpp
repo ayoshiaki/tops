@@ -8,7 +8,7 @@
 
 namespace tops {
 
-  //! Creates a probabilistic model
+  //! Creates a HMM using Baum-Welch
   class TrainHMMBaumWelch : public ProbabilisticModelCreator {
   public:
     TrainHMMBaumWelch () {}

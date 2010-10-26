@@ -8,7 +8,7 @@
 
 namespace tops {
 
-  //! Creates a probabilistic model
+  //! Creates a Multinomial Distribution
   class TrainFiniteDiscreteDistribution : public ProbabilisticModelCreator {
   public:
     TrainFiniteDiscreteDistribution () {}

@@ -8,7 +8,7 @@
 
 namespace tops {
 
-  //! Creates a probabilistic model
+  //! Train a inhomogeneous VLMC
   class TrainVariableLengthInhomogeneousMarkovChain : public ProbabilisticModelCreator {
   public:
     TrainVariableLengthInhomogeneousMarkovChain () {}

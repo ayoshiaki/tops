@@ -13,7 +13,7 @@
 namespace tops{
 
 
-  //! This is a markov chain implementation 
+  //! This class is a Variable Length Markov Chain
   class VariableLengthMarkovChain : public FactorableModel {
   public:
     VariableLengthMarkovChain(){
@@ -24,6 +24,7 @@ namespace tops{
     }
     virtual ~VariableLengthMarkovChain() {};
 
+    //! Set the context tree of the Markov chain
     virtual void setTree(ContextTreePtr tree) {
       _tree = tree;
     }
@@ -41,15 +42,21 @@ namespace tops{
     //! Returns a string representation of the model
     virtual std::string str() const ;
 
+    //! Returns the name of the model
     virtual std::string model_name () const {
       return "VariableLengthMarkovChain";
     }
+
+    //! Returns a factory for this Markov chain
     virtual ProbabilisticModelCreatorPtr getFactory() const ;
 
+    //! Returns the number of parameters of the model
     virtual int size() const;
 
+    //! Initialize the Markov chain given the parameters
     virtual void initialize(const ProbabilisticModelParameters & p) ;
 
+    //! Returns the parameters of the model
     virtual ProbabilisticModelParameters parameters() const;
   private:
     ContextTreePtr _tree;

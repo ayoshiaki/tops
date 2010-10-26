@@ -8,7 +8,7 @@
 
 namespace tops {
 
-  //! Creates a probabilistic model
+  //! Train a Phased Markov Chain
   class TrainPhasedMarkovChain : public ProbabilisticModelCreator {
   public:
     TrainPhasedMarkovChain () {}

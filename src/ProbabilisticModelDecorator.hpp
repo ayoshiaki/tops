@@ -1,7 +1,7 @@
 #include "ProbabilisticModel.hpp"
 #include <string>
 namespace tops {
-  //! Decorator 
+  //! Decorator for the probabilistic model
   class ProbabilisticModelDecorator : public ProbabilisticModel {
   private:
     ProbabilisticModelPtr _model;

@@ -6,6 +6,7 @@
 #include "ProbabilisticModelParameter.hpp"
 
 namespace tops {
+  //! Creates a new probabilistic model
   class ProbabilisticModelCreatorClient {
   public:
     ProbabilisticModelCreatorClient();
