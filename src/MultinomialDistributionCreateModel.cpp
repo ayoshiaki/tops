@@ -1,6 +1,6 @@
 #include "Alphabet.h"
-#include "FiniteDiscreteDistributionFactory.h"
-#include "FiniteDiscreteDistributionCreateModel.h"
+#include "MultinomialDistributionFactory.h"
+#include "MultinomialDistributionCreateModel.h"
 #include "ReadConfigurationFile.h"
 #include "SequenceFactory.h"
 #include "FASTAReader.h"
@@ -9,14 +9,14 @@
 
 namespace myop {
 
-  ProbabilisticModelPtr FiniteDiscreteDistributionCreateModel::create (const std::string & config) {
+  ProbabilisticModelPtr MultinomialDistributionCreateModel::create (const std::string & config) {
     std::string TYPE("distribution");
     std::vector <std::string> mandatory;
     mandatory.push_back(TYPE);
     ReadConfigurationFile readConf;
     Configuration conf = readConf.load_configuration_file(config, mandatory);
 
-    std::map <std::string, FiniteDiscreteDistributionCreateModelPtr> commands;
+    std::map <std::string, MultinomialDistributionCreateModelPtr> commands;
     std::string BERNOULLI("Bernoulli");
     std::string UNIFORM_ALPHABET("Uniform");
     std::string SMOOTHED_HISTOGRAM_BURGE("SmoothedHistogramBurge");
@@ -25,19 +25,19 @@ namespace myop {
     std::string SMOOTHED_HISTOGRAM_MYOP("SmoothedHistogramMYOP");
     std::string SMOOTHED_HISTOGRAM_MAJOROS("SmoothedHistogramMajoros");
     
-    commands[BERNOULLI] = FiniteDiscreteDistributionCreateModelPtr(new BernoulliCreateModel());
-    commands[UNIFORM_ALPHABET] = FiniteDiscreteDistributionCreateModelPtr(new UniformAlphabetCreateModel());
-    commands[SMOOTHED_HISTOGRAM_BURGE] = FiniteDiscreteDistributionCreateModelPtr(new SmoothedHistogramBurgeCreateModel());
-    commands[SMOOTHED_HISTOGRAM_STANKE] = FiniteDiscreteDistributionCreateModelPtr(new SmoothedHistogramStankeCreateModel());
-    commands[SMOOTHED_HISTOGRAM_SHEATHER_JONES] = FiniteDiscreteDistributionCreateModelPtr(new SmoothedHistogramKernelDensityCreateModel());
-    commands[SMOOTHED_HISTOGRAM_MYOP] = FiniteDiscreteDistributionCreateModelPtr(new SmoothedHistogramMYOPCreateModel());
-    commands[SMOOTHED_HISTOGRAM_MAJOROS] = FiniteDiscreteDistributionCreateModelPtr(new SmoothedHistogramMajorosCreateModel());
+    commands[BERNOULLI] = MultinomialDistributionCreateModelPtr(new BernoulliCreateModel());
+    commands[UNIFORM_ALPHABET] = MultinomialDistributionCreateModelPtr(new UniformAlphabetCreateModel());
+    commands[SMOOTHED_HISTOGRAM_BURGE] = MultinomialDistributionCreateModelPtr(new SmoothedHistogramBurgeCreateModel());
+    commands[SMOOTHED_HISTOGRAM_STANKE] = MultinomialDistributionCreateModelPtr(new SmoothedHistogramStankeCreateModel());
+    commands[SMOOTHED_HISTOGRAM_SHEATHER_JONES] = MultinomialDistributionCreateModelPtr(new SmoothedHistogramKernelDensityCreateModel());
+    commands[SMOOTHED_HISTOGRAM_MYOP] = MultinomialDistributionCreateModelPtr(new SmoothedHistogramMYOPCreateModel());
+    commands[SMOOTHED_HISTOGRAM_MAJOROS] = MultinomialDistributionCreateModelPtr(new SmoothedHistogramMajorosCreateModel());
     
     if(commands.find(conf[TYPE]) == commands.end())
       {
 	std::cerr << "Invalid value for \"distribution\" parameter" << std::endl;
 	std::cerr << "Valid values are: " << std::endl;
-	std::map<std::string,FiniteDiscreteDistributionCreateModelPtr> :: iterator it;
+	std::map<std::string,MultinomialDistributionCreateModelPtr> :: iterator it;
 	for (it = commands.begin(); it != commands.end(); it++)
 	  std::cerr << "\t" << it->first << std::endl;
 	exit(-1);
@@ -51,7 +51,7 @@ namespace myop {
     mandatory.push_back(PROBABILITY);
     ReadConfigurationFile readConf;
     Configuration conf = readConf.load_configuration_file(config, mandatory);
-    FiniteDiscreteDistributionFactory factory;
+    MultinomialDistributionFactory factory;
     return factory.bernoulli(atof(conf[PROBABILITY].c_str()));
   }
   
@@ -63,7 +63,7 @@ namespace myop {
     Configuration conf = readConf.load_configuration_file(config, mandatory);
     AlphabetPtr alphabet = AlphabetPtr(new Alphabet());
     alphabet->initializeFromString(conf[ALPHABET]);
-    FiniteDiscreteDistributionFactory factory;
+    MultinomialDistributionFactory factory;
     return factory.uniform(alphabet);
   }
   
@@ -96,7 +96,7 @@ namespace myop {
 	lengths.push_back((double)sequence.size());
       }
     reader.close();
-    FiniteDiscreteDistributionFactory factory;
+    MultinomialDistributionFactory factory;
     return factory.smoothedDistributionBurge(lengths, atof(conf[C].c_str()));
   }
 
@@ -134,7 +134,7 @@ namespace myop {
 	lengths.push_back((double)sequence.size());
       }
     reader.close();
-    FiniteDiscreteDistributionFactory factory;
+    MultinomialDistributionFactory factory;
     return factory.smoothedDistributionMajoros(lengths, atoi(conf[WINDOW_SIZE].c_str()), atoi(conf[INTERACTIONS].c_str()), atoi(conf[N].c_str()));
   }
   
@@ -168,7 +168,7 @@ namespace myop {
 	lengths.push_back(sequence.size());
       }
     reader.close();
-    FiniteDiscreteDistributionFactory factory;
+    MultinomialDistributionFactory factory;
     return factory.smoothedDistributionKernelDensityStanke(lengths);
   }
 
@@ -201,7 +201,7 @@ namespace myop {
 	lengths.push_back(sequence.size());
       }
     reader.close();
-    FiniteDiscreteDistributionFactory factory;
+    MultinomialDistributionFactory factory;
     return factory.smoothedDistributionKernelDensity(lengths);
   }
 
@@ -233,7 +233,7 @@ namespace myop {
 	lengths.push_back(sequence.size());
       }
     reader.close();
-    FiniteDiscreteDistributionFactory factory;
+    MultinomialDistributionFactory factory;
     return factory.smoothedDistributionKernelDensityMYOP(lengths);
 
   }

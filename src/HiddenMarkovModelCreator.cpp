@@ -1,6 +1,6 @@
 #include "HiddenMarkovModelCreator.hpp"
-#include "FiniteDiscreteDistributionCreator.hpp"
-#include "FiniteDiscreteDistribution.hpp"
+#include "MultinomialDistributionCreator.hpp"
+#include "MultinomialDistribution.hpp"
 #include "ConfigurationReader.hpp"
 #include "HiddenMarkovModel.hpp"
 #include "Alphabet.hpp"

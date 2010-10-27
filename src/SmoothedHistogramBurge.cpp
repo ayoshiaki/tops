@@ -1,5 +1,5 @@
 #include "SmoothedHistogramBurge.hpp"
-#include "FiniteDiscreteDistribution.hpp"
+#include "MultinomialDistribution.hpp"
 #include "util.hpp"
 namespace tops {
 
@@ -79,8 +79,8 @@ namespace tops {
     ProbabilisticModelParameters pars;
     pars.add("probabilities", ProbabilisticModelParameterValuePtr (new DoubleVectorParameterValue(prob)));
     pars.add("alphabet", alpha->getParameterValue());
-    FiniteDiscreteDistributionPtr result = 
-      FiniteDiscreteDistributionPtr(new FiniteDiscreteDistribution());
+    MultinomialDistributionPtr result = 
+      MultinomialDistributionPtr(new MultinomialDistribution());
     result->initialize(pars);
     return result;
   }

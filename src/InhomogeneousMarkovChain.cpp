@@ -111,7 +111,7 @@ namespace tops{
 	DoubleVector prob;
 	for(int i = 0; i < n->alphabet_size(); i++) 
 	  prob.push_back(exp(c ->getDistribution()->log_probability_of(i)));
-	FiniteDiscreteDistributionPtr distr = FiniteDiscreteDistributionPtr(new FiniteDiscreteDistribution(prob));
+	MultinomialDistributionPtr distr = MultinomialDistributionPtr(new MultinomialDistribution(prob));
 	n->setDistribution(distr);
 	c->setChild(n, l);
       }

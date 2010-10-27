@@ -2,7 +2,7 @@
 #define PHASED_RUN_LENGTH_DISTRIBUTION_HPP
 
 #include "ProbabilisticModelDecorator.hpp"
-#include "FiniteDiscreteDistribution.hpp"
+#include "MultinomialDistribution.hpp"
 namespace tops { 
   //! Provides mechanisms to control the phase of a probabilistic model
   class PhasedRunLengthDistribution : public ProbabilisticModelDecorator {

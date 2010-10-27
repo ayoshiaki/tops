@@ -9,10 +9,10 @@
 namespace tops {
 
   //! Creates a Multinomial Distribution
-  class TrainFiniteDiscreteDistribution : public ProbabilisticModelCreator {
+  class TrainMultinomialDistribution : public ProbabilisticModelCreator {
   public:
-    TrainFiniteDiscreteDistribution () {}
-    virtual ~TrainFiniteDiscreteDistribution () {};
+    TrainMultinomialDistribution () {}
+    virtual ~TrainMultinomialDistribution () {};
     //! Creates a probability model
     /*! \param parameters is a set of parameters that is utilized to build the model */
     virtual ProbabilisticModelPtr create( ProbabilisticModelParameters & parameters) const ;
@@ -28,7 +28,7 @@ namespace tops {
     virtual std::string help() const ;
 
   };
-  typedef boost::shared_ptr <TrainFiniteDiscreteDistribution> TrainFiniteDiscreteDistributionPtr ;
+  typedef boost::shared_ptr <TrainMultinomialDistribution> TrainMultinomialDistributionPtr ;
 };
 
 

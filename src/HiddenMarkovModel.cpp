@@ -343,7 +343,7 @@ namespace tops {
     std::map<std::string,double>::const_iterator it;    
     std::map<std::string,std::vector<double> >::const_iterator it2;    
 
-    FiniteDiscreteDistributionPtr pi = FiniteDiscreteDistributionPtr(new FiniteDiscreteDistribution());
+    MultinomialDistributionPtr pi = MultinomialDistributionPtr(new MultinomialDistribution());
     pi->initializeFromMap(initial_probabilities->getDoubleMap(), states);
 
     std::map<std::string,double> emisspar = emissions->getDoubleMap();
@@ -411,14 +411,14 @@ namespace tops {
     for(unsigned int i = 0; i < states->size(); i++)
       {
 	SymbolPtr state_name = states->getSymbol(i);
-	FiniteDiscreteDistributionPtr e ;
-	FiniteDiscreteDistributionPtr t ;
+	MultinomialDistributionPtr e ;
+	MultinomialDistributionPtr t ;
 	it2 = emiss.find(state_name->name());
 	if(it2 != emiss.end())
-	  e = FiniteDiscreteDistributionPtr(new FiniteDiscreteDistribution(it2->second));
+	  e = MultinomialDistributionPtr(new MultinomialDistribution(it2->second));
 	it2 = trans.find(state_name->name());
 	if(it2 != trans.end())
-	  t = FiniteDiscreteDistributionPtr(new FiniteDiscreteDistribution(it2->second));
+	  t = MultinomialDistributionPtr(new MultinomialDistribution(it2->second));
 	else {
 	  std::cerr << "ERROR: Could not configure the state " << state_name->name() << "!" << std::endl;
 	  exit(-1);
@@ -487,7 +487,7 @@ namespace tops {
   }
 
 
-  void HiddenMarkovModel::setInitialProbability(FiniteDiscreteDistributionPtr initial) {
+  void HiddenMarkovModel::setInitialProbability(MultinomialDistributionPtr initial) {
     _initial_probability = initial;
   }
   void HiddenMarkovModel::setObservationSymbols(AlphabetPtr obs) {

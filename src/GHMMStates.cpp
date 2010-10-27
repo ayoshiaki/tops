@@ -1,6 +1,6 @@
 #include "GHMMStates.hpp"
 #include "ProbabilisticModel.hpp"
-#include "FiniteDiscreteDistribution.hpp"
+#include "MultinomialDistribution.hpp"
 #include "Symbol.hpp" 
 namespace tops{
   GHMMState::GHMMState() {
@@ -43,10 +43,10 @@ namespace tops{
   ProbabilisticModelPtr GHMMState::observation() const {
     return _observation;
   }
-  void GHMMState::setTransition(FiniteDiscreteDistributionPtr trans) {
+  void GHMMState::setTransition(MultinomialDistributionPtr trans) {
     _transition = trans;
   }
-  FiniteDiscreteDistributionPtr GHMMState::transition() const {
+  MultinomialDistributionPtr GHMMState::transition() const {
     return _transition;
   }
   int GHMMState::chooseDuration() const {
@@ -267,7 +267,7 @@ namespace tops{
 
 
   void GHMMSignalState::fixTransitionDistribution () const {
-    FiniteDiscreteDistributionPtr trans = transition();
+    MultinomialDistributionPtr trans = transition();
     DoubleVector probabilities = (trans->parameters()).getMandatoryParameterValue("probabilities")->getDoubleVector();
     int j = id();
     if(probabilities.size() <= 0) {
@@ -291,7 +291,7 @@ namespace tops{
   }
 
   void GHMMExplicitDurationState::fixTransitionDistribution () const {
-    FiniteDiscreteDistributionPtr trans = transition();
+    MultinomialDistributionPtr trans = transition();
     DoubleVector probabilities = (trans->parameters()).getMandatoryParameterValue("probabilities")->getDoubleVector();
     int j = id();
     if(probabilities.size() <= 0) {

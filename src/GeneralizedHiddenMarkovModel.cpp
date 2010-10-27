@@ -62,13 +62,13 @@ namespace tops {
 	_all_states.resize(alphabet->size());
 }
 void GeneralizedHiddenMarkovModel::setInitialProbability(
-		FiniteDiscreteDistributionPtr init) {
+		MultinomialDistributionPtr init) {
 	_initial_probabilities = init;
 }
 
 void GeneralizedHiddenMarkovModel::configureSignalState(
 							std::string observation_model_name, std::string null_model_name,
-							FiniteDiscreteDistributionPtr transition_distr, double threshold,
+							MultinomialDistributionPtr transition_distr, double threshold,
 							int size, std::string state_name, int iphase, int ophase){
   SymbolPtr symbol = _state_names->getSymbol(state_name);
   ProbabilisticModelPtr model = _models[observation_model_name];
@@ -87,7 +87,7 @@ void GeneralizedHiddenMarkovModel::configureSignalState(
 
 void GeneralizedHiddenMarkovModel::configureGeometricDurationState(
 								   std::string model_name,
-								   FiniteDiscreteDistributionPtr transition_distr, std::string state_name, int iphase, int ophase) {
+								   MultinomialDistributionPtr transition_distr, std::string state_name, int iphase, int ophase) {
   ProbabilisticModelPtr model = _models[model_name];
   SymbolPtr symbol = _state_names->getSymbol(state_name);
   GHMMStatePtr state = GHMMStatePtr(new GHMMState(model, transition_distr,
@@ -102,7 +102,7 @@ void GeneralizedHiddenMarkovModel::configureGeometricDurationState(
 
 void GeneralizedHiddenMarkovModel::configureExplicitDurationState(
 								  std::string observation_model_name,
-		FiniteDiscreteDistributionPtr transition_distr,
+		MultinomialDistributionPtr transition_distr,
 								  std::string duration_model_name, std::string state_name, int iphase, int ophase, int start, int stop, int leftJoinable, int rightJoinable) 
 {
 
@@ -768,7 +768,7 @@ Sequence & GeneralizedHiddenMarkovModel::chooseObservation(Sequence & h, int i,
     AlphabetPtr observation_symbols = AlphabetPtr(new Alphabet());
     observation_symbols->initializeFromVector(observation_symbols_par->getStringVector());
 
-    FiniteDiscreteDistributionPtr pi = FiniteDiscreteDistributionPtr(new FiniteDiscreteDistribution());
+    MultinomialDistributionPtr pi = MultinomialDistributionPtr(new MultinomialDistribution());
     pi->initializeFromMap(initial_probabilities_par->getDoubleMap(), states);
     
     std::map<std::string, double> transpar = transitions_par->getDoubleMap();
@@ -860,9 +860,9 @@ Sequence & GeneralizedHiddenMarkovModel::chooseObservation(Sequence & h, int i,
 	std::string model_name = observationpar->getString();
 	restore_model(model_name, parameters);
 	
-	FiniteDiscreteDistributionPtr transition =
-	  FiniteDiscreteDistributionPtr(
-					new FiniteDiscreteDistribution(
+	MultinomialDistributionPtr transition =
+	  MultinomialDistributionPtr(
+					new MultinomialDistribution(
 								       trans[state_names[i]]));
 	
 	int iphase = -1;

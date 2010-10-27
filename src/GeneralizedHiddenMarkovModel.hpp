@@ -2,7 +2,7 @@
 #define GENERALIZED_HIDDEN_MARKOV_MODEL_H
 #include <set>
 
-#include "FiniteDiscreteDistribution.hpp"
+#include "MultinomialDistribution.hpp"
 #include "ProbabilisticModel.hpp"
 #include "Sequence.hpp"
 #include "Alphabet.hpp"
@@ -88,7 +88,7 @@ namespace tops {
   //! This is a class representing Hidden semi-Markov Models
   class GeneralizedHiddenMarkovModel: public DecodableModel {
   private:
-    FiniteDiscreteDistributionPtr _initial_probabilities;
+    MultinomialDistributionPtr _initial_probabilities;
     GHMMStates _all_states;
     AlphabetPtr _state_names;
     GHMMStates _geometric_duration_states;
@@ -139,7 +139,7 @@ namespace tops {
     virtual int chooseFirstState() const;
 
     //! Choose the initial state
-    virtual FiniteDiscreteDistributionPtr getInitialProbabilities() const {
+    virtual MultinomialDistributionPtr getInitialProbabilities() const {
       return _initial_probabilities;
     }
 
@@ -160,16 +160,16 @@ namespace tops {
     }
     void configureSignalState(std::string observation_model_name, 
 			      std::string null_model_name, 
-			      FiniteDiscreteDistributionPtr transition_distr, double threshold,
+			      MultinomialDistributionPtr transition_distr, double threshold,
 			      int size, std::string state_name, int iphase, int ophase);
   
     void configureGeometricDurationState(std::string observation_model_name,
-					 FiniteDiscreteDistributionPtr transition_distr,
+					 MultinomialDistributionPtr transition_distr,
 					 std::string state_name, int iphase, int ophase);
     void configureExplicitDurationState(std::string observation_model_name,
-					FiniteDiscreteDistributionPtr transition_distr,
+					MultinomialDistributionPtr transition_distr,
 					std::string duration_model_name, std::string state_name, int iphase, int ophase, int start, int stop, int leftJoinable, int rightJoinable);
-    void setInitialProbability(FiniteDiscreteDistributionPtr init);
+    void setInitialProbability(MultinomialDistributionPtr init);
     void setObservationSymbols(AlphabetPtr obs) {
       setAlphabet(obs);
     }

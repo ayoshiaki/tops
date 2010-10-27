@@ -13,7 +13,7 @@
 namespace tops {
 
   //! This  represent  probability distributions  over a finite set of symbols
-  class FiniteDiscreteDistribution :  public FactorableModel
+  class MultinomialDistribution :  public FactorableModel
   {
   private:
     DoubleVector _log_probabilities;
@@ -21,11 +21,11 @@ namespace tops {
     int _size;
   public:
     
-    FiniteDiscreteDistribution()  {
+    MultinomialDistribution()  {
     };
     //! Constructor
     /*! \param probabilities is the probabilities value */
-    FiniteDiscreteDistribution(const DoubleVector & probabilities) ;
+    MultinomialDistribution(const DoubleVector & probabilities) ;
 
     //! Choose 
     virtual double choose()const ;    
@@ -60,7 +60,7 @@ namespace tops {
     void setProbabilities(const DoubleVector & probabilities) ;
   };
   
-  typedef boost::shared_ptr<FiniteDiscreteDistribution> FiniteDiscreteDistributionPtr;
+  typedef boost::shared_ptr<MultinomialDistribution> MultinomialDistributionPtr;
 }
 
 

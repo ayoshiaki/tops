@@ -109,7 +109,7 @@ namespace tops
     _symbol = symbol;
   }
 
-  void ContextTreeNode::setDistribution(FiniteDiscreteDistributionPtr distribution){
+  void ContextTreeNode::setDistribution(MultinomialDistributionPtr distribution){
     _distribution = distribution;
   }
   ContextTreeNodePtr ContextTreeNode::getChild(int symbol){
@@ -121,7 +121,7 @@ namespace tops
       }
     return _child[symbol] ;
   }
-  FiniteDiscreteDistributionPtr ContextTreeNode::getDistribution(){
+  MultinomialDistributionPtr ContextTreeNode::getDistribution(){
     return _distribution;
   }
   void ContextTreeNode::deleteChildren() {
@@ -283,7 +283,7 @@ namespace tops
 	for(int l = 0; l < (int)_alphabet->size(); l++){
 	  probs[l] = (double)((_all_context[i]->getCounter())[l])/total;
 	}
-	FiniteDiscreteDistributionPtr distr = FiniteDiscreteDistributionPtr(new FiniteDiscreteDistribution(probs));
+	MultinomialDistributionPtr distr = MultinomialDistributionPtr(new MultinomialDistribution(probs));
 	distr->setAlphabet(_alphabet);
 	_all_context[i]->setDistribution(distr);
       }

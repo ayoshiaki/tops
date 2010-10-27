@@ -1,15 +1,15 @@
 #ifndef DEGENERATE_DISTRIBUTION_H
 #define DEGENERATE_DISTRIBUTION_H 
-#include "FiniteDiscreteDistribution.hpp"
+#include "MultinomialDistribution.hpp"
 namespace tops {
   //! A probabilistic model that emits a constant integer value.
-  class DegenerateDistribution : public FiniteDiscreteDistribution
+  class DegenerateDistribution : public MultinomialDistribution
   {
     friend class boost::serialization::access;
     template <class Archive> 
     void serialize (Archive & ar, const unsigned int ) 
     {
-      ar & boost::serialization::base_object<FiniteDiscreteDistribution> (*this);
+      ar & boost::serialization::base_object<MultinomialDistribution> (*this);
       ar & _constant;
     }
   private:
@@ -22,7 +22,7 @@ namespace tops {
       _huge = -HUGE;
       _zero = 0.0;
     }
-    DegenerateDistribution(int c) : FiniteDiscreteDistribution("DegenerateDistribution")
+    DegenerateDistribution(int c) : MultinomialDistribution("DegenerateDistribution")
     {
       _huge = -HUGE;
       _zero = 0.0;

@@ -2,7 +2,7 @@
 
 
 #include "ProbabilisticModelCreator.hpp"
-#include "FiniteDiscreteDistributionCreator.hpp"
+#include "MultinomialDistributionCreator.hpp"
 #include "BernoulliModelCreator.hpp"
 #include "ConfigurationReader.hpp"
 #include "VariableLengthMarkovChainCreator.hpp"
@@ -20,7 +20,7 @@
 
 #include "TrainHMMBaumWelch.hpp"
 #include "TrainVariableLengthMarkovChain.hpp"
-#include "TrainFiniteDiscreteDistribution.hpp"
+#include "TrainMultinomialDistribution.hpp"
 #include "TrainFixedLengthMarkovChain.hpp"
 #include "TrainWeightArrayModel.hpp"
 #include "BayesianInformationCriteria.hpp"
@@ -238,12 +238,12 @@ namespace tops
     _trainingCommand["SmoothedHistogramKernelDensity"] = SmoothedHistogramKernelDensityPtr(new SmoothedHistogramKernelDensity());
     _trainingCommand["SmoothedHistogramStanke"] = SmoothedHistogramStankePtr(new SmoothedHistogramStanke());
     _trainingCommand["SmoothedHistogramBurge"] = SmoothedHistogramBurgePtr(new SmoothedHistogramBurge());
-    _trainingCommand["MultinomialDistribution"] = TrainFiniteDiscreteDistributionPtr(new TrainFiniteDiscreteDistribution());
+    _trainingCommand["MultinomialDistribution"] = TrainMultinomialDistributionPtr(new TrainMultinomialDistribution());
     _modelSelectionCommand["BIC"] = BayesianInformationCriteriaPtr(new BayesianInformationCriteria());
     _modelSelectionCommand["AIC"] = AkaikeInformationCriteriaPtr(new AkaikeInformationCriteria());
     _decoratorCommand["RemoveSequence"] = RemoveSequenceFromModelPtr(new RemoveSequenceFromModel());
     _createModelCommand["MultinomialDistribution"] =
-      FiniteDiscreteDistributionCreatorPtr(new FiniteDiscreteDistributionCreator());
+      MultinomialDistributionCreatorPtr(new MultinomialDistributionCreator());
     _createModelCommand["VariableLengthMarkovChain"] =
       VariableLengthMarkovChainCreatorPtr(new VariableLengthMarkovChainCreator());
     _createModelCommand["InhomogeneousMarkovChain"] =

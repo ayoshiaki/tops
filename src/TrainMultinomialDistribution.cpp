@@ -1,12 +1,12 @@
 #include "ProbabilisticModel.hpp"
-#include "TrainFiniteDiscreteDistribution.hpp"
+#include "TrainMultinomialDistribution.hpp"
 #include "ConfigurationReader.hpp"
 #include "ContextTree.hpp"
 #include "VariableLengthMarkovChain.hpp"
 #include "util.hpp"
 namespace tops {
 
-  ProbabilisticModelPtr TrainFiniteDiscreteDistribution::create( ProbabilisticModelParameters & parameters, const std::vector<std::string> & sample_set, double & loglikelihood, int & sample_size) const {
+  ProbabilisticModelPtr TrainMultinomialDistribution::create( ProbabilisticModelParameters & parameters, const std::vector<std::string> & sample_set, double & loglikelihood, int & sample_size) const {
 
 	ProbabilisticModelParameterValuePtr alphapar =
 			parameters.getMandatoryParameterValue("alphabet");
@@ -36,16 +36,16 @@ namespace tops {
 	return m;
   }
 
-ProbabilisticModelPtr TrainFiniteDiscreteDistribution::train(const SequenceEntryList & sample_set, AlphabetPtr alphabet) const{
+ProbabilisticModelPtr TrainMultinomialDistribution::train(const SequenceEntryList & sample_set, AlphabetPtr alphabet) const{
 	ContextTreePtr tree = ContextTreePtr(new ContextTree(alphabet));
 	tree->initializeCounter(sample_set, 0);
 	tree->normalize();
-	FiniteDiscreteDistributionPtr m = tree->getRoot()->getDistribution();
+	MultinomialDistributionPtr m = tree->getRoot()->getDistribution();
 	m->setAlphabet(alphabet);
 	return m;
   }
 
-  ProbabilisticModelPtr TrainFiniteDiscreteDistribution::create(
+  ProbabilisticModelPtr TrainMultinomialDistribution::create(
 		ProbabilisticModelParameters & parameters, double & loglikelihood,
 		int & sample_size) const {
 	ProbabilisticModelParameterValuePtr trainpar =
@@ -72,7 +72,7 @@ ProbabilisticModelPtr TrainFiniteDiscreteDistribution::train(const SequenceEntry
 	return m;
 
 }
-  ProbabilisticModelPtr TrainFiniteDiscreteDistribution::create(
+  ProbabilisticModelPtr TrainMultinomialDistribution::create(
 								ProbabilisticModelParameters & parameters) const {
     double loglike;
     int samplesize;
@@ -80,14 +80,14 @@ ProbabilisticModelPtr TrainFiniteDiscreteDistribution::train(const SequenceEntry
     
   }
 
-   std::string TrainFiniteDiscreteDistribution::help() const   {
+   std::string TrainMultinomialDistribution::help() const   {
       std::stringstream out;
       out << "\nUSAGE: " << std::endl;
       out << "Mandatory parameters: " << std::endl;
       out << "\ttraining_set" << std::endl;
       out << "\talphabet" << std::endl;
       out << "Example: " << std::endl;
-      out << "\ttraining_algorithm=\"FiniteDiscreteDistribution\"" << std::endl;
+      out << "\ttraining_algorithm=\"MultinomialDistribution\"" << std::endl;
       out << "\talphabet=(\"0\", \"1\")" << std::endl;
       out << "\ttraining_set= \"input.seq" << std::endl;
       return out.str();

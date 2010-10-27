@@ -2,7 +2,7 @@
 #define REVERSE_COMPLEMENT_HPP
 
 #include "ProbabilisticModelDecorator.hpp"
-#include "FiniteDiscreteDistribution.hpp"
+#include "MultinomialDistribution.hpp"
 #include "Symbol.hpp"
 namespace tops { 
 

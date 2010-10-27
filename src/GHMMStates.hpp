@@ -8,8 +8,8 @@ namespace tops {
   class ProbabilisticModel;
   typedef boost::shared_ptr <ProbabilisticModel> ProbabilisticModelPtr;
 
-  class FiniteDiscreteDistribution;
-  typedef boost::shared_ptr <FiniteDiscreteDistribution> FiniteDiscreteDistributionPtr;
+  class MultinomialDistribution;
+  typedef boost::shared_ptr <MultinomialDistribution> MultinomialDistributionPtr;
   class Symbol;
   typedef boost::shared_ptr<Symbol> SymbolPtr;
 
@@ -18,13 +18,13 @@ namespace tops {
   public:
     GHMMState();
     GHMMState(ProbabilisticModelPtr observation,
-	      FiniteDiscreteDistributionPtr transition, SymbolPtr name) :
+	      MultinomialDistributionPtr transition, SymbolPtr name) :
       _observation(observation), _transition(transition), _name(name){};
     virtual ~GHMMState();
     virtual void setObservation(ProbabilisticModelPtr obs) ;
     virtual ProbabilisticModelPtr observation() const ;
-    virtual void setTransition(FiniteDiscreteDistributionPtr trans) ;
-    virtual FiniteDiscreteDistributionPtr transition() const ;
+    virtual void setTransition(MultinomialDistributionPtr trans) ;
+    virtual MultinomialDistributionPtr transition() const ;
     virtual int chooseDuration() const ;
     virtual std::string name() const ;
     virtual int id() const ;
@@ -67,7 +67,7 @@ namespace tops {
     virtual ProbabilisticModelParameters parameters() const;
   private:
     ProbabilisticModelPtr _observation;
-    FiniteDiscreteDistributionPtr _transition;
+    MultinomialDistributionPtr _transition;
     SymbolPtr _name;
     std::vector<int> _predecessors;
     std::vector<int> _successors;
@@ -84,7 +84,7 @@ namespace tops {
   public:
     GHMMSignalState() ;
     GHMMSignalState(ProbabilisticModelPtr observation,
-		    FiniteDiscreteDistributionPtr transition, SymbolPtr name) :
+		    MultinomialDistributionPtr transition, SymbolPtr name) :
       GHMMState(observation, transition, name) {};
 
     virtual int size() const ;
@@ -117,7 +117,7 @@ namespace tops {
     GHMMExplicitDurationState() ;
 
     GHMMExplicitDurationState(ProbabilisticModelPtr observation,
-			      FiniteDiscreteDistributionPtr transition, SymbolPtr name) :
+			      MultinomialDistributionPtr transition, SymbolPtr name) :
       GHMMState(observation, transition, name) {};
 
     

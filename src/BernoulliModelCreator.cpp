@@ -1,6 +1,6 @@
 #include "BernoulliModelCreator.hpp"
 #include "ConfigurationReader.hpp"
-#include "FiniteDiscreteDistribution.hpp"
+#include "MultinomialDistribution.hpp"
 #include "Alphabet.hpp"
 
 namespace tops {
@@ -14,7 +14,7 @@ namespace tops {
     DoubleVector distr;
     distr.push_back(probs->getDouble());
     distr.push_back(1.0 - probs->getDouble());
-    ProbabilisticModelPtr model = FiniteDiscreteDistributionPtr(new FiniteDiscreteDistribution(distr));
+    ProbabilisticModelPtr model = MultinomialDistributionPtr(new MultinomialDistribution(distr));
     return model;
   }
 }

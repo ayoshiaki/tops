@@ -2,7 +2,7 @@
 #include "Symbol.hpp"
 namespace tops {
 
-  void FixedSequenceAtPosition::initialize(int position, Sequence sequence, FiniteDiscreteDistributionPtr distr){
+  void FixedSequenceAtPosition::initialize(int position, Sequence sequence, MultinomialDistributionPtr distr){
     _position = position;
     _sequence =sequence;
     _probabilities = distr;

@@ -19,7 +19,7 @@ namespace tops {
       out << "Mandatory parameters: " << std::endl;
       out << "\tprobability = <a double>" << std::endl;
       out << "Example: " << std::endl;
-      out << "\tcreate_model=\"FiniteDiscreteDistribution\"" << std::endl;
+      out << "\tcreate_model=\"MultinomialDistribution\"" << std::endl;
       out << "\toutput_model_file=\"./example.model\"" << std::endl;
       out << "\tprobability= 0.25" << std::endl;
       return out.str();

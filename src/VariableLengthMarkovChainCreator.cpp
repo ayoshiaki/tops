@@ -1,7 +1,7 @@
 #include "VariableLengthMarkovChain.hpp"
 #include "VariableLengthMarkovChainCreator.hpp"
 #include "ConfigurationReader.hpp"
-#include "FiniteDiscreteDistribution.hpp"
+#include "MultinomialDistribution.hpp"
 #include "Symbol.hpp"
 #include "Alphabet.hpp"
 #include <boost/algorithm/string.hpp>

@@ -1,5 +1,5 @@
-#include "FiniteDiscreteDistribution.hpp"
-#include "FiniteDiscreteDistributionCreator.hpp"
+#include "MultinomialDistribution.hpp"
+#include "MultinomialDistributionCreator.hpp"
 #include "Symbol.hpp"
 #include <iostream>
 #include <cmath>
@@ -9,7 +9,7 @@
 
 namespace tops {
   
-  FiniteDiscreteDistribution:: FiniteDiscreteDistribution(const DoubleVector & probabilities)
+  MultinomialDistribution:: MultinomialDistribution(const DoubleVector & probabilities)
   {
     _size = probabilities.size() - 1;
     _log_probabilities.resize(_size+1);
@@ -25,7 +25,7 @@ namespace tops {
 	_log_probabilities[i] = log(probabilities[i]/sum);
   }
 
-  void FiniteDiscreteDistribution::setProbabilities(const DoubleVector & probabilities) {
+  void MultinomialDistribution::setProbabilities(const DoubleVector & probabilities) {
     _size = probabilities.size() - 1;
     _log_probabilities.resize(_size+1);
     double  sum = 0;
@@ -39,15 +39,15 @@ namespace tops {
       else
 	_log_probabilities[i] = log(probabilities[i]/sum);
   }
- double FiniteDiscreteDistribution::choosePosition(const Sequence & s, int i ) const {
+ double MultinomialDistribution::choosePosition(const Sequence & s, int i ) const {
    return choose();
  }
 
-  double FiniteDiscreteDistribution::evaluatePosition(const Sequence & s, int i) const  {
+  double MultinomialDistribution::evaluatePosition(const Sequence & s, int i) const  {
     return log_probability_of(s[i]);
   }
 
-   double FiniteDiscreteDistribution::log_probability_of(int s) const  {
+   double MultinomialDistribution::log_probability_of(int s) const  {
      if ((s>=0) && (s < (int)(_log_probabilities.size() )))
 	return _log_probabilities[s];
       else {
@@ -55,17 +55,17 @@ namespace tops {
       }
     }
 
-  double FiniteDiscreteDistribution::log_probability_of(int s, double new_value) {
+  double MultinomialDistribution::log_probability_of(int s, double new_value) {
     _log_probabilities[s] = new_value;
     return log_probability_of(s);
   }
 
-  int FiniteDiscreteDistribution::size() const
+  int MultinomialDistribution::size() const
   {
     return _size;
   }
 
-  double FiniteDiscreteDistribution:: choose() const {
+  double MultinomialDistribution:: choose() const {
     double random = ((double)rand())/ ((double) RAND_MAX + 1.0) ;
     int result;
     for(result = 0; result < (int)_log_probabilities.size(); result++)
@@ -79,11 +79,11 @@ namespace tops {
     return (double)result;
   }
 
-  ProbabilisticModelCreatorPtr FiniteDiscreteDistribution::getFactory () const{
-    return FiniteDiscreteDistributionCreatorPtr(new FiniteDiscreteDistributionCreator());
+  ProbabilisticModelCreatorPtr MultinomialDistribution::getFactory () const{
+    return MultinomialDistributionCreatorPtr(new MultinomialDistributionCreator());
   }
 
-  std::string FiniteDiscreteDistribution::str () const {
+  std::string MultinomialDistribution::str () const {
     std::stringstream out;
     AlphabetPtr alpha = alphabet();
     
@@ -105,7 +105,7 @@ namespace tops {
   }
   
   
-  void FiniteDiscreteDistribution::initializeFromMap(const std::map <std::string, double> & probabilities, AlphabetPtr alphabet) 
+  void MultinomialDistribution::initializeFromMap(const std::map <std::string, double> & probabilities, AlphabetPtr alphabet) 
   {
     std::map<std::string,double>::const_iterator it;    
     DoubleVector probs;
@@ -138,7 +138,7 @@ namespace tops {
     setAlphabet(alphabet);
   }
 
-  void FiniteDiscreteDistribution::initialize(const ProbabilisticModelParameters & p) {
+  void MultinomialDistribution::initialize(const ProbabilisticModelParameters & p) {
     ProbabilisticModelParameterValuePtr probs = p.getMandatoryParameterValue("probabilities");
     ProbabilisticModelParameterValuePtr alphabet = p.getOptionalParameterValue("alphabet");
     DoubleVector distr = probs->getDoubleVector();
@@ -151,7 +151,7 @@ namespace tops {
       }
   }
 
-  ProbabilisticModelParameters FiniteDiscreteDistribution::parameters () const {
+  ProbabilisticModelParameters MultinomialDistribution::parameters () const {
     AlphabetPtr alpha = alphabet();
     ProbabilisticModelParameters par;
     par.add("model_name", StringParameterValuePtr(new StringParameterValue("MultinomialDistribution")));

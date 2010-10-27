@@ -7,7 +7,7 @@
 
 #include "TrainHMMBaumWelch.hpp"
 #include "TrainVariableLengthMarkovChain.hpp"
-#include "TrainFiniteDiscreteDistribution.hpp"
+#include "TrainMultinomialDistribution.hpp"
 #include "TrainFixedLengthMarkovChain.hpp"
 #include "TrainGHMMTransitions.hpp"
 #include "TrainWeightArrayModel.hpp"
@@ -64,7 +64,7 @@ int main(int argc, char ** argv) {
 	createModelCommand["SmoothedHistogramKernelDensity"] = SmoothedHistogramKernelDensityPtr(new SmoothedHistogramKernelDensity());
 	createModelCommand["SmoothedHistogramStanke"] = SmoothedHistogramStankePtr(new SmoothedHistogramStanke());
 	createModelCommand["SmoothedHistogramBurge"] = SmoothedHistogramBurgePtr(new SmoothedHistogramBurge());
-	createModelCommand["MultinomialDistribution"] = TrainFiniteDiscreteDistributionPtr(new TrainFiniteDiscreteDistribution());
+	createModelCommand["MultinomialDistribution"] = TrainMultinomialDistributionPtr(new TrainMultinomialDistribution());
 
 	
 	modelSelectionCommand["BIC"] = BayesianInformationCriteriaPtr(

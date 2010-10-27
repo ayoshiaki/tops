@@ -19,26 +19,26 @@ namespace tops {
   private:
     int _id;
     SymbolPtr _name;
-    FiniteDiscreteDistributionPtr _emission;
-    FiniteDiscreteDistributionPtr _transitions;
+    MultinomialDistributionPtr _emission;
+    MultinomialDistributionPtr _transitions;
   public:
     HMMState(){}
-    HMMState (int id, SymbolPtr name, FiniteDiscreteDistributionPtr emission,  FiniteDiscreteDistributionPtr transitions) : _id(id), _name(name), _emission(emission), _transitions(transitions) {}
+    HMMState (int id, SymbolPtr name, MultinomialDistributionPtr emission,  MultinomialDistributionPtr transitions) : _id(id), _name(name), _emission(emission), _transitions(transitions) {}
     void setName (SymbolPtr name) {
       _name = name;
     }
-    void setEmissions (FiniteDiscreteDistributionPtr e)
+    void setEmissions (MultinomialDistributionPtr e)
     {
       _emission = e;
     }
-    void setTransition (FiniteDiscreteDistributionPtr t) 
+    void setTransition (MultinomialDistributionPtr t) 
     {
       _transitions = t;
     }
-    FiniteDiscreteDistributionPtr emission() {
+    MultinomialDistributionPtr emission() {
       return _emission;
     }
-    FiniteDiscreteDistributionPtr transitions() {
+    MultinomialDistributionPtr transitions() {
       return _transitions;
     }
     bool isSilent() {
@@ -66,7 +66,7 @@ namespace tops {
     HiddenMarkovModel() {
     };
 
-    HiddenMarkovModel( std::vector <HMMStatePtr> states, FiniteDiscreteDistributionPtr initial_probability, AlphabetPtr state_names, AlphabetPtr observation_symbols) :    _states(states) , _initial_probability(initial_probability), _state_names (state_names) {
+    HiddenMarkovModel( std::vector <HMMStatePtr> states, MultinomialDistributionPtr initial_probability, AlphabetPtr state_names, AlphabetPtr observation_symbols) :    _states(states) , _initial_probability(initial_probability), _state_names (state_names) {
       tops::ProbabilisticModel::setAlphabet(observation_symbols);
 
 
@@ -128,7 +128,7 @@ namespace tops {
 
     virtual ProbabilisticModelParameters parameters() const ;
 
-    void setInitialProbability(FiniteDiscreteDistributionPtr initial) ;
+    void setInitialProbability(MultinomialDistributionPtr initial) ;
     void setObservationSymbols(AlphabetPtr obs) ;
     void setStates(std::vector<HMMStatePtr> states, AlphabetPtr state_names) ;
 
@@ -136,7 +136,7 @@ namespace tops {
 
   private:
     std::vector <HMMStatePtr> _states;
-    FiniteDiscreteDistributionPtr _initial_probability;
+    MultinomialDistributionPtr _initial_probability;
     std::vector<double> _ctFactors;
     AlphabetPtr _state_names;
     void scale(std::vector<double> & in, int t);

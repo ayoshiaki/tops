@@ -1,6 +1,6 @@
 #include "TargetModel.hpp"
 //#include "TargetModelCreator.hpp"
-#include "TrainFiniteDiscreteDistribution.hpp"
+#include "TrainMultinomialDistribution.hpp"
 
 #include <iostream>
 #include <cmath>
@@ -37,7 +37,7 @@ namespace tops {
     SequenceEntryPtr entry = SequenceEntryPtr(new SequenceEntry(alphabet()));
     entry->setSequence(subseq);
     samples.push_back(entry);
-    TrainFiniteDiscreteDistributionPtr trainingAlgorithm = TrainFiniteDiscreteDistributionPtr(new TrainFiniteDiscreteDistribution());
+    TrainMultinomialDistributionPtr trainingAlgorithm = TrainMultinomialDistributionPtr(new TrainMultinomialDistribution());
     ProbabilisticModelPtr m = trainingAlgorithm->train(samples, alphabet());
     return m->evaluate(s, begin, end);
   }

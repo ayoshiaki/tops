@@ -149,8 +149,8 @@ namespace tops {
 	    ProbabilisticModelParameters fddpar ;
 	    fddpar.add("probabilities", DoubleVectorParameterValuePtr(new DoubleVectorParameterValue(p)));
 	    fddpar.add("alphabet", alphabet->getParameterValue());
-	    FiniteDiscreteDistributionPtr distr = 
-	      FiniteDiscreteDistributionPtr(new FiniteDiscreteDistribution());
+	    MultinomialDistributionPtr distr = 
+	      MultinomialDistributionPtr(new MultinomialDistribution());
 	    distr->initialize(fddpar);
 	    root->setDistribution(distr);
 	  }
@@ -176,8 +176,8 @@ namespace tops {
 			ProbabilisticModelParameters fddpar ;
 			fddpar.add("probabilities", DoubleVectorParameterValuePtr(new DoubleVectorParameterValue(p)));
 			fddpar.add("alphabet", alphabet->getParameterValue());
-			FiniteDiscreteDistributionPtr distr = 
-			  FiniteDiscreteDistributionPtr(new FiniteDiscreteDistribution());
+			MultinomialDistributionPtr distr = 
+			  MultinomialDistributionPtr(new MultinomialDistribution());
 			distr->initialize(fddpar);
 			node2->setDistribution(distr);
 		      }
@@ -189,8 +189,8 @@ namespace tops {
 			ProbabilisticModelParameters fddpar ;
 			fddpar.add("probabilities", DoubleVectorParameterValuePtr(new DoubleVectorParameterValue(probs2)));
 			fddpar.add("alphabet", alphabet->getParameterValue());
-			FiniteDiscreteDistributionPtr distr = 
-			  FiniteDiscreteDistributionPtr(new FiniteDiscreteDistribution());
+			MultinomialDistributionPtr distr = 
+			  MultinomialDistributionPtr(new MultinomialDistribution());
 			distr->initialize(fddpar);
 			node2->setDistribution(distr);
 		      }

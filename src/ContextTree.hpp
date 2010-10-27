@@ -2,7 +2,7 @@
 #define CONTEXT_TREE_HPP
 
 
-#include "FiniteDiscreteDistribution.hpp"
+#include "MultinomialDistribution.hpp"
 #include "ProbabilisticModelParameter.hpp"
 #include <boost/shared_ptr.hpp>
 #include <set>
@@ -13,7 +13,7 @@ namespace tops {
   //! This is a context tree node
   class ContextTreeNode {
   private:
-    FiniteDiscreteDistributionPtr _distribution;
+    MultinomialDistributionPtr _distribution;
     ContextTreeNodeVector _child;
     int _alphabet_size;
     int _symbol;
@@ -64,13 +64,13 @@ namespace tops {
 
 
     //! set the distribution of this context
-    void setDistribution(FiniteDiscreteDistributionPtr distribution);
+    void setDistribution(MultinomialDistributionPtr distribution);
 
     //! get the child of a symbol
     ContextTreeNodePtr getChild(int symbol);
 
     //! get the distribution of this context
-    FiniteDiscreteDistributionPtr getDistribution();
+    MultinomialDistributionPtr getDistribution();
 
     //! deletes the children of this contex
       void deleteChildren() ;

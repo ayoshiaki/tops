@@ -1,5 +1,5 @@
 #include "SmoothedHistogramKernelDensity.hpp"
-#include "FiniteDiscreteDistribution.hpp"
+#include "MultinomialDistribution.hpp"
 #include "util.hpp"
 
 namespace tops {
@@ -58,8 +58,8 @@ namespace tops {
     }
 
 
-    FiniteDiscreteDistributionPtr result = 
-      FiniteDiscreteDistributionPtr(new FiniteDiscreteDistribution(prob));
+    MultinomialDistributionPtr result = 
+      MultinomialDistributionPtr(new MultinomialDistribution(prob));
     
     return result;
 

@@ -1,6 +1,6 @@
 #include "TrainGHMMTransitions.hpp"
-#include "FiniteDiscreteDistributionCreator.hpp"
-#include "FiniteDiscreteDistribution.hpp"
+#include "MultinomialDistributionCreator.hpp"
+#include "MultinomialDistribution.hpp"
 #include "ConfigurationReader.hpp"
 #include "GeneralizedHiddenMarkovModel.hpp"
 #include "ProbabilisticModelCreatorClient.hpp"
