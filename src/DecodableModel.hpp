@@ -31,6 +31,9 @@ namespace tops {
 
     //! Viterbi algorithm
     virtual double viterbi (const Sequence &s, Sequence &path, Matrix & gamma) const = 0;
+    
+    //! Posterior Probabilities: P(yi=k|x)
+    virtual void posteriorProbabilities (const Sequence &s, Matrix & probabilities) const = 0;
 
     //! Choose the observation given a state 
     /*!\param h is the history */

@@ -140,6 +140,26 @@ namespace tops {
 
   }
   
+  //! Posterior Probabilities: P(yi=k|x)
+  void HiddenMarkovModel::posteriorProbabilities (const Sequence &sequence, Matrix & probabilities) const
+  {
+    int nstates = _states.size();
+    int size = sequence.size();
+    Matrix p (nstates, size);
+    
+    Matrix alpha; // forward
+    Matrix beta;  // backward
+    
+    double full = this->forward(sequence, alpha);
+    this->backward(sequence, beta);
+    
+    for(int k = 0; k < nstates; k++)
+      for(int i = 0; i < size; i++)
+        p(k, i) = alpha(k, i) + beta(k, i) - full;
+        
+    probabilities = p;
+  }
+  
 
   void HiddenMarkovModel::scale(std::vector<double> & in,  int t) 
   {

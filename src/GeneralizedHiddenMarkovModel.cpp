@@ -596,6 +596,11 @@ double GeneralizedHiddenMarkovModel::viterbi(const Sequence &s, Sequence &path,
   
 }
 
+//! Posterior Probabilities: P(yi=k|x)
+void GeneralizedHiddenMarkovModel::posteriorProbabilities (const Sequence &s, Matrix & probabilities) const{
+  std::cerr << "Forward not implemented" << std::endl;
+}
+
 //! Choose the observation given a state
 Sequence & GeneralizedHiddenMarkovModel::chooseObservation(Sequence & h, int i,
 		int state) const {

@@ -128,6 +128,9 @@ namespace tops {
     //! Viterbi algorithm
     virtual double
     viterbi(const Sequence &s, Sequence &path, Matrix & gamma) const;
+    
+    //! Posterior Probabilities: P(yi=k|x)
+    virtual void posteriorProbabilities (const Sequence &s, Matrix & probabilities) const;
 
     //! Choose the observation given a state
     virtual Sequence & chooseObservation(Sequence & h, int i, int state) const;

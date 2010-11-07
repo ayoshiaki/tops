@@ -11,6 +11,7 @@ ADD_EXECUTABLE(sliding_window sliding_window.cpp)
 ADD_EXECUTABLE(test_read_seq test_read_seq.cpp)
 ADD_EXECUTABLE(evaluate evaluate.cpp) 
 ADD_EXECUTABLE(kullback_positional kullback_positional.cpp) 
+ADD_EXECUTABLE(posterior_probabilities posterior_probabilities.cpp) 
 
 TARGET_LINK_LIBRARIES(evaluate ToPS ${BOOST_REGEX_LIBRARY} ${RMATH_LIBRARY} ${BOOST_PROGRAM_OPTIONS_LIBRARY} )
 TARGET_LINK_LIBRARIES(train ToPS ${BOOST_REGEX_LIBRARY} ${RMATH_LIBRARY} ${BOOST_PROGRAM_OPTIONS_LIBRARY} )
@@ -21,8 +22,9 @@ TARGET_LINK_LIBRARIES(simulate ToPS ${BOOST_REGEX_LIBRARY} ${RMATH_LIBRARY} ${BO
 TARGET_LINK_LIBRARIES(bayes_classifier ToPS ${BOOST_REGEX_LIBRARY} ${RMATH_LIBRARY} ${BOOST_PROGRAM_OPTIONS_LIBRARY} ) 
 TARGET_LINK_LIBRARIES(sliding_window ToPS ${BOOST_REGEX_LIBRARY} ${RMATH_LIBRARY} ${BOOST_PROGRAM_OPTIONS_LIBRARY} ) 
 TARGET_LINK_LIBRARIES(kullback_positional ToPS ${BOOST_REGEX_LIBRARY} ${RMATH_LIBRARY} ${BOOST_PROGRAM_OPTIONS_LIBRARY} ) 
+TARGET_LINK_LIBRARIES(posterior_probabilities ToPS ${BOOST_REGEX_LIBRARY} ${RMATH_LIBRARY} ${BOOST_PROGRAM_OPTIONS_LIBRARY} )
 
-install(TARGETS train viterbi_decoding simulate bayes_classifier one_file_model sliding_window evaluate kullback_positional
+install(TARGETS train viterbi_decoding simulate bayes_classifier one_file_model sliding_window evaluate kullback_positional posterior_probabilities
         RUNTIME DESTINATION bin
        LIBRARY DESTINATION lib
        ARCHIVE DESTINATION lib/static)
