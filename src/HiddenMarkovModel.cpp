@@ -160,6 +160,31 @@ namespace tops {
     probabilities = p;
   }
   
+  //! Posterior Decoding: ^yi = argmax_k P(yi=k|x)
+  void HiddenMarkovModel::posteriorDecoding (const Sequence &sequence, Sequence &path, Matrix & probabilities) const{
+    int nstates = _states.size();
+    int size = sequence.size();
+    
+    this->posteriorProbabilities(sequence, probabilities);
+    
+    path.resize(size);
+    
+    double max;
+    for(int i = 0; i < size; i++)
+    {
+      max = probabilities(0, i);
+      path[i] = 0;
+      for(int k = 1; k < nstates; k++)
+      {
+        if(probabilities(k, i) > max)
+        {
+          max = probabilities(k, i);
+          path[i] = k;
+        }
+      }
+    }
+  }
+  
 
   void HiddenMarkovModel::scale(std::vector<double> & in,  int t) 
   {

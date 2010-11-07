@@ -131,6 +131,9 @@ namespace tops {
     
     //! Posterior Probabilities: P(yi=k|x)
     virtual void posteriorProbabilities (const Sequence &s, Matrix & probabilities) const;
+    
+    //! Posterior Decoding: ^yi = argmax_k P(yi=k|x)
+    virtual void posteriorDecoding (const Sequence &s, Sequence &path, Matrix & probabilities) const;
 
     //! Choose the observation given a state
     virtual Sequence & chooseObservation(Sequence & h, int i, int state) const;
