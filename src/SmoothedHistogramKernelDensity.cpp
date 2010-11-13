@@ -10,6 +10,8 @@ namespace tops {
   {
     ProbabilisticModelParameterValuePtr training_set_parameter = 
       parameters.getMandatoryParameterValue("training_set");
+    ProbabilisticModelParameterValuePtr geompar = 
+      parameters.getOptionalParameterValue("geometric_tail");
     
     if(training_set_parameter == NULL) {
       std::cerr << help () << std::endl;
@@ -58,8 +60,14 @@ namespace tops {
     }
 
 
+    ProbabilisticModelParameters pars;
+    pars.add("probabilities", ProbabilisticModelParameterValuePtr (new DoubleVectorParameterValue(prob)));
+    pars.add("alphabet", alpha->getParameterValue());
+    if(geompar != NULL) 
+      pars.add("geometric_tail", geompar);
     MultinomialDistributionPtr result = 
-      MultinomialDistributionPtr(new MultinomialDistribution(prob));
+      MultinomialDistributionPtr(new MultinomialDistribution());
+    result->initialize(pars);
     
     return result;
 

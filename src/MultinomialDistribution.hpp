@@ -19,9 +19,12 @@ namespace tops {
     DoubleVector _log_probabilities;
     double _huge;
     int _size;
+    bool _geometric_tail;
+    double _mean;
   public:
     
     MultinomialDistribution()  {
+      _geometric_tail = false;
     };
     //! Constructor
     /*! \param probabilities is the probabilities value */

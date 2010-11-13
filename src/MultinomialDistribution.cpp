@@ -23,6 +23,7 @@ namespace tops {
 	_log_probabilities[i] = -HUGE;
       else
 	_log_probabilities[i] = log(probabilities[i]/sum);
+    _geometric_tail = false;
   }
 
   void MultinomialDistribution::setProbabilities(const DoubleVector & probabilities) {
@@ -51,6 +52,9 @@ namespace tops {
      if ((s>=0) && (s < (int)(_log_probabilities.size() )))
 	return _log_probabilities[s];
       else {
+	if(_geometric_tail && s > _log_probabilities.size()) {
+	  return log(1.0/_mean) * s + log(1.0 - 1.0/_mean);
+	}
 	return -HUGE;
       }
     }
@@ -141,6 +145,7 @@ namespace tops {
   void MultinomialDistribution::initialize(const ProbabilisticModelParameters & p) {
     ProbabilisticModelParameterValuePtr probs = p.getMandatoryParameterValue("probabilities");
     ProbabilisticModelParameterValuePtr alphabet = p.getOptionalParameterValue("alphabet");
+    ProbabilisticModelParameterValuePtr geometric_tail_ptr = p.getOptionalParameterValue("geometric_tail");
     DoubleVector distr = probs->getDoubleVector();
     setProbabilities(distr);
     if (alphabet != NULL)
@@ -148,7 +153,15 @@ namespace tops {
 	AlphabetPtr alpha = AlphabetPtr(new Alphabet());
 	alpha->initializeFromVector(alphabet->getStringVector());
 	setAlphabet(alpha);
+	if(geometric_tail_ptr != NULL) {
+	  _geometric_tail = (geometric_tail_ptr->getInt() == 1);
+	}
       }
+    _mean = 0.0;
+    for (int i = 0 ; i < _log_probabilities.size(); i++){
+      _mean += exp(_log_probabilities[i]) * i;
+    }
+
   }
 
   ProbabilisticModelParameters MultinomialDistribution::parameters () const {
@@ -163,6 +176,8 @@ namespace tops {
     par.add("probabilities", DoubleVectorParameterValuePtr(new DoubleVectorParameterValue(probs)));
     if(alpha->size() > 0)
       par.add("alphabet", alpha->getParameterValue());
+    if(_geometric_tail == 1) 
+      par.add("geometric_tail", IntParameterValuePtr(new IntParameterValue(1)));
     return par;
   }
 }
