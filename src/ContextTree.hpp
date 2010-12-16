@@ -128,6 +128,10 @@ namespace tops {
     //! Prune similar subtrees
     void pruneTree(double delta) ;
 
+
+    //! Prune subtrees with small counters
+    void pruneTreeSmallSampleSize(int small) ;
+
     //! Initialize context tree using the Rissanen algorithm
     void initializeContextTreeRissanen(const SequenceEntryList & sequences);
 

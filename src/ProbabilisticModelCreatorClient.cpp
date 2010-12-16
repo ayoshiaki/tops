@@ -30,6 +30,7 @@
 #include "SmoothedHistogramStanke.hpp"
 #include "SmoothedHistogramBurge.hpp"
 #include "TrainPhasedMarkovChain.hpp"
+#include "TrainInterpolatedPhasedMarkovChain.hpp"
 #include "TrainPhasedMarkovChainContextAlgorithm.hpp"
 #include "RemoveSequenceFromModel.hpp"
 #include "SequenceFormat.hpp"
@@ -234,6 +235,7 @@ namespace tops
     _trainingCommand["VariableLengthInhomogeneousMarkovChain"]
       = TrainVariableLengthInhomogeneousMarkovChainPtr(new TrainVariableLengthInhomogeneousMarkovChain());
     _trainingCommand["PhasedMarkovChain"] = TrainPhasedMarkovChainPtr(new TrainPhasedMarkovChain());
+    _trainingCommand["InterpolatedPhasedMarkovChain"] = TrainInterpolatedPhasedMarkovChainPtr(new TrainInterpolatedPhasedMarkovChain());
     _trainingCommand["PhasedMarkovChainContextAlgorithm"] = TrainPhasedMarkovChainContextAlgorithmPtr(new TrainPhasedMarkovChainContextAlgorithm());
     _trainingCommand["SmoothedHistogramKernelDensity"] = SmoothedHistogramKernelDensityPtr(new SmoothedHistogramKernelDensity());
     _trainingCommand["SmoothedHistogramStanke"] = SmoothedHistogramStankePtr(new SmoothedHistogramStanke());

@@ -354,6 +354,65 @@ namespace tops
 
   }
 
+  void ContextTree::pruneTreeSmallSampleSize(int small) 
+  {
+
+    double sample_size = 0.0;
+    for (int l = 0; l < (int)_alphabet->size(); l++)
+      sample_size += (getRoot()->getCounter())[l];
+    std::set<int> x = getLevelOneNodes();
+    std::vector<int> nodesToPrune (x.begin(),x.end());
+    std::set<int>::iterator it;
+
+    while(nodesToPrune.size() > 0) 
+      {
+	int id = nodesToPrune.back();
+	nodesToPrune.pop_back();
+	double total = 0.0;
+	ContextTreeNodePtr parentNode = getContext(id);
+	if(parentNode->isLeaf())
+	  break;
+
+	for(int m = 0; m < (int)_alphabet->size(); m++)
+	  total += (parentNode->getCounter())[m];
+	bool foundSmall = false;
+	for (int l = 0; l < (int)_alphabet->size(); l++)
+	  {	  
+	    ContextTreeNodePtr childNode = parentNode->getChild(l);
+	    double totalChild = 0.0;
+	    for(int m = 0; m < (int)_alphabet->size(); m++)
+	      totalChild+= (childNode->getCounter())[m];
+	    for(int m = 0; m < (int)_alphabet->size(); m++)
+	      {
+		assert(childNode->isLeaf());
+		if((double)(childNode->getCounter())[m] < small) 
+		  {
+		    foundSmall = true;
+		    break;
+		  }
+	      }
+	    if(foundSmall)
+	      break;
+	  }
+	if((total < small) || (foundSmall==true))
+	  {
+	    parentNode->deleteChildren();
+	    ContextTreeNodePtr parentNode2 = getContext(parentNode->getParent());
+	    bool toPrune = true;
+	    for(int l = 0; l < (int)_alphabet->size(); l++)
+	      if((parentNode2->getChild(l) != NULL) && !(parentNode2->getChild(l)->isLeaf()))
+		{
+		  toPrune = false;
+		  break;
+		}
+	    if(toPrune)
+	      nodesToPrune.push_back(parentNode2->id());
+	  }
+      }
+  }
+
+
+
   void ContextTree::pruneTree(double delta) 
   {
 
@@ -421,6 +480,9 @@ namespace tops
 	  }
       }
   }
+
+
+
   
 
   void ContextTree::initializeContextTreeRissanen(const SequenceEntryList & sequences)

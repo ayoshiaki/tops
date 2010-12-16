@@ -845,8 +845,6 @@ Sequence & GeneralizedHiddenMarkovModel::chooseObservation(Sequence & h, int i,
 	  statepars->getOptionalParameterValue("output_phase");
 	ProbabilisticModelParameterValuePtr inputphasepar =
 	  statepars->getOptionalParameterValue("input_phase");
-
-
 	ProbabilisticModelParameterValuePtr extend_emission_par =
 	  statepars->getOptionalParameterValue("extend_emission");
 	ProbabilisticModelParameterValuePtr start_extend_emission_par =
@@ -883,7 +881,6 @@ Sequence & GeneralizedHiddenMarkovModel::chooseObservation(Sequence & h, int i,
 	  ophase = outputphasepar->getInt();
 	if (durationpar == NULL) {
 	  if (nullmodelpar == NULL) {
-	    
 	    configureGeometricDurationState(model_name, transition, state_names[i], iphase, ophase);
 	  } else {
 	    if (thresholdpar == NULL) {
