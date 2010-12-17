@@ -65,8 +65,8 @@ ProbabilisticModelPtr TrainInterpolatedPhasedMarkovChain::create(
 		tree->initializeCounter(positionalSample, order, pseudocounts);
 		tree->pruneTreeSmallSampleSize(400);
 		tree->normalize();
+		tree->pruneTreeSmallSampleSize(400);
 		positional_distribution[i] = tree;
-		
 	}
 	InhomogeneousMarkovChainPtr model = InhomogeneousMarkovChainPtr(
 									new InhomogeneousMarkovChain());
