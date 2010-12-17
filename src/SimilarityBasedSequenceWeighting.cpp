@@ -10,6 +10,38 @@
 
 namespace tops {
 
+
+
+  double SimilarityBasedSequenceWeighting::prefix_sum_array_compute(int begin, int end, int phase) {
+    if ((begin < (int) _scores.size()) && (begin >= 0)){
+      return _scores[begin];
+    }
+    return -HUGE;
+  }
+  double SimilarityBasedSequenceWeighting::prefix_sum_array_compute(int begin, int end) 
+  {
+    return prefix_sum_array_compute(begin, end, 0);
+  }
+    
+  bool SimilarityBasedSequenceWeighting::initialize_prefix_sum_array(const Sequence & s, int phase)
+  {
+    if(ProbabilisticModel::initialize_prefix_sum_array(s))
+      return true;
+    _scores.resize(s.size());
+    for (int i = 0; i < (int) s.size(); i++)  {
+      _scores[i] = evaluate(s, i, s.size() - 1);
+    }
+    return true; 
+  }
+
+  bool SimilarityBasedSequenceWeighting::initialize_prefix_sum_array(const Sequence & s)
+  {
+    return initialize_prefix_sum_array(s, 0);
+  }
+
+
+
+
   std::string SimilarityBasedSequenceWeighting::str() const
   {
     std::stringstream out;
@@ -24,8 +56,8 @@ namespace tops {
     out << "normalizer = " << x->str() << std::endl;
     if(_skip_offset >= 0)
       {
-	out << "skip_offset = " <<  p->str() << std::endl;
-	out << "skip_length = " << x->str() << std::endl;
+	out << "skip_offset = " <<  so->str() << std::endl;
+	out << "skip_length = " << sl->str() << std::endl;
       }
       
     return out.str();
@@ -38,10 +70,9 @@ namespace tops {
     if(begin < 0)
       return -HUGE;
 
-
-    
+    int length =     (_counter.begin()->first).size();
     std::stringstream qstream;
-    for(int i = begin ; i <= (int)end; i++){
+    for(int i = begin ; (i <= (int)end) && (i < (int) (begin + length)) ; i++){
       qstream << alphabet()->getSymbol(s[i])->name();
     }
     std::string q = qstream.str();
@@ -68,7 +99,9 @@ namespace tops {
 	  sum += it->second;
 	} 
       }
-    return sum/_normalizer;
+    if(close(sum, 0.0, 1e-5))
+      return -HUGE;
+    return log(sum/_normalizer);
   }
   void SimilarityBasedSequenceWeighting::initialize (const ProbabilisticModelParameters & p ) 
   {
@@ -88,7 +121,7 @@ namespace tops {
       } 
     _counter = counterpar->getDoubleMap();
     _normalizer  = normalizerp->getDouble();
-    if(skiplengthpar == NULL) 
+    if((skiplengthpar == NULL) || (offsetpar == NULL) ) 
       {
 	_skip_offset = -1;
 	_skip_length = -1;

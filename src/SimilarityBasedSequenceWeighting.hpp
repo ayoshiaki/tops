@@ -20,6 +20,13 @@ namespace tops {
     
     SimilarityBasedSequenceWeighting()  {
     };
+    virtual double prefix_sum_array_compute(int begin, int end, int phase);
+
+    virtual double prefix_sum_array_compute(int begin, int end) ;
+
+    virtual bool initialize_prefix_sum_array(const Sequence & s);
+
+    virtual bool initialize_prefix_sum_array(const Sequence & s, int phase);
     
     virtual ~SimilarityBasedSequenceWeighting() {}
     virtual void initialize (const ProbabilisticModelParameters & p ) ;
@@ -34,6 +41,7 @@ namespace tops {
     virtual std::string str() const;
 
   private: 
+    DoubleVector _scores;
     std::map<std::string,double> _counter;
     int _skip_offset;
     int _skip_length;

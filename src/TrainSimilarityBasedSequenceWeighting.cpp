@@ -9,7 +9,7 @@
 namespace tops {
 
 
-  double calculate_normalizer (std::string q, double n, int max_length, std::map<std::string, double > & counter, AlphabetPtr alphabet, int skip_offset, int skip_length) 
+  double calculate_normalizer (std::string q, int max_length, std::map<std::string, double > & counter, AlphabetPtr alphabet, int skip_offset, int skip_length) 
   {
     if((int)q.size() >= max_length) 
       {
@@ -45,8 +45,7 @@ namespace tops {
 	  {
 	    std::stringstream x;
 	    x << q << alphabet->getSymbol(i)->name();
-	    n++;
-	    sum += calculate_normalizer(x.str(), n, max_length,counter,alphabet, skip_offset, skip_length);
+	    sum += calculate_normalizer(x.str(),max_length,counter,alphabet, skip_offset, skip_length);
 	  }
 	return sum;
       }
@@ -105,7 +104,7 @@ ProbabilisticModelPtr TrainSimilarityBasedSequenceWeighting::create(
 	      min_length = o.str().size();
 	  }
 	std::string q;
-	double normalize = calculate_normalizer(q, 0, min_length, counter, alphabet, skip_offset, skip_length);
+	double normalize = calculate_normalizer(q, min_length, counter, alphabet, skip_offset, skip_length);
 	ProbabilisticModelParameters pars;
 	pars.add("alphabet", alphapar);
 	pars.add("counter", DoubleMapParameterValuePtr(new DoubleMapParameterValue(counter)));
