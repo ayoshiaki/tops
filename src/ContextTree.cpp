@@ -127,7 +127,8 @@ namespace tops
   void ContextTreeNode::deleteChildren() {
     ContextTreeNodePtr n;
     for(int m = 0; m < (int)_child.size(); m++)
-      _child[m]->setParent(-1);
+      if(_child[m] != NULL)
+	_child[m]->setParent(-1);
     _child.resize(0);
     _child.resize(_alphabet_size);
     _leaf = true;
@@ -244,7 +245,7 @@ namespace tops
 	  ContextTreeNodePtr parent = _all_context[parent_id];
 	  bool levelOne = true;
 	  for(int l =0; l < (int)_alphabet->size(); l++)
-	    if(!parent->getChild(l)->isLeaf()) 
+	    if((parent->getChild(l) != NULL )&& !parent->getChild(l)->isLeaf()) 
 	      levelOne = false;
 	  if(levelOne)
 	    result.insert(parent->id());
@@ -351,15 +352,11 @@ namespace tops
 	    }
 	}
     }
-
   }
 
   void ContextTree::pruneTreeSmallSampleSize(int small) 
   {
 
-    double sample_size = 0.0;
-    for (int l = 0; l < (int)_alphabet->size(); l++)
-      sample_size += (getRoot()->getCounter())[l];
     std::set<int> x = getLevelOneNodes();
     std::vector<int> nodesToPrune (x.begin(),x.end());
     std::set<int>::iterator it;
@@ -379,22 +376,21 @@ namespace tops
 	for (int l = 0; l < (int)_alphabet->size(); l++)
 	  {	  
 	    ContextTreeNodePtr childNode = parentNode->getChild(l);
-	    double totalChild = 0.0;
-	    for(int m = 0; m < (int)_alphabet->size(); m++)
-	      totalChild+= (childNode->getCounter())[m];
+	    if(childNode == NULL)
+	      continue;
+	    double totalchild = 0;
 	    for(int m = 0; m < (int)_alphabet->size(); m++)
 	      {
-		assert(childNode->isLeaf());
-		if((double)(childNode->getCounter())[m] < small) 
-		  {
-		    foundSmall = true;
-		    break;
-		  }
+		totalchild += (childNode->getCounter())[m];
 	      }
-	    if(foundSmall)
-	      break;
+	    if(totalchild < small){
+	      for(int m = 0; m < (int)_alphabet->size(); m++)
+		{
+		  (childNode->getCounter())[m] = (parentNode->getCounter())[m];
+		}
+	    }
 	  }
-	if((total < small) || (foundSmall==true))
+	if(total < small)
 	  {
 	    parentNode->deleteChildren();
 	    ContextTreeNodePtr parentNode2 = getContext(parentNode->getParent());
