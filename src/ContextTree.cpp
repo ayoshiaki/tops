@@ -333,8 +333,6 @@ namespace tops
 		{
 		  ContextTreeNodePtr c2 = createContext();
 		  w->setChild(c2, symbol);
-
-
 		}
 	      w = w->getChild(symbol);
 	      

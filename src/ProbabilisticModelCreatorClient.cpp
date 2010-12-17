@@ -15,6 +15,7 @@
 #include "ReverseComplementDNACreator.hpp"
 #include "PhasedRunLengthDistributionCreator.hpp"
 #include "ProbabilisticModelParameter.hpp"
+#include "SimilarityBasedSequenceWeightingCreator.hpp"
 #include "util.hpp"
 
 
@@ -264,6 +265,9 @@ namespace tops
       PhasedRunLengthDistributionCreatorPtr(new PhasedRunLengthDistributionCreator());
     _createModelCommand["ReverseComplementDNA"] =
       ReverseComplementDNACreatorPtr(new ReverseComplementDNACreator());
+    _createModelCommand["SimilarityBasedSequenceWeighting"] =
+      SimilarityBasedSequenceWeightingCreatorPtr(new SimilarityBasedSequenceWeightingCreator());
+
   }
 }
 
