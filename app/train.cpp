@@ -19,6 +19,7 @@
 #include "SmoothedHistogramBurge.hpp"
 #include "TrainPhasedMarkovChain.hpp"
 #include "TrainInterpolatedPhasedMarkovChain.hpp"
+#include "TrainInterpolatedMarkovChain.hpp"
 #include "TrainPhasedMarkovChainContextAlgorithm.hpp"
 #include "RemoveSequenceFromModel.hpp"
 #include "SequenceFormat.hpp"
@@ -61,6 +62,9 @@ int main(int argc, char ** argv) {
 			new TrainPhasedMarkovChain());
 	createModelCommand["InterpolatedPhasedMarkovChain"] = TrainInterpolatedPhasedMarkovChainPtr(
 			new TrainInterpolatedPhasedMarkovChain());
+
+	createModelCommand["InterpolatedMarkovChain"] = TrainInterpolatedMarkovChainPtr(
+			new TrainInterpolatedMarkovChain());
 
 	createModelCommand["PhasedMarkovChainContextAlgorithm"] = TrainPhasedMarkovChainContextAlgorithmPtr(
 													    new TrainPhasedMarkovChainContextAlgorithm());
