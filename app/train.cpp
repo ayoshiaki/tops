@@ -20,6 +20,7 @@
 #include "TrainPhasedMarkovChain.hpp"
 #include "TrainInterpolatedPhasedMarkovChain.hpp"
 #include "TrainInterpolatedMarkovChain.hpp"
+#include "TrainSimilarityBasedSequenceWeighting.hpp"
 #include "TrainPhasedMarkovChainContextAlgorithm.hpp"
 #include "RemoveSequenceFromModel.hpp"
 #include "SequenceFormat.hpp"
@@ -65,6 +66,9 @@ int main(int argc, char ** argv) {
 
 	createModelCommand["InterpolatedMarkovChain"] = TrainInterpolatedMarkovChainPtr(
 			new TrainInterpolatedMarkovChain());
+
+	createModelCommand["SBSW"] = TrainSimilarityBasedSequenceWeightingPtr(
+			new TrainSimilarityBasedSequenceWeighting());
 
 	createModelCommand["PhasedMarkovChainContextAlgorithm"] = TrainPhasedMarkovChainContextAlgorithmPtr(
 													    new TrainPhasedMarkovChainContextAlgorithm());
