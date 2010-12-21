@@ -38,16 +38,11 @@ namespace tops {
 
     //! Calculates the sequence likelihood given this model 
     virtual double evaluate(const Sequence & s, unsigned int begin, unsigned int end) const;
-  
+
+    virtual double evaluate(const Sequence & s, unsigned int begin, unsigned int end, int phase) const ;  
     virtual std::string str() const;
 
   private: 
-    DoubleVector _scores;
-    std::map<std::string,double> _counter;
-    int _skip_offset;
-    int _skip_length;
-    double _normalizer;
-
     std::vector<ProbabilisticModelPtr> _sub_models;
     std::vector<int> _max_size;
     ProbabilisticModelPtr _last_model;

@@ -16,14 +16,6 @@ namespace tops {
     virtual std::string help() const 
     {
       std::stringstream out;
-      out << "\nUSAGE: " << std::endl;
-      out << "Mandatory parameters: " << std::endl;
-      out << "model_name = \"MultipleSequentialModel\"" << std::endl;
-      out << "\talphabet = <a vector of strings>" << std::endl;
-      out << "Optional parameters: " << std::endl;
-      out << "Example: " << std::endl;
-      out << "model_name = \"MultipleSequentialModel\"" << std::endl;
-      out << "\talphabet= (\"A\", \"C\", \"G\", \"T\")" << std::endl;
       return out.str();
     }
 

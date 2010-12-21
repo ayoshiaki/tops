@@ -63,12 +63,13 @@ namespace tops {
     _iphase = input_phase;
     _ophase = output_phase;
     _nphases = nphase;
-    _normfactor = log((double)_nphases);
     double sum = -HUGE;
-    for(int i = _delta; i < subModel()->size(); i++) {
-      sum = log_sum(sum, subModel()->log_probability_of(i));
+    for(int i = 0; i < subModel()->size(); i++) {
+      int d = i + _delta;
+      if(mod((d + _iphase-1), _nphases) == _ophase) 
+	sum = log_sum(sum, subModel()->log_probability_of(i));
     }
-    _normfactor -= sum;
+    _normfactor = sum;
   }
   double PhasedRunLengthDistribution::choose() const
   {
@@ -90,8 +91,8 @@ namespace tops {
     int d = s + _delta;
     if(mod((d + _iphase-1), _nphases) != _ophase) 
       return -HUGE;
-    double result = ProbabilisticModelDecorator::log_probability_of(d);
-    return result+_normfactor;
+    double result = subModel()->log_probability_of(d);
+    return result-_normfactor;
   }
   
   Sequence & PhasedRunLengthDistribution::choose(Sequence & h, int size) const {

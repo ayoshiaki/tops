@@ -71,7 +71,6 @@ int main (int argc, char ** argv)
 	  continue;
 	Sequence s = entry.getSequence();
 	double prob =  m->evaluate(s, 0, s.size() -1, phase);
-	
 	std::cout << entry.getName() << "\t"
 		  << prob << std::endl;
       }

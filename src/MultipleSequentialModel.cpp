@@ -1,5 +1,4 @@
 #include "MultipleSequentialModel.hpp"
-//#include "MultipleSequentialModelCreator.hpp"
 #include "TrainMultinomialDistribution.hpp"
 #include "ProbabilisticModelCreatorClient.hpp"
 #include "Symbol.hpp"
@@ -22,6 +21,9 @@ namespace tops {
     for(int i = 0; i < (int)_sub_models.size(); i++)
       {
 	e = b + _max_size[i] - 1;
+	if (e >= _seqsize) 
+	  e = _seqsize-1;
+
 	if(i == 0)
 	  sum = _sub_models[i]->prefix_sum_array_compute(b,e,phase);
 	else
@@ -36,25 +38,7 @@ namespace tops {
   }
   double MultipleSequentialModel::prefix_sum_array_compute(int begin, int end) 
   {
-    if(begin < 0)
-      return -HUGE;
-    double sum = -HUGE;
-    int b = begin;
-    int e = 0;
-    for(int i = 0; i < (int)_sub_models.size(); i++)
-      {
-	e = b + _max_size[i] - 1;
-	if(i == 0)
-	  sum = _sub_models[i]->prefix_sum_array_compute(b,e);
-	else
-	  sum += _sub_models[i]->prefix_sum_array_compute(b,e);
-
-	if( e >=  end) 
-	  return sum;
-	b = e + 1;
-      }
-    sum += _last_model->prefix_sum_array_compute(b,_seqsize );
-    return sum;
+    return prefix_sum_array_compute(begin, end, 0);
     
   }
   
@@ -68,6 +52,7 @@ namespace tops {
 	_sub_models[i]->initialize_prefix_sum_array(s);
       }
     _seqsize = s.size() -1;
+
     return true; 
   }
 
@@ -91,27 +76,32 @@ namespace tops {
     return s.str();
   }
 
-    //! Calculates the sequence likelihood given this model 
-  double MultipleSequentialModel::evaluate(const Sequence & s, unsigned int begin, unsigned int end) const {
+  double MultipleSequentialModel::evaluate(const Sequence & s, unsigned int begin, unsigned int end, int phase) const {
     if (end >= s.size())
       return -HUGE;
     if(begin < 0)
       return -HUGE;
+    if(begin > end)
+      return -HUGE;
+
     double sum = -HUGE;
     int b = begin;
     int e = 0;
     for(int i = 0; i < (int)_sub_models.size(); i++)
       {
 	e = b + _max_size[i] - 1;
+	if (e >= s.size()) 
+	  e = s.size()-1;
 	if(i == 0)
-	  sum = _sub_models[i]->evaluate(s,b,e);
+	  sum = _sub_models[i]->evaluate(s,b,e, phase);
 	else
-	  sum += _sub_models[i]->evaluate(s,b,e);
+	  sum += _sub_models[i]->evaluate(s,b,e,phase);
+	phase = mod(phase + e - b + 1, 3);
 	if( e >=  (int)end) 
 	  return sum;
 	b = e + 1;
       }
-    sum += _last_model->evaluate(s, b, s.size()-1);
+    sum += _last_model->evaluate(s, b, end,phase);
     return sum;
   }
   void MultipleSequentialModel::initialize (const ProbabilisticModelParameters & p ) 
@@ -121,12 +111,12 @@ namespace tops {
     ProbabilisticModelParameterValuePtr lastmodelpar = p.getMandatoryParameterValue("last_model");
     ProbabilisticModelCreatorClient creator;
     StringVector modelnames = modelspar->getStringVector();
-    IntVector maxlength = maxsizepar->getIntVector();
+    DoubleVector maxlength = maxsizepar->getDoubleVector();
     std::string lastmodelname = lastmodelpar->getString();
 
     if(maxlength.size() != modelnames.size() )
       {
-	std::cerr << "ERROR: number of models does not match the number of max_lengths";
+	std::cerr << "ERROR: number of models does not match the number of max_length";
 	exit(-1);
       }
     _sub_models.resize(modelnames.size());
@@ -139,10 +129,17 @@ namespace tops {
 	    std::cerr << "ERROR: Cannot load model " << modelnames[i] << std::endl;
 	    exit(-1);
 	  }
+	setAlphabet(_sub_models[i]->alphabet());
 	_max_size[i] = maxlength[i];
       }
     _last_model = creator.create(lastmodelname);
     _parameters =  p;
+
+    
+  }
+    //! Calculates the sequence likelihood given this model 
+  double MultipleSequentialModel::evaluate(const Sequence & s, unsigned int begin, unsigned int end) const {
+    return evaluate(s, begin,end,0);
   }
 
   ProbabilisticModelParameters MultipleSequentialModel::parameters() const

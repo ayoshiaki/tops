@@ -5,52 +5,79 @@
 #include "ContextTree.hpp"
 #include "VariableLengthMarkovChain.hpp"
 #include "Symbol.hpp"
+#include "SequenceFactory.hpp"
 #include "util.hpp"
 namespace tops {
 
-
-  double calculate_normalizer (std::string q, int max_length, std::map<std::string, double > & counter, AlphabetPtr alphabet, int skip_offset, int skip_length) 
+  double test (ProbabilisticModelPtr m, std::string q, int max) 
   {
-    if((int)q.size() >= max_length) 
+    if(q.size() >= max) 
       {
-	double sum = 0;
-	std::map<std::string, double>::const_iterator it;
-	for(it = counter.begin(); it != counter.end();  it++)
+	SequenceFactory f(m->alphabet());
+	std::stringstream s;
+	for (int i = 0; i < q.size(); i++)
 	  {
-	    std::string q2 = it->first;
-	    int diff = 0;
-	    if(q.size () != q2.size())
-	      return -HUGE;
-	    
-	    for(int i = 0; i < (int)q2.size(); i++)
-	      {
-		if((i >= skip_offset) && (i <= skip_offset+skip_length)){
-		  if(q[i] != q2[i])
-		    diff+=2;
-		} else 	if(q[i] != q2[i])
-		  diff++;
-	      }
-	    if(diff == 1){
-	      sum += 0.001 * it->second;
-	    } else if (diff==0){
-	      sum += it->second;
-	    } 
+	    if(i == 0)
+	      s << q[i];
+	    else 
+	      s << " " << q[i];
 	  }
-	return sum;
-      } 
+	Sequence x = f.createSequence(s.str());
+	double p = exp(m->evaluate(x, 0, x.size()-1));
+	std::cerr << q << " " << p  << std::endl;
+	return p;
+      }
     else 
       {
-	double sum = 0;
-	for(int i = 0; i < (int)alphabet->size(); i++)
+	double sum = 0.0;
+	for(int i = 0 ; i < m->alphabet()->size(); i++)
 	  {
-	    std::stringstream x;
-	    x << q << alphabet->getSymbol(i)->name();
-	    sum += calculate_normalizer(x.str(),max_length,counter,alphabet, skip_offset, skip_length);
+	    std::stringstream s;
+	    s <<q<< m->alphabet()->getSymbol(i)->name() ;
+	    sum += test(m, s.str(), max);
 	  }
 	return sum;
       }
-  
   }
+
+  double calculate_normalizer (int skip_length,int skip_offset, int max_length, std::map<std::string, double > & counter, int alphabet_size)
+  {
+    int npatterns_differ_1 = 0;
+    npatterns_differ_1 = (alphabet_size - 1) * (max_length - skip_length);
+    if(skip_length < 0)
+      npatterns_differ_1 = (alphabet_size - 1) * (max_length );
+    double sum = 0.0;
+    std::map<std::string, double>::const_iterator it;
+    std::map<std::string, double>::const_iterator it2;
+    for(it = counter.begin(); it != counter.end(); it++)
+      {
+	sum += it->second;
+
+	int diff = 0;
+	int np_differ_1  = 0;
+	
+	for(it2 = counter.begin(); it2 != counter.end(); it2++) 
+	  {
+	    std::string a = it->first;
+	    std::string b = it2->first;
+	    for(int i = 0; i < max_length; i++)
+	      if((i >= skip_offset) && (i <= skip_offset+skip_length)){
+		if(a[i] != b[i])
+		  diff+=2;
+	      }else if(a[i] != b[i])
+		diff++;
+	    
+	    if(diff == 1) {
+	      sum += it2->second * 0.001;
+	      np_differ_1 ++;
+	    }
+	  }
+	sum += 0.001*it->second*(npatterns_differ_1 - np_differ_1);
+      }
+    return sum;
+  }
+
+ 
 
 
 
@@ -104,7 +131,8 @@ ProbabilisticModelPtr TrainSimilarityBasedSequenceWeighting::create(
 	      min_length = o.str().size();
 	  }
 	std::string q;
-	double normalize = calculate_normalizer(q, min_length, counter, alphabet, skip_offset, skip_length);
+	double normalize = calculate_normalizer(skip_length,skip_offset,  min_length, counter, alphabet->size());
+
 	ProbabilisticModelParameters pars;
 	pars.add("alphabet", alphapar);
 	pars.add("counter", DoubleMapParameterValuePtr(new DoubleMapParameterValue(counter)));
@@ -115,6 +143,10 @@ ProbabilisticModelPtr TrainSimilarityBasedSequenceWeighting::create(
 	}
 	ProbabilisticModelPtr m = SimilarityBasedSequenceWeightingPtr(new SimilarityBasedSequenceWeighting());
 	m->initialize(pars);
+
+	//	std::string x;
+	//	std::cerr << "SUM: " << test(m, x, min_length)<< std::endl;
+
 	loglikelihood = 0.0;
 	sample_size = 0;
 	for (int i = 0; i < (int) sample_set.size(); i++) {

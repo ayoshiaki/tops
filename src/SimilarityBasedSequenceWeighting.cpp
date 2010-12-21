@@ -69,7 +69,6 @@ namespace tops {
       return -HUGE;
     if(begin < 0)
       return -HUGE;
-
     int length =     (_counter.begin()->first).size();
     std::stringstream qstream;
     for(int i = begin ; (i <= (int)end) && (i < (int) (begin + length)) ; i++){
@@ -84,7 +83,6 @@ namespace tops {
 	int diff = 0;
 	if(q.size () != q2.size())
 	  return -HUGE;
-	   
 	for(int i = 0; i < (int)q2.size(); i++)
 	  {
 	    if((i >= _skip_offset) && (i <= _skip_offset+_skip_length)){

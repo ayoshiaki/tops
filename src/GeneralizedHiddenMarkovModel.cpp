@@ -263,6 +263,7 @@ void GeneralizedHiddenMarkovModel::findBestPredecessorSignalStates(int i,
     if (i < (_signal_states[s]->size() - 1))
       continue;
     double prob = _all_states[_signal_states[s]->id()]->observation()->prefix_sum_array_compute(i-_signal_states[s]->size() + 1, i);
+
     assert(prob <= 0);
     double null_prob = 0;
 
