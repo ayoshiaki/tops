@@ -1,0 +1,10 @@
+Package: ToPS
+Type: Package
+Title: This package provides an interface to access ToPS using R
+Version: 1.0
+Date: 2010-04-13
+Author: André Yoshiaki Kashiwabara
+Maintainer: André Yoshiaki Kashiwabara <akashiwabara@usp.br>
+Description: ToPS is an object oriented framework written in C++ that provides a set of probabilistic model to analyze sequence data.
+License: GPL 
+LazyLoad: yes

@@ -10,6 +10,7 @@ ToPS is an objected-oriented framework implemented using C++ that facilitates th
 
 The user can implement models either by manual description of the probability values in a configuration file, or by using training algorithms provided by the system. The ToPS framework also includes a set of programs that implement bayesian classifiers, sequence samplers, and sequence decoders. Finally, ToPS is an extensible and portable system that facilitates the implementation of other probabilistic models, and the development of new programs.
 
+Please feel free to contact me if you have any question: André Yoshiaki Kashiwabara <akashiwabara@usp.br>
 
 * Git Repository
 
@@ -20,7 +21,8 @@ git clone git://tops.git.sourceforge.net/gitroot/tops/tops
 * Platforms
 
 ToPS was designed to run on Unix/Linux operating systems. Tested platforms include: MacOS X, and Ubuntu linux.
-Software
+
+* Software Requirement
 
 ToPS was written in C++. It was compiled using the g++ version 4.2.1 and it requires
 
@@ -54,4 +56,12 @@ ToPS was written in C++. It was compiled using the g++ version 4.2.1 and it requ
    6. If you are using linux run ldconfig
 
       sudo ldconfig
+
+
+* Installing R package
+
+0. Install ToPS first.
+1. Execute the following command
+R CMD install tops-R-package
+
 

@@ -1,0 +1,2 @@
+PKG_CPPFLAGS=-I/usr/local/include/tops/ -I/usr/local/include -I/opt/local/include
+PKG_LIBS=-L/usr/local/lib/ -lToPS
