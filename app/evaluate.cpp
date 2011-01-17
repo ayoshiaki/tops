@@ -2,17 +2,17 @@
  *       evaluate.cpp
  *
  *       Copyright 2011 Andre Yoshiaki Kashiwabara <akashiwabara@usp.br>
- *     
+ *
  *       This program is free software; you can redistribute it and/or modify
  *       it under the terms of the GNU  General Public License as published by
  *       the Free Software Foundation; either version 3 of the License, or
  *       (at your option) any later version.
- *     
+ *
  *       This program is distributed in the hope that it will be useful,
  *       but WITHOUT ANY WARRANTY; without even the implied warranty of
  *       MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *       GNU General Public License for more details.
- *      
+ *
  *       You should have received a copy of the GNU General Public License
  *       along with this program; if not, write to the Free Software
  *       Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
@@ -64,11 +64,11 @@ int main (int argc, char ** argv)
 	return -1;
 
       }
-      if (vm.count("fasta")) 
+      if (vm.count("fasta"))
 	SequenceFormatManager::instance()->setFormat(FastaSequenceFormatPtr(new FastaSequenceFormat()));
 
       ProbabilisticModelCreatorClient creator;
-      ProbabilisticModelPtr m = creator.create(vm["model"].as<string>());      
+      ProbabilisticModelPtr m = creator.create(vm["model"].as<string>());
       int phase = 0;
       if(vm.count("phase")) {
 	phase = vm["phase"].as<int>();
@@ -88,12 +88,19 @@ int main (int argc, char ** argv)
       SequenceEntry entry(alphabet);
       while(!cin.eof()) {
 	cin >> entry;
-	if(entry.getSequence().size() == 0) 
+	if(entry.getSequence().size() == 0)
 	  continue;
 	Sequence s = entry.getSequence();
 	double prob =  m->evaluate(s, 0, s.size() -1, phase);
+
+#if 0
+  m->initialize_prefix_sum_array(s,0);
+  double prob2 = m->prefix_sum_array_compute(0, s.size()-1,0);
 	std::cout << entry.getName() << "\t"
-		  << prob << std::endl;
+            << exp(prob) << " " << exp(prob2) <<std::endl;
+#endif
+	std::cout << entry.getName() << "\t"
+            << exp(prob) << std::endl;
       }
     }
   catch (boost::program_options::invalid_command_line_syntax &e)
