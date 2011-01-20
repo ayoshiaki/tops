@@ -2,17 +2,17 @@
  *       GHMMStates.cpp
  *
  *       Copyright 2011 Andre Yoshiaki Kashiwabara <akashiwabara@usp.br>
- *     
+ *
  *       This program is free software; you can redistribute it and/or modify
  *       it under the terms of the GNU  General Public License as published by
  *       the Free Software Foundation; either version 3 of the License, or
  *       (at your option) any later version.
- *     
+ *
  *       This program is distributed in the hope that it will be useful,
  *       but WITHOUT ANY WARRANTY; without even the implied warranty of
  *       MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *       GNU General Public License for more details.
- *      
+ *
  *       You should have received a copy of the GNU General Public License
  *       along with this program; if not, write to the Free Software
  *       Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
@@ -22,27 +22,48 @@
 #include "GHMMStates.hpp"
 #include "ProbabilisticModel.hpp"
 #include "MultinomialDistribution.hpp"
-#include "Symbol.hpp" 
+#include "Symbol.hpp"
 namespace tops{
-  GHMMState::GHMMState() {
-    _start = 0;
-    _stop = 0;
-    isRightJoinable(0);
-    isLeftJoinable(0);
+    GHMMState::GHMMState() {
+        _start = 0;
+        _stop = 0;
+        isRightJoinable(0);
+        isLeftJoinable(0);
     }
-  
-  GHMMState:: ~GHMMState() {
-  }
-  
-  void GHMMState::observationModelName(std::string name) {
-    _observationModelName = name;
-  }
+
+    GHMMState:: ~GHMMState() {
+    }
+
+    void GHMMState::findBestPredecessor (Matrix & gamma, Matrix &psi, Matrix &psilen, const Sequence & s, int base, const GHMMStates & all_states){
+        int d = 1;
+        int from = _predecessors[0];
+        double gmax = gamma(from, base-d) + all_states[from]->transition()->log_probability_of(id());
+        int pmax = from;
+        for (int p = 1; p < (int)_predecessors.size();p++){
+            int from = _predecessors[p];
+            double g = gamma(from, base-d) + all_states[from]->transition()->log_probability_of(id());
+            if(gmax < g){
+                gmax = g;
+                pmax = from;
+            }
+        }
+        int phase = getInputPhase();
+        gmax = gmax + duration_probability(d) + observation()->prefix_sum_array_compute(base-d +1, base, phase);
+
+        if(gamma(id(), base) < gmax){
+            gamma(id(), base) = gmax;
+            psi(id(), base) = pmax;
+            psilen(id(), base) = d;
+        }
+    }
+    void GHMMState::observationModelName(std::string name) {
+        _observationModelName = name;
+    }
   void GHMMState::durationModelName(std::string name) {
-    
+
   }
 
   void GHMMState::nullModelName(std::string name) {
-    
   }
   std::string GHMMState::observationModelName() const {
     return _observationModelName;
@@ -55,7 +76,7 @@ namespace tops{
     std::string n;
     return n;
   }
-  
+
 
 
   void GHMMState::setObservation(ProbabilisticModelPtr obs) {
@@ -111,11 +132,11 @@ namespace tops{
     answer.add("observation", StringParameterValuePtr(new StringParameterValue(observationModelName())));
     return answer;
   }
-  
+
   int GHMMState::getInputPhase() const {
     return _inputPhase;
   }
-  
+
   void GHMMState::setInputPhase(int _inputPhase) {
     this->_inputPhase = _inputPhase;
   }
@@ -124,7 +145,7 @@ namespace tops{
   int GHMMState::getStart() const {
     return _start;
   }
-  
+
   void GHMMState::setStart(int start) {
     this->_start = start;
   }
@@ -133,15 +154,15 @@ namespace tops{
   int GHMMState::getStop() const {
     return _stop;
   }
-  
+
   void GHMMState::setStop(int stop) {
     this->_stop = stop;
   }
-  
+
   int GHMMState::getOutputPhase() const {
     return _outputPhase;
   }
-  
+
   void GHMMState::setOutputPhase(int _outputPhase) {
     this->_outputPhase = _outputPhase;
   }
@@ -151,7 +172,7 @@ namespace tops{
   }
 
 
-  
+
   GHMMSignalState::GHMMSignalState() {
     setStart(0);
     setStop(0);
@@ -201,10 +222,10 @@ namespace tops{
     out << "null_model = " << nullModelName() << std::endl;
     out << "threshold = " << _threshold << std::endl;
     out << "sequence_length = " << _size << "]" << std::endl;
-    
+
     return out.str();
   }
-  
+
   ProbabilisticModelParameters GHMMSignalState::parameters() const{
     ProbabilisticModelParameters answer;
     answer.add("observation", StringParameterValuePtr(new StringParameterValue(GHMMState::observationModelName())));
@@ -230,11 +251,17 @@ namespace tops{
 
   void GHMMExplicitDurationState::setDuration(ProbabilisticModelPtr d) {
       _duration = d;
+      ProbabilisticModelParameters p = d->parameters();
+      ProbabilisticModelParameterValuePtr par = p.getOptionalParameterValue("number_of_phases");
+      if(par != NULL)
+          _number_of_phases = par->getInt();
+      else
+          _number_of_phases = 0;
     }
    ProbabilisticModelPtr GHMMExplicitDurationState::duration() const {
      return _duration;
    }
-    
+
     int GHMMExplicitDurationState::chooseDuration() const {
       return _duration->choose();
     }
@@ -244,7 +271,7 @@ namespace tops{
     double GHMMExplicitDurationState::duration_probability(int l) const {
       return _duration->log_probability_of(l);
     }
-    
+
     std::string GHMMExplicitDurationState::str() const {
       std::stringstream out;
       out << name() << " = [\n observation = " << GHMMState::observationModelName() << std::endl;
@@ -261,7 +288,7 @@ namespace tops{
       }
 
       out << "duration = " << durationModelName() << "]" << std::endl;
-      
+
       return out.str();
     }
 
@@ -271,7 +298,6 @@ namespace tops{
       answer.add("duration", StringParameterValuePtr(new StringParameterValue(durationModelName())));
       return answer;
     }
-
   void GHMMState::isLeftJoinable(int joinable){
     this->_left_joinable = joinable;
   }
@@ -287,6 +313,41 @@ namespace tops{
   }
 
 
+
+    void GHMMSignalState::findBestPredecessor (Matrix & gamma, Matrix &psi, Matrix &psilen, const Sequence & s, int base, const GHMMStates & all_states){
+        int d = size();
+        int from = predecessors()[0];
+        if((base - d ) < 0)
+            return;
+        double gmax = gamma(from, base-d) + all_states[from]->transition()->log_probability_of(id());
+        int pmax = from;
+        for (int p = 1; p < (int)predecessors().size();p++){
+            int from = predecessors()[p];
+            double g = gamma(from, base-d) + all_states[from]->transition()->log_probability_of(id());
+            if(gmax < g){
+                gmax = g;
+                pmax = from;
+            }
+        }
+        int phase = getInputPhase();
+        gmax = gmax + duration_probability(d) + observation()->prefix_sum_array_compute(base-d +1, base, phase);
+#if 0
+        std::cerr << "id: " << id() << " " << base - d + 1 << " " << base << std::endl;
+        std::cerr << " duration: " << duration_probability(d) << std::endl;
+        std::cerr << " emission: " << observation()->prefix_sum_array_compute(base-d+1, base , phase) << std::endl;
+        std::cerr << " from: " << from << std::endl;
+        std::cerr << " gamma: " << gamma(from, base-d) << std::endl;
+        std::cerr << " duration: " << d << std::endl;
+        std::cerr << " gmax: " << gmax << std::endl;
+#endif
+        if(gamma(id(), base) < gmax){
+            gamma(id(), base) = gmax;
+            psi(id(), base) = pmax;
+            psilen(id(), base) = d;
+
+        }
+    }
+
   void GHMMSignalState::fixTransitionDistribution () const {
     MultinomialDistributionPtr trans = transition();
     DoubleVector probabilities = (trans->parameters()).getMandatoryParameterValue("probabilities")->getDoubleVector();
@@ -298,19 +359,55 @@ namespace tops{
     double sum = 0.0;
     for(int i = 0; i < (int)probabilities.size(); i++)
       {
-	if (i == j) 
+	if (i == j)
 	  continue;
 	sum += probabilities[i];
       }
     for(int i = 0; i < (int)probabilities.size(); i++)
       {
-	if (i == j) 
+	if (i == j)
 	  continue;
 	probabilities[i]  = probabilities[i]/sum;
       }
     trans->setProbabilities(probabilities);
   }
 
+    void GHMMExplicitDurationState::findBestPredecessor (Matrix & gamma, Matrix &psi, Matrix &psilen, const Sequence & s, int base, const GHMMStates & all_states){
+        int diff = getOutputPhase() - getInputPhase();
+        if(diff < 0) diff *= (-1);
+        int step = _number_of_phases;
+        if(_number_of_phases  == 1)
+            diff = 0;
+        int minbase = (base - diff - 30000) ;
+        if(minbase < 0) minbase = 0;
+        for (int d = base - diff; d >= minbase; d-=step)
+            {
+                int from = predecessors()[0];
+                if((base - d ) < 0)
+                    return;
+                double gmax = gamma(from, base-d) + all_states[from]->transition()->log_probability_of(id());
+                int pmax = from;
+                for (int p = 1; p < (int)predecessors().size();p++){
+                    int from = predecessors()[p];
+                    double g = gamma(from, base-d) + all_states[from]->transition()->log_probability_of(id());
+                    if(gmax < g){
+                        gmax = g;
+                        pmax = from;
+                    }
+                }
+                int phase = getInputPhase();
+                double emission = observation()->prefix_sum_array_compute(base-d+1, base, phase);
+                if(close(emission, -HUGE, 1e-1)){
+                    break;
+                }
+                gmax = gmax + duration_probability(d) + observation()->prefix_sum_array_compute(base-d+1, base, phase);
+                if(gamma(id(), base) < gmax){
+                    gamma(id(), base) = gmax;
+                    psi(id(), base) = pmax;
+                    psilen(id(), base) = d;
+                }
+            }
+    }
   void GHMMExplicitDurationState::fixTransitionDistribution () const {
     MultinomialDistributionPtr trans = transition();
     DoubleVector probabilities = (trans->parameters()).getMandatoryParameterValue("probabilities")->getDoubleVector();
@@ -322,19 +419,16 @@ namespace tops{
     double sum = 0.0;
     for(int i = 0; i < (int)probabilities.size(); i++)
       {
-	if (i == j) 
+	if (i == j)
 	  continue;
 	sum += probabilities[i];
       }
     for(int i = 0; i <(int) probabilities.size(); i++)
       {
-	if (i == j) 
+	if (i == j)
 	  continue;
 	probabilities[i]  = probabilities[i]/sum;
       }
     trans->setProbabilities(probabilities);
   }
-
-
-
 }
