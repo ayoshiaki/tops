@@ -2,17 +2,17 @@
  *       GeneralizedHiddenMarkovModel.hpp
  *
  *       Copyright 2011 Andre Yoshiaki Kashiwabara <akashiwabara@usp.br>
- *     
+ *
  *       This program is free software; you can redistribute it and/or modify
  *       it under the terms of the GNU  General Public License as published by
  *       the Free Software Foundation; either version 3 of the License, or
  *       (at your option) any later version.
- *     
+ *
  *       This program is distributed in the hope that it will be useful,
  *       but WITHOUT ANY WARRANTY; without even the implied warranty of
  *       MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *       GNU General Public License for more details.
- *      
+ *
  *       You should have received a copy of the GNU General Public License
  *       along with this program; if not, write to the Free Software
  *       Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
@@ -116,17 +116,6 @@ namespace tops {
     GHMMSignalStates _signal_states;
     GHMMExplicitDurationStates _explicit_duration_states;
     void initialize_prefix_sum_arrays(const Sequence & s) const;
-    void findBestPredecessorGeometricStates(int i, Matrix & gamma, std::vector<std::vector<OptimalPredecessorPtr> > & ptr, const Sequence & sequence) const;
-    void findBestPredecessorSignalStates(int i,
-					 Matrix & gamma, std::vector<
-					 std::vector<OptimalPredecessorPtr> > & ptr,
-					 const Sequence & sequence,
-					 std::vector<std::set<CandidateSignalPtr> > & predecessors) const;
-    void findBestPredecessorSignalStatesFinish(int i,
-					       Matrix & gamma, std::vector<
-					       std::vector<OptimalPredecessorPtr> > & ptr,
-					       const Sequence & sequence,
-					       std::vector<std::set<CandidateSignalPtr> > & predecessors) const;
     //! Finds all candidate signals that are  successor of the  toSignal state and inserts the toSignal state as the predecessor candidate signal.
     void addSignalPredecessors(CandidateSignalPtr sig, std::vector<std::set<CandidateSignalPtr> > & predecessors) const;
     void restore_model(std::string & model_name, const ProbabilisticModelParameters & parameters);
@@ -134,25 +123,29 @@ namespace tops {
   public:
     GeneralizedHiddenMarkovModel() {
     }
-  
+
     virtual ~GeneralizedHiddenMarkovModel() {
     }
-  
+
     void fixStatesPredecessorSuccessor();
-  
+
     //! Forward algorithm
     virtual double forward(const Sequence & s, Matrix &alpha) const;
-  
+
     //! Backward algorithm
     virtual double backward(const Sequence & s, Matrix &beta) const;
 
     //! Viterbi algorithm
     virtual double
     viterbi(const Sequence &s, Sequence &path, Matrix & gamma) const;
-    
+
+    //! Inefficient Viterbi algorithm
+    virtual double
+    _viterbi(const Sequence &s, Sequence &path, Matrix & gamma) const;
+
     //! Posterior Probabilities: P(yi=k|x)
     virtual void posteriorProbabilities (const Sequence &s, Matrix & probabilities) const;
-    
+
     //! Posterior Decoding: ^yi = argmax_k P(yi=k|x)
     virtual void posteriorDecoding (const Sequence &s, Sequence &path, Matrix & probabilities) const;
 
@@ -185,11 +178,11 @@ namespace tops {
     virtual DecodableModel * decodable() {
       return this;
     }
-    void configureSignalState(std::string observation_model_name, 
-			      std::string null_model_name, 
+    void configureSignalState(std::string observation_model_name,
+			      std::string null_model_name,
 			      MultinomialDistributionPtr transition_distr, double threshold,
 			      int size, std::string state_name, int iphase, int ophase);
-  
+
     void configureGeometricDurationState(std::string observation_model_name,
 					 MultinomialDistributionPtr transition_distr,
 					 std::string state_name, int iphase, int ophase);
@@ -202,7 +195,7 @@ namespace tops {
     }
     void setStateNames(AlphabetPtr alphabet);
     virtual ProbabilisticModelParameters parameters() const ;
-    virtual void initialize(const ProbabilisticModelParameters & p) ;    
+    virtual void initialize(const ProbabilisticModelParameters & p) ;
 
 
   };

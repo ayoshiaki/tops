@@ -2,17 +2,17 @@
  *       GHMMStates.hpp
  *
  *       Copyright 2011 Andre Yoshiaki Kashiwabara <akashiwabara@usp.br>
- *     
+ *
  *       This program is free software; you can redistribute it and/or modify
  *       it under the terms of the GNU  General Public License as published by
  *       the Free Software Foundation; either version 3 of the License, or
  *       (at your option) any later version.
- *     
+ *
  *       This program is distributed in the hope that it will be useful,
  *       but WITHOUT ANY WARRANTY; without even the implied warranty of
  *       MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *       GNU General Public License for more details.
- *      
+ *
  *       You should have received a copy of the GNU General Public License
  *       along with this program; if not, write to the Free Software
  *       Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
@@ -28,12 +28,14 @@
 namespace tops {
   class ProbabilisticModel;
   typedef boost::shared_ptr <ProbabilisticModel> ProbabilisticModelPtr;
-
   class MultinomialDistribution;
   typedef boost::shared_ptr <MultinomialDistribution> MultinomialDistributionPtr;
   class Symbol;
   typedef boost::shared_ptr<Symbol> SymbolPtr;
 
+    class GHMMState;
+    typedef boost::shared_ptr<GHMMState> GHMMStatePtr;
+    typedef std::vector<GHMMStatePtr> GHMMStates;
   //! Represents a GHMM State
   class GHMMState {
   public:
@@ -72,7 +74,7 @@ namespace tops {
 
     virtual void isLeftJoinable(int joinable);
     virtual int isLeftJoinable() const;
-    
+
     virtual void isRightJoinable(int joinable);
     virtual int isRightJoinable() const;
 
@@ -86,13 +88,14 @@ namespace tops {
     virtual std::string nullModelName() const;
     virtual void fixTransitionDistribution () const {} ;
     virtual ProbabilisticModelParameters parameters() const;
+    virtual void findBestPredecessor (Matrix & gamma, Matrix &psi, Matrix &psilen, const Sequence & s, int base, const GHMMStates & all_states);
   private:
     ProbabilisticModelPtr _observation;
     MultinomialDistributionPtr _transition;
     SymbolPtr _name;
     std::vector<int> _predecessors;
     std::vector<int> _successors;
-    int _inputPhase; 
+    int _inputPhase;
     int _outputPhase;
     int _start;
     int _stop;
@@ -122,13 +125,15 @@ namespace tops {
     virtual std::string nullModelName() const;
     virtual ProbabilisticModelParameters parameters() const;
     virtual void fixTransitionDistribution () const ;
+    virtual void findBestPredecessor (Matrix & gamma, Matrix &psi, Matrix &psilen, const Sequence & s, int base, const GHMMStates & all_states);
+
 
   private:
     int _size;
     double _threshold;
     ProbabilisticModelPtr _nullModel;
     std::string _nullModelName;
-    
+
   };
   //! GHMM Explicit duration state
   class GHMMExplicitDurationState: public GHMMState {
@@ -140,8 +145,7 @@ namespace tops {
     GHMMExplicitDurationState(ProbabilisticModelPtr observation,
 			      MultinomialDistributionPtr transition, SymbolPtr name) :
       GHMMState(observation, transition, name) {};
-
-    
+    virtual void findBestPredecessor (Matrix & gamma, Matrix &psi, Matrix &psilen, const Sequence & s, int base, const GHMMStates & all_states);
     virtual void setDuration(ProbabilisticModelPtr d) ;
     virtual ProbabilisticModelPtr duration() const ;
     virtual int chooseDuration() const ;
@@ -149,23 +153,24 @@ namespace tops {
     virtual double duration_probability(int l) const ;
     virtual std::string str() const ;
 
-    virtual void durationModelName(std::string name); 
+    virtual void durationModelName(std::string name);
     virtual std::string durationModelName() const ;
     virtual void fixTransitionDistribution () const;
 
     virtual ProbabilisticModelParameters parameters() const;
+
   private:
     ProbabilisticModelPtr _duration;
     std::string _durationModelName;
-    
+    int _number_of_phases;
   };
-  
-  typedef boost::shared_ptr<GHMMState> GHMMStatePtr;
+
+
   typedef boost::shared_ptr<GHMMSignalState> GHMMSignalStatePtr;
   typedef boost::shared_ptr<GHMMExplicitDurationState>
   GHMMExplicitDurationStatePtr;
 
-  typedef std::vector<GHMMStatePtr> GHMMStates;
+
   typedef std::vector<GHMMSignalStatePtr> GHMMSignalStates;
   typedef std::vector<GHMMExplicitDurationStatePtr> GHMMExplicitDurationStates;
 

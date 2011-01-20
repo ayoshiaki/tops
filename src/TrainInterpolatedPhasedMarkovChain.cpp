@@ -115,11 +115,11 @@ ProbabilisticModelPtr TrainInterpolatedPhasedMarkovChain::create(
                           continue;
                       }
                       int end = (length) * nseq + i -1;
-                      if(end >= (int)(sample_set[j]->getSequence()).size())
+                      if(end >= (int)(sample_set_1[j]->getSequence()).size())
                           break;
                       Sequence s;
                       for(int k = start; k <= end; k++)
-                          s.push_back((sample_set[j]->getSequence())[k]);
+                          s.push_back((sample_set_1[j]->getSequence())[k]);
                       SequenceEntryPtr entry = SequenceEntryPtr (new SequenceEntry(alphabet));
                       entry->setSequence(s);
                       positionalSample.push_back(entry);
@@ -138,19 +138,17 @@ ProbabilisticModelPtr TrainInterpolatedPhasedMarkovChain::create(
                           continue;
                       }
                       int end = (length) * nseq + i -2;
-                      if(end >= (int)(sample_set[j]->getSequence()).size())
+                      if(end >= (int)(sample_set_2[j]->getSequence()).size())
                           break;
                       Sequence s;
                       for(int k = start; k <= end; k++)
-                          s.push_back((sample_set[j]->getSequence())[k]);
+                          s.push_back((sample_set_2[j]->getSequence())[k]);
                       SequenceEntryPtr entry = SequenceEntryPtr (new SequenceEntry(alphabet));
                       entry->setSequence(s);
                       positionalSample.push_back(entry);
                       nseq++;
                   }
           }
-
-
 
       ContextTreePtr tree = ContextTreePtr(new ContextTree(alphabet));
       tree->initializeCounter(positionalSample, order, pseudocounts);
