@@ -212,7 +212,7 @@ namespace tops{
   }
   double GHMMSignalState::duration_probability(int l) const {
     if (l == _size)
-	return 0.0;
+        return 0.0;
     else
       return -HUGE;
   }
@@ -276,15 +276,15 @@ namespace tops{
       std::stringstream out;
       out << name() << " = [\n observation = " << GHMMState::observationModelName() << std::endl;
       if((getStart() > 0) || (getStop() > 0)) {
-	out << "extend_emission = 1" << std::endl;
-	out << "start = " << getStart() <<  std::endl;
-	out << "stop = " << getStop() << std::endl;
+        out << "extend_emission = 1" << std::endl;
+        out << "start = " << getStart() <<  std::endl;
+        out << "stop = " << getStop() << std::endl;
       }
       if(isLeftJoinable()) {
-	out << "left_joinable = " << isLeftJoinable() << std::endl;
+        out << "left_joinable = " << isLeftJoinable() << std::endl;
       }
       if(isRightJoinable()) {
-	out << "right_joinable = " << isRightJoinable() << std::endl;
+        out << "right_joinable = " << isRightJoinable() << std::endl;
       }
 
       out << "duration = " << durationModelName() << "]" << std::endl;
@@ -376,7 +376,7 @@ namespace tops{
         int diff = mod(getOutputPhase() - getInputPhase(),_number_of_phases);
         if(_number_of_phases  == 1)
             diff = 0;
-        int minbase = (base - diff - 30000) ;
+        int minbase = (base - diff - 15000) ;
         if(minbase < 0) minbase = 0;
         for (int d = base - diff; d > minbase; d-=_number_of_phases)
             {
@@ -397,7 +397,7 @@ namespace tops{
 
                 double emission = observation()->prefix_sum_array_compute(d, base, phase);
 
-                if(close(emission, -HUGE, 1) && (base -d +1 > 100))
+                if(close(emission, -HUGE, 1) )
                     return;
 
 #if 0
@@ -431,15 +431,15 @@ namespace tops{
     double sum = 0.0;
     for(int i = 0; i < (int)probabilities.size(); i++)
       {
-	if (i == j)
-	  continue;
-	sum += probabilities[i];
+        if (i == j)
+          continue;
+        sum += probabilities[i];
       }
     for(int i = 0; i <(int) probabilities.size(); i++)
       {
-	if (i == j)
-	  continue;
-	probabilities[i]  = probabilities[i]/sum;
+        if (i == j)
+          continue;
+        probabilities[i]  = probabilities[i]/sum;
       }
     trans->setProbabilities(probabilities);
   }

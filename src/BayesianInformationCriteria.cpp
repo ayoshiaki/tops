@@ -2,17 +2,17 @@
  *       BayesianInformationCriteria.cpp
  *
  *       Copyright 2011 Andre Yoshiaki Kashiwabara <akashiwabara@usp.br>
- *     
+ *
  *       This program is free software; you can redistribute it and/or modify
  *       it under the terms of the GNU  General Public License as published by
  *       the Free Software Foundation; either version 3 of the License, or
  *       (at your option) any later version.
- *     
+ *
  *       This program is distributed in the hope that it will be useful,
  *       but WITHOUT ANY WARRANTY; without even the implied warranty of
  *       MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *       GNU General Public License for more details.
- *      
+ *
  *       You should have received a copy of the GNU General Public License
  *       along with this program; if not, write to the Free Software
  *       Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
@@ -23,7 +23,7 @@
 #include <map>
 #include <vector>
 
-namespace tops 
+namespace tops
 {
   std::string BayesianInformationCriteria::help() const {
     std::stringstream out;
@@ -47,19 +47,19 @@ namespace tops
     return out.str();
   }
 
-  ProbabilisticModelPtr BayesianInformationCriteria::create( ProbabilisticModelParameters & parameters) const 
+  ProbabilisticModelPtr BayesianInformationCriteria::create( ProbabilisticModelParameters & parameters) const
   {
     ProbabilisticModelParameterValuePtr beginpar = parameters.getMandatoryParameterValue("begin");
     ProbabilisticModelParameterValuePtr endpar = parameters.getMandatoryParameterValue("end");
     ProbabilisticModelParameterValuePtr steppar = parameters.getMandatoryParameterValue("step");
     ProbabilisticModelParameterValuePtr trainpar = parameters.getMandatoryParameterValue("training_algorithm");
-    
+
     if((beginpar == NULL) ||
        (endpar == NULL) ||
-       (steppar == NULL)) 
+       (steppar == NULL))
       {
-	std::cerr << help() << std::endl;
-	exit(-1);
+        std::cerr << help() << std::endl;
+        exit(-1);
       }
     std::map<std::string, double> beginmap = beginpar->getDoubleMap();
     std::map<std::string, double> endmap = endpar->getDoubleMap();
@@ -75,48 +75,53 @@ namespace tops
     combinations.resize(1);
     for(p = parnames.begin(); p != parnames.end(); p++)
       {
-	std::vector <std::vector <double> > new_combinations;
-	for (double i = beginmap[*p] ; i <= endmap[*p]; i += stepmap[*p]) 
-	  {
-	    for(int j = 0; j < (int) combinations.size() ; j++)
-	      {
-		std::vector <double> comb;
-		for(int k = 0; k < (int)combinations[j].size(); k++)
-		  comb.push_back(combinations[j][k]);
-		comb.push_back(i);
-		new_combinations.push_back(comb);
-	      }
-	  }
-	combinations = new_combinations;
-      }						
+        std::vector <std::vector <double> > new_combinations;
+        for (double i = beginmap[*p] ; i <= endmap[*p]; i += stepmap[*p])
+          {
+            for(int j = 0; j < (int) combinations.size() ; j++)
+              {
+                std::vector <double> comb;
+                for(int k = 0; k < (int)combinations[j].size(); k++)
+                  comb.push_back(combinations[j][k]);
+                comb.push_back(i);
+                new_combinations.push_back(comb);
+              }
+          }
+        combinations = new_combinations;
+      }
     double bic = -HUGE;
     ProbabilisticModelPtr result;
     for(int i = 0; i < (int) combinations.size(); i++)
       {
-	for(int j = 0; j < (int) combinations[i].size(); j++)
-	  {
-	    DoubleParameterValuePtr value = DoubleParameterValuePtr(new DoubleParameterValue(combinations[i][j]));
-	    
-	    parameters.set(parnames[j], value);
-	  }
-	double loglikelihood;
-	int sample_size;
-	ProbabilisticModelPtr m = _creator->create(parameters, loglikelihood, sample_size);
-	double model_bic =  loglikelihood  - 0.5* m->size() * log((double) sample_size);
-	if(bic < model_bic)
-	  {
-	    bic = model_bic;
-	    result = m;
-	  }
+        for(int j = 0; j < (int) combinations[i].size(); j++)
+          {
+            DoubleParameterValuePtr value = DoubleParameterValuePtr(new DoubleParameterValue(combinations[i][j]));
 
-	int k = 0;
-	if( k < (int) combinations[i].size()) 
-	  {
-	    std::cerr << combinations[i][k];
-	    for(k = 1; k < (int) combinations[i].size(); k++)
-	      std::cerr << "\t" << combinations[i][k];
-	  }
-	std::cerr << "\t" << model_bic  << std::endl;
+            parameters.set(parnames[j], value);
+          }
+        double loglikelihood;
+        int sample_size;
+        ProbabilisticModelPtr m = _creator->create(parameters, loglikelihood, sample_size);
+        if(m == NULL)
+            {
+                std::cerr << "ERROR (BIC): model was not estimated by training algorithm " << std::endl;
+                exit(-1);
+            }
+        double model_bic =  loglikelihood  - 0.5* m->size() * log((double) sample_size);
+        if(bic < model_bic)
+          {
+            bic = model_bic;
+            result = m;
+          }
+
+        int k = 0;
+        if( k < (int) combinations[i].size())
+          {
+            std::cerr << combinations[i][k];
+            for(k = 1; k < (int) combinations[i].size(); k++)
+              std::cerr << "\t" << combinations[i][k];
+          }
+        std::cerr << "\t" << model_bic  << std::endl;
 
       }
     std::cout << "# Model BIC: " << bic  << std::endl;
