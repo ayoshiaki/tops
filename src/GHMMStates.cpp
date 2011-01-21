@@ -359,52 +359,64 @@ namespace tops{
     double sum = 0.0;
     for(int i = 0; i < (int)probabilities.size(); i++)
       {
-	if (i == j)
-	  continue;
-	sum += probabilities[i];
+          if (i == j)
+              continue;
+          sum += probabilities[i];
       }
     for(int i = 0; i < (int)probabilities.size(); i++)
       {
-	if (i == j)
-	  continue;
-	probabilities[i]  = probabilities[i]/sum;
+          if (i == j)
+              continue;
+          probabilities[i]  = probabilities[i]/sum;
       }
     trans->setProbabilities(probabilities);
   }
 
     void GHMMExplicitDurationState::findBestPredecessor (Matrix & gamma, Matrix &psi, Matrix &psilen, const Sequence & s, int base, const GHMMStates & all_states){
-        int diff = getOutputPhase() - getInputPhase();
-        if(diff < 0) diff *= (-1);
-        int step = _number_of_phases;
+        int diff = mod(getOutputPhase() - getInputPhase(),_number_of_phases);
         if(_number_of_phases  == 1)
             diff = 0;
         int minbase = (base - diff - 30000) ;
         if(minbase < 0) minbase = 0;
-        for (int d = base - diff; d >= minbase; d-=step)
+        for (int d = base - diff; d > minbase; d-=_number_of_phases)
             {
                 int from = predecessors()[0];
                 if((base - d ) < 0)
                     return;
-                double gmax = gamma(from, base-d) + all_states[from]->transition()->log_probability_of(id());
+                double gmax = gamma(from, d-1) + all_states[from]->transition()->log_probability_of(id());
                 int pmax = from;
                 for (int p = 1; p < (int)predecessors().size();p++){
                     int from = predecessors()[p];
-                    double g = gamma(from, base-d) + all_states[from]->transition()->log_probability_of(id());
+                    double g = gamma(from, d-1) + all_states[from]->transition()->log_probability_of(id());
                     if(gmax < g){
                         gmax = g;
                         pmax = from;
                     }
                 }
                 int phase = getInputPhase();
-                double emission = observation()->prefix_sum_array_compute(base-d+1, base, phase);
-                if(close(emission, -HUGE, 1e-1)){
-                    break;
-                }
-                gmax = gmax + duration_probability(d) + observation()->prefix_sum_array_compute(base-d+1, base, phase);
+
+                double emission = observation()->prefix_sum_array_compute(d, base, phase);
+
+                if(close(emission, -HUGE, 1) && (base -d +1 > 100))
+                    return;
+
+#if 0
+        std::cerr << name() << " " << d  << " " << base << std::endl;
+        std::cerr << "iphase: " << getInputPhase() << std::endl;
+        std::cerr << "ophase: " << getOutputPhase() << std::endl;
+        std::cerr << " duration: " << duration_probability(base-d+1) << std::endl;
+        std::cerr << " emission: " << observation()->prefix_sum_array_compute(d, base , phase) << std::endl;
+        std::cerr << " number_of_phases: " << _number_of_phases << std::endl;
+        std::cerr << " from: " << from << std::endl;
+        std::cerr << " gamma: " << gamma(from, d-1) << std::endl;
+        std::cerr << " d: " << base-d+1 << std::endl;
+        std::cerr << " gmax: " << gmax << std::endl;
+#endif
+                gmax = gmax + duration_probability(base-d+1) + observation()->prefix_sum_array_compute(d, base, phase);
                 if(gamma(id(), base) < gmax){
                     gamma(id(), base) = gmax;
                     psi(id(), base) = pmax;
-                    psilen(id(), base) = d;
+                    psilen(id(), base) = base-d+1;
                 }
             }
     }

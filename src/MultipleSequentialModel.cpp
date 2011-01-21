@@ -83,7 +83,7 @@ namespace tops {
         if(begin > end)
             return -HUGE;
 
-        double sum = -HUGE;
+        double sum = 0;
         int b = begin;
         int e = 0;
         for(int i = 0; i < _idx_not_limited; i++)
@@ -91,13 +91,10 @@ namespace tops {
                 e = b + _max_size[i] - 1;
                 if (e >= _seqsize)
                     e = _seqsize-1;
-                if(i == 0)
-                    sum = _sub_models[i]->prefix_sum_array_compute(b,e,phase);
-                else
-                    sum += _sub_models[i]->prefix_sum_array_compute(b,e,phase);
+                sum += _sub_models[i]->prefix_sum_array_compute(b,e,phase);
                 phase = mod(phase + e - b + 1, 3);
-                if( e >=  (int)end)
-                    return sum;
+                if( e >  (int)end)
+                    return -HUGE;
                 b = e + 1;
 
             }
@@ -112,7 +109,6 @@ namespace tops {
 
             }
         int end_of_not_limited = e;
-
         if( end_of_not_limited - begin_of_not_limited + 1 > 0 ){
             sum += _sub_models[_idx_not_limited]->prefix_sum_array_compute(begin_of_not_limited, end_of_not_limited, phase);
         }
