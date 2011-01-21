@@ -382,7 +382,7 @@ double GeneralizedHiddenMarkovModel::viterbi(const Sequence &s, Sequence &path,
   for(int i = 0; i < size; i++) {
       std::cerr << "i: " << i << std::endl;
       for(int k = 0; k < nstates; k++){
-          std::cerr << " "  << k << " " << gamma(k, i) << " " << psi(k, i) << " " << psilen(k,i) << std::endl;
+          std::cerr << " "  << getStateName(k) << " " << gamma(k, i) << " " << getStateName(psi(k, i)) << " " << psilen(k,i) << std::endl;
       }
 
   }
