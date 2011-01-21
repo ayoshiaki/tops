@@ -212,7 +212,7 @@ namespace tops{
   }
   double GHMMSignalState::duration_probability(int l) const {
     if (l == _size)
-	return 0.0;
+        return 0.0;
     else
       return -HUGE;
   }
@@ -276,15 +276,15 @@ namespace tops{
       std::stringstream out;
       out << name() << " = [\n observation = " << GHMMState::observationModelName() << std::endl;
       if((getStart() > 0) || (getStop() > 0)) {
-	out << "extend_emission = 1" << std::endl;
-	out << "start = " << getStart() <<  std::endl;
-	out << "stop = " << getStop() << std::endl;
+        out << "extend_emission = 1" << std::endl;
+        out << "start = " << getStart() <<  std::endl;
+        out << "stop = " << getStop() << std::endl;
       }
       if(isLeftJoinable()) {
-	out << "left_joinable = " << isLeftJoinable() << std::endl;
+        out << "left_joinable = " << isLeftJoinable() << std::endl;
       }
       if(isRightJoinable()) {
-	out << "right_joinable = " << isRightJoinable() << std::endl;
+        out << "right_joinable = " << isRightJoinable() << std::endl;
       }
 
       out << "duration = " << durationModelName() << "]" << std::endl;
@@ -431,15 +431,15 @@ namespace tops{
     double sum = 0.0;
     for(int i = 0; i < (int)probabilities.size(); i++)
       {
-	if (i == j)
-	  continue;
-	sum += probabilities[i];
+        if (i == j)
+          continue;
+        sum += probabilities[i];
       }
     for(int i = 0; i <(int) probabilities.size(); i++)
       {
-	if (i == j)
-	  continue;
-	probabilities[i]  = probabilities[i]/sum;
+        if (i == j)
+          continue;
+        probabilities[i]  = probabilities[i]/sum;
       }
     trans->setProbabilities(probabilities);
   }

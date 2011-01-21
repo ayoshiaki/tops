@@ -55,30 +55,30 @@ int main (int argc, char ** argv)
       store(parse_command_line(argc, argv, desc), vm);
       notify(vm);
       if(vm.count("help"))
-	{
-	  cout << desc << "\n";
-	  return 1;
-	}
+        {
+          cout << desc << "\n";
+          return 1;
+        }
       if(vm.count("model")<= 0) {
-	cerr << desc << "\n";
-	return -1;
+        cerr << desc << "\n";
+        return -1;
 
       }
       if (vm.count("fasta"))
-	SequenceFormatManager::instance()->setFormat(FastaSequenceFormatPtr(new FastaSequenceFormat()));
+        SequenceFormatManager::instance()->setFormat(FastaSequenceFormatPtr(new FastaSequenceFormat()));
 
       ProbabilisticModelCreatorClient creator;
       ProbabilisticModelPtr m = creator.create(vm["model"].as<string>());
       int phase = 0;
       if(vm.count("phase")) {
-	phase = vm["phase"].as<int>();
+        phase = vm["phase"].as<int>();
       }
 
 
 
       if(m == NULL){
-	std::cerr << "Cannot open model " << std::endl;
-	exit(-1);
+        std::cerr << "Cannot open model " << std::endl;
+        exit(-1);
       }
 
       map<std::string,std::string>::const_iterator it;
@@ -87,20 +87,21 @@ int main (int argc, char ** argv)
 
       SequenceEntry entry(alphabet);
       while(!cin.eof()) {
-	cin >> entry;
-	if(entry.getSequence().size() == 0)
-	  continue;
-	Sequence s = entry.getSequence();
-	double prob =  m->evaluate(s, 0, s.size() -1, phase);
+        cin >> entry;
+        if(entry.getSequence().size() == 0)
+          continue;
+        Sequence s = entry.getSequence();
+        double prob =  m->evaluate(s, 0, s.size() -1, phase);
 
-#if 0
+#if 1
   m->initialize_prefix_sum_array(s,0);
   double prob2 = m->prefix_sum_array_compute(0, s.size()-1,0);
-	std::cout << entry.getName() << "\t"
+        std::cout << entry.getName() << "\t"
             << exp(prob) << " " << exp(prob2) <<std::endl;
-#endif
-	std::cout << entry.getName() << "\t"
+#else
+        std::cout << entry.getName() << "\t"
             << exp(prob) << std::endl;
+#endif
       }
     }
   catch (boost::program_options::invalid_command_line_syntax &e)

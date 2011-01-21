@@ -82,7 +82,7 @@ namespace tops {
             return -HUGE;
         if(begin > end)
             return -HUGE;
-
+        std::cerr << "psa" << std::endl;
         double sum = 0;
         int b = begin;
         int e = 0;
@@ -91,25 +91,40 @@ namespace tops {
                 e = b + _max_size[i] - 1;
                 if (e >= _seqsize)
                     e = _seqsize-1;
+                double x = _sub_models[i]->prefix_sum_array_compute(b,e,phase);
+                std::cerr << b<< " " << e << " " << phase << " " <<  x << std::endl;
                 sum += _sub_models[i]->prefix_sum_array_compute(b,e,phase);
-                phase = mod(phase + e - b + 1, 3);
-                if( e >  (int)end)
-                    return -HUGE;
-                b = e + 1;
+                if( e >=  (int)end)
+                    return sum;
 
+                phase = mod(phase + e - b + 1, 3);
+                b = e + 1;
+                if(e>=_seqsize)
+                    break;
             }
         int begin_of_not_limited = b;
         e = end;
         for (int i = _sub_models.size()-1; i > _idx_not_limited ; i--)
             {
                 b = e - _max_size[i] + 1;
-                int phase2 = mod(phase + b - begin_of_not_limited + 1, 3);
+                int phase2 = mod(phase + b - begin_of_not_limited, 3);
+                if(b < 0) {
+                    phase2 = mod(phase2 -b, 3);
+                    b  = 0;
+                }
+                double x = _sub_models[i]->prefix_sum_array_compute(b,e,phase2);
+                std::cerr << b<< " " << e << " " << phase2 << " " <<x << std::endl;
+
                 sum += _sub_models[i]->prefix_sum_array_compute(b,e,phase2);
                 e = b - 1;
-
+                if (e < 0)
+                    break;
             }
         int end_of_not_limited = e;
         if( end_of_not_limited - begin_of_not_limited + 1 > 0 ){
+            double x = _sub_models[_idx_not_limited]->prefix_sum_array_compute(begin_of_not_limited, end_of_not_limited, phase);
+            std::cerr << begin_of_not_limited<< " " << phase << " " <<end_of_not_limited << " " << x << std::endl;
+
             sum += _sub_models[_idx_not_limited]->prefix_sum_array_compute(begin_of_not_limited, end_of_not_limited, phase);
         }
         return sum;
@@ -151,14 +166,12 @@ namespace tops {
     }
 
     double MultipleSequentialModel::evaluate(const Sequence & s, unsigned int begin, unsigned int end, int phase) const {
-        if (end >= s.size())
-            return -HUGE;
         if(begin < 0)
             return -HUGE;
         if(begin > end)
             return -HUGE;
-
-        double sum = -HUGE;
+        std::cerr << "evaluate" << std::endl;
+        double sum = 0;
         int b = begin;
         int e = 0;
         for(int i = 0; i < _idx_not_limited; i++)
@@ -166,26 +179,44 @@ namespace tops {
                 e = b + _max_size[i] - 1;
                 if (e >= s.size())
                     e = s.size()-1;
-                if(i == 0)
-                    sum = _sub_models[i]->evaluate(s,b,e, phase);
-                else
-                    sum += _sub_models[i]->evaluate(s,b,e,phase);
-                phase = mod(phase + e - b + 1, 3);
+                double x = _sub_models[i]->evaluate(s,b,e,phase);
+                std::cerr << b<< " " << e << " " << phase << " " << x <<  std::endl;
+
+                sum += _sub_models[i]->evaluate(s,b,e,phase);
                 if( e >=  (int)end)
                     return sum;
+
+                phase = mod(phase + e - b + 1, 3);
                 b = e + 1;
+                if(e >= s.size())
+                    break;
             }
         int begin_of_not_limited = b;
         e = end;
         for (int i = _sub_models.size()-1; i > _idx_not_limited ; i--)
             {
                 b = e - _max_size[i] + 1;
-                sum += _sub_models[i]->evaluate(s,b,e,phase);
+                int phase2 = mod(phase + b - begin_of_not_limited, 3);
+                if(b < 0) {
+                    phase2 = mod(phase2 -b, 3);
+                    b  = 0;
+                }
+                double x = _sub_models[i]->evaluate(s,b,e,phase2);
+                std::cerr << b<< " " << e << " " << phase2 << " " << x << std::endl;
+
+                sum += _sub_models[i]->evaluate(s,b,e,phase2);
                 e = b - 1;
+                if (e < 0)
+                    break;
+
             }
         int end_of_not_limited = e;
-        if( end_of_not_limited - begin_of_not_limited + 1 > 0 )
-            sum += _sub_models[_idx_not_limited]->evaluate(s, begin_of_not_limited, end_of_not_limited, phase);
+        if( end_of_not_limited - begin_of_not_limited + 1 > 0 ){
+                double x = _sub_models[_idx_not_limited]->evaluate(s,begin_of_not_limited, end_of_not_limited, phase);
+                std::cerr << begin_of_not_limited<< " " << end_of_not_limited << " " << phase << " " << x << std::endl;
+
+            sum += _sub_models[_idx_not_limited]->evaluate(s,begin_of_not_limited, end_of_not_limited, phase);
+        }
         return sum;
     }
     void MultipleSequentialModel::initialize (const ProbabilisticModelParameters & p )
