@@ -82,7 +82,6 @@ namespace tops {
             return -HUGE;
         if(begin > end)
             return -HUGE;
-        std::cerr << "psa" << std::endl;
         double sum = 0;
         int b = begin;
         int e = 0;
@@ -92,7 +91,6 @@ namespace tops {
                 if (e >= _seqsize)
                     e = _seqsize-1;
                 double x = _sub_models[i]->prefix_sum_array_compute(b,e,phase);
-                std::cerr << b<< " " << e << " " << phase << " " <<  x << std::endl;
                 sum += _sub_models[i]->prefix_sum_array_compute(b,e,phase);
                 if( e >=  (int)end)
                     return sum;
@@ -113,8 +111,6 @@ namespace tops {
                     b  = 0;
                 }
                 double x = _sub_models[i]->prefix_sum_array_compute(b,e,phase2);
-                std::cerr << b<< " " << e << " " << phase2 << " " <<x << std::endl;
-
                 sum += _sub_models[i]->prefix_sum_array_compute(b,e,phase2);
                 e = b - 1;
                 if (e < 0)
@@ -123,8 +119,6 @@ namespace tops {
         int end_of_not_limited = e;
         if( end_of_not_limited - begin_of_not_limited + 1 > 0 ){
             double x = _sub_models[_idx_not_limited]->prefix_sum_array_compute(begin_of_not_limited, end_of_not_limited, phase);
-            std::cerr << begin_of_not_limited<< " " << phase << " " <<end_of_not_limited << " " << x << std::endl;
-
             sum += _sub_models[_idx_not_limited]->prefix_sum_array_compute(begin_of_not_limited, end_of_not_limited, phase);
         }
         return sum;
@@ -170,7 +164,6 @@ namespace tops {
             return -HUGE;
         if(begin > end)
             return -HUGE;
-        std::cerr << "evaluate" << std::endl;
         double sum = 0;
         int b = begin;
         int e = 0;
@@ -180,8 +173,6 @@ namespace tops {
                 if (e >= s.size())
                     e = s.size()-1;
                 double x = _sub_models[i]->evaluate(s,b,e,phase);
-                std::cerr << b<< " " << e << " " << phase << " " << x <<  std::endl;
-
                 sum += _sub_models[i]->evaluate(s,b,e,phase);
                 if( e >=  (int)end)
                     return sum;
@@ -202,8 +193,6 @@ namespace tops {
                     b  = 0;
                 }
                 double x = _sub_models[i]->evaluate(s,b,e,phase2);
-                std::cerr << b<< " " << e << " " << phase2 << " " << x << std::endl;
-
                 sum += _sub_models[i]->evaluate(s,b,e,phase2);
                 e = b - 1;
                 if (e < 0)
@@ -212,9 +201,7 @@ namespace tops {
             }
         int end_of_not_limited = e;
         if( end_of_not_limited - begin_of_not_limited + 1 > 0 ){
-                double x = _sub_models[_idx_not_limited]->evaluate(s,begin_of_not_limited, end_of_not_limited, phase);
-                std::cerr << begin_of_not_limited<< " " << end_of_not_limited << " " << phase << " " << x << std::endl;
-
+            double x = _sub_models[_idx_not_limited]->evaluate(s,begin_of_not_limited, end_of_not_limited, phase);
             sum += _sub_models[_idx_not_limited]->evaluate(s,begin_of_not_limited, end_of_not_limited, phase);
         }
         return sum;
