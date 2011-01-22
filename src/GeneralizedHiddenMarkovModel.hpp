@@ -77,7 +77,7 @@ namespace tops {
     double _null_model_prob;
   public:
     CandidateSignal(int id, int begin, int end, int begin_of_next_state,
-		    double prob, double null_model_prob) {
+                    double prob, double null_model_prob) {
       _id = id;
       _begin = begin;
       _end = end;
@@ -110,6 +110,7 @@ namespace tops {
   class GeneralizedHiddenMarkovModel: public DecodableModel {
   private:
     MultinomialDistributionPtr _initial_probabilities;
+    MultinomialDistributionPtr _terminal_probabilities;
     GHMMStates _all_states;
     AlphabetPtr _state_names;
     GHMMStates _geometric_duration_states;
@@ -118,6 +119,7 @@ namespace tops {
     void initialize_prefix_sum_arrays(const Sequence & s) const;
     //! Finds all candidate signals that are  successor of the  toSignal state and inserts the toSignal state as the predecessor candidate signal.
     void addSignalPredecessors(CandidateSignalPtr sig, std::vector<std::set<CandidateSignalPtr> > & predecessors) const;
+    void buildDoubleParameterValue(MultinomialDistributionPtr distr, ProbabilisticModelParameters & answer, const char *) const;
     void restore_model(std::string & model_name, const ProbabilisticModelParameters & parameters);
     std::map<std::string, ProbabilisticModelPtr> _models;
   public:
@@ -179,17 +181,18 @@ namespace tops {
       return this;
     }
     void configureSignalState(std::string observation_model_name,
-			      std::string null_model_name,
-			      MultinomialDistributionPtr transition_distr, double threshold,
-			      int size, std::string state_name, int iphase, int ophase);
+                              std::string null_model_name,
+                              MultinomialDistributionPtr transition_distr, double threshold,
+                              int size, std::string state_name, int iphase, int ophase);
 
     void configureGeometricDurationState(std::string observation_model_name,
-					 MultinomialDistributionPtr transition_distr,
-					 std::string state_name, int iphase, int ophase);
+                                         MultinomialDistributionPtr transition_distr,
+                                         std::string state_name, int iphase, int ophase);
     void configureExplicitDurationState(std::string observation_model_name,
-					MultinomialDistributionPtr transition_distr,
-					std::string duration_model_name, std::string state_name, int iphase, int ophase, int start, int stop, int leftJoinable, int rightJoinable);
+                                        MultinomialDistributionPtr transition_distr,
+                                        std::string duration_model_name, std::string state_name, int iphase, int ophase, int start, int stop, int leftJoinable, int rightJoinable);
     void setInitialProbability(MultinomialDistributionPtr init);
+    void setTerminalProbability(MultinomialDistributionPtr term);
     void setObservationSymbols(AlphabetPtr obs) {
       setAlphabet(obs);
     }

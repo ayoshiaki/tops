@@ -87,6 +87,11 @@ void GeneralizedHiddenMarkovModel::setInitialProbability(
         _initial_probabilities = init;
 }
 
+void GeneralizedHiddenMarkovModel::setTerminalProbability(
+                MultinomialDistributionPtr term) {
+        _terminal_probabilities = term;
+}
+
 void GeneralizedHiddenMarkovModel::configureSignalState(
                                                         std::string observation_model_name, std::string null_model_name,
                                                         MultinomialDistributionPtr transition_distr, double threshold,
@@ -366,20 +371,23 @@ double GeneralizedHiddenMarkovModel::viterbi(const Sequence &s, Sequence &path,
         _all_states[k]->findBestPredecessor (gamma, psi, psilen,  s, i, _all_states);
     }
   }
+  int L = size-1;
 
+  if(_terminal_probabilities != NULL){
+      for(int k = 0; k < nstates; k++)
+          gamma(k,L) += _terminal_probabilities->log_probability_of(k);
+  }
   //backtracing
   path.resize(size);
-  int L = size-1;
+
   int state = 0;
   double max = gamma(0, L);
-#if 0
   for(int k = 1; k < nstates; k++){
     if(max < gamma(k, L)){
-      max = gamma(k, L);
-      state = k;
+        max = gamma(k, L) ;
+        state = k;
     }
   }
-#endif
 #if 0
   for(int i = 0; i < size; i++) {
       std::cerr << "i: " << i << std::endl;
@@ -390,18 +398,17 @@ double GeneralizedHiddenMarkovModel::viterbi(const Sequence &s, Sequence &path,
   }
 #endif
   while(L > 0){
-    int d = psilen(state, L);
-    int p = psi(state, L);
-    for(int i = 0; i < d; i++){
-      path[L] = state;
-      L--;
-    }
-    state = p;
+      int d = psilen(state, L);
+      int p = psi(state, L);
+      for(int i = 0; i < d; i++){
+          path[L] = state;
+          L--;
+      }
+      state = p;
   }
   return max;
 
 }
-
 //! Posterior Probabilities: P(yi=k|x)
 void GeneralizedHiddenMarkovModel::posteriorProbabilities (const Sequence &s, Matrix & probabilities) const{
   std::cerr << "posteriorProbabilities not implemented" << std::endl;
@@ -491,6 +498,19 @@ Sequence & GeneralizedHiddenMarkovModel::chooseObservation(Sequence & h, int i,
                                                               _initial_probabilities->log_probability_of(i));
       }
     out << ")" << std::endl;
+
+    if(_terminal_probabilities != NULL) {
+        out << "terminal_probabilities = (";
+        if(!close(exp(_terminal_probabilities->log_probability_of(0)), 0, 1e-10))
+            out << "\"" << getStateName(0) << "\":  " << exp(_terminal_probabilities->log_probability_of(0));
+        for (int i = 1; i < nstates; i++)
+            {
+                if(!close(exp(_terminal_probabilities->log_probability_of(i)), 0.0, 1e-10))
+                    out << ";\n \"" << getStateName(i) << "\": " << exp(_terminal_probabilities->log_probability_of(i));
+            }
+        out << ")" << std::endl;
+    }
+
     std::map <std::string, ProbabilisticModelPtr> ::const_iterator it;
 
     for(it = _models.begin(); it != _models.end(); it++)
@@ -502,10 +522,32 @@ Sequence & GeneralizedHiddenMarkovModel::chooseObservation(Sequence & h, int i,
       out << _all_states[i]->str();
 
     return out.str();
-
   }
 
+    void GeneralizedHiddenMarkovModel::buildDoubleParameterValue(MultinomialDistributionPtr distr, ProbabilisticModelParameters & answer, const char * name) const
+    {
+        int nstates = getStateNames()->size();
+        double sum = 0.0;
+        std::vector <double> probs;
+        probs.resize(nstates);
+        for(int i = 0; i < nstates; i++){
+            probs[i] = exp(distr->log_probability_of(i));
+            sum += probs[i];
+        }
+        std::map <std::string, double> aux;
+        std::stringstream out5;
+        out5 << getStateName(0);
+        aux[out5.str()] =  probs[0]/sum;
+        for(int i = 0; i < nstates; i++)
+            for(int j = 0; j < (int)alphabet()->size(); j++)
+                if((i != 0) || (j != 0)){
+                    std::stringstream out6;
+                    out6 << getStateName(i) ;
+                    aux[out6.str()] = probs[i]/sum;
+                }
+        answer.add(name, DoubleMapParameterValuePtr(new DoubleMapParameterValue(aux)));
 
+    }
 
   ProbabilisticModelParameters GeneralizedHiddenMarkovModel::parameters() const
   {
@@ -530,26 +572,9 @@ Sequence & GeneralizedHiddenMarkovModel::chooseObservation(Sequence & h, int i,
 
     answer.add("transitions", DoubleMapParameterValuePtr(new DoubleMapParameterValue(trans)));
 
-    double sum = 0.0;
-    std::vector <double> probs;
-    probs.resize(nstates);
-    for(int i = 0; i < nstates; i++){
-      probs[i] = exp(_initial_probabilities->log_probability_of(i));
-      sum += probs[i];
-    }
-    std::map <std::string, double> initial;
-    std::stringstream out5;
-    out5 << getStateName(0);
-    initial[out5.str()] =  probs[0]/sum;
-    for(int i = 0; i < nstates; i++)
-      for(int j = 0; j < (int)alphabet()->size(); j++)
-        if((i != 0) || (j != 0)){
-          std::stringstream out6;
-          out6 << getStateName(i) ;
-          initial[out6.str()] = probs[i]/sum;
-        }
-    answer.add("initial_probabilities", DoubleMapParameterValuePtr(new DoubleMapParameterValue(initial)));
-
+    buildDoubleParameterValue(_initial_probabilities, answer, "initial_probabilities");
+    if(_terminal_probabilities != NULL)
+        buildDoubleParameterValue(_terminal_probabilities, answer, "terminal_probabilities");
     std::map <std::string, ProbabilisticModelPtr> ::const_iterator it;
 
     for(it = _models.begin(); it != _models.end(); it++)
@@ -576,6 +601,9 @@ Sequence & GeneralizedHiddenMarkovModel::chooseObservation(Sequence & h, int i,
       parameters.getMandatoryParameterValue("transitions");
     ProbabilisticModelParameterValuePtr observation_symbols_par =
       parameters.getMandatoryParameterValue("observation_symbols");
+    ProbabilisticModelParameterValuePtr terminal_probabilities_par =
+        parameters.getOptionalParameterValue("terminal_probabilities");
+
 
     std::vector<std::string> state_names = state_names_par->getStringVector();
     AlphabetPtr states = AlphabetPtr(new Alphabet());
@@ -587,6 +615,13 @@ Sequence & GeneralizedHiddenMarkovModel::chooseObservation(Sequence & h, int i,
     MultinomialDistributionPtr pi = MultinomialDistributionPtr(new MultinomialDistribution());
     pi->initializeFromMap(initial_probabilities_par->getDoubleMap(), states);
 
+    if(terminal_probabilities_par != NULL){
+        MultinomialDistributionPtr terminalprob = MultinomialDistributionPtr(new MultinomialDistribution());
+        terminalprob->initializeFromMap(terminal_probabilities_par->getDoubleMap(), states);
+        setTerminalProbability(terminalprob);
+    }
+
+
     std::map<std::string, double> transpar = transitions_par->getDoubleMap();
     std::map<std::string, DoubleVector> trans;
     std::map<std::string, double>::const_iterator it;
@@ -595,7 +630,6 @@ Sequence & GeneralizedHiddenMarkovModel::chooseObservation(Sequence & h, int i,
       std::vector<std::string> splited;
       boost::regex separator("\\|");
       split_regex(it->first, splited, separator);
-
       if(splited.size() == 1) {
         splited.push_back("");
       }
@@ -736,6 +770,7 @@ Sequence & GeneralizedHiddenMarkovModel::chooseObservation(Sequence & h, int i,
     }
     setObservationSymbols(observation_symbols);
     setInitialProbability(pi);
+
     fixStatesPredecessorSuccessor();
 
 

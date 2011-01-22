@@ -78,9 +78,10 @@ namespace tops{
                           while( (m < (int) (sample_set[j]->getSequence()).size()) && (l <= o))
                               {
                                   s[l] = (sample_set[j]->getSequence())[m];
-                                  if(fixseq && (fixed_pos <= m) && ( m <= fixed_pos + fixed.size()-1)){
-                                      int p = m-fixed_pos;
-                                      s[l] = fixed[p];
+                                  if(fixseq && (fixed_pos <= (m-k)) && ( (m-k) <= fixed_pos + fixed.size()-1)){
+                                      int p = m-fixed_pos-k;
+                                      if((p >= 0) && (p < fixed.size()))
+                                          s[l] = fixed[p];
                                   }
                                   l++; m++;
                               }

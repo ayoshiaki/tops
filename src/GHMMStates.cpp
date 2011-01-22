@@ -376,7 +376,7 @@ namespace tops{
         int diff = mod(getOutputPhase() - getInputPhase(),_number_of_phases);
         if(_number_of_phases  == 1)
             diff = 0;
-        int minbase = (base - diff - 30000) ;
+        int minbase = (base - diff - 15000) ;
         if(minbase < 0) minbase = 0;
         for (int d = base - diff; d > minbase; d-=_number_of_phases)
             {
@@ -397,7 +397,7 @@ namespace tops{
 
                 double emission = observation()->prefix_sum_array_compute(d, base, phase);
 
-                if(close(emission, -HUGE, 1) && (base -d +1 > 100))
+                if(close(emission, -HUGE, 1) )
                     return;
 
 #if 0

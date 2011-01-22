@@ -93,14 +93,14 @@ int main (int argc, char ** argv)
         Sequence s = entry.getSequence();
         double prob =  m->evaluate(s, 0, s.size() -1, phase);
 
-#if 1
+#if 0
   m->initialize_prefix_sum_array(s,0);
   double prob2 = m->prefix_sum_array_compute(0, s.size()-1,0);
         std::cout << entry.getName() << "\t"
             << exp(prob) << " " << exp(prob2) <<std::endl;
 #else
         std::cout << entry.getName() << "\t"
-            << exp(prob) << std::endl;
+            << prob << std::endl;
 #endif
       }
     }
