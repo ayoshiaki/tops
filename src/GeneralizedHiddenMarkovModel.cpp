@@ -353,6 +353,7 @@ double GeneralizedHiddenMarkovModel::viterbi(const Sequence &s, Sequence &path,
                 Matrix & g) const {
   int size = s.size();
   int nstates = _all_states.size();
+
   initialize_prefix_sum_arrays(s);
 
   Matrix gamma(nstates, size);
@@ -406,6 +407,7 @@ double GeneralizedHiddenMarkovModel::viterbi(const Sequence &s, Sequence &path,
       }
       state = p;
   }
+  std::cerr << "3"<<std::endl;
   return max;
 
 }

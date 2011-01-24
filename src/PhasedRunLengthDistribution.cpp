@@ -2,17 +2,17 @@
  *       PhasedRunLengthDistribution.cpp
  *
  *       Copyright 2011 Andre Yoshiaki Kashiwabara <akashiwabara@usp.br>
- *     
+ *
  *       This program is free software; you can redistribute it and/or modify
  *       it under the terms of the GNU  General Public License as published by
  *       the Free Software Foundation; either version 3 of the License, or
  *       (at your option) any later version.
- *     
+ *
  *       This program is distributed in the hope that it will be useful,
  *       but WITHOUT ANY WARRANTY; without even the implied warranty of
  *       MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *       GNU General Public License for more details.
- *      
+ *
  *       You should have received a copy of the GNU General Public License
  *       along with this program; if not, write to the Free Software
  *       Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
@@ -24,6 +24,9 @@
 #include "PhasedRunLengthDistribution.hpp"
 #include "ProbabilisticModelCreatorClient.hpp"
 namespace tops {
+    int PhasedRunLengthDistribution::size() const {
+        return subModel()->size();
+    }
 
   ProbabilisticModelParameters PhasedRunLengthDistribution::parameters() const
   {
@@ -34,14 +37,14 @@ namespace tops {
     p.add("number_of_phases", IntParameterValuePtr(new IntParameterValue(_nphases)));
     p.add("delta", DoubleParameterValuePtr(new DoubleParameterValue(_delta)));
     std::string modelname = ProbabilisticModelDecorator::subModelName();
-    if(modelname.length() > 0) 
+    if(modelname.length() > 0)
       p.add("model", StringParameterValuePtr(new StringParameterValue(modelname)));
     else
       p.add("model", StringParameterValuePtr(new StringParameterValue(subModel()->str())));
-    
+
     return p;
   }
-  
+
   void PhasedRunLengthDistribution::initialize(const ProbabilisticModelParameters & p)
   {
     ProbabilisticModelParameterValuePtr iphasepar = p.getMandatoryParameterValue("input_phase");
@@ -65,11 +68,11 @@ namespace tops {
       ProbabilisticModelParametersPtr par = reader.parameters();
       m = creator.create(*par);
     } else  {
-	m = creator.create(modelstr) ;
-	if(m == NULL) {
-	  std::cerr << "Can not load model file " << modelstr<< "!" << std::endl;
-	  exit(-1);
-	}
+        m = creator.create(modelstr) ;
+        if(m == NULL) {
+          std::cerr << "Can not load model file " << modelstr<< "!" << std::endl;
+          exit(-1);
+        }
       }
     AlphabetPtr alpha = m->alphabet();
     initialize(delta, iphase, ophase, nphase);
@@ -87,8 +90,8 @@ namespace tops {
     double sum = -HUGE;
     for(int i = 0; i < subModel()->size(); i++) {
       int d = i + _delta;
-      if(mod((d + _iphase-1), _nphases) == _ophase) 
-	sum = log_sum(sum, subModel()->log_probability_of(i));
+      if(mod((d + _iphase-1), _nphases) == _ophase)
+        sum = log_sum(sum, subModel()->log_probability_of(i));
     }
     _normfactor = sum;
   }
@@ -106,16 +109,16 @@ namespace tops {
 
     return d;
   }
-  
+
   double  PhasedRunLengthDistribution::log_probability_of(int s) const
   {
     int d = s + _delta;
-    if(mod((d + _iphase-1), _nphases) != _ophase) 
+    if(mod((d + _iphase-1), _nphases) != _ophase)
       return -HUGE;
     double result = subModel()->log_probability_of(d);
     return result-_normfactor;
   }
-  
+
   Sequence & PhasedRunLengthDistribution::choose(Sequence & h, int size) const {
     for(int i = 0; i < size; i++)
       h.push_back(choose());
@@ -130,7 +133,7 @@ std::string PhasedRunLengthDistribution::str() const{
   out << "output_phase = " << _ophase << std::endl;
   out << "number_of_phases = " << _nphases << std::endl;
   std::string modelname = ProbabilisticModelDecorator::subModelName();
-  if(modelname.length() > 0) 
+  if(modelname.length() > 0)
     out << "model = " << modelname << std::endl ;
   else
     out << "model = [" << subModel()->str() << "]" << std::endl ;
