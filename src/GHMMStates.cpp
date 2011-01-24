@@ -256,7 +256,7 @@ namespace tops{
       if(par != NULL)
           _number_of_phases = par->getInt();
       else
-          _number_of_phases = 0;
+          _number_of_phases = 1;
     }
    ProbabilisticModelPtr GHMMExplicitDurationState::duration() const {
      return _duration;
@@ -373,10 +373,17 @@ namespace tops{
   }
 
     void GHMMExplicitDurationState::findBestPredecessor (Matrix & gamma, Matrix &psi, Matrix &psilen, const Sequence & s, int base, const GHMMStates & all_states){
-        int diff = mod(getOutputPhase() - getInputPhase(),_number_of_phases);
-        if(_number_of_phases  == 1)
-            diff = 0;
+        int diff = 0;
+        if(_number_of_phases  > 1)
+            diff = mod(getOutputPhase() - getInputPhase(),_number_of_phases);
+        if(_number_of_phases <= 0)
+            _number_of_phases = 1;
+        int offset = duration()->size();
+
+        if(offset > 15000)
+            offset = 15000;
         int minbase = (base - diff - 15000) ;
+
         if(minbase < 0) minbase = 0;
         for (int d = base - diff; d > minbase; d-=_number_of_phases)
             {
@@ -397,7 +404,7 @@ namespace tops{
 
                 double emission = observation()->prefix_sum_array_compute(d, base, phase);
 
-                if(close(emission, -HUGE, 1) )
+                if(emission <= -HUGE)
                     return;
 
 #if 0
