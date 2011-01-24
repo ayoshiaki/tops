@@ -90,7 +90,6 @@ namespace tops {
                 e = b + _max_size[i] - 1;
                 if (e >= _seqsize)
                     e = _seqsize-1;
-                double x = _sub_models[i]->prefix_sum_array_compute(b,e,phase);
                 sum += _sub_models[i]->prefix_sum_array_compute(b,e,phase);
                 if( e >=  (int)end)
                     return sum;
@@ -110,7 +109,6 @@ namespace tops {
                     phase2 = mod(phase2 -b, 3);
                     b  = 0;
                 }
-                double x = _sub_models[i]->prefix_sum_array_compute(b,e,phase2);
                 sum += _sub_models[i]->prefix_sum_array_compute(b,e,phase2);
                 e = b - 1;
                 if (e < 0)
@@ -118,7 +116,6 @@ namespace tops {
             }
         int end_of_not_limited = e;
         if( end_of_not_limited - begin_of_not_limited + 1 > 0 ){
-            double x = _sub_models[_idx_not_limited]->prefix_sum_array_compute(begin_of_not_limited, end_of_not_limited, phase);
             sum += _sub_models[_idx_not_limited]->prefix_sum_array_compute(begin_of_not_limited, end_of_not_limited, phase);
         }
         return sum;
@@ -172,7 +169,6 @@ namespace tops {
                 e = b + _max_size[i] - 1;
                 if (e >= s.size())
                     e = s.size()-1;
-                double x = _sub_models[i]->evaluate(s,b,e,phase);
                 sum += _sub_models[i]->evaluate(s,b,e,phase);
                 if( e >=  (int)end)
                     return sum;
@@ -192,7 +188,6 @@ namespace tops {
                     phase2 = mod(phase2 -b, 3);
                     b  = 0;
                 }
-                double x = _sub_models[i]->evaluate(s,b,e,phase2);
                 sum += _sub_models[i]->evaluate(s,b,e,phase2);
                 e = b - 1;
                 if (e < 0)
@@ -201,7 +196,6 @@ namespace tops {
             }
         int end_of_not_limited = e;
         if( end_of_not_limited - begin_of_not_limited + 1 > 0 ){
-            double x = _sub_models[_idx_not_limited]->evaluate(s,begin_of_not_limited, end_of_not_limited, phase);
             sum += _sub_models[_idx_not_limited]->evaluate(s,begin_of_not_limited, end_of_not_limited, phase);
         }
         return sum;
