@@ -407,7 +407,6 @@ double GeneralizedHiddenMarkovModel::viterbi(const Sequence &s, Sequence &path,
       }
       state = p;
   }
-  std::cerr << "3"<<std::endl;
   return max;
 
 }

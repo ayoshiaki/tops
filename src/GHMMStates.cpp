@@ -382,8 +382,7 @@ namespace tops{
 
         if(offset > 15000)
             offset = 15000;
-        int minbase = (base - diff - 15000) ;
-
+        int minbase = (base - diff - offset) ;
         if(minbase < 0) minbase = 0;
         for (int d = base - diff; d > minbase; d-=_number_of_phases)
             {
