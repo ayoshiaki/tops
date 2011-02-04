@@ -215,7 +215,7 @@ namespace tops {
             }
         _sub_models.resize(modelnames.size());
         _max_size.resize(modelnames.size());
-        _idx_not_limited =0;
+        _idx_not_limited = _sub_models.size();
         int count = 0;
         for(int i = 0; i < (int)modelnames.size();i++)
             {
@@ -226,7 +226,7 @@ namespace tops {
                         _idx_not_limited = i;
                     }
             }
-        if (count != 1)
+        if (count > 1)
             {
                 std::cerr << "ERROR: Only one model can has unlimited length\n" << std::endl;
                 exit(-1);
