@@ -36,6 +36,9 @@ namespace tops{
 
     void GHMMState::findBestPredecessor (Matrix & gamma, Matrix &psi, Matrix &psilen, const Sequence & s, int base, const GHMMStates & all_states){
         int d = 1;
+        if(predecessors().size() <= 0)
+            return;
+
         int from = _predecessors[0];
         double gmax = gamma(from, base-d) + all_states[from]->transition()->log_probability_of(id());
         int pmax = from;
@@ -316,6 +319,9 @@ namespace tops{
 
     void GHMMSignalState::findBestPredecessor (Matrix & gamma, Matrix &psi, Matrix &psilen, const Sequence & s, int base, const GHMMStates & all_states){
         int d = size();
+        if(predecessors().size() <= 0)
+            return;
+
         int from = predecessors()[0];
         if((base - d ) < 0)
             return;
@@ -331,15 +337,6 @@ namespace tops{
         }
         int phase = getInputPhase();
         gmax = gmax + duration_probability(d) + observation()->prefix_sum_array_compute(base-d +1, base, phase);
-#if 0
-        std::cerr << "id: " << id() << " " << base - d + 1 << " " << base << std::endl;
-        std::cerr << " duration: " << duration_probability(d) << std::endl;
-        std::cerr << " emission: " << observation()->prefix_sum_array_compute(base-d+1, base , phase) << std::endl;
-        std::cerr << " from: " << from << std::endl;
-        std::cerr << " gamma: " << gamma(from, base-d) << std::endl;
-        std::cerr << " duration: " << d << std::endl;
-        std::cerr << " gmax: " << gmax << std::endl;
-#endif
         if(gamma(id(), base) < gmax){
             gamma(id(), base) = gmax;
             psi(id(), base) = pmax;
@@ -386,6 +383,8 @@ namespace tops{
         if(minbase < 0) minbase = 0;
         for (int d = base - diff; d > minbase; d-=_number_of_phases)
             {
+                if(predecessors().size() <= 0)
+                    return;
                 int from = predecessors()[0];
                 if((base - d ) < 0)
                     return;
@@ -403,8 +402,6 @@ namespace tops{
 
                 double emission = observation()->prefix_sum_array_compute(d, base, phase);
 
-                if(emission <= -HUGE)
-                    return;
 
 #if 0
         std::cerr << name() << " " << d  << " " << base << std::endl;
@@ -418,8 +415,11 @@ namespace tops{
         std::cerr << " d: " << base-d+1 << std::endl;
         std::cerr << " gmax: " << gmax << std::endl;
 #endif
+
+                if(emission <= -HUGE)
+                    return;
                 gmax = gmax + duration_probability(base-d+1) + observation()->prefix_sum_array_compute(d, base, phase);
-                if(gamma(id(), base) < gmax){
+              if(gamma(id(), base) < gmax){
                     gamma(id(), base) = gmax;
                     psi(id(), base) = pmax;
                     psilen(id(), base) = base-d+1;
