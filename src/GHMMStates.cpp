@@ -62,11 +62,22 @@ namespace tops{
 
     void GHMMState::choosePredecessor (Matrix & alpha, int base, int & state, int & position, const GHMMStates & all_states) {
         double sum = 0;
+
+
         double random = ((double)rand())/ ((double) RAND_MAX + 1.0) ;
+#if 0
+        std::cerr << base << " " << std::endl;
+        for (int k = 0; k < (int)predecessors().size(); k++)
+            {
+                int p = predecessors()[k];
+                std::cerr << " " << all_states[p]->name () << " " << base - 1 << " " << exp(alpha(p, base - 1) + all_states[p]->transition()->log_probability_of(id()) + all_states[id()]->observation()->prefix_sum_array_compute(base, base, all_states[id()]->getInputPhase()) - alpha(id(), base)) << " "  << exp(alpha(p, base -1 )) << std::endl;
+
+            }
+#endif
         for (int k = 0; k < (int)predecessors().size(); k++)
             {
                 int choosed = predecessors()[k];
-                sum += exp(alpha(choosed, base - 1) + all_states[choosed]->transition()->log_probability_of(id()) + all_states[id()]->observation()->prefix_sum_array_compute(base, base, all_states[id()]->getInputPhase()) - alpha(id(), base));
+                sum += exp(alpha(choosed, base - 1) + all_states[choosed]->transition()->log_probability_of(id()) + observation()->prefix_sum_array_compute(base, base, getInputPhase()) - alpha(id(), base));
                 if(sum >= random){
                     state = choosed;
                     position = base - 1;
@@ -76,20 +87,16 @@ namespace tops{
     }
     void GHMMState::forwardSum (Matrix & alpha, const Sequence & s, int base, const GHMMStates & all_states){
         alpha(id(), base)= -HUGE;
-        int d = 1;
         if(predecessors().size() <= 0)
             return;
         int from = predecessors()[0];
         int phase = getInputPhase();
         double emission = observation()->prefix_sum_array_compute(base, base, phase);
-        if(emission <= -HUGE)
-            return;
-
-        alpha(id(), base) =  alpha(from, base-d) + all_states[from]->transition()->log_probability_of(id()) + duration_probability(d) + emission;
+        alpha(id(), base) =  alpha(from, base-1) + all_states[from]->transition()->log_probability_of(id()) + emission;
         for (int k = 1; k < (int)predecessors().size(); k++)
             {
                 from = predecessors()[k];
-                alpha(id(), base) =  log_sum(alpha(from, base -d) + all_states[from]->transition()->log_probability_of(id()) + duration_probability(d) + emission, alpha(id(), base));
+                alpha(id(), base) =  log_sum(alpha(from, base - 1) + all_states[from]->transition()->log_probability_of(id()) +  emission, alpha(id(), base));
             }
 
     }
@@ -199,7 +206,7 @@ namespace tops{
     this->_stop = stop;
   }
 
-  int GHMMState::getOutputPhase() const {
+    int GHMMState::getOutputPhase() const {
     return _outputPhase;
   }
 
@@ -383,7 +390,8 @@ namespace tops{
     }
 
     void GHMMSignalState::forwardSum (Matrix & alpha, const Sequence & s, int base, const GHMMStates & all_states){
-        alpha(id(), base) = -HUGE;
+
+        alpha(id(), base)  = -HUGE;
         int d = size();
         if(predecessors().size() <= 0)
             return;
@@ -393,8 +401,7 @@ namespace tops{
             return;
         int phase = getInputPhase();
         double emission = observation()->prefix_sum_array_compute(base - d+ 1, base, phase);
-        if(emission <= -HUGE)
-            return;
+
         alpha(id(), base) =  alpha(from, base-d) + all_states[from]->transition()->log_probability_of(id())  + emission;
         for (int k = 1; k < (int)predecessors().size(); k++)
             {
@@ -409,10 +416,12 @@ namespace tops{
         double sum = 0;
         double random = ((double)rand())/ ((double) RAND_MAX + 1.0) ;
         position = base - size() ;
+        if(position < 0)
+            position = 0;
         for(int k  = 0; k < (int)predecessors().size(); k++)
             {
                 int choosed = predecessors()[k];
-                sum += exp(alpha(choosed, position) + all_states[choosed]->transition()->log_probability_of(id()) + all_states[id()]->observation()->prefix_sum_array_compute(position + 1, base, all_states[id()]->getInputPhase())  - alpha(id(), base)+ all_states[id()]->duration_probability(base - position) ) ;
+                sum += exp(alpha(choosed, position) + all_states[choosed]->transition()->log_probability_of(id()) + observation()->prefix_sum_array_compute(position + 1, base, getInputPhase())  - alpha(id(), base)+ duration_probability(base - position) ) ;
                 if(sum >= random){
                     state = choosed;
                     return;
@@ -468,7 +477,7 @@ namespace tops{
                 for(int k  = 0; k < (int)predecessors().size(); k++)
                     {
                         int choosed = predecessors()[k];
-                        sum += exp(alpha(choosed, position) + all_states[choosed]->transition()->log_probability_of(id()) + all_states[id()]->observation()->prefix_sum_array_compute(position + 1, base, all_states[id()]->getInputPhase())  - alpha(id(), base)+ all_states[id()]->duration_probability(base - position ) ) ;
+                        sum += exp(alpha(choosed, position) + all_states[choosed]->transition()->log_probability_of(id()) + observation()->prefix_sum_array_compute(d, base, getInputPhase())  - alpha(id(), base) + duration_probability(base - d + 1 ) ) ;
                         if(sum >= random){
                             state = choosed;
                             return;
@@ -563,7 +572,7 @@ namespace tops{
                 double emission = observation()->prefix_sum_array_compute(d, base, phase);
                 if(emission <= -HUGE)
                     return;
-                alpha(id(), base) =  alpha(from, d-1) + all_states[from]->transition()->log_probability_of(id()) + duration_probability(base-d+1) + emission;
+                alpha(id(), base) =  log_sum(alpha(from, d-1) + all_states[from]->transition()->log_probability_of(id()) + duration_probability(base-d+1) + emission, alpha(id(), base));
                 for (int k = 1; k < (int)predecessors().size(); k++)
                     {
                         from = predecessors()[k];
