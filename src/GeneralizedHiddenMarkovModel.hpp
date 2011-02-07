@@ -109,6 +109,10 @@ namespace tops {
   //! This is a class representing Hidden semi-Markov Models
   class GeneralizedHiddenMarkovModel: public DecodableModel {
   private:
+      Matrix _alpha;
+      Sequence _last;
+      MultinomialDistributionPtr _last_state_probabilities;
+      MultinomialDistributionPtr _duration_state_probabilities;
     MultinomialDistributionPtr _initial_probabilities;
     MultinomialDistributionPtr _terminal_probabilities;
     GHMMStates _all_states;
@@ -131,6 +135,10 @@ namespace tops {
 
     void fixStatesPredecessorSuccessor();
 
+    virtual double efficient_forward(const Sequence & s, Matrix &alpha) const;
+
+
+
     //! Forward algorithm
     virtual double forward(const Sequence & s, Matrix &alpha) const;
 
@@ -141,6 +149,10 @@ namespace tops {
     virtual double
     viterbi(const Sequence &s, Sequence &path, Matrix & gamma) const;
 
+      //! Choose a path given a sequence_length
+      virtual void choosePath(const Sequence &s, Sequence &path) ;
+
+      virtual void initializeChoosePathAlgorithm(const Sequence &s);
     //! Inefficient Viterbi algorithm
     virtual double
     _viterbi(const Sequence &s, Sequence &path, Matrix & gamma) const;

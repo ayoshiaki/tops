@@ -59,6 +59,43 @@ namespace tops{
             psilen(id(), base) = d;
         }
     }
+
+    void GHMMState::choosePredecessor (Matrix & alpha, int base, int & state, int & position, const GHMMStates & all_states) {
+        double sum = 0;
+        double random = ((double)rand())/ ((double) RAND_MAX + 1.0) ;
+        for (int k = 0; k < (int)predecessors().size(); k++)
+            {
+                int choosed = predecessors()[k];
+                sum += exp(alpha(choosed, base - 1) + all_states[choosed]->transition()->log_probability_of(id()) + all_states[id()]->observation()->prefix_sum_array_compute(base, base, all_states[id()]->getInputPhase()) - alpha(id(), base));
+                if(sum >= random){
+                    state = choosed;
+                    position = base - 1;
+                    return;
+                }
+            }
+    }
+    void GHMMState::forwardSum (Matrix & alpha, const Sequence & s, int base, const GHMMStates & all_states){
+        alpha(id(), base)= -HUGE;
+        int d = 1;
+        if(predecessors().size() <= 0)
+            return;
+        int from = predecessors()[0];
+        int phase = getInputPhase();
+        double emission = observation()->prefix_sum_array_compute(base, base, phase);
+        if(emission <= -HUGE)
+            return;
+
+        alpha(id(), base) =  alpha(from, base-d) + all_states[from]->transition()->log_probability_of(id()) + duration_probability(d) + emission;
+        for (int k = 1; k < (int)predecessors().size(); k++)
+            {
+                from = predecessors()[k];
+                alpha(id(), base) =  log_sum(alpha(from, base -d) + all_states[from]->transition()->log_probability_of(id()) + duration_probability(d) + emission, alpha(id(), base));
+            }
+
+    }
+
+
+
     void GHMMState::observationModelName(std::string name) {
         _observationModelName = name;
     }
@@ -345,6 +382,47 @@ namespace tops{
         }
     }
 
+    void GHMMSignalState::forwardSum (Matrix & alpha, const Sequence & s, int base, const GHMMStates & all_states){
+        alpha(id(), base) = -HUGE;
+        int d = size();
+        if(predecessors().size() <= 0)
+            return;
+
+        int from = predecessors()[0];
+        if((base - d ) < 0)
+            return;
+        int phase = getInputPhase();
+        double emission = observation()->prefix_sum_array_compute(base - d+ 1, base, phase);
+        if(emission <= -HUGE)
+            return;
+        alpha(id(), base) =  alpha(from, base-d) + all_states[from]->transition()->log_probability_of(id())  + emission;
+        for (int k = 1; k < (int)predecessors().size(); k++)
+            {
+                from = predecessors()[k];
+                alpha(id(), base) =  log_sum(alpha(from, base -d) + all_states[from]->transition()->log_probability_of(id()) + emission, alpha(id(), base));
+            }
+    }
+
+
+
+    void GHMMSignalState::choosePredecessor (Matrix & alpha, int base, int & state, int & position, const GHMMStates & all_states) {
+        double sum = 0;
+        double random = ((double)rand())/ ((double) RAND_MAX + 1.0) ;
+        position = base - size() ;
+        for(int k  = 0; k < (int)predecessors().size(); k++)
+            {
+                int choosed = predecessors()[k];
+                sum += exp(alpha(choosed, position) + all_states[choosed]->transition()->log_probability_of(id()) + all_states[id()]->observation()->prefix_sum_array_compute(position + 1, base, all_states[id()]->getInputPhase())  - alpha(id(), base)+ all_states[id()]->duration_probability(base - position) ) ;
+                if(sum >= random){
+                    state = choosed;
+                    return;
+                }
+            }
+    }
+
+
+
+
   void GHMMSignalState::fixTransitionDistribution () const {
     MultinomialDistributionPtr trans = transition();
     DoubleVector probabilities = (trans->parameters()).getMandatoryParameterValue("probabilities")->getDoubleVector();
@@ -368,6 +446,36 @@ namespace tops{
       }
     trans->setProbabilities(probabilities);
   }
+
+    void GHMMExplicitDurationState::choosePredecessor (Matrix & alpha, int base, int & state, int & position, const GHMMStates & all_states) {
+        double sum = 0;
+        double random = ((double)rand())/ ((double) RAND_MAX + 1.0) ;
+        int diff  = 0;
+        if(_number_of_phases  > 1)
+            diff = mod(getOutputPhase() - getInputPhase(),_number_of_phases);
+        if(_number_of_phases <= 0)
+            _number_of_phases = 1;
+        int offset = duration()->size();
+
+        if(offset > 15000)
+            offset = 15000;
+        int minbase = (base - diff - offset) ;
+        if(minbase < 0) minbase = 0;
+
+        for (int d = base - diff; d > minbase; d-=_number_of_phases)
+            {
+                position = d - 1;
+                for(int k  = 0; k < (int)predecessors().size(); k++)
+                    {
+                        int choosed = predecessors()[k];
+                        sum += exp(alpha(choosed, position) + all_states[choosed]->transition()->log_probability_of(id()) + all_states[id()]->observation()->prefix_sum_array_compute(position + 1, base, all_states[id()]->getInputPhase())  - alpha(id(), base)+ all_states[id()]->duration_probability(base - position ) ) ;
+                        if(sum >= random){
+                            state = choosed;
+                            return;
+                        }
+                    }
+            }
+    }
 
     void GHMMExplicitDurationState::findBestPredecessor (Matrix & gamma, Matrix &psi, Matrix &psilen, const Sequence & s, int base, const GHMMStates & all_states){
         int diff = 0;
@@ -426,6 +534,47 @@ namespace tops{
                 }
             }
     }
+
+
+
+    void GHMMExplicitDurationState::forwardSum (Matrix & alpha, const Sequence & s, int base, const GHMMStates & all_states){
+        alpha(id(), base) = -HUGE;
+        int diff = 0;
+        if(_number_of_phases  > 1)
+            diff = mod(getOutputPhase() - getInputPhase(),_number_of_phases);
+        if(_number_of_phases <= 0)
+            _number_of_phases = 1;
+        int offset = duration()->size();
+
+        if(offset > 15000)
+            offset = 15000;
+        int minbase = (base - diff - offset) ;
+        if(minbase < 0) minbase = 0;
+
+
+        for (int d = base - diff; d > minbase; d-=_number_of_phases)
+            {
+                if(predecessors().size() <= 0)
+                    return;
+                int from = predecessors()[0];
+                if((base - d ) < 0)
+                    return;
+                int phase = getInputPhase();
+                double emission = observation()->prefix_sum_array_compute(d, base, phase);
+                if(emission <= -HUGE)
+                    return;
+                alpha(id(), base) =  alpha(from, d-1) + all_states[from]->transition()->log_probability_of(id()) + duration_probability(base-d+1) + emission;
+                for (int k = 1; k < (int)predecessors().size(); k++)
+                    {
+                        from = predecessors()[k];
+                        alpha(id(), base) =  log_sum(alpha(from, d-1) + all_states[from]->transition()->log_probability_of(id()) + duration_probability(base-d+1) + emission, alpha(id(), base));
+                    }
+
+            }
+    }
+
+
+
   void GHMMExplicitDurationState::fixTransitionDistribution () const {
     MultinomialDistributionPtr trans = transition();
     DoubleVector probabilities = (trans->parameters()).getMandatoryParameterValue("probabilities")->getDoubleVector();

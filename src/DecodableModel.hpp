@@ -2,17 +2,17 @@
  *       DecodableModel.hpp
  *
  *       Copyright 2011 Andre Yoshiaki Kashiwabara <akashiwabara@usp.br>
- *     
+ *
  *       This program is free software; you can redistribute it and/or modify
  *       it under the terms of the GNU  General Public License as published by
  *       the Free Software Foundation; either version 3 of the License, or
  *       (at your option) any later version.
- *     
+ *
  *       This program is distributed in the hope that it will be useful,
  *       but WITHOUT ANY WARRANTY; without even the implied warranty of
  *       MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *       GNU General Public License for more details.
- *      
+ *
  *       You should have received a copy of the GNU General Public License
  *       along with this program; if not, write to the Free Software
  *       Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
@@ -35,15 +35,15 @@ namespace tops {
     DecodableModel(){};
     virtual ~DecodableModel(){};
 
-    virtual double evaluate(const Sequence & s, unsigned int begin, unsigned int end) const; 
-    
+    virtual double evaluate(const Sequence & s, unsigned int begin, unsigned int end) const;
+
     virtual Sequence & choose(Sequence & h, int size) const;
 
     virtual Sequence & choose(Sequence & h, Sequence & path,  int size) const;
 
     virtual Sequence & choose(Sequence & h, Sequence & path,  int i, int size) const;
 
-    
+
     //! Forward algorithm
     virtual double forward(const Sequence & s, Matrix &alpha) const = 0;
 
@@ -52,14 +52,17 @@ namespace tops {
 
     //! Viterbi algorithm
     virtual double viterbi (const Sequence &s, Sequence &path, Matrix & gamma) const = 0;
-    
+
+      //! Choose a path given a sequence
+      virtual void choosePath(const Sequence &s, Sequence &path);
+
     //! Posterior Probabilities: P(yi=k|x)
     virtual void posteriorProbabilities (const Sequence &s, Matrix & probabilities) const = 0;
-    
+
     //! Posterior Decoding: ^yi = argmax_k P(yi=k|x)
     virtual void posteriorDecoding (const Sequence &s, Sequence &path, Matrix & probabilities) const = 0;
 
-    //! Choose the observation given a state 
+    //! Choose the observation given a state
     /*!\param h is the history */
     virtual Sequence &  chooseObservation ( Sequence & h,int i, int state ) const = 0;
 

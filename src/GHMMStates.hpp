@@ -41,7 +41,7 @@ namespace tops {
   public:
     GHMMState();
     GHMMState(ProbabilisticModelPtr observation,
-	      MultinomialDistributionPtr transition, SymbolPtr name) :
+              MultinomialDistributionPtr transition, SymbolPtr name) :
       _observation(observation), _transition(transition), _name(name){};
     virtual ~GHMMState();
     virtual void setObservation(ProbabilisticModelPtr obs) ;
@@ -89,6 +89,8 @@ namespace tops {
     virtual void fixTransitionDistribution () const {} ;
     virtual ProbabilisticModelParameters parameters() const;
     virtual void findBestPredecessor (Matrix & gamma, Matrix &psi, Matrix &psilen, const Sequence & s, int base, const GHMMStates & all_states);
+    virtual void forwardSum (Matrix & alpha, const Sequence & s, int base, const GHMMStates & all_states);
+      virtual void choosePredecessor (Matrix & alpha, int base, int & state, int & position , const GHMMStates & all_states);
   private:
     ProbabilisticModelPtr _observation;
     MultinomialDistributionPtr _transition;
@@ -108,7 +110,7 @@ namespace tops {
   public:
     GHMMSignalState() ;
     GHMMSignalState(ProbabilisticModelPtr observation,
-		    MultinomialDistributionPtr transition, SymbolPtr name) :
+                    MultinomialDistributionPtr transition, SymbolPtr name) :
       GHMMState(observation, transition, name) {};
 
     virtual int size() const ;
@@ -126,7 +128,8 @@ namespace tops {
     virtual ProbabilisticModelParameters parameters() const;
     virtual void fixTransitionDistribution () const ;
     virtual void findBestPredecessor (Matrix & gamma, Matrix &psi, Matrix &psilen, const Sequence & s, int base, const GHMMStates & all_states);
-
+    virtual void forwardSum (Matrix & alpha, const Sequence & s, int base, const GHMMStates & all_states);
+      virtual void choosePredecessor (Matrix & alpha, int base, int & state, int & position, const GHMMStates & all_states);
 
   private:
     int _size;
@@ -143,9 +146,13 @@ namespace tops {
     GHMMExplicitDurationState() ;
 
     GHMMExplicitDurationState(ProbabilisticModelPtr observation,
-			      MultinomialDistributionPtr transition, SymbolPtr name) :
+                              MultinomialDistributionPtr transition, SymbolPtr name) :
       GHMMState(observation, transition, name) {};
     virtual void findBestPredecessor (Matrix & gamma, Matrix &psi, Matrix &psilen, const Sequence & s, int base, const GHMMStates & all_states);
+    virtual void forwardSum (Matrix & alpha, const Sequence & s, int base, const GHMMStates & all_states);
+      virtual void choosePredecessor (Matrix & alpha, int base, int & state, int & position, const GHMMStates & all_states);
+
+
     virtual void setDuration(ProbabilisticModelPtr d) ;
     virtual ProbabilisticModelPtr duration() const ;
     virtual int chooseDuration() const ;

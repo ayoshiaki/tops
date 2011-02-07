@@ -152,6 +152,98 @@ void GeneralizedHiddenMarkovModel::configureExplicitDurationState(
 }
 
 
+    void GeneralizedHiddenMarkovModel::initializeChoosePathAlgorithm(const Sequence &s)
+    {
+        if(s != _last)
+            {
+                efficient_forward(s, _alpha);
+                _last = s;
+            }
+    }
+
+    void GeneralizedHiddenMarkovModel::choosePath(const Sequence &s, Sequence &path) {
+        initializeChoosePathAlgorithm(s);
+        int size = s.size();
+        int nstates =_all_states.size();
+        DoubleVector lastStateProbability(nstates);
+        double sum = -HUGE;
+        int L = size - 1;
+        path.resize(s.size());
+#if 0
+        for(int i = 0; i < size; i++)
+            {
+                std::cerr << i << " " << std::endl;
+                for (int j = 0; j < nstates; j++)
+                    {
+                        std::cerr << " " << _all_states[j]->name() << " " << _alpha(j, i) << std::endl;
+                    }
+            }
+#endif
+        for(int k = 0; k < nstates; k++)
+            {
+                sum = log_sum(sum, _alpha(k,L) );
+            }
+        for(int k = 0; k < nstates; k++)
+            {
+                lastStateProbability[k] = exp(_alpha(k, L) - sum);
+            }
+        MultinomialDistributionPtr m = MultinomialDistributionPtr(new MultinomialDistribution(lastStateProbability));
+
+        int q = m->choose();
+        int position = L;
+
+        while (position > 0 ){
+
+            double sum = 0;
+            int new_position;
+            int state;
+            new_position = 0;
+            state = q;
+            _all_states[q]->choosePredecessor(_alpha, position, state, new_position, _all_states);
+            for(int p = new_position + 1; p <= position; p++)
+                {
+                    path[p] = q;
+                }
+            position = new_position;
+            q = state;
+        }
+    }
+
+double GeneralizedHiddenMarkovModel::efficient_forward(const Sequence & s, Matrix &a) const {
+  int size = s.size();
+  int nstates = _all_states.size();
+  initialize_prefix_sum_arrays(s);
+
+  Matrix alpha (nstates, size);
+
+  // initialization
+  for (int k = 0; k < nstates; k++) {
+    alpha(k, 0) = getInitialProbabilities()->log_probability_of(k)
+      + _all_states[k]->observation()->prefix_sum_array_compute(0, 0);
+  }
+
+  for (int i = 1; i < size; i++) {
+      for(int k = 0; k < nstates; k++) {
+          _all_states[k]->forwardSum(alpha, s, i, _all_states);
+      }
+  }
+
+  if(_terminal_probabilities != NULL){
+      for(int k = 0; k < nstates; k++)
+          alpha(k,size-1) +=_terminal_probabilities->log_probability_of(k);
+  }
+
+
+  a = alpha;
+  double sum = alpha(0, size-1);
+  for(int k = 1; k < nstates; k++)
+    sum = log_sum(sum, alpha(k, size-1));
+
+  return sum;
+}
+
+
+
 double GeneralizedHiddenMarkovModel::forward(const Sequence & s, Matrix &a) const {
   int size = s.size();
   int nstates = _all_states.size();
@@ -188,6 +280,9 @@ double GeneralizedHiddenMarkovModel::forward(const Sequence & s, Matrix &a) cons
 
   return sum;
 }
+
+
+
 
 //! Backward algorithm
 double GeneralizedHiddenMarkovModel::backward(const Sequence & s, Matrix &beta) const {
@@ -266,7 +361,7 @@ void GeneralizedHiddenMarkovModel::fixStatesPredecessorSuccessor() {
               _all_states[j]->addPredecessor(i);
               if((!_all_states[j]->isGeometricDuration())  && (!_all_states[i]->isGeometricDuration()))
                 {
-                  std::cerr << "WARNING: Transitions between two non-geometric run-length states are not supported: " << _all_states[i]->name() << "->" << _all_states[j]->name() << ": "  << transprob << std::endl;
+                  std::cerr << "WARNING: Transitions between two non-geometric run-length states make viterbi decoding slow: " << _all_states[i]->name() << "->" << _all_states[j]->name() << ": "  << transprob << std::endl;
                 }
             }
 
@@ -274,7 +369,7 @@ void GeneralizedHiddenMarkovModel::fixStatesPredecessorSuccessor() {
               _all_states[i]->addSuccessor(j);
               if((!_all_states[i]->isGeometricDuration())  && (!_all_states[j]->isGeometricDuration()))
                 {
-                  std::cerr << "WARNING: Transitions between two non-geometric run-length states are not supported: " << _all_states[i]->name() << "->" << _all_states[j]->name() << ": "  << transprob << std::endl;
+                  std::cerr << "WARNING: Transitions between two non-geometric run-length states make viterbi decoding slow: " << _all_states[i]->name() << "->" << _all_states[j]->name() << ": "  << transprob << std::endl;
                 }
             }
           }
