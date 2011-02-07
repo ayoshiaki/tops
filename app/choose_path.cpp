@@ -45,6 +45,7 @@ int main (int argc, char ** argv)
   desc.add_options()
     ("help,h", "produce help message")
     ("model,m", value<string> (), "a decodable model")
+      ("numpath,n", value<int>(), "number of paths")
     //    ("sequence,s", value<string> (), "sequence file")
     ("fasta,F",  "use fasta format");
 
@@ -71,7 +72,7 @@ int main (int argc, char ** argv)
           cerr << "Can't open model: " << model_name.c_str() << endl;
           exit(-1);
         }
-
+      int nseq = vm["numpath"].as<int>();
       AlphabetPtr alphabet = model->alphabet();
       //      std::ifstream input(fasta.c_str());
       //      if(!input.good()) {
@@ -90,7 +91,7 @@ int main (int argc, char ** argv)
 
         Sequence states;
         clock_t begin = clock();
-        for(int i = 0;i < 5; i++) {
+        for(int i = 0;i < nseq; i++) {
             model->decodable()->choosePath(entry.getSequence(), states);
             stringstream new_name;
             new_name <<     entry.getName() ;
