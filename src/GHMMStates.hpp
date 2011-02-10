@@ -79,13 +79,10 @@ namespace tops {
     virtual int isRightJoinable() const;
 
 
-    virtual ProbabilisticModelPtr nullModel()  const ;
     virtual void observationModelName(std::string name) ;
     virtual void durationModelName(std::string name) ;
-    virtual void nullModelName(std::string name) ;
     virtual std::string observationModelName() const;
     virtual std::string durationModelName() const;
-    virtual std::string nullModelName() const;
     virtual void fixTransitionDistribution () const {} ;
     virtual ProbabilisticModelParameters parameters() const;
     virtual void findBestPredecessor (Matrix & gamma, Matrix &psi, Matrix &psilen, const Sequence & s, int base, const GHMMStates & all_states);
@@ -115,16 +112,12 @@ namespace tops {
 
     virtual int size() const ;
     virtual void setSize(int s);
-    virtual void setNullModel(ProbabilisticModelPtr n) ;
-    virtual ProbabilisticModelPtr nullModel() const ;
     virtual int chooseDuration() const ;
     virtual double getThreshold() const ;
     virtual void setThreshold(double threshold) ;
     virtual double duration_probability(int l) const ;
     virtual std::string str() const ;
 
-    virtual void nullModelName(std::string name) ;
-    virtual std::string nullModelName() const;
     virtual ProbabilisticModelParameters parameters() const;
     virtual void fixTransitionDistribution () const ;
     virtual void findBestPredecessor (Matrix & gamma, Matrix &psi, Matrix &psilen, const Sequence & s, int base, const GHMMStates & all_states);
@@ -134,8 +127,6 @@ namespace tops {
   private:
     int _size;
     double _threshold;
-    ProbabilisticModelPtr _nullModel;
-    std::string _nullModelName;
 
   };
   //! GHMM Explicit duration state

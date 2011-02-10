@@ -110,8 +110,6 @@ namespace tops{
 
   }
 
-  void GHMMState::nullModelName(std::string name) {
-  }
   std::string GHMMState::observationModelName() const {
     return _observationModelName;
   }
@@ -119,10 +117,7 @@ namespace tops{
     std::string n;
     return n;
   }
-  std::string GHMMState::nullModelName() const {
-    std::string n;
-    return n;
-  }
+
 
 
 
@@ -213,10 +208,6 @@ namespace tops{
   void GHMMState::setOutputPhase(int _outputPhase) {
     this->_outputPhase = _outputPhase;
   }
-  ProbabilisticModelPtr GHMMState::nullModel()  const {
-    ProbabilisticModelPtr m;
-    return m;
-  }
 
 
 
@@ -232,19 +223,9 @@ namespace tops{
   void GHMMSignalState::setSize(int s) {
     _size = s;
   }
-  void GHMMSignalState::setNullModel(ProbabilisticModelPtr n) {
-    _nullModel = n;
-  }
-  ProbabilisticModelPtr GHMMSignalState::nullModel() const {
-    return _nullModel;
-  }
 
-  void GHMMSignalState::nullModelName(std::string name) {
-    _nullModelName = name;
-  }
-  std::string GHMMSignalState::nullModelName() const{
-    return  _nullModelName;
-  }
+
+
 
 
 
@@ -266,8 +247,6 @@ namespace tops{
   std::string GHMMSignalState::str() const {
     std::stringstream out;
     out << name() << " = [\n observation = " << GHMMState::observationModelName() << std::endl;
-    out << "null_model = " << nullModelName() << std::endl;
-    out << "threshold = " << _threshold << std::endl;
     out << "sequence_length = " << _size << "]" << std::endl;
 
     return out.str();
@@ -276,8 +255,6 @@ namespace tops{
   ProbabilisticModelParameters GHMMSignalState::parameters() const{
     ProbabilisticModelParameters answer;
     answer.add("observation", StringParameterValuePtr(new StringParameterValue(GHMMState::observationModelName())));
-    answer.add("null_model", StringParameterValuePtr(new StringParameterValue(nullModelName())));
-    answer.add("threshold", DoubleParameterValuePtr(new DoubleParameterValue(_threshold)));
     answer.add("sequence_length", IntParameterValuePtr(new IntParameterValue(_size)));
     return answer;
   }

@@ -92,27 +92,21 @@ void GeneralizedHiddenMarkovModel::setTerminalProbability(
         _terminal_probabilities = term;
 }
 
-void GeneralizedHiddenMarkovModel::configureSignalState(
-                                                        std::string observation_model_name, std::string null_model_name,
-                                                        MultinomialDistributionPtr transition_distr, double threshold,
+void GeneralizedHiddenMarkovModel::configureSignalState(std::string observation_model_name,
+                                                        MultinomialDistributionPtr transition_distr,
                                                         int size, std::string state_name, int iphase, int ophase){
   SymbolPtr symbol = _state_names->getSymbol(state_name);
   ProbabilisticModelPtr model = _models[observation_model_name];
-  ProbabilisticModelPtr null = _models[null_model_name];
   GHMMSignalStatePtr signal = GHMMSignalStatePtr(new GHMMSignalState(model,transition_distr, symbol));
   signal->setSize(size);
-  signal->setNullModel(null);
-  signal->nullModelName(null_model_name);
   signal->observationModelName(observation_model_name);
-  signal->setThreshold(threshold);
   signal->setInputPhase(iphase);
   signal->setOutputPhase(ophase);
   _all_states[symbol->id()] = signal;
   _signal_states.push_back(signal);
 }
 
-void GeneralizedHiddenMarkovModel::configureGeometricDurationState(
-                                                                   std::string model_name,
+void GeneralizedHiddenMarkovModel::configureGeometricDurationState(std::string model_name,
                                                                    MultinomialDistributionPtr transition_distr, std::string state_name, int iphase, int ophase) {
   ProbabilisticModelPtr model = _models[model_name];
   SymbolPtr symbol = _state_names->getSymbol(state_name);
@@ -126,10 +120,8 @@ void GeneralizedHiddenMarkovModel::configureGeometricDurationState(
 }
 
 
-void GeneralizedHiddenMarkovModel::configureExplicitDurationState(
-                                                                  std::string observation_model_name,
-                MultinomialDistributionPtr transition_distr,
-                                                                  std::string duration_model_name, std::string state_name, int iphase, int ophase, int start, int stop, int leftJoinable, int rightJoinable)
+void GeneralizedHiddenMarkovModel::configureExplicitDurationState(std::string observation_model_name, MultinomialDistributionPtr transition_distr,
+                                                                  std::string duration_model_name, std::string state_name, int iphase, int ophase)
 {
 
   ProbabilisticModelPtr model = _models[observation_model_name];
@@ -142,13 +134,7 @@ void GeneralizedHiddenMarkovModel::configureExplicitDurationState(
   state->setDuration(duration);
   state->setInputPhase(iphase);
   state->setOutputPhase(ophase);
-  state->setStart(start);
-  state->setStop(stop);
-  state->isLeftJoinable(leftJoinable);
-  state->isRightJoinable(rightJoinable);
   _all_states[symbol->id()] = state;
-  _explicit_duration_states.push_back(state);
-
 }
 
 
@@ -193,8 +179,6 @@ void GeneralizedHiddenMarkovModel::configureExplicitDurationState(
         int position = L;
 
         while (position > 0 ){
-
-            double sum = 0;
             int new_position;
             int state;
             new_position = 0;
@@ -297,8 +281,6 @@ double GeneralizedHiddenMarkovModel::backward(const Sequence & s, Matrix &beta) 
 #endif
 
     for (int i = 0; i < (int) _all_states.size(); i++) {
-      if(_all_states[i] ->nullModel() != NULL)
-        _all_states[i]->nullModel()->initialize_prefix_sum_array(s);
       _all_states[i]->observation()->initialize_prefix_sum_array(s);
     }
 #if 0
@@ -315,17 +297,7 @@ double GeneralizedHiddenMarkovModel::backward(const Sequence & s, Matrix &beta) 
   }
 
 
-//! Finds all candidate signals that are  successor of the  toSignal state and inserts the toSignal state as the predecessor candidate signal.
-void GeneralizedHiddenMarkovModel::addSignalPredecessors(
-                CandidateSignalPtr sig,
-                std::vector<std::set<CandidateSignalPtr> > & predecessors) const {
-        int toSignal = sig->stateId();
-        std::vector<int> nextStates = _all_states[toSignal]->successors();
-        for (int s = 0; s < (int) nextStates.size(); s++) {
-          if (!_all_states[nextStates[s]] ->isGeometricDuration())
-            predecessors[nextStates[s]].insert(sig);
-        }
-}
+
 void GeneralizedHiddenMarkovModel::fixStatesPredecessorSuccessor() {
   for (int i = 0; i < (int) _all_states.size(); i++)
     {
@@ -769,10 +741,6 @@ Sequence & GeneralizedHiddenMarkovModel::chooseObservation(Sequence & h, int i,
         ProbabilisticModelParametersPtr statepars = reader.parameters();
         ProbabilisticModelParameterValuePtr observationpar =
           statepars->getOptionalParameterValue("observation");
-        ProbabilisticModelParameterValuePtr nullmodelpar =
-          statepars->getOptionalParameterValue("null_model");
-        ProbabilisticModelParameterValuePtr thresholdpar =
-          statepars->getOptionalParameterValue("threshold");
         ProbabilisticModelParameterValuePtr durationpar =
           statepars->getOptionalParameterValue("duration");
         ProbabilisticModelParameterValuePtr lengthpar =
@@ -781,16 +749,6 @@ Sequence & GeneralizedHiddenMarkovModel::chooseObservation(Sequence & h, int i,
           statepars->getOptionalParameterValue("output_phase");
         ProbabilisticModelParameterValuePtr inputphasepar =
           statepars->getOptionalParameterValue("input_phase");
-        ProbabilisticModelParameterValuePtr extend_emission_par =
-          statepars->getOptionalParameterValue("extend_emission");
-        ProbabilisticModelParameterValuePtr start_extend_emission_par =
-          statepars->getOptionalParameterValue("start");
-        ProbabilisticModelParameterValuePtr stop_extend_emission_par =
-          statepars->getOptionalParameterValue("stop");
-        ProbabilisticModelParameterValuePtr l_joinable_par =
-          statepars->getOptionalParameterValue("left_joinable");
-        ProbabilisticModelParameterValuePtr r_joinable_par =
-          statepars->getOptionalParameterValue("right_joinable");
 
 
 
@@ -812,52 +770,25 @@ Sequence & GeneralizedHiddenMarkovModel::chooseObservation(Sequence & h, int i,
         int iphase = -1;
         int ophase = -1;
         if(inputphasepar != NULL)
-          iphase = inputphasepar->getInt();
+            iphase = inputphasepar->getInt();
         if(outputphasepar != NULL)
-          ophase = outputphasepar->getInt();
+            ophase = outputphasepar->getInt();
         if (durationpar == NULL) {
-          if (nullmodelpar == NULL) {
-            configureGeometricDurationState(model_name, transition, state_names[i], iphase, ophase);
-          } else {
-            if (thresholdpar == NULL) {
-              std::cerr
-                << "ERROR: missing threshold parameter of the state : "
-                << state_names[i] << std::endl;
-              return;
-            }
             if (lengthpar == NULL) {
-              std::cerr
-                << "ERROR: missing sequence_length parameter of the state : "
-                << state_names[i] << std::endl;
-              return ;
+                configureGeometricDurationState(model_name, transition, state_names[i], iphase, ophase);
+            } else {
+                configureSignalState(model_name,
+                                     transition,
+                                     lengthpar->getDouble(),
+                                     state_names[i], iphase, ophase);
             }
-            // Signal state
-            std::string null_model_name = nullmodelpar->getString();
-            restore_model(null_model_name,  parameters);
-            configureSignalState(model_name,
-                                 null_model_name, transition,
-                                 thresholdpar->getDouble(), lengthpar->getDouble(),
-                                 state_names[i], iphase, ophase);
-          }
+
         } else {
 
-          // Explicit duration state
-          std::string duration_model_name = durationpar->getString();
-          restore_model(duration_model_name,  parameters);
-          int l_joinable = 0;
-          int r_joinable = 0;
-          if(l_joinable_par != NULL)
-            l_joinable = l_joinable_par->getInt();
-          if(r_joinable_par != NULL)
-            r_joinable = r_joinable_par->getInt();
-
-          if(extend_emission_par == NULL) {
-            configureExplicitDurationState(model_name, transition, duration_model_name, state_names[i], iphase, ophase, 0, 0, l_joinable, r_joinable);
-          } else {
-            int start = start_extend_emission_par->getInt();
-            int stop = stop_extend_emission_par->getInt();
-            configureExplicitDurationState(model_name, transition, duration_model_name, state_names[i], iphase, ophase, start, stop, l_joinable, r_joinable);
-          }
+            // Explicit duration state
+            std::string duration_model_name = durationpar->getString();
+            restore_model(duration_model_name,  parameters);
+            configureExplicitDurationState(model_name, transition, duration_model_name, state_names[i], iphase, ophase);
 
         }
 
