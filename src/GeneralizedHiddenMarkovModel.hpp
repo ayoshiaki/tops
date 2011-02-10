@@ -32,79 +32,7 @@
 #include "util.hpp"
 
 namespace tops {
-  //! This class is used by the GHMM to store the optimal predecessor
-  class OptimalPredecessor {
-  private:
-    int _from;
-    int _nextExplicitStateId;
-    int _prevExplicitStateId;
-    int _begin;
-    int _endOfExplicitStateId;
-  public:
-    OptimalPredecessor(int from, int nextEid, int prevEid, int begin, int end) {
-      _from = from;
-      _nextExplicitStateId = nextEid;
-      _prevExplicitStateId = prevEid;
-      _begin = begin;
-      _endOfExplicitStateId = end;
-    }
-    int from() {
-      return _from;
-    }
-    int nextExplicitStateId() {
-      return _nextExplicitStateId;
-    }
-    int prevExplicitStateId() {
-      return _prevExplicitStateId;
-    }
-    int begin() {
-      return _begin;
-    }
-    int endOfExplicitStateId() {
-      return _endOfExplicitStateId;
-    }
-  };
-  typedef boost::shared_ptr<OptimalPredecessor> OptimalPredecessorPtr;
 
-  //! This class stores the  candidate signal data
-  class CandidateSignal {
-  private:
-    int _id; // Signal id
-    int _begin;
-    int _end;
-    int _begin_of_next_state;
-    double _prob;
-    double _null_model_prob;
-  public:
-    CandidateSignal(int id, int begin, int end, int begin_of_next_state,
-                    double prob, double null_model_prob) {
-      _id = id;
-      _begin = begin;
-      _end = end;
-      _begin_of_next_state = begin_of_next_state;
-      _prob = prob;
-      _null_model_prob = null_model_prob;
-    }
-    int stateId() {
-      return _id;
-    }
-    int begin() {
-      return _begin;
-    }
-    int end() {
-      return _end;
-    }
-    int begin_of_next_state() {
-      return _begin_of_next_state;
-    }
-    double prob() {
-      return _prob;
-    }
-    double null_model_prob() {
-      return _null_model_prob;
-    }
-  };
-  typedef boost::shared_ptr<CandidateSignal> CandidateSignalPtr;
 
   //! This is a class representing Hidden semi-Markov Models
   class GeneralizedHiddenMarkovModel: public DecodableModel {
@@ -121,8 +49,6 @@ namespace tops {
     GHMMSignalStates _signal_states;
     GHMMExplicitDurationStates _explicit_duration_states;
     void initialize_prefix_sum_arrays(const Sequence & s) const;
-    //! Finds all candidate signals that are  successor of the  toSignal state and inserts the toSignal state as the predecessor candidate signal.
-    void addSignalPredecessors(CandidateSignalPtr sig, std::vector<std::set<CandidateSignalPtr> > & predecessors) const;
     void buildDoubleParameterValue(MultinomialDistributionPtr distr, ProbabilisticModelParameters & answer, const char *) const;
     void restore_model(std::string & model_name, const ProbabilisticModelParameters & parameters);
     std::map<std::string, ProbabilisticModelPtr> _models;
@@ -192,17 +118,16 @@ namespace tops {
     virtual DecodableModel * decodable() {
       return this;
     }
+      void configureExplicitDurationState(std::string observation_model_name, MultinomialDistributionPtr transition_distr,
+                                          std::string duration_model_name, std::string state_name, int iphase, int ophase);
+
     void configureSignalState(std::string observation_model_name,
-                              std::string null_model_name,
-                              MultinomialDistributionPtr transition_distr, double threshold,
+                              MultinomialDistributionPtr transition_distr,
                               int size, std::string state_name, int iphase, int ophase);
 
     void configureGeometricDurationState(std::string observation_model_name,
                                          MultinomialDistributionPtr transition_distr,
                                          std::string state_name, int iphase, int ophase);
-    void configureExplicitDurationState(std::string observation_model_name,
-                                        MultinomialDistributionPtr transition_distr,
-                                        std::string duration_model_name, std::string state_name, int iphase, int ophase, int start, int stop, int leftJoinable, int rightJoinable);
     void setInitialProbability(MultinomialDistributionPtr init);
     void setTerminalProbability(MultinomialDistributionPtr term);
     void setObservationSymbols(AlphabetPtr obs) {
