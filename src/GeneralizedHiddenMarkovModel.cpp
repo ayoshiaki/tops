@@ -260,7 +260,7 @@ double GeneralizedHiddenMarkovModel::forward(const Sequence & s, Matrix &a) cons
   for(int k = 1; k < nstates; k++)
     sum = log_sum(sum, alpha(k, size-1));
 
-  //printf("forward: %f\n\n", sum);
+  printf("forward: %f\n\n", sum);
 
   return sum;
 
@@ -288,7 +288,7 @@ double GeneralizedHiddenMarkovModel::backward(const Sequence & s, Matrix &b) con
       for (int d = size-i-1; d > 0; d--){
         for (int p = 0; p < nstates; p++){
           beta(k, i) = log_sum(beta(k, i), _all_states[k]->transition()->log_probability_of(p)
-                     + _all_states[p]->observation()->prefix_sum_array_compute(i, i+d)
+                     + _all_states[p]->observation()->prefix_sum_array_compute(i+1, i+d)
                      + _all_states[p]->duration_probability(d)
                      + beta(p, i+d));
         }
@@ -300,9 +300,9 @@ double GeneralizedHiddenMarkovModel::backward(const Sequence & s, Matrix &b) con
 
   double sum = -HUGE;
   for(int k = 0; k < nstates; k++)
-    sum = log_sum(sum, beta(k, 0));
+      sum = log_sum(sum, beta(k, 0) + getInitialProbabilities()->log_probability_of(k)) ;
 
-  //printf("backward: %f\n\n", sum);
+  printf("backward: %f\n\n", sum);
 
   return sum;
 }
