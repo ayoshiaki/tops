@@ -237,15 +237,12 @@ double GeneralizedHiddenMarkovModel::forward(const Sequence & s, Matrix &a) cons
 
   // initialization
   for (int k = 0; k < nstates; k++) {
-    alpha(k, 0) = getInitialProbabilities()->log_probability_of(k)
-      + _all_states[k]->observation()->prefix_sum_array_compute(0, 0);
+    alpha(k, 0) = getInitialProbabilities()->log_probability_of(k);
   }
 
   for (int i = 1; i < size; i++) {
     for(int k = 0; k < nstates; k++) {
-      alpha(k, i) = alpha(0, 0) + _all_states[0]->transition()->log_probability_of(k)
-                  + _all_states[k]->duration_probability(i)
-                  + _all_states[k]->observation()->prefix_sum_array_compute(0, i);
+      alpha(k, i) = -HUGE;
       for(int d = i; d > 0; d--){
         for(int p = 0; p < nstates; p++){
           alpha(k, i) = log_sum(alpha(k, i), alpha(p, i-d)
@@ -258,20 +255,56 @@ double GeneralizedHiddenMarkovModel::forward(const Sequence & s, Matrix &a) cons
   }
 
   a = alpha;
+
   double sum = alpha(0, size-1);
   for(int k = 1; k < nstates; k++)
     sum = log_sum(sum, alpha(k, size-1));
 
+  //printf("forward: %f\n\n", sum);
+
   return sum;
+
 }
 
 
 
 
 //! Backward algorithm
-double GeneralizedHiddenMarkovModel::backward(const Sequence & s, Matrix &beta) const {
-  std::cerr << "Backward not implemented" << std::endl;
-  return 0.0;
+double GeneralizedHiddenMarkovModel::backward(const Sequence & s, Matrix &b) const {
+  int size = s.size();
+  int nstates = _all_states.size();
+  initialize_prefix_sum_arrays(s);
+
+  Matrix beta (nstates, size);
+
+  // initialization
+  for (int k = 0; k < nstates; k++) {
+    beta(k, size-1) = 0.0;
+  }
+
+  for (int i = size-2; i >= 0; i--){
+    for (int k = 0; k < nstates; k++){
+      beta(k, i) = -HUGE;
+      for (int d = size-i-1; d > 0; d--){
+        for (int p = 0; p < nstates; p++){
+          beta(k, i) = log_sum(beta(k, i), _all_states[k]->transition()->log_probability_of(p)
+                     + _all_states[p]->observation()->prefix_sum_array_compute(i, i+d)
+                     + _all_states[p]->duration_probability(d)
+                     + beta(p, i+d));
+        }
+      }
+    }
+  }
+
+  b = beta;
+
+  double sum = -HUGE;
+  for(int k = 0; k < nstates; k++)
+    sum = log_sum(sum, beta(k, 0));
+
+  //printf("backward: %f\n\n", sum);
+
+  return sum;
 }
 
   void GeneralizedHiddenMarkovModel::initialize_prefix_sum_arrays(const Sequence & s) const {
