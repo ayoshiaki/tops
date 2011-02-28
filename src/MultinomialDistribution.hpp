@@ -38,6 +38,7 @@ namespace tops {
   {
   private:
     DoubleVector _log_probabilities;
+    Matrix _log_probabilities_matrix;
     double _huge;
     int _size;
     bool _geometric_tail;
@@ -51,12 +52,17 @@ namespace tops {
     /*! \param probabilities is the probabilities value */
     MultinomialDistribution(const DoubleVector & probabilities) ;
 
+    MultinomialDistribution(const Matrix & probabilities);
+
     //! Choose 
     virtual double choose()const ;    
 
+    virtual void choosePair(int* a, int* b)const;
 
     //! Returns the log_probability_of the number s
     virtual double log_probability_of(int s) const;
+
+    virtual double log_probability_of_pair(int s1, int s2) const;
 
 
     //! Set the probability value of the number s
