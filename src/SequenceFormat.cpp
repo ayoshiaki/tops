@@ -89,7 +89,9 @@ namespace tops {
       in.setName( seqname);
       std::string description;
       trim_spaces(seq_entry[last]);
-      in.setSequence(factory.createSequence(seq_entry[last]));
+      std::vector<int> invalid;
+      in.setSequence(factory.createSequence(seq_entry[last], invalid));
+      in.setInvalidPositions(invalid);
       return stream;
     }
     return stream;
@@ -150,8 +152,9 @@ namespace tops {
 
     SequenceFactory factory(in.getAlphabet());
     trim_spaces(sequence);
-    in.setSequence(factory.createSequenceRemovedSpaces(sequence));
-
+    std::vector <int> invalid;
+    in.setSequence(factory.createSequenceRemovedSpaces(sequence, invalid));
+    in.setInvalidPositions(invalid);
     boost::regex sep(" ");
     std::vector <std::string> name_and_description;
     split_regex(_currentFastaHeader, name_and_description, sep);
