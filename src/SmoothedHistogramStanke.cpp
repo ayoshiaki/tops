@@ -52,11 +52,13 @@ namespace tops {
     std::map<long,double> d;
     std::map<long,int> counter;
     double n = data.size();
+    DoubleVector prob;
 
-    long max = -1;
     if(data.size() > 0)
       {
 
+
+          long max = -1;
 
         for(int i = 0; i < (int)data.size(); i++){
           if(counter.find((long)data[i]) == counter.end())
@@ -68,39 +70,48 @@ namespace tops {
         }
         if(max > 15000)
             max = 15000;
-        /* Smoothing the histogram using parzen window (kernel density estimation) */
-        for (long pos = 1; pos <= max + 1; pos++) {
-          double h = (0.5 / pow(n, 1.0/5.0)) * (double)pos;
-          int c1 = 0;
-          int c2 = 0;
-          double r = 0.0;
-          for (r = 1;  r < (double)(h); r++){
-            c1 = 0; c2 = 0;
-            for(long x = pos ; x <= pos + (long)r - 1; x++)
-              if(counter.find(x) != counter.end())
-                c1 += counter[x];
-            for(long x = pos - (long)r + 1; x <= pos; x++)
-              if(counter.find(x) != counter.end())
-                c2 += counter[x];
-            if(c1 >= 8 || c2 >= 8){
-              break;
+        vector<double> pi;
+        pi.resize(max);
+
+
+        std::vector <double> sigmas;
+        sigmas.resize(max);
+        double a = 0.5;
+        int m = 8;
+        for(int pos = 1; pos < (int)sigmas.size(); pos+=1)
+            {
+                int max2 = (int) ((a / pow(n, 1.0/5.0) ) * (double)pos);
+                int rl = 0;
+                int rr = 0;
+                long r = 0;
+                while(r <= (long)max)
+                    {
+                        r++;
+                        for(long k = pos; k <= pos + r - 1; k++)
+                            rr += counter[k];
+                        for(long k = pos -r + 1; k <= pos; k++)
+                            rl += counter[k];
+                        if ((rr >= m) || (rl >= m)){
+                            break;
+                        }
+                    }
+                if(max2 < r){
+                    max2 = r;
+                }
+                sigmas[pos] = (double)max2;
             }
-          }
-          if(r > h)
-            h = r;
-          double fx = kernel_density_estimation_gaussian(pos, h, data);
-          d[pos] = fx;
-          total += fx;
+
+        for (long pos = 1; pos < max; pos++) {
+            pi[pos] = kernel_density_estimation_gaussian(pos, sigmas[pos], data);
+            total += pi[pos];
         }
 
+
+        prob.resize(max+2);
+        for (long k = 1; k <= max+1; k++){
+            prob[k] =  pi[k]/(total) ;
+        }
       }
-    DoubleVector prob;
-    prob.resize(max+2);
-    for (long k = 1; k <= max+1; k++){
-      prob[k] =  (d[k] + 1e-10)/(total + 1e-10*total) ;
-    }
-
-
     ProbabilisticModelParameters pars;
     pars.add("probabilities", ProbabilisticModelParameterValuePtr (new DoubleVectorParameterValue(prob)));
     pars.add("alphabet", alpha->getParameterValue());
@@ -109,10 +120,7 @@ namespace tops {
     MultinomialDistributionPtr result =
       MultinomialDistributionPtr(new MultinomialDistribution());
     result->initialize(pars);
-
-
     return result;
-
   }
 
 }
