@@ -33,7 +33,6 @@ namespace tops {
       parameters.getOptionalParameterValue("geometric_tail");
 
     if(training_set_parameter == NULL) {
-      std::cerr << help () << std::endl;
       ProbabilisticModelPtr nullmodel;
       exit(-1);
       return nullmodel;
@@ -78,19 +77,25 @@ namespace tops {
         sigmas.resize(max);
         double a = 0.5;
         int m = 8;
+        long r = 0;
         for(int pos = 1; pos < (int)sigmas.size(); pos+=1)
             {
                 int max2 = (int) ((a / pow(n, 1.0/5.0) ) * (double)pos);
                 int rl = 0;
                 int rr = 0;
-                long r = 0;
                 while(r <= (long)max)
                     {
                         r++;
-                        for(long k = pos; k <= pos + r - 1; k++)
+                        for(long k = pos; k < counter.size() &&  k <= pos + r - 1; k++){
                             rr += counter[k];
-                        for(long k = pos -r + 1; k <= pos; k++)
+                            if (rr >= m)
+                                break;
+                        }
+                        for(long k = pos -r + 1; k < counter.size() &&  k <= pos; k++){
                             rl += counter[k];
+                            if( rl >= m)
+                                break;
+                        }
                         if ((rr >= m) || (rl >= m)){
                             break;
                         }
@@ -98,9 +103,9 @@ namespace tops {
                 if(max2 < r){
                     max2 = r;
                 }
+
                 sigmas[pos] = (double)max2;
             }
-
         for (long pos = 1; pos < max; pos++) {
             pi[pos] = kernel_density_estimation_gaussian(pos, sigmas[pos], data);
             total += pi[pos];
