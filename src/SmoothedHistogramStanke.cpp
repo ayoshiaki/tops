@@ -108,7 +108,20 @@ namespace tops {
                         if(pos - bwd + 1 >= 0)
                             count_right += c;
                     }
-                pi[pos] = kernel_density_estimation_gaussian(pos, bwd, data);
+                pi[pos] += epanechnikov((double)pos, (double)bwd) * counter[pos];
+                bool negligible = false;
+                int j=1;
+                while (!negligible && (pos-j>=0 || pos+j<max)){
+                    double  wj = epanechnikov(bwd, j) * counter[pos];
+                    if (pos-j>=0 && pos-j<pi.size() ) {
+                        pi[pos-j] += wj;
+                    }
+                    if (pos+j<pi.size() && pos+j>=0) {
+                        pi[pos+j] += wj;
+                    }
+                    negligible = (wj < 1e-20);
+                    j++;
+                }
                 total += pi[pos];
             }
 
