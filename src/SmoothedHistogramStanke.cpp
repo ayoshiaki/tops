@@ -29,8 +29,25 @@ namespace tops {
   {
     ProbabilisticModelParameterValuePtr training_set_parameter =
       parameters.getMandatoryParameterValue("training_set");
-    ProbabilisticModelParameterValuePtr geompar =
-      parameters.getOptionalParameterValue("geometric_tail");
+    ProbabilisticModelParameterValuePtr maxlengthp =
+      parameters.getOptionalParameterValue("max_length");
+    ProbabilisticModelParameterValuePtr mp =
+      parameters.getOptionalParameterValue("m");
+    ProbabilisticModelParameterValuePtr slopep =
+      parameters.getOptionalParameterValue("slope");
+
+    double a = 0.5;
+    int m = 8;
+
+    if(mp != NULL)
+        m = mp->getInt();
+
+    if(slopep != NULL)
+        a = slopep->getDouble();
+
+    long max = 15000;
+    if(maxlengthp != NULL)
+        max = maxlengthp->getInt();
 
     if(training_set_parameter == NULL) {
       ProbabilisticModelPtr nullmodel;
@@ -55,33 +72,24 @@ namespace tops {
 
     if(data.size() > 0)
       {
+          for(int i = 0; i < data.size(); i++){
+              counter[i] += 1.0;
+          }
+          for(int i = 0; i < (int)data.size(); i++){
+              if(counter.find((long)data[i]) == counter.end())
+                  counter[(long)data[i]] = 1.0;
+              else
+                  counter[(long)data[i]] += 1.0;
+          }
+          vector<double> pi;
+          pi.resize(max);
 
 
-          long max = -1;
 
-        for(int i = 0; i < (int)data.size(); i++){
-          if(counter.find((long)data[i]) == counter.end())
-            counter[(long)data[i]] = 1.0;
-          else
-            counter[(long)data[i]] += 1.0;
-          if(max < (long) data[i])
-            max = (long)data[i];
-        }
-        if(max > 15000)
-            max = 15000;
-        vector<double> pi;
-        pi.resize(max);
-
-
-        std::vector <double> sigmas;
-        sigmas.resize(max);
-        double a = 0.5;
-        int m = 8;
-        long r = 0;
         double count_left = 0;
         double count_right = 0;
 
-        for(int pos = 0; pos < (int)sigmas.size(); pos+=1)
+        for(int pos = 0; pos < max ; pos +=1)
             {
                 int bwd = (int) ((a / pow(n, 1.0/5.0) ) * (double)pos);
                 if(bwd <= 0)
@@ -97,7 +105,7 @@ namespace tops {
                             count_right += c;
                     }
 
-                while (count_left < m && count_right < m && bwd < n)
+                while (count_left < m && count_right < m && bwd < max)
                     {
                         bwd ++;
                         int c = 1;
@@ -108,34 +116,35 @@ namespace tops {
                         if(pos - bwd + 1 >= 0)
                             count_right += c;
                     }
-                pi[pos] += epanechnikov((double)pos, (double)bwd) * counter[pos];
+                pi[pos] += epanechnikov((double)0, (double)bwd) * counter[pos];
                 bool negligible = false;
                 int j=1;
                 while (!negligible && (pos-j>=0 || pos+j<max)){
-                    double  wj = epanechnikov(bwd, j) * counter[pos];
-                    if (pos-j>=0 && pos-j<pi.size() ) {
+                    double  wj = epanechnikov(bwd, j) * (counter[pos] + 1.0);
+                    if (pos-j>=0 && pos-j<(int)pi.size() ) {
                         pi[pos-j] += wj;
                     }
-                    if (pos+j<pi.size() && pos+j>=0) {
+                    if (pos+j<(int)pi.size() && pos+j>=0) {
                         pi[pos+j] += wj;
                     }
                     negligible = (wj < 1e-20);
                     j++;
                 }
-                total += pi[pos];
             }
 
+        double total = 0;
+        for (long k = 1; k < max; k++){
+            total += pi[k];
+        }
 
-        prob.resize(max+2);
-        for (long k = 1; k <= max+1; k++){
+        prob.resize(max);
+        for (long k = 1; k < max; k++){
             prob[k] =  pi[k]/(total) ;
         }
       }
     ProbabilisticModelParameters pars;
     pars.add("probabilities", ProbabilisticModelParameterValuePtr (new DoubleVectorParameterValue(prob)));
     pars.add("alphabet", alpha->getParameterValue());
-    if(geompar != NULL)
-      pars.add("geometric_tail", geompar);
     MultinomialDistributionPtr result =
       MultinomialDistributionPtr(new MultinomialDistribution());
     result->initialize(pars);
