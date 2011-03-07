@@ -96,9 +96,9 @@ namespace tops {
                     bwd = 1;
                 for(int j = pos - bwd + 1; (j >= 0 && j < n) && (j <= pos + bwd -1)  ; j++)
                     {
-                        int c = 1;
+                        int c = 0;
                         if(counter[j] > c)
-                            c = counter[j];
+                            c = 1;
                         if(j <= pos)
                             count_left += c;
                         if(j >= pos)
@@ -108,19 +108,19 @@ namespace tops {
                 while (count_left < m && count_right < m && bwd < max)
                     {
                         bwd ++;
-                        int c = 1;
+                        int c = 0;
                         if (counter[pos + bwd - 1] > c)
-                            c = counter[pos + bwd - 1];
+                            c = 1;
                         if(pos + bwd -1 < n)
                             count_left += c;
                         if(pos - bwd + 1 >= 0)
                             count_right += c;
                     }
-                pi[pos] += epanechnikov((double)0, (double)bwd) * counter[pos];
+                pi[pos] += kernel_normal((double)0, (double)bwd) * counter[pos];
                 bool negligible = false;
                 int j=1;
                 while (!negligible && (pos-j>=0 || pos+j<max)){
-                    double  wj = epanechnikov(bwd, j) * (counter[pos] + 1.0);
+                    double  wj = kernel_normal(bwd, j) * (counter[pos] );
                     if (pos-j>=0 && pos-j<(int)pi.size() ) {
                         pi[pos-j] += wj;
                     }
