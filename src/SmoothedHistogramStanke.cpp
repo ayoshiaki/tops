@@ -78,38 +78,39 @@ namespace tops {
         double a = 0.5;
         int m = 8;
         long r = 0;
-        for(int pos = 1; pos < (int)sigmas.size(); pos+=1)
-            {
-                int max2 = (int) ((a / pow(n, 1.0/5.0) ) * (double)pos);
-                int rl = 0;
-                int rr = 0;
-                while(r <= (long)max)
-                    {
-                        r++;
-                        for(long k = pos; k < counter.size() &&  k <= pos + r - 1; k++){
-                            rr += counter[k];
-                            if (rr >= m)
-                                break;
-                        }
-                        for(long k = pos -r + 1; k < counter.size() &&  k <= pos; k++){
-                            rl += counter[k];
-                            if( rl >= m)
-                                break;
-                        }
-                        if ((rr >= m) || (rl >= m)){
-                            break;
-                        }
-                    }
-                if(max2 < r){
-                    max2 = r;
-                }
+        double count_left = 0;
+        double count_right = 0;
 
-                sigmas[pos] = (double)max2;
+        for(int pos = 0; pos < (int)sigmas.size(); pos+=1)
+            {
+                int bwd = (int) ((a / pow(n, 1.0/5.0) ) * (double)pos);
+                if(bwd <= 0)
+                    bwd = 1;
+                for(int j = pos - bwd + 1; (j >= 0 && j < n) && (j <= pos + bwd -1)  ; j++)
+                    {
+                        int c = 1;
+                        if(counter[j] > c)
+                            c = counter[j];
+                        if(j <= pos)
+                            count_left += c;
+                        if(j >= pos)
+                            count_right += c;
+                    }
+
+                while (count_left < m && count_right < m && bwd < n)
+                    {
+                        bwd ++;
+                        int c = 1;
+                        if (counter[pos + bwd - 1] > c)
+                            c = counter[pos + bwd - 1];
+                        if(pos + bwd -1 < n)
+                            count_left += c;
+                        if(pos - bwd + 1 >= 0)
+                            count_right += c;
+                    }
+                pi[pos] = kernel_density_estimation_gaussian(pos, bwd, data);
+                total += pi[pos];
             }
-        for (long pos = 1; pos < max; pos++) {
-            pi[pos] = kernel_density_estimation_gaussian(pos, sigmas[pos], data);
-            total += pi[pos];
-        }
 
 
         prob.resize(max+2);

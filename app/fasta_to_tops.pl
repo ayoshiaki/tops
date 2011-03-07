@@ -12,5 +12,5 @@ while (my $seq = $in -> next_seq())
     $name =~ s/^\s+//;
     $name =~ s/\s+$//;
     my @symbols = split("", $seq->seq());
-    print "$name:\t".join(" ", @symbols)."\n";
+    print "$name:\t".uc(join(" ", @symbols))."\n";
 }
