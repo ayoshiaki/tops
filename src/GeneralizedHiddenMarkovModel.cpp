@@ -30,7 +30,6 @@
 
 namespace tops {
 
-
   void GeneralizedHiddenMarkovModel::restore_model(std::string & model_name,const ProbabilisticModelParameters & parameters) {
     ProbabilisticModelParameterValuePtr modelpar =
       parameters.getOptionalParameterValue(model_name);
@@ -460,17 +459,66 @@ double GeneralizedHiddenMarkovModel::viterbi(const Sequence &s, Sequence &path,
   Matrix psi(nstates, size);
   Matrix psilen(nstates, size);
 
+  std::map < int, std::list<int>  > valid_positions;
+  std::list <int> e;
+  for(int k = 0; k <nstates; k++)
+      valid_positions[k] = e;
+
+
+  std::vector<bool> possible_path;
+  possible_path.resize(nstates);
+
   // initialization
   for (int k = 0; k < nstates; k++) {
-    gamma(k, 0) = getInitialProbabilities()->log_probability_of(k)
-        + _all_states[k]->observation()->prefix_sum_array_compute(0, 0);
+      gamma(k, 0) = getInitialProbabilities()->log_probability_of(k)
+          + _all_states[k]->observation()->prefix_sum_array_compute(0, 0);
+      possible_path[k] = 1;
+      if(gamma(k,0) <= -HUGE)
+          {
+              possible_path[k] = 0;
+          }
   }
 
+  for(int i = 0; i < (int)possible_path.size(); i++)
+      {
+          std::vector <int> next_states = _all_states[i]->successors();
+          if(!possible_path[i])
+              continue;
+          for(int p = 0; p < (int)next_states.size(); p++)
+              {
+                  int succ = next_states[p];
+                  if (!_all_states[succ]->isGeometricDuration()) {
+                      (valid_positions.find(succ)->second).push_back(0);
+                  }
+              }
+      }
+
+
   for(int i = 1; i < size; i++){
-    for(int k = 0; k < nstates; k++){
-        gamma(k, i) = -HUGE;
-        _all_states[k]->findBestPredecessor (gamma, psi, psilen,  s, i, _all_states);
-    }
+      for(int k = 0; k < nstates; k++){
+          gamma(k, i) = -HUGE;
+          _all_states[k]->findBestPredecessor (gamma, psi, psilen,  s, i, _all_states, valid_positions);
+          possible_path[k] = 1;
+          if(gamma(k,i) <= -HUGE)
+              {
+                  possible_path[k] = 0;
+              }
+      }
+
+      for(int s = 0; s < (int)possible_path.size(); s++)
+          {
+              std::vector <int> next_states = _all_states[s]->successors();
+              if(!possible_path[s])
+                  continue;
+              for(int p = 0; p < (int)next_states.size(); p++)
+                  {
+                      int succ = next_states[p];
+                      if (!_all_states[succ]->isGeometricDuration()) {
+                          (valid_positions.find(succ)->second).push_back(i);
+                      }
+                  }
+          }
+
   }
   int L = size-1;
 
@@ -507,6 +555,16 @@ double GeneralizedHiddenMarkovModel::viterbi(const Sequence &s, Sequence &path,
       }
       state = p;
   }
+#if 0
+  for(int i = 0; i < size ; i ++) {
+      std::cerr << "[" << i << "]" << std::endl; ;
+      for(int k = 0; k < nstates; k++)
+          {
+
+              std::cerr << " " << _all_states[k] -> name() << " " << gamma(k,i) << " " << _all_states[psi(k, i)]->name() << " " << psilen(k, i) << std::endl;
+          }
+  }
+#endif
   return max;
 
 }

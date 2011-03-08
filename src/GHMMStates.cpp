@@ -23,6 +23,8 @@
 #include "ProbabilisticModel.hpp"
 #include "MultinomialDistribution.hpp"
 #include "Symbol.hpp"
+#include <list>
+
 namespace tops{
     GHMMState::GHMMState() {
         _start = 0;
@@ -34,7 +36,7 @@ namespace tops{
     GHMMState:: ~GHMMState() {
     }
 
-    void GHMMState::findBestPredecessor (Matrix & gamma, Matrix &psi, Matrix &psilen, const Sequence & s, int base, const GHMMStates & all_states){
+    void GHMMState::findBestPredecessor (Matrix & gamma, Matrix &psi, Matrix &psilen, const Sequence & s, int base, const GHMMStates & all_states, std::map < int, std::list<int> >  & valid_positions){
         int d = 1;
         if(predecessors().size() <= 0)
             return;
@@ -338,7 +340,7 @@ namespace tops{
 
 
 
-    void GHMMSignalState::findBestPredecessor (Matrix & gamma, Matrix &psi, Matrix &psilen, const Sequence & s, int base, const GHMMStates & all_states){
+    void GHMMSignalState::findBestPredecessor (Matrix & gamma, Matrix &psi, Matrix &psilen, const Sequence & s, int base, const GHMMStates & all_states, std::map < int, std::list<int> >  & valid_positions){
         int d = size();
         if(predecessors().size() <= 0)
             return;
@@ -463,62 +465,77 @@ namespace tops{
             }
     }
 
-    void GHMMExplicitDurationState::findBestPredecessor (Matrix & gamma, Matrix &psi, Matrix &psilen, const Sequence & s, int base, const GHMMStates & all_states){
+    void GHMMExplicitDurationState::findBestPredecessor (Matrix & gamma, Matrix &psi, Matrix &psilen, const Sequence & s, int base, const GHMMStates & all_states, std::map < int, std::list<int> >  & valid_positions){
         int diff = 0;
         if(_number_of_phases  > 1)
             diff = mod(getOutputPhase() - getInputPhase(),_number_of_phases);
         if(_number_of_phases <= 0)
             _number_of_phases = 1;
         int offset = duration()->size();
-
         if(offset > 15000)
             offset = 15000;
-        int minbase = (base - diff - offset) ;
-        if(minbase < 0) minbase = 0;
-        for (int d = base - diff; d > minbase; d-=_number_of_phases)
+
+
+        bool toContinue = false;
+
+        for(int suc = 0; suc < (int)successors().size(); suc++)
             {
-                if(predecessors().size() <= 0)
-                    return;
-                int from = predecessors()[0];
-                if((base - d ) < 0)
-                    return;
-                double gmax = gamma(from, d-1) + all_states[from]->transition()->log_probability_of(id());
-                int pmax = from;
-                for (int p = 1; p < (int)predecessors().size();p++){
-                    int from = predecessors()[p];
-                    double g = gamma(from, d-1) + all_states[from]->transition()->log_probability_of(id());
-                    if(gmax < g){
-                        gmax = g;
-                        pmax = from;
-                    }
+                if(!all_states[successors()[suc]]->isGeometricDuration()){
+                    toContinue = true;
+                    break;
                 }
-                int phase = getInputPhase();
-
-                double emission = observation()->prefix_sum_array_compute(d, base, phase);
-
-
-#if 0
-        std::cerr << name() << " " << d  << " " << base << std::endl;
-        std::cerr << "iphase: " << getInputPhase() << std::endl;
-        std::cerr << "ophase: " << getOutputPhase() << std::endl;
-        std::cerr << " duration: " << duration_probability(base-d+1) << std::endl;
-        std::cerr << " emission: " << observation()->prefix_sum_array_compute(d, base , phase) << std::endl;
-        std::cerr << " number_of_phases: " << _number_of_phases << std::endl;
-        std::cerr << " from: " << from << std::endl;
-        std::cerr << " gamma: " << gamma(from, d-1) << std::endl;
-        std::cerr << " d: " << base-d+1 << std::endl;
-        std::cerr << " gmax: " << gmax << std::endl;
-#endif
-
-                if(emission <= -HUGE)
-                    return;
-                gmax = gmax + duration_probability(base-d+1) + observation()->prefix_sum_array_compute(d, base, phase);
-              if(gamma(id(), base) < gmax){
-                    gamma(id(), base) = gmax;
-                    psi(id(), base) = pmax;
-                    psilen(id(), base) = base-d+1;
+                if((base + 1 < (int)s.size()) && (all_states[successors()[suc]]->observation()->prefix_sum_array_compute(base+1, base+1) > -HUGE)) {
+                    toContinue = true;
+                    break;
                 }
             }
+        if(!toContinue){
+            return;
+        }
+
+        std::list<int>::iterator it;
+        it =  (valid_positions.find(id())->second).begin();
+        while(it != (valid_positions.find(id())->second).end()) {
+            int d = (*it)+ 1;
+            if(predecessors().size() <= 0)
+                return;
+            int from = predecessors()[0];
+            if((base - d ) < 0)
+                return;
+
+            double gmax = gamma(from, d-1) + all_states[from]->transition()->log_probability_of(id());
+            int pmax = from;
+            for (int p = 1; p < (int)predecessors().size();p++){
+                int from = predecessors()[p];
+                double g = gamma(from, d-1) + all_states[from]->transition()->log_probability_of(id());
+                if(gmax < g){
+                    gmax = g;
+                    pmax = from;
+                }
+            }
+            int phase = getInputPhase();
+
+            double emission = observation()->prefix_sum_array_compute(d, base, phase);
+
+            if(emission <= -HUGE){
+                it = (valid_positions.find(id())->second).erase(it);
+                continue;
+            }
+            if(base-d+1 >= offset)
+                {
+                    it = (valid_positions.find(id())->second).erase(it);
+                    continue;
+                }
+            gmax = gmax + duration_probability(base-d+1) + observation()->prefix_sum_array_compute(d, base, phase);
+
+
+            if(gamma(id(), base) < gmax){
+                gamma(id(), base) = gmax;
+                psi(id(), base) = pmax;
+                psilen(id(), base) = base-d+1;
+            }
+            it++;
+        }
     }
 
 
