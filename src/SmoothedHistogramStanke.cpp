@@ -48,6 +48,8 @@ namespace tops {
     long max = 15000;
     if(maxlengthp != NULL)
         max = maxlengthp->getInt();
+    int L = max;
+    max = max + 4 * a * max;
 
     if(training_set_parameter == NULL) {
       ProbabilisticModelPtr nullmodel;
@@ -67,7 +69,6 @@ namespace tops {
     double total = 0.0;
     std::map<long,double> d;
     std::map<long,int> counter;
-    double n = data.size();
     DoubleVector prob;
 
     if(data.size() > 0)
@@ -82,60 +83,59 @@ namespace tops {
                   counter[(long)data[i]] += 1.0;
           }
           vector<double> pi;
-          pi.resize(max);
+          pi.resize(L);
 
 
 
         double count_left = 0;
         double count_right = 0;
 
-        for(int pos = 0; pos < max ; pos +=1)
+        for(int pos = 0; (pos < L) && (pos < max) ; pos +=1)
             {
-                int bwd = (int) ((a / pow(n, 1.0/5.0) ) * (double)pos);
-                if(bwd <= 0)
-                    bwd = 1;
-                for(int j = pos - bwd + 1; (j >= 0 && j < n) && (j <= pos + bwd -1)  ; j++)
-                    {
-                        int c = 0;
-                        if(counter[j] > c)
-                            c = 1;
-                        if(j <= pos)
-                            count_left += c;
-                        if(j >= pos)
-                            count_right += c;
-                    }
-
-                while (count_left < m && count_right < m && bwd < max)
-                    {
-                        bwd ++;
-                        int c = 0;
-                        if (counter[pos + bwd - 1] > c)
-                            c = 1;
-                        if(pos + bwd -1 < n)
-                            count_left += c;
-                        if(pos - bwd + 1 >= 0)
-                            count_right += c;
-                    }
-                pi[pos] += kernel_normal((double)0, (double)bwd) * counter[pos];
-                bool negligible = false;
-                int j=1;
-                while (!negligible && (pos-j>=0 || pos+j<max)){
-                    double  wj = kernel_normal(bwd, j) * (counter[pos] );
-                    if (pos-j>=0 && pos-j<(int)pi.size() ) {
-                        pi[pos-j] += wj;
-                    }
-                    if (pos+j<(int)pi.size() && pos+j>=0) {
-                        pi[pos+j] += wj;
-                    }
-                    negligible = (wj < 1e-20);
-                    j++;
-                }
+	      int bwd = (int) (.01+ (a / pow(L, 1.0/5.0) ) * (double)pos);
+	      if(bwd <= 0)
+		bwd = 1;
+	      for(int j = pos - bwd + 1;  (j <= pos + bwd -1)  ; j++)
+		{
+		  if (! (j >= 0 && j < L))
+		    continue;
+		  if(j <= pos)
+		    count_left += (counter[j]) ? 1: 0;
+		  if(j >= pos)
+		    count_right += (counter[j])? 1: 0;
+		}
+	      
+	      while (count_left < m && count_right < m && bwd < L)
+		{
+		  bwd ++;
+		  if(pos + bwd -1 < L)
+		    count_left += counter[pos + bwd - 1] ? 1:0;
+		  if(pos - bwd + 1 >= 0)
+		    count_right += counter[pos + bwd - 1] ? 1:0;
+		}
+	      if(pos < L) 
+		pi[pos] += kernel_normal((double)0, (double)bwd) * counter[pos];
+	      bool negligible = false;
+	      int j=1;
+	      while (!negligible && (pos-j>=0 || pos+j<L)){
+		double  wj = kernel_normal(j, bwd) * (counter[pos] );
+		if (pos-j>=0 && pos-j<(int)pi.size() ) {
+		  pi[pos-j] += wj;
+		}
+		if (pos+j<(int)pi.size() && pos+j>=0) {
+		  pi[pos+j] += wj;
+		}
+		negligible = (wj < 1e-20);
+		j++;
+	      }
             }
-
+	
         double total = 0;
         for (long k = 1; k < max; k++){
             total += pi[k];
         }
+	std::cerr << "pi: " << pi[584] << std::endl;
+	std::cerr << "total: " << total << std::endl;
 
         prob.resize(max);
         for (long k = 1; k < max; k++){
