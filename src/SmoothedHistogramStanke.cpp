@@ -48,7 +48,7 @@ namespace tops {
     long max = 15000;
     if(maxlengthp != NULL)
         max = maxlengthp->getInt();
-
+    max = max + 4 * a * max;
     if(training_set_parameter == NULL) {
       ProbabilisticModelPtr nullmodel;
       exit(-1);
