@@ -159,53 +159,7 @@ namespace tops {
     }
     return max;
 
-  }
-  
-  //! Posterior Probabilities: P(yi=k|x)
-  void HiddenMarkovModel::posteriorProbabilities (const Sequence &sequence, Matrix & probabilities) const
-  {
-    int nstates = _states.size();
-    int size = sequence.size();
-    Matrix p (nstates, size);
-    
-    Matrix alpha; // forward
-    Matrix beta;  // backward
-    
-    double full = this->forward(sequence, alpha);
-    this->backward(sequence, beta);
-    
-    for(int k = 0; k < nstates; k++)
-      for(int i = 0; i < size; i++)
-        p(k, i) = alpha(k, i) + beta(k, i) - full;
-        
-    probabilities = p;
-  }
-  
-  //! Posterior Decoding: ^yi = argmax_k P(yi=k|x)
-  void HiddenMarkovModel::posteriorDecoding (const Sequence &sequence, Sequence &path, Matrix & probabilities) const{
-    int nstates = _states.size();
-    int size = sequence.size();
-    
-    this->posteriorProbabilities(sequence, probabilities);
-    
-    path.resize(size);
-    
-    double max;
-    for(int i = 0; i < size; i++)
-    {
-      max = probabilities(0, i);
-      path[i] = 0;
-      for(int k = 1; k < nstates; k++)
-      {
-        if(probabilities(k, i) > max)
-        {
-          max = probabilities(k, i);
-          path[i] = k;
-        }
-      }
-    }
-  }
-  
+  }  
 
   void HiddenMarkovModel::scale(std::vector<double> & in,  int t) 
   {

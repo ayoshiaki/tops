@@ -79,15 +79,9 @@ namespace tops {
       virtual void choosePath(const Sequence &s, Sequence &path) ;
 
       virtual void initializeChoosePathAlgorithm(const Sequence &s);
+      
     //! Inefficient Viterbi algorithm
-    virtual double
-    _viterbi(const Sequence &s, Sequence &path, Matrix & gamma) const;
-
-    //! Posterior Probabilities: P(yi=k|x)
-    virtual void posteriorProbabilities (const Sequence &s, Matrix & probabilities) const;
-
-    //! Posterior Decoding: ^yi = argmax_k P(yi=k|x)
-    virtual void posteriorDecoding (const Sequence &s, Sequence &path, Matrix & probabilities) const;
+    virtual double _viterbi(const Sequence &s, Sequence &path, Matrix & gamma) const;
 
     //! Choose the observation given a state
     virtual Sequence & chooseObservation(Sequence & h, int i, int state) const;

@@ -510,15 +510,6 @@ double GeneralizedHiddenMarkovModel::viterbi(const Sequence &s, Sequence &path,
   return max;
 
 }
-//! Posterior Probabilities: P(yi=k|x)
-void GeneralizedHiddenMarkovModel::posteriorProbabilities (const Sequence &s, Matrix & probabilities) const{
-  std::cerr << "posteriorProbabilities not implemented" << std::endl;
-}
-
-//! Posterior Decoding: ^yi = argmax_k P(yi=k|x)
-void GeneralizedHiddenMarkovModel::posteriorDecoding (const Sequence &s, Sequence &path, Matrix & probabilities) const{
-  std::cerr << "posteriorDecoding not implemented" << std::endl;
-}
 
 //! Choose the observation given a state
 Sequence & GeneralizedHiddenMarkovModel::chooseObservation(Sequence & h, int i,
