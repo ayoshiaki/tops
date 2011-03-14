@@ -2,17 +2,17 @@
  *       ProbabilisticModel.hpp
  *
  *       Copyright 2011 Andre Yoshiaki Kashiwabara <akashiwabara@usp.br>
- *     
+ *
  *       This program is free software; you can redistribute it and/or modify
  *       it under the terms of the GNU  General Public License as published by
  *       the Free Software Foundation; either version 3 of the License, or
  *       (at your option) any later version.
- *     
+ *
  *       This program is distributed in the hope that it will be useful,
  *       but WITHOUT ANY WARRANTY; without even the implied warranty of
  *       MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *       GNU General Public License for more details.
- *      
+ *
  *       You should have received a copy of the GNU General Public License
  *       along with this program; if not, write to the Free Software
  *       Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
@@ -56,12 +56,19 @@ namespace tops {
     ProbabilisticModel( AlphabetPtr alpha) : _alphabet(alpha)   {    };
     virtual ~ProbabilisticModel () {}
 
-    //! Calculates the sequence likelihood given this model 
+    //! Calculates the sequence likelihood given this model
     virtual double evaluate(const Sequence & s, unsigned int begin, unsigned int end) const {
       not_implemented("evaluate()");
       return 0;
     }
-    
+
+    //! Calculates the probability of Pr(Si = s[i]  | s[i-1],...,s[0])
+    virtual double evaluatePosition(const Sequence & s, unsigned int i) const {
+      not_implemented("evaluatePosition()");
+      return 0;
+    }
+
+
     //! Choose a symbol
     virtual double choose() const {
       not_implemented("choose()");
@@ -103,7 +110,7 @@ namespace tops {
       return h;
     }
 
-    //! Returns the alphabet 
+    //! Returns the alphabet
     virtual AlphabetPtr alphabet() const
     {
       return _alphabet;
@@ -120,7 +127,7 @@ namespace tops {
       return out.str();
     }
 
-    //! returns the model name    
+    //! returns the model name
     virtual std::string model_name() const{
       std::stringstream out;
       not_implemented("model_name()");
@@ -144,7 +151,7 @@ namespace tops {
       std::cerr << "ERROR: The " << model_name() << " does not implement initialize" << std::endl;
       exit(-1);
     }
-    
+
     virtual void not_implemented (std::string method ) const {
       std::cerr << "ERROR: The " << model_name() << " does not implement " << method << std::endl;
     }
@@ -178,7 +185,7 @@ namespace tops {
     }
     virtual bool initialize_prefix_sum_array(const Sequence & s) {
       if(_last == s)
-	return true;
+        return true;
       _last = s;
       return false;
     }
@@ -190,13 +197,13 @@ namespace tops {
       not_implemented("getStateNames()");
       return n;
     }
-    
-    //! Train baum Welch 
+
+    //! Train baum Welch
     virtual void trainBaumWelch (SequenceList & training_set, int maxiterations, double diff) {
       not_implemented("trainBaumWelch");
     }
 
-    
+
     virtual InhomogeneousFactorableModel* inhomogeneous() {
       not_implemented("inhomogeneous()");
       return NULL;

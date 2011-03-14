@@ -198,6 +198,9 @@ namespace tops
           printTree(node->getChild(l), out);
   }
 
+
+
+
   ContextTree::ContextTree(AlphabetPtr alphabet){
     _alphabet = alphabet;
   }
@@ -310,7 +313,39 @@ namespace tops
       }
   }
 
+    void ContextTree::normalize(ProbabilisticModelPtr old, double pseudocount)
+    {
+    std::vector <ContextTreeNodePtr> newAllVector;
+    for(int i = 0; i  < (int)_all_context.size(); i++)
+      {
+        double total = 0;
+        DoubleVector probs(_alphabet->size());
 
+        Sequence s;
+        ContextTreeNodePtr current = _all_context[i];
+        while (current != getRoot()) {
+            s.push_back (current->symbol());
+            current = _all_context[current->getParent()];
+        }
+        Sequence s2;
+        for (int j = s.size()-1; j >=0; j--)
+            s2.push_back(s[j]);
+
+        for(int l = 0; l < (int)_alphabet->size(); l++) {
+            total += (double)(_all_context[i]->getCounter())[l] + pseudocount;
+        }
+        for(int l = 0; l < (int)_alphabet->size(); l++){
+            Sequence s3;
+            s3 = s2;
+            s3.push_back(l);
+            double prob = exp(old->evaluatePosition(s3,s3.size()-1));
+            probs[l] = (double)((_all_context[i]->getCounter())[l] + pseudocount*prob)/(total);
+        }
+        MultinomialDistributionPtr distr = MultinomialDistributionPtr(new MultinomialDistribution(probs));
+        distr->setAlphabet(_alphabet);
+        _all_context[i]->setDistribution(distr);
+      }
+    }
 
   std::string ContextTree::str() const{
     std::stringstream out;

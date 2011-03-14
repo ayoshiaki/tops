@@ -2,6 +2,7 @@
 #include "TrainWeightArrayModel.hpp"
 #include "InhomogeneousMarkovChain.hpp"
 #include "ProbabilisticModelParameter.hpp"
+#include "ProbabilisticModelCreatorClient.hpp"
 #include "SequenceFactory.hpp"
 namespace tops{
 
@@ -16,6 +17,8 @@ namespace tops{
     ProbabilisticModelParameterValuePtr pseudocountspar = parameters.getOptionalParameterValue("pseudo_counts");
     ProbabilisticModelParameterValuePtr fixseqpar = parameters.getOptionalParameterValue("fixed_sequence");
     ProbabilisticModelParameterValuePtr fixseqpospar = parameters.getOptionalParameterValue("fixed_sequence_position");
+    ProbabilisticModelParameterValuePtr aprioripar = parameters.getOptionalParameterValue("apriori");
+
     if((alphabetpar == NULL) ||
        (trainingsetpar == NULL) ||
        (lengthpar == NULL) ||
@@ -26,6 +29,15 @@ namespace tops{
       }
     int offset = 0;
     double pseudocounts = 0;
+    if(pseudocountspar != NULL)
+        pseudocounts = pseudocountspar->getDouble();
+    ProbabilisticModelPtr apriori;
+    if(aprioripar != NULL)
+      {
+         ProbabilisticModelCreatorClient c;
+         apriori = c.create(aprioripar->getString());
+      }
+
     if(offsetpar != NULL)
       offset = offsetpar ->getInt();
     if(pseudocountspar != NULL)
@@ -98,15 +110,20 @@ namespace tops{
                       positionalSample.push_back(entry);
                   }
           }
-        if(fixseq && (fixed_pos <= i) && (((int)fixed.size() - (i - (int)fixed_pos +1))>= 0)){
+        if(fixseq && (fixed_pos <= i) && (((int)fixed.size() - ((int)i - (int)fixed_pos +1))>= 0)){
             ContextTreePtr tree = ContextTreePtr(new ContextTree(alphabet));
             tree->initializeCounter(positionalSample, o, 0);
-            tree->normalize();
             positional_distribution[i] = tree;
         } else {
             ContextTreePtr tree = ContextTreePtr(new ContextTree(alphabet));
-            tree->initializeCounter(positionalSample, o, pseudocounts);
-            tree->normalize();
+
+            if(apriori != NULL  && apriori->factorable() != NULL){
+                tree->initializeCounter(positionalSample, o, pseudocounts);
+                tree->normalize(apriori, pseudocounts);
+            } else {
+                tree->initializeCounter(positionalSample, o, pseudocounts);
+                tree->normalize();
+            }
             positional_distribution[i] = tree;
         }
       }
