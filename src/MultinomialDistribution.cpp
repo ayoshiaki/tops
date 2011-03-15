@@ -72,13 +72,9 @@ namespace tops {
    double MultinomialDistribution::log_probability_of(int s) const  {
      if ((s>=0) && (s < (int)(_log_probabilities.size() )))
         return _log_probabilities[s];
-      else {
-        if(_geometric_tail && s > _log_probabilities.size()) {
-          return log(1.0/_mean) * s + log(1.0 - 1.0/_mean);
-        }
-        return -HUGE;
-      }
-    }
+    return -HUGE;
+   }
+
 
   double MultinomialDistribution::log_probability_of(int s, double new_value) {
     _log_probabilities[s] = new_value;

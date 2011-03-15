@@ -69,6 +69,13 @@ namespace tops {
     }
 
 
+    //! Calculates the probability of Pr_t(Si = s[i]  | s[i-1],...,s[0])
+      virtual double evaluatePosition(const Sequence & s,  int i,  int t) const {
+          evaluatePosition(s, i);
+          return 0;
+      }
+
+
     //! Choose a symbol
     virtual double choose() const {
       not_implemented("choose()");
@@ -205,16 +212,16 @@ namespace tops {
 
 
     virtual InhomogeneousFactorableModel* inhomogeneous() {
-      not_implemented("inhomogeneous()");
+        //      not_implemented("inhomogeneous()");
       return NULL;
     }
     virtual DecodableModel* decodable() {
-      not_implemented("decodable()");
+        //      not_implemented("decodable()");
       return NULL;
     }
 
     virtual FactorableModel* factorable() {
-      not_implemented("factorable()");
+        //      not_implemented("factorable()");
       return NULL;
     }
   };

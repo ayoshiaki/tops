@@ -313,7 +313,7 @@ namespace tops
       }
   }
 
-    void ContextTree::normalize(ProbabilisticModelPtr old, double pseudocount)
+    void ContextTree::normalize(ProbabilisticModelPtr old, double pseudocount, int t)
     {
     std::vector <ContextTreeNodePtr> newAllVector;
     for(int i = 0; i  < (int)_all_context.size(); i++)
@@ -323,24 +323,27 @@ namespace tops
 
         Sequence s;
         ContextTreeNodePtr current = _all_context[i];
+
         while (current != getRoot()) {
             s.push_back (current->symbol());
             current = _all_context[current->getParent()];
+
         }
-        Sequence s2;
-        for (int j = s.size()-1; j >=0; j--)
-            s2.push_back(s[j]);
+
 
         for(int l = 0; l < (int)_alphabet->size(); l++) {
-            total += (double)(_all_context[i]->getCounter())[l] + pseudocount;
+            total += (double)(_all_context[i]->getCounter())[l];
         }
         for(int l = 0; l < (int)_alphabet->size(); l++){
             Sequence s3;
-            s3 = s2;
+            s3 = s;
             s3.push_back(l);
-            double prob = exp(old->evaluatePosition(s3,s3.size()-1));
-            probs[l] = (double)((_all_context[i]->getCounter())[l] + pseudocount*prob)/(total);
+
+            double prob = exp(old->evaluatePosition(s3,s3.size()-1, t));
+
+            probs[l] = (double)((_all_context[i]->getCounter())[l] + pseudocount*prob)/(total + pseudocount);
         }
+
         MultinomialDistributionPtr distr = MultinomialDistributionPtr(new MultinomialDistribution(probs));
         distr->setAlphabet(_alphabet);
         _all_context[i]->setDistribution(distr);

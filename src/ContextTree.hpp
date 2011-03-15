@@ -143,7 +143,12 @@ namespace tops {
     void normalize();
 
     //! normalize using a tree to get the a priori probabilities
-      void normalize(ProbabilisticModelPtr old, double pseudocount);
+      void normalize(ProbabilisticModelPtr old, double pseudocount, int i);
+
+    //! normalize using a tree to get the a priori probabilities
+      void normalize(ProbabilisticModelPtr old, double pseudocount){
+          normalize(old,pseudocount,0);
+      }
 
     std::string str() const;
 

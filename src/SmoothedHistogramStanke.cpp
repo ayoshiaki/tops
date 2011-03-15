@@ -71,6 +71,10 @@ namespace tops {
     std::map<long,int> counter;
     DoubleVector prob;
 
+
+    vector<double> pi;
+    pi.resize(L);
+
     if(data.size() > 0)
       {
           for(int i = 0; i < data.size(); i++){
@@ -82,8 +86,6 @@ namespace tops {
               else
                   counter[(long)data[i]] += 1.0;
           }
-          vector<double> pi;
-          pi.resize(L);
 
 
 
@@ -129,7 +131,7 @@ namespace tops {
                 j++;
               }
             }
-
+#if 0
         double total = 0;
         for (long k = 1; k < (int)pi.size(); k++){
             total += pi[k];
@@ -138,9 +140,10 @@ namespace tops {
         for (long k = 1; k < (int)pi.size(); k++){
             prob[k] =  pi[k]/(total) ;
         }
+#endif
       }
     ProbabilisticModelParameters pars;
-    pars.add("probabilities", ProbabilisticModelParameterValuePtr (new DoubleVectorParameterValue(prob)));
+    pars.add("probabilities", ProbabilisticModelParameterValuePtr (new DoubleVectorParameterValue(pi)));
     pars.add("alphabet", alpha->getParameterValue());
     MultinomialDistributionPtr result =
       MultinomialDistributionPtr(new MultinomialDistribution());

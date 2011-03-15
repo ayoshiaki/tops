@@ -100,10 +100,11 @@ ProbabilisticModelPtr TrainPhasedMarkovChain::create(
                 }
                 ContextTreePtr tree = ContextTreePtr(new ContextTree(alphabet));
 
-                if(apriori != NULL  && apriori->factorable() != NULL){
+                if(apriori != NULL){
                     tree->initializeCounter(sample_set, orderpar->getInt(), 0);
-                    tree->normalize(apriori, pseudocounts);
+                    tree->normalize(apriori, pseudocounts, i);
                 } else {
+
                     tree->initializeCounter(sample_set, orderpar->getInt(), pseudocounts);
                     tree->normalize();
                 }

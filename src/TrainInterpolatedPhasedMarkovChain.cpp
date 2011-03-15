@@ -162,7 +162,7 @@ namespace tops {
             tree->initializeCounter(positionalSample, order, pseudocounts);
             tree->pruneTreeSmallSampleSize(400);
 
-            if(apriori != NULL  && apriori->factorable() != NULL){
+            if(apriori != NULL){
                 tree->initializeCounter(sample_set, orderpar->getInt(), 0);
                 tree->normalize(apriori, pseudocounts);
             } else {
