@@ -30,8 +30,14 @@ namespace tops{
   double InhomogeneousMarkovChain::evaluatePosition(const Sequence & s, int i, int t) const{
 
     assert((t >= 0) && (t < (int)_context_trees.size()));
-
-    return  _context_trees[t]->getContext(s,i)->getDistribution()->evaluatePosition(s,i);
+    ContextTreeNodePtr context = _context_trees[t]->getContext(s,i);
+    if(context == NULL) {
+        return -HUGE;
+    }
+    MultinomialDistributionPtr distr = context->getDistribution();
+    if(distr == NULL)
+        return -HUGE;
+    return  distr->evaluatePosition(s,i);
   }
 
   //! Choose the position i of the sequence s given the subsequence before the position i.

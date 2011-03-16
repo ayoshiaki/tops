@@ -515,16 +515,9 @@ namespace tops{
             }
             int phase = getInputPhase();
 
-            // cant emit it here.
-            double join_emission = observation()->evaluate(s, base,base, phase);
-            if(join_emission <= -HUGE)
-                {
-                    it = (valid_positions.find(id())->second).erase(it);
-                    continue;
-                }
 
             double emission = observation()->prefix_sum_array_compute(d, base, phase);
-            if(emission <= -HUGE){
+            if(close(exp(emission), 0.0, 1e-10)){
                 it = (valid_positions.find(id())->second).erase(it);
                 continue;
             }

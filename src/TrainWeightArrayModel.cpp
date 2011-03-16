@@ -113,6 +113,7 @@ namespace tops{
         if(fixseq && (fixed_pos <= i) && (((int)fixed.size() - ((int)i - (int)fixed_pos +1))>= 0)){
             ContextTreePtr tree = ContextTreePtr(new ContextTree(alphabet));
             tree->initializeCounter(positionalSample, o, 0);
+            tree->normalize();
             positional_distribution[i] = tree;
         } else {
             ContextTreePtr tree = ContextTreePtr(new ContextTree(alphabet));
