@@ -36,7 +36,10 @@ namespace tops {
 
   /* normal kernel */
   double kernel_normal(double x, double h){
-      return (1/sqrt(2*M_PI)) / h * exp(- x / h * x / h / 2);
+      double y = (x/h) * (x/h) ;
+      double v =  (1/(h*sqrt(2*M_PI)))* exp(- y);
+      return v;
+
   }
 
 

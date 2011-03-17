@@ -148,6 +148,10 @@ namespace tops {
     MultinomialDistributionPtr result =
       MultinomialDistributionPtr(new MultinomialDistribution());
     result->initialize(pars);
+    for (int i = 0; i < pi.size(); i++)
+        {
+            result->log_probability_of(i, log(pi[i]/data.size()));
+        }
     return result;
   }
 
