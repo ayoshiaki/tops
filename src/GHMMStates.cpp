@@ -517,7 +517,7 @@ namespace tops{
 
 
             double emission = observation()->prefix_sum_array_compute(d, base, phase);
-            if(close(exp(emission), 0.0, 1e-10)){
+            if(emission <= -HUGE) {
                 it = (valid_positions.find(id())->second).erase(it);
                 continue;
             }

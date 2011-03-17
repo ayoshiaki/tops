@@ -502,7 +502,7 @@ double GeneralizedHiddenMarkovModel::viterbi(const Sequence &s, Sequence &path,
           gamma(k, i) = -HUGE;
           possible_path[k] = 1;
           _all_states[k]->findBestPredecessor (gamma, psi, psilen,  s, i, _all_states, valid_positions);
-          if(close (exp(gamma(k,i)), 0.0, 1e-1))
+          if(gamma(k,i) <= -HUGE)
               {
                   possible_path[k] = 0;
               }
