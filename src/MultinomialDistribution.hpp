@@ -64,9 +64,12 @@ namespace tops {
 
     virtual double log_probability_of_pair(int s1, int s2) const;
 
+    void strMatrix () const;
 
     //! Set the probability value of the number s
     virtual double log_probability_of(int s, double new_value) ;
+
+    virtual double log_probability_of_pair(int s1, int s2, double new_value);
 
     virtual double evaluatePosition(const Sequence & s, int i) const ;
     

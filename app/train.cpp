@@ -27,6 +27,7 @@
 #include <string>
 
 #include "TrainHMMBaumWelch.hpp"
+#include "TrainPHMMBaumWelch.hpp"
 #include "TrainVariableLengthMarkovChain.hpp"
 #include "TrainMultinomialDistribution.hpp"
 #include "TrainFixedLengthMarkovChain.hpp"
@@ -75,6 +76,8 @@ int main(int argc, char ** argv) {
                         = TrainFixedLengthMarkovChainPtr(new TrainFixedLengthMarkovChain());
         createModelCommand["BaumWelch"] = TrainHMMBaumWelchPtr(
                         new TrainHMMBaumWelch());
+	createModelCommand["PHMMBaumWelch"] = TrainPHMMBaumWelchPtr(
+			new TrainPHMMBaumWelch());					    
         createModelCommand["WeightArrayModel"] = TrainWeightArrayModelPtr(
                         new TrainWeightArrayModel());
         createModelCommand["VariableLengthInhomogeneousMarkovChain"]

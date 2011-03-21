@@ -37,6 +37,7 @@
 
 namespace tops {
   class DecodableModel;
+  class PairHiddenMarkovModel;
   class FactorableModel;
   class InhomogeneousFactorableModel;
   class ProbabilisticModelCreator;
@@ -115,6 +116,11 @@ namespace tops {
     }
     //! returns the string representation of the model
     virtual std::string str() const {
+      std::stringstream out;
+      not_implemented("str()");
+      return out.str();
+    }
+    virtual std::string str() {
       std::stringstream out;
       not_implemented("str()");
       return out.str();
@@ -203,6 +209,11 @@ namespace tops {
     }
     virtual DecodableModel* decodable() {
       not_implemented("decodable()");
+      return NULL;
+    }
+
+    virtual PairHiddenMarkovModel* pairDecodable() {
+      not_implemented("pairDecodable()");
       return NULL;
     }
 

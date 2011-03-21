@@ -297,7 +297,7 @@ namespace tops {
       StringMapParameterValuePtr str_map = 
 	StringMapParameterValuePtr(new StringMapParameterValue());
       std::string str;
-      std::copy(first+1, last-4, std::back_inserter(str));
+      std::copy(first+1, last-1, std::back_inserter(str));
       std::string v;
       if( (str_map->getStringMap()).find(str) == (str_map->getStringMap()).end()) {
 	(str_map->getStringMap())[str] = v;
@@ -316,7 +316,7 @@ namespace tops {
     void operator()(IteratorT first, IteratorT last) const
     {
       std::string str;
-      std::copy(first, last, std::back_inserter(str));
+      std::copy(first+1, last-1, std::back_inserter(str));
       (_c->getCurrentParameterValue()->getStringMap() )[_c->getAuxString()] = str;
     }
   private:
@@ -332,7 +332,7 @@ namespace tops {
     void operator()(IteratorT first, IteratorT last) const
     {
       std::string str;
-      std::copy(first+1, last-4, std::back_inserter(str));
+      std::copy(first+1, last-1, std::back_inserter(str));
       std::string v;
       if( (_c->getCurrentParameterValue()->getStringMap()).find(str) == (_c->getCurrentParameterValue()->getStringMap()).end()) {
 	(_c->getCurrentParameterValue()->getStringMap())[str] = v;
@@ -470,7 +470,7 @@ namespace tops {
       parameter_name,  prob_table, string_vector, double_vector, 
       int_vector, word, word_p, string_map, transition_map, nested_configuration, nested_parameter_spec;
     word_p 
-      = lexeme_d [ +(alnum_p | (ch_p('_') | '.' | '/' | '-' | ' '))]
+      = lexeme_d [ +(alnum_p | (ch_p('_') | '.' | '/' | '-' | ' ' | ','))]
       ;
     word
       = ch_p('"')  
@@ -492,7 +492,7 @@ namespace tops {
     transition_map
       = ch_p('(')
       >> '"'
-      >> (+ word_p)  [set_first_word(this)]
+      >> ( + word_p)  [set_first_word(this)]
       >> '"' 
       >>
       (  (ch_p('|')  >> '"' >> ( *word_p ) [set_second_word(this)] >> '"' >> ':' )
@@ -515,21 +515,22 @@ namespace tops {
       = ch_p('(') 
       >> ('"' 
 	  >> +word_p
-	  >> '"' 
-	  >>  ch_p(':')
 	  >> '"' )[create_string_map(this)]
-      >> +word_p [add_str_map (this)]
-      >> '"' 
-      >> *( ch_p(';') 
+      >>  ch_p(':')
+      >> ('"'
+	  >> +word_p 
+	  >> '"' ) [add_str_map (this)]
+      >> *( ';' 
 	    >> (  '"' 
 		  >> +word_p 
-		  >>   '"' 
-		  >>   ':' 
-		  >> '"' )[add_new_map(this)]
-	    >> +word_p [add_str_map(this)]
-	    >> '"' ) 
-      
-      >> !( ch_p(';') ) >> ')'
+		  >>   '"')[add_new_map(this)] 
+	    >>  ':' 
+	    >> ('"' 
+		>> +word_p 
+		>> '"' ) [add_str_map(this)] )
+	    
+      >> ';'
+      >> ')'
       ;
     parameter_name 
       = lexeme_d [ alpha_p >> *(alnum_p | (ch_p('_') | '.' | '/'))]
@@ -539,11 +540,11 @@ namespace tops {
       | parameter_name [set_parameter_value_string(this)]
       | word  [set_parameter_value_word(this)]
       | string_vector 
-      | string_map
       | transition_map
       | strict_real_p [set_parameter_value_double(this)]
       | int_p [set_parameter_value_int(this)]
       | nested_configuration [set_parameter_value_string(this)]
+      | string_map
       ;
 
     nested_parameter_spec 

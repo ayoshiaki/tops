@@ -8,128 +8,150 @@
 #include "Sequence.hpp"
 #include "Alphabet.hpp"
 #include "ContextTree.hpp"
+#include "Symbol.hpp"
 
-#include "HiddenMarkovModelCreator.hpp"
+#include "PairHiddenMarkovModelCreator.hpp"
 #include "util.hpp"
 #include <cstdarg>
 #include <vector>
 
 namespace tops{
+  class PHMMState: public HMMState {
 
-  class PairHiddenMarkovModel :   public DecodableModel{
   private:
-    HiddenMarkovModelPtr _hmm; 
-    int _gap_id;
-    void scale(std::vector<double> & in, int t);
-    std::vector<double> iterate(Sequence & obs);
+    int _emissionSeq1, _emissionSeq2;
+    IntVector _incomingTransitions, _outgoingTransitions;
+    
+  public:
+    PHMMState(){}
 
+    PHMMState(int id, SymbolPtr name, MultinomialDistributionPtr emission,  MultinomialDistributionPtr transitions, IntVector iTransitions, IntVector oTransitions, int eSeq1, int eSeq2){
+      _id = id;
+      _name = name;
+      _emission = emission;
+      _transitions = transitions;
+      _incomingTransitions = iTransitions;
+      _outgoingTransitions = oTransitions;
+      _emissionSeq1 = eSeq1;
+      _emissionSeq2 = eSeq2;
+    }
+
+    int eSeq1(){
+      return _emissionSeq1;
+    }
+
+    int eSeq2(){
+      return _emissionSeq2;
+    }
+
+    void setNumEmissionSeq1(int i){
+      _emissionSeq1 = i;
+    }
+    
+    void setNumemissionSeq2(int i){
+      _emissionSeq2 = i;
+    }
+
+    vector<int> iTransitions(){
+      return _incomingTransitions;
+    }
+
+    int getITransId(int i){
+      return _incomingTransitions[i];
+    }
+
+    vector<int> oTransitions(){
+      return _outgoingTransitions;
+    }
+
+    int getOTransId(int i){
+      return _outgoingTransitions[i];
+    }
+  };
+
+  typedef boost::shared_ptr <PHMMState> PHMMStatePtr;
+
+  class PairHiddenMarkovModel : public ProbabilisticModel{
+  private:
+    int _gap_id;
+    int _end_id;
+    int _begin_id;
+    std::vector<PHMMStatePtr> _states;
+    AlphabetPtr _state_names;
+    std::vector<PHMMStatePtr> _silent_states;
+    
   public:
     
     PairHiddenMarkovModel() {
     };
 
-    PairHiddenMarkovModel( std::vector <HMMStatePtr> states, MultinomialDistributionPtr initial_probability, AlphabetPtr state_names, AlphabetPtr observation_symbols) {
-      _hmm = HiddenMarkovModelPtr(new HiddenMarkovModel(states, initial_probability, state_names, observation_symbols));
+    PairHiddenMarkovModel( std::vector <PHMMStatePtr> states, AlphabetPtr state_names, AlphabetPtr observation_symbols) {
+      _states = states;
+      _state_names = state_names;
       tops::ProbabilisticModel::setAlphabet(observation_symbols);
     }
 
     virtual ~PairHiddenMarkovModel(){}
 
-    void setStates(std::vector<HMMStatePtr> states) {
-      _hmm->setStates(states);
-    }
+    //Forward, Backward and Viterbi algorithms. We assume there are no cycles of silent states.
+    virtual double forward(const Sequence & seq1, const Sequence & seq2, vector<Matrix> &a);
 
-    //! Choose the observation given a state 
-    //virtual Sequence &  chooseObservation ( Sequence & h, int i,  int state) const ;
+    virtual double backward(const Sequence & seq1, const Sequence & seq2, vector<Matrix> &a);
 
-    //! Choose a state
-    //virtual int chooseState(int state ) const ;
+    virtual double viterbi(const Sequence & seq1, const Sequence & seq2, Sequence & path, Sequence & al1, Sequence & al2, vector<Matrix> &a);
 
-    //! Choose first state
-    //virtual int chooseFirstState() const ;
+    virtual void posteriorProbabilities (const Sequence &seq1, const Sequence &seq2, vector<Matrix> & probabilities);
 
-    virtual AlphabetPtr getStateNames() const {
-      return _hmm->getStateNames();
-    }
+    virtual void generateSequence(Sequence &seq1, Sequence &seq2, Sequence &path);
 
-    virtual std::string getStateName(int state) const;
+    virtual void trainBaumWelch(SequenceList & sample1, SequenceList & sample2, int maxiterations, double diff_threshold);
     
-    //virtual std::string str () const ;
-    
-    virtual void setState (int id, HMMStatePtr state)
-    {
-      _hmm->setState(id, state);
-    }
-
-    virtual HMMStatePtr getState(int id) const 
-    {
-      return _hmm->getState(id);
-    }
-
-    //! Forward algorithm
-    virtual double forward(const Sequence & seq1, const Sequence & seq2, vector<Matrix> &a) const;
-    
-    //! Backward algorithm
-    //virtual double backward(const Sequence & s, Matrix &beta) const;
-    
-    //! Viterbi algorithm
-    //virtual double viterbi (const Sequence &s, Sequence &path, Matrix & gamma) const ;
-    
-    //! Posterior Probabilities: P(yi=k|x)
-    //virtual void posteriorProbabilities (const Sequence &s, Matrix & probabilities) const;
-
-    //! Posterior Decoding: ^yi = argmax_k P(yi=k|x)
-    //virtual void posteriorDecoding (const Sequence &s, Sequence &path, Matrix & probabilities) const;
-
-    virtual double forward(const Sequence & s, Matrix &alpha) const{
-      cerr << "For pairHMM this algorithm needs two input sequences." << endl; 
-      exit(-1);
-    }
-
-    //! Backward algorithm
-    virtual double backward(const Sequence & s, Matrix &beta) const {
-      cerr << "For pairHMM this algorithm needs two input sequences." << endl;
-      exit(-1);
-    }
-
-    //! Viterbi algorithm
-    virtual double viterbi (const Sequence &s, Sequence &path, Matrix & gamma) const {
-      cerr << "For pairHMM this algorithm needs two input sequences." << endl;
-      exit(-1);
-    }
-    
-    //! Posterior Probabilities: P(yi=k|x)
-    virtual void posteriorProbabilities (const Sequence &s, Matrix & probabilities) const {
-      cerr << "For pairHMM this algorithm needs two input sequences." << endl;
-      exit(-1);
-    }
-    
-    //! Posterior Decoding: ^yi = argmax_k P(yi=k|x)
-    virtual void posteriorDecoding (const Sequence &s, Sequence &path, Matrix & probabilities) const {
-      cerr << "For pairHMM this algorithm needs two input sequences." << endl;
-      exit(-1);
-    }
-
     virtual std::string model_name() const {
       return "PairHiddenMarkovModel";
     }
-    /*virtual ProbabilisticModelCreatorPtr getFactory() const {
-      return PairHiddenMarkovModelCreatorPtr(new PairHiddenMarkovModelCreator());
-      }*/
-    virtual DecodableModel * decodable()  {
-      return this;
-    }
-    //virtual void trainBaumWelch (SequenceList & training_set, int maxiterations, double diff) ;
     
+    virtual ProbabilisticModelCreatorPtr getFactory() const {
+      return PairHiddenMarkovModelCreatorPtr(new PairHiddenMarkovModelCreator());
+    }
+
     virtual void initialize(const ProbabilisticModelParameters & par) ;
 
-    //virtual ProbabilisticModelParameters parameters() const ;
+    void setStates(std::vector<PHMMStatePtr> states, AlphabetPtr state_names){
+      _states = states;
+      _state_names = state_names;
+    }
 
-    void setInitialProbability(MultinomialDistributionPtr initial) ;
-    void setObservationSymbols(AlphabetPtr obs) ;
-    void setStates(std::vector<HMMStatePtr> states, AlphabetPtr state_names) ;
+    void setObservationSymbols(AlphabetPtr obs){
+      tops::ProbabilisticModel::setAlphabet(obs);
+    }
+    
+    void setSilentStates(std::vector<PHMMStatePtr> states){
+      _silent_states = states;
+    }
 
-    virtual double getEmission(const Sequence & seq1, const Sequence & seq2, int state_id, int seq1Pos, int seq2Pos, int* state_type) const;
+    PHMMStatePtr getPHMMState(int id){
+      return _states[id];
+    }
+
+    int getSilentId(int k){
+      return _silent_states[k]->getId();
+    }
+
+    virtual AlphabetPtr getStateNames() const {
+      return _state_names;
+    }
+
+    virtual string getStateName(int state) const{
+      return _state_names->getSymbol(state)->name();
+    }
+
+    std::string str ();
+
+    void silentStatesSort(vector<PHMMStatePtr> silStates);
+
+    virtual PairHiddenMarkovModel * pairDecodable() {
+      return this;
+    }
 
   };
 

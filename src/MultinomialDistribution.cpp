@@ -55,14 +55,14 @@ namespace tops {
     double sum = 0;
     for(int i = 0; i < size1; i++){
       for(int j = 0; j < size2; j++){
+	if(close(probabilities(i,j), 0.0, 1e-10))
+	  continue;
 	sum += probabilities(i,j);
       }
     }
     for(int i = 0; i < size1; i++){
       for(int j = 0; j < size2; j++){
-	if(i >= size1 || j >= size2)
-	  _log_probabilities_matrix(i,j) = -HUGE;
-	else if(close(probabilities(i,j), 0.0, 1e-10))
+	if(close(probabilities(i,j), 0.0, 1e-10))
 	  _log_probabilities_matrix(i,j) = -HUGE;
 	else
 	  _log_probabilities_matrix(i,j) = log(probabilities(i,j)/sum);
@@ -117,6 +117,11 @@ namespace tops {
     return log_probability_of(s);
   }
 
+  double MultinomialDistribution::log_probability_of_pair(int s1, int s2, double new_value) {
+    _log_probabilities_matrix(s1,s2) = new_value;
+    return log_probability_of_pair(s1,s2);
+  }
+
   int MultinomialDistribution::size() const
   {
     return _size;
@@ -138,21 +143,24 @@ namespace tops {
 
   void MultinomialDistribution::choosePair(int* a, int* b) const {
     double random = ((double)rand())/ ((double) RAND_MAX + 1.0) ;
-    int result1, result2;
+    int result1 = 0;
+    int result2 = 0;
     for(result1 = 0; result1 < (int)_log_probabilities_matrix.size1(); result1++){
       for(result2 = 0; result2 < (int)_log_probabilities_matrix.size2(); result2++){
 	random -= exp(_log_probabilities_matrix(result1,result2));
 	if(random <= 0)
 	  break;
       }
+      if(random <= 0)
+	break;
     }
     if(result1 >= (int)_log_probabilities_matrix.size1() && result2 >= (int)_log_probabilities_matrix.size2()){
-      *a = result1 - 1;
-      *b = result2 - 1;
+      *a = (result1 - 1);
+      *b = (result2 - 1);
     }
     else{
-    *a = result1;
-    *b = result2;
+      *a = result1;
+      *b = result2;
     }
   }
 
@@ -181,6 +189,19 @@ namespace tops {
     return out.str();
   }
   
+  void MultinomialDistribution::strMatrix () const {
+    if(_log_probabilities_matrix.size1() > 0){	
+      for(int i = 0; i < (int)_log_probabilities_matrix.size1(); i++){
+	for(int j = 0; j < (int)_log_probabilities_matrix.size2(); j++){
+	  if(j == (int)_log_probabilities_matrix.size2() -1)
+	    std::cout << exp(_log_probabilities_matrix(i,j)) << endl;
+	  else
+	    std::cout << exp(_log_probabilities_matrix(i,j)) << " ";
+	}
+      }
+      cout << endl << endl;
+    }
+  }
   
   void MultinomialDistribution::initializeFromMap(const std::map <std::string, double> & probabilities, AlphabetPtr alphabet) 
   {
