@@ -128,7 +128,7 @@ namespace tops {
         }
       }
 
-    return log(sum/(_normalizer  + 1e-4 * (pow(4, psize-_skip_length ))));
+    return log(sum/(_normalizer  + 1e-4 * (pow((double)4, (double)(psize-_skip_length) ))));
   }
   void SimilarityBasedSequenceWeighting::initialize (const ProbabilisticModelParameters & p )
   {
