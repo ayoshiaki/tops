@@ -29,6 +29,7 @@
 #include "VariableLengthMarkovChainCreator.hpp"
 #include "InhomogeneousMarkovChainCreator.hpp"
 #include "HiddenMarkovModelCreator.hpp"
+#include "PairHiddenMarkovModelCreator.hpp"
 #include "GeneralizedHiddenMarkovModelCreator.hpp"
 #include "TargetModelCreator.hpp"
 #include "SmoothedHistogramKernelDensity.hpp"
@@ -279,6 +280,8 @@ namespace tops
       InhomogeneousMarkovChainCreatorPtr(new InhomogeneousMarkovChainCreator());
     _createModelCommand["HiddenMarkovModel"] =
       HiddenMarkovModelCreatorPtr(new HiddenMarkovModelCreator());
+    _createModelCommand["PairHiddenMarkovModel"] =
+      PairHiddenMarkovModelCreatorPtr(new PairHiddenMarkovModelCreator());
     _createModelCommand["GeneralizedHiddenMarkovModel"] =
       GeneralizedHiddenMarkovModelCreatorPtr(new GeneralizedHiddenMarkovModelCreator());
     _createModelCommand["Bernoulli"] =

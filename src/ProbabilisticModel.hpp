@@ -37,6 +37,7 @@
 
 namespace tops {
   class DecodableModel;
+  class PairHiddenMarkovModel;
   class FactorableModel;
   class InhomogeneousFactorableModel;
   class ProbabilisticModelCreator;
@@ -218,6 +219,11 @@ namespace tops {
     }
     virtual DecodableModel* decodable() {
         //      not_implemented("decodable()");
+      return NULL;
+    }
+
+    virtual PairHiddenMarkovModel* pairDecodable() {
+      not_implemented("pairDecodable()");
       return NULL;
     }
 
