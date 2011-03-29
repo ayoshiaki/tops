@@ -36,6 +36,7 @@ namespace tops {
   typedef std::vector <double> DoubleVector;
   typedef std::vector <int> IntVector;
   typedef boost::numeric::ublas::matrix<double> Matrix;
+  typedef boost::numeric::ublas::matrix<int> IntMatrix;
   typedef std::vector <std::string> StringVector;
   typedef std::map <std::string, std::string> StringMap;
 

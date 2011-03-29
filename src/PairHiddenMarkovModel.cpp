@@ -11,9 +11,7 @@
 #include <stdio.h>
 #include <algorithm>
 
-namespace tops {
-
-  
+namespace tops {  
 
   std::string PairHiddenMarkovModel::str ()
   {
