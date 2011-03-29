@@ -37,7 +37,7 @@
 namespace tops {
 
   class HMMState {
-  private:
+  protected:
     int _id;
     SymbolPtr _name;
     MultinomialDistributionPtr _emission;
