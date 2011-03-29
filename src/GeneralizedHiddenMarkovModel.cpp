@@ -68,11 +68,13 @@ namespace tops {
     }
      else
         {
+
           ProbabilisticModelPtr m = creator.create(cfg);
           if (m == NULL) {
             std::cerr << "Can not load model " << cfg << "! " << std::endl;
             return;
           }
+
           _models[model_name] = m;
         }
   }
@@ -307,7 +309,7 @@ double GeneralizedHiddenMarkovModel::backward(const Sequence & s, Matrix &b) con
 }
 
   void GeneralizedHiddenMarkovModel::initialize_prefix_sum_arrays(const Sequence & s) const {
-#if 0
+#if 1
     struct timeval start, stop;
     gettimeofday(&start, (struct timezone *) NULL);
 #endif
@@ -315,7 +317,7 @@ double GeneralizedHiddenMarkovModel::backward(const Sequence & s, Matrix &b) con
     for (int i = 0; i < (int) _all_states.size(); i++) {
       _all_states[i]->observation()->initialize_prefix_sum_array(s);
     }
-#if 0
+#if 1
     gettimeofday(&stop, (struct timezone *)NULL);
     stop.tv_sec -= start.tv_sec;
     stop.tv_usec -= start.tv_usec;
@@ -323,7 +325,7 @@ double GeneralizedHiddenMarkovModel::backward(const Sequence & s, Matrix &b) con
       stop.tv_sec --;
       stop.tv_usec += 1000000;
     }
-    fprintf(stderr, "Elapsed time %ld%c%02d seconds\n", stop.tv_sec, '.', stop.tv_usec/1000);
+    fprintf(stderr, "PSA Elapsed time %ld%c%02d seconds\n", stop.tv_sec, '.', stop.tv_usec/1000);
 #endif
 
   }
@@ -496,13 +498,15 @@ double GeneralizedHiddenMarkovModel::viterbi(const Sequence &s, Sequence &path,
 
   for(int i = 1; i < size; i++){
       for(int k = 0; k < nstates; k++){
+
           gamma(k, i) = -HUGE;
-          _all_states[k]->findBestPredecessor (gamma, psi, psilen,  s, i, _all_states, valid_positions);
           possible_path[k] = 1;
+          _all_states[k]->findBestPredecessor (gamma, psi, psilen,  s, i, _all_states, valid_positions);
           if(gamma(k,i) <= -HUGE)
               {
                   possible_path[k] = 0;
               }
+
       }
 
       for(int s = 0; s < (int)possible_path.size(); s++)

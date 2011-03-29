@@ -82,7 +82,7 @@ namespace tops{
 
                       if(m < 0)
                           continue;
-                      if((m + o) >= (sample_set[j]->getSequence()).size())
+                      if((m + o) >= (int)(sample_set[j]->getSequence()).size())
                           continue;
 
 
@@ -110,9 +110,10 @@ namespace tops{
                       positionalSample.push_back(entry);
                   }
           }
-        if(fixseq && (fixed_pos <= i) && (((int)fixed.size() - ((int)i - (int)fixed_pos +1))>= 0)){
+        if(fixseq && (fixed_pos <= i) && ((int)i <= ((int)fixed_pos + (int)fixed.size() - 1))){
             ContextTreePtr tree = ContextTreePtr(new ContextTree(alphabet));
             tree->initializeCounter(positionalSample, o, 0);
+            tree->normalize();
             positional_distribution[i] = tree;
         } else {
             ContextTreePtr tree = ContextTreePtr(new ContextTree(alphabet));
@@ -123,9 +124,11 @@ namespace tops{
             } else {
                 tree->initializeCounter(positionalSample, o, pseudocounts);
                 tree->normalize();
+
             }
             positional_distribution[i] = tree;
         }
+
       }
     InhomogeneousMarkovChainPtr model = InhomogeneousMarkovChainPtr(new    InhomogeneousMarkovChain());
     model->setPositionSpecificDistribution(positional_distribution);
@@ -136,7 +139,11 @@ namespace tops{
     for(int j = 0; j < (int)sample_set.size(); j++)
         {
         sample_size += (sample_set[j]->getSequence()).size();
-        loglikelihood += model->evaluate((sample_set[j]->getSequence()), 0, (sample_set[j]->getSequence()).size()-1);
+        double v = model->evaluate((sample_set[j]->getSequence()), 0, (sample_set[j]->getSequence()).size()-1);
+        if (v <= -HUGE)
+            continue;
+
+        loglikelihood += v;
       }
     return model;
 
