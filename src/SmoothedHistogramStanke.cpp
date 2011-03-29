@@ -77,9 +77,6 @@ namespace tops {
 
     if(data.size() > 0)
       {
-          for(int i = 0; i < data.size(); i++){
-              counter[i] += 1.0;
-          }
           for(int i = 0; i < (int)data.size(); i++){
               if(counter.find((long)data[i]) == counter.end())
                   counter[(long)data[i]] = 1.0;
@@ -131,7 +128,7 @@ namespace tops {
                 j++;
               }
             }
-#if 0
+#if 1
         double total = 0;
         for (long k = 1; k < (int)pi.size(); k++){
             total += pi[k];
@@ -143,15 +140,11 @@ namespace tops {
 #endif
       }
     ProbabilisticModelParameters pars;
-    pars.add("probabilities", ProbabilisticModelParameterValuePtr (new DoubleVectorParameterValue(pi)));
+    pars.add("probabilities", ProbabilisticModelParameterValuePtr (new DoubleVectorParameterValue(prob)));
     pars.add("alphabet", alpha->getParameterValue());
     MultinomialDistributionPtr result =
       MultinomialDistributionPtr(new MultinomialDistribution());
     result->initialize(pars);
-    for (int i = 0; i < pi.size(); i++)
-        {
-            result->log_probability_of(i, log(pi[i]/data.size()));
-        }
     return result;
   }
 

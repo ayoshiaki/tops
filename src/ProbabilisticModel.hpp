@@ -180,6 +180,7 @@ namespace tops {
     }
 
     virtual double prefix_sum_array_compute(int begin , int end) {
+        std::cerr << "WARNING: " << model_name() << " does not implement prefix_sum_array " << std::endl;
       return evaluate(_last, begin, end);
     }
 

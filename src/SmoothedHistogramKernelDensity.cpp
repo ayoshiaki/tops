@@ -74,6 +74,7 @@ namespace tops {
           total += integral;
         }
       }
+
     DoubleVector prob;
     prob.resize(max+2);
     for (int k = 0; k <= max; k++){

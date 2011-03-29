@@ -8,6 +8,8 @@ find_package(Boost 1.35 COMPONENTS program_options)
 # find_package(PerlLibs)
 
 ADD_DEFINITIONS("-Wall  -O3 -finline-functions -funroll-loops -ftree-vectorize -ffast-math  -g")
+# ADD_DEFINITIONS("-Wall -g")
+
 SET(BOOST_REGEX_LIBRARY ${Boost_REGEX_LIBRARY})
 SET(BOOST_PROGRAM_OPTIONS_LIBRARY ${Boost_PROGRAM_OPTIONS_LIBRARY})
 FIND_LIBRARY(BOOST_REGEX_LIBRARY boost_regex-mt PATHS ${Boost_LIBRARY_DIRS} )

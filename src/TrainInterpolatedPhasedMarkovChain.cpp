@@ -159,14 +159,15 @@ namespace tops {
                 }
 
             ContextTreePtr tree = ContextTreePtr(new ContextTree(alphabet));
-            tree->initializeCounter(positionalSample, order, pseudocounts);
-            tree->pruneTreeSmallSampleSize(400);
 
             if(apriori != NULL){
-                tree->initializeCounter(sample_set, orderpar->getInt(), 0);
-                tree->normalize(apriori, pseudocounts);
+                tree->initializeCounter(positionalSample, order, 0);
+                tree->pruneTreeSmallSampleSize(400);
+                tree->normalize(apriori, pseudocounts, i);
+
             } else {
-                tree->initializeCounter(sample_set, orderpar->getInt(), pseudocounts);
+                tree->initializeCounter(positionalSample, order, pseudocounts);
+                tree->pruneTreeSmallSampleSize(400);
                 tree->normalize();
             }
 

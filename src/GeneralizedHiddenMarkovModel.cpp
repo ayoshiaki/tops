@@ -585,7 +585,7 @@ void GeneralizedHiddenMarkovModel::posteriorDecoding (const Sequence &s, Sequenc
 //! Choose the observation given a state
 Sequence & GeneralizedHiddenMarkovModel::chooseObservation(Sequence & h, int i,
                 int state) const {
-  assert(state < (int)_all_states.size());
+  assert(state >= 0 && state < (int)_all_states.size());
   int d = _all_states[state]->chooseDuration();
   int iphase = _all_states[state]->getInputPhase();
   _all_states[state]->observation()->chooseWithHistory(h, i, iphase, d);
@@ -594,7 +594,7 @@ Sequence & GeneralizedHiddenMarkovModel::chooseObservation(Sequence & h, int i,
 
   //! Choose a state
   int GeneralizedHiddenMarkovModel::chooseState(int state) const {
-    return _all_states[state]->transition()->choose();
+      return _all_states[state]->transition()->choose();
   }
 
   //! Choose the initial state
@@ -895,7 +895,12 @@ Sequence & GeneralizedHiddenMarkovModel::chooseObservation(Sequence & h, int i,
 
     fixStatesPredecessorSuccessor();
 
-
+    for (int i = 0; i < (int)_all_states.size(); i++)
+        if (_all_states[i]->transition()->size() <= 0)
+            {
+                std::cerr << "ERROR: GHMM initialization, state " << _all_states[i]->name() << " has outdegree equal a zero !\n";
+                exit(-1);
+            }
   }
 
 }

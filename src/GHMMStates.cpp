@@ -521,6 +521,7 @@ namespace tops{
                 it = (valid_positions.find(id())->second).erase(it);
                 continue;
             }
+
             if(base-d+1 >= offset)
                 {
                     it = (valid_positions.find(id())->second).erase(it);

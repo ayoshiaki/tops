@@ -315,6 +315,10 @@ namespace tops
 
     void ContextTree::normalize(ProbabilisticModelPtr old, double pseudocount, int t)
     {
+        if(old == NULL){
+            std::cerr << "ERROR: ContextTree -> a priori model is null !" << std::endl;
+            exit(-1);
+        }
     std::vector <ContextTreeNodePtr> newAllVector;
     for(int i = 0; i  < (int)_all_context.size(); i++)
       {
@@ -323,13 +327,17 @@ namespace tops
 
         Sequence s;
         ContextTreeNodePtr current = _all_context[i];
-
-        while (current != getRoot()) {
+        bool valid = true;
+        while (current != getRoot() ) {
             s.push_back (current->symbol());
+            if(current->getParent() < 0) {
+                valid = false;
+                break;
+            }
             current = _all_context[current->getParent()];
-
         }
-
+        if(!valid)
+            continue;
 
         for(int l = 0; l < (int)_alphabet->size(); l++) {
             total += (double)(_all_context[i]->getCounter())[l];

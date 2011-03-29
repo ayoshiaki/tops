@@ -61,14 +61,14 @@ ProbabilisticModelPtr TrainInterpolatedMarkovChain::create(
         SequenceEntryList sample_set;
         readSequencesFromFile(sample_set, alphabet, trainpar->getString());
         ContextTreePtr tree = ContextTreePtr(new ContextTree(alphabet));
-        tree->initializeCounter(sample_set, orderpar->getInt(), pseudocounts);
-        tree->pruneTreeSmallSampleSize(400);
 
         if(apriori != NULL ){
             tree->initializeCounter(sample_set, orderpar->getInt(), 0);
-            tree->normalize(apriori, pseudocounts);
+            tree->pruneTreeSmallSampleSize(400);
+            tree->normalize(apriori, pseudocounts, 0);
         } else {
             tree->initializeCounter(sample_set, orderpar->getInt(), pseudocounts);
+            tree->pruneTreeSmallSampleSize(400);
             tree->normalize();
         }
 
