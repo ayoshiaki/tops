@@ -130,11 +130,11 @@ namespace tops {
             }
 #if 1
         double total = 0;
-        for (long k = 1; k < (int)pi.size(); k++){
+        for (long k = 0; k < (int)pi.size(); k++){
             total += pi[k];
         }
         prob.resize(L);
-        for (long k = 1; k < (int)pi.size(); k++){
+        for (long k = 0; k < (int)pi.size(); k++){
             prob[k] =  pi[k]/(total) ;
         }
 #endif
