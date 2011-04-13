@@ -393,7 +393,7 @@ namespace tops
       double weight = 1.0;
       if (weights.find(seqname) != weights.end())
 	weight = (weights.find(seqname)->second);
-
+      // std::cerr << seqname << " with weight " << weight << std::endl;
       for( int i = order; i < (int)(sequences[l]->getSequence()).size(); i++)
         {
           int currentSymbol = (sequences[l]->getSequence())[i];

@@ -93,6 +93,7 @@ namespace tops {
             for(int j = 0; j < (int)sample_set.size(); j++)
                 {
                     int nseq = 0;
+                    std::string name = sample_set[j]->getName();
                     while(true)
                         {
                             int start = (length) * nseq - order + i;
@@ -108,6 +109,7 @@ namespace tops {
                                 s.push_back((sample_set[j]->getSequence())[k]);
                             SequenceEntryPtr entry = SequenceEntryPtr (new SequenceEntry(alphabet));
                             entry->setSequence(s);
+                            entry->setName(name);
                             positionalSample.push_back(entry);
                             nseq++;
                         }
@@ -120,6 +122,7 @@ namespace tops {
             for(int j = 0; j < (int)sample_set_1.size(); j++)
                 {
                     int nseq = 0;
+                    std::string name = sample_set_1[j]->getName();
                     while(true)
                         {
                             int start = (length) * nseq - order + i -1;
@@ -135,6 +138,7 @@ namespace tops {
                                 s.push_back((sample_set_1[j]->getSequence())[k]);
                             SequenceEntryPtr entry = SequenceEntryPtr (new SequenceEntry(alphabet));
                             entry->setSequence(s);
+                            entry->setName(name);
                             positionalSample.push_back(entry);
                             nseq++;
                         }
@@ -143,6 +147,7 @@ namespace tops {
             for(int j = 0; j < (int)sample_set_2.size(); j++)
                 {
                     int nseq = 0;
+                    std::string name = sample_set_2[j]->getName();
                     while(true)
                         {
                             int start = (length) * nseq - order + i -2;
@@ -158,6 +163,7 @@ namespace tops {
                                 s.push_back((sample_set_2[j]->getSequence())[k]);
                             SequenceEntryPtr entry = SequenceEntryPtr (new SequenceEntry(alphabet));
                             entry->setSequence(s);
+                            entry->setName(name);
                             positionalSample.push_back(entry);
                             nseq++;
                         }
