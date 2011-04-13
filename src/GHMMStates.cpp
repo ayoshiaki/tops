@@ -502,7 +502,10 @@ namespace tops{
             int from = predecessors()[0];
             if((base - d ) < 0)
                 return;
-
+ 	    if(duration_probability(base -d + 1) <= -HUGE) {
+                it++;
+                continue;
+            }
             double gmax = gamma(from, d-1) + all_states[from]->transition()->log_probability_of(id());
             int pmax = from;
             for (int p = 1; p < (int)predecessors().size();p++){
