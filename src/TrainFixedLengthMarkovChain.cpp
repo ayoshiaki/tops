@@ -25,6 +25,7 @@
 #include "ContextTree.hpp"
 #include "VariableLengthMarkovChain.hpp"
 #include "ProbabilisticModelCreatorClient.hpp"
+#include <map>
 #include "util.hpp"
 namespace tops {
 
@@ -39,7 +40,15 @@ ProbabilisticModelPtr TrainFixedLengthMarkovChain::create(
                         parameters.getMandatoryParameterValue("alphabet");
         ProbabilisticModelParameterValuePtr pseudocountspar = parameters.getOptionalParameterValue("pseudo_counts");
         ProbabilisticModelParameterValuePtr aprioripar = parameters.getOptionalParameterValue("apriori");
-        double pseudocounts = 0;
+	ProbabilisticModelParameterValuePtr weightspar = parameters.getOptionalParameterValue("weights");
+	std::map <std::string, double> weights;
+	if(weightspar != NULL) {
+	  readMapFromFile(weights, weightspar->getString());
+	}
+
+	
+
+	double pseudocounts = 0;
         ProbabilisticModelPtr apriori;
         if(aprioripar != NULL)
             {
@@ -61,11 +70,11 @@ ProbabilisticModelPtr TrainFixedLengthMarkovChain::create(
         ContextTreePtr tree = ContextTreePtr(new ContextTree(alphabet));
 
         if(apriori != NULL ){
-            tree->initializeCounter(sample_set, orderpar->getInt(), 0);
-            tree->normalize(apriori, pseudocounts);
+	  tree->initializeCounter(sample_set, orderpar->getInt(), 0, weights);
+	  tree->normalize(apriori, pseudocounts);
         } else {
-            tree->initializeCounter(sample_set, orderpar->getInt(), pseudocounts);
-            tree->normalize();
+	  tree->initializeCounter(sample_set, orderpar->getInt(), pseudocounts, weights);
+	  tree->normalize();
         }
 
         VariableLengthMarkovChainPtr m = VariableLengthMarkovChainPtr(

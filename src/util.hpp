@@ -89,7 +89,8 @@ namespace tops {
     /* interquantile */
   double iqr (const DoubleVector &data);
 
-
+  //! reads a table with two column, the first column is a key, and the second column is a double value.
+  void readMapFromFile(std::map<std::string, double> & s, std::string  file_name);
 
 
 }

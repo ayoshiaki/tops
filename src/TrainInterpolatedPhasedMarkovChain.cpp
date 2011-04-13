@@ -45,6 +45,11 @@ namespace tops {
             parameters.getMandatoryParameterValue("number_of_phases");
         ProbabilisticModelParameterValuePtr pseudocountspar = parameters.getOptionalParameterValue("pseudo_counts");
         ProbabilisticModelParameterValuePtr aprioripar = parameters.getOptionalParameterValue("apriori");
+	ProbabilisticModelParameterValuePtr weightspar = parameters.getOptionalParameterValue("weights");
+	std::map <std::string, double> weights;
+	if(weightspar != NULL) {
+	  readMapFromFile(weights, weightspar->getString());
+	}
 
         double pseudocounts = 0;
         if(pseudocountspar != NULL)
@@ -161,12 +166,12 @@ namespace tops {
             ContextTreePtr tree = ContextTreePtr(new ContextTree(alphabet));
 
             if(apriori != NULL){
-                tree->initializeCounter(positionalSample, order, 0);
+	      tree->initializeCounter(positionalSample, order, 0, weights);
                 tree->pruneTreeSmallSampleSize(400);
                 tree->normalize(apriori, pseudocounts, i);
 
             } else {
-                tree->initializeCounter(positionalSample, order, pseudocounts);
+	      tree->initializeCounter(positionalSample, order, pseudocounts, weights);
                 tree->pruneTreeSmallSampleSize(400);
                 tree->normalize();
             }
