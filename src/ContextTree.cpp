@@ -86,6 +86,11 @@ namespace tops
     _counter[s] += 1.0;
   }
 
+  void ContextTreeNode::addCount (int s, double weight) {
+    _counter[s] += weight;
+  }
+
+
   void ContextTreeNode::setCount (int s, double v) {
     _counter[s] = v;
   }
@@ -366,11 +371,12 @@ namespace tops
     return out.str();
   }
 
-  void ContextTree::initializeCounter(const SequenceEntryList & sequences, int order)
+  void ContextTree::initializeCounter(const SequenceEntryList & sequences, int order, const std::map<std::string, double> & weights)
   {
-    initializeCounter(sequences, order,0);
+    initializeCounter(sequences, order,0, weights);
   }
-  void ContextTree::initializeCounter(const SequenceEntryList & sequences, int order, double pseudocounts)
+
+  void ContextTree::initializeCounter(const SequenceEntryList & sequences, int order, double pseudocounts, const std::map<std::string, double> & weights)
   {
     if (order < 0) order = 0;
 
@@ -383,6 +389,11 @@ namespace tops
     }
 
     for ( int l = 0; l < (int)sequences.size(); l ++){
+      std::string seqname = sequences[l]->getName();
+      double weight = 1.0;
+      if (weights.find(seqname) != weights.end())
+	weight = (weights.find(seqname)->second);
+
       for( int i = order; i < (int)(sequences[l]->getSequence()).size(); i++)
         {
           int currentSymbol = (sequences[l]->getSequence())[i];
@@ -390,7 +401,7 @@ namespace tops
 
           ContextTreeNodePtr w = getRoot();
 
-          w->addCount(currentSymbol);
+          w->addCount(currentSymbol, weight);
 
           while((j >= 0) &&  ((i - j) <= order))
             {
@@ -411,7 +422,7 @@ namespace tops
               }
 
 
-              w->addCount(currentSymbol);
+              w->addCount(currentSymbol, weight);
               j -- ;
             }
         }

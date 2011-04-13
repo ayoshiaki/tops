@@ -19,6 +19,13 @@ namespace tops{
     ProbabilisticModelParameterValuePtr fixseqpospar = parameters.getOptionalParameterValue("fixed_sequence_position");
     ProbabilisticModelParameterValuePtr aprioripar = parameters.getOptionalParameterValue("apriori");
 
+	ProbabilisticModelParameterValuePtr weightspar = parameters.getOptionalParameterValue("weights");
+	std::map <std::string, double> weights;
+	if(weightspar != NULL) {
+	  readMapFromFile(weights, weightspar->getString());
+	}
+
+
     if((alphabetpar == NULL) ||
        (trainingsetpar == NULL) ||
        (lengthpar == NULL) ||
@@ -112,17 +119,17 @@ namespace tops{
           }
         if(fixseq && (fixed_pos <= i) && ((int)i <= ((int)fixed_pos + (int)fixed.size() - 1))){
             ContextTreePtr tree = ContextTreePtr(new ContextTree(alphabet));
-            tree->initializeCounter(positionalSample, o, 0);
+            tree->initializeCounter(positionalSample, o, 0, weights);
             tree->normalize();
             positional_distribution[i] = tree;
         } else {
             ContextTreePtr tree = ContextTreePtr(new ContextTree(alphabet));
 
             if(apriori != NULL  && apriori->factorable() != NULL){
-                tree->initializeCounter(positionalSample, o, pseudocounts);
+	      tree->initializeCounter(positionalSample, o, pseudocounts, weights);
                 tree->normalize(apriori, pseudocounts);
             } else {
-                tree->initializeCounter(positionalSample, o, pseudocounts);
+	      tree->initializeCounter(positionalSample, o, pseudocounts, weights);
                 tree->normalize();
 
             }

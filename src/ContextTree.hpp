@@ -53,10 +53,14 @@ namespace tops {
     //! Default constructor
     ContextTreeNode() ;
 
-    //! Add a count for the symbol s
+    //! Add a count to the symbol s
     void addCount (int s);
 
-    //! Add v to the  counter for the symbol s
+    //! Add a count w to the symbol s
+    void addCount (int s, double w);
+
+
+    //! Add v to the  counter to the symbol s
     void setCount (int s, double v);
 
     //! get the counter
@@ -152,9 +156,9 @@ namespace tops {
 
     std::string str() const;
 
-    void initializeCounter(const SequenceEntryList & sequences, int order);
+    void initializeCounter(const SequenceEntryList & sequences, int order, const std::map<std::string, double> & weights);
 
-    void initializeCounter(const SequenceEntryList & sequences, int order, double pseudocounts);
+    void initializeCounter(const SequenceEntryList & sequences, int order, double pseudocounts, const std::map<std::string, double> & weights);
 
     //! Prune similar subtrees
     void pruneTree(double delta) ;

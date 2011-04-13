@@ -178,6 +178,31 @@ namespace tops {
     input.close();
   }
 
+  void readMapFromFile(std::map<std::string, double> & s,
+		       std::string  file_name)
+  {
+    std::ifstream input(file_name.c_str());
+    if(!input.good())
+      {
+        std::cerr << "Can not open file " << file_name << std::endl;
+        exit(-1);
+      }
+    std::string line;
+    while(!input.eof())
+      {
+	std::getline(input, line, '\n');
+	std::vector <std::string> x;
+	boost::regex separator("\t");
+	split_regex(line, x, separator);
+	if(x.size() >= 2) {
+	  std::string key = x[0];
+	  int value = atof((x[1]).c_str());
+	  s[key] = value;
+	}
+      }
+    input.close();
+  }
+
 
 
   int mod(int D, int d) {

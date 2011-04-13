@@ -45,6 +45,11 @@ ProbabilisticModelPtr TrainPhasedMarkovChain::create(
           parameters.getMandatoryParameterValue("number_of_phases");
     ProbabilisticModelParameterValuePtr pseudocountspar = parameters.getOptionalParameterValue("pseudo_counts");
         ProbabilisticModelParameterValuePtr aprioripar = parameters.getOptionalParameterValue("apriori");
+	ProbabilisticModelParameterValuePtr weightspar = parameters.getOptionalParameterValue("weights");
+	std::map <std::string, double> weights;
+	if(weightspar != NULL) {
+	  readMapFromFile(weights, weightspar->getString());
+	}
 
     double pseudocounts = 0;
     if(pseudocountspar != NULL)
@@ -101,11 +106,11 @@ ProbabilisticModelPtr TrainPhasedMarkovChain::create(
                 ContextTreePtr tree = ContextTreePtr(new ContextTree(alphabet));
 
                 if(apriori != NULL){
-                    tree->initializeCounter(sample_set, orderpar->getInt(), 0);
+		  tree->initializeCounter(sample_set, orderpar->getInt(), 0, weights);
                     tree->normalize(apriori, pseudocounts, i);
                 } else {
 
-                    tree->initializeCounter(sample_set, orderpar->getInt(), pseudocounts);
+		  tree->initializeCounter(sample_set, orderpar->getInt(), pseudocounts, weights);
                     tree->normalize();
                 }
 
