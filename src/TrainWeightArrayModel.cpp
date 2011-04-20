@@ -114,6 +114,7 @@ namespace tops{
 
                       SequenceEntryPtr entry = SequenceEntryPtr(new SequenceEntry(alphabet));
                       entry->setSequence(s);
+                      entry->setName(sample_set[j]->getName());
                       positionalSample.push_back(entry);
                   }
           }
