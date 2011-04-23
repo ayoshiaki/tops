@@ -495,18 +495,30 @@ namespace tops{
 
         std::list<int>::iterator it;
         it =  (valid_positions.find(id())->second).begin();
-	//	std::cerr << base << " " << all_states[id()]->name() << " " << (valid_positions.find(id())->second).size() << std::endl;
+        //      std::cerr << base << " " << all_states[id()]->name() << " " << (valid_positions.find(id())->second).size() << std::endl;
         while(it != (valid_positions.find(id())->second).end()) {
             int d = (*it)+ 1;
             if(predecessors().size() <= 0)
-	      return;
+              return;
             int from = predecessors()[0];
             if((base - d ) < 0)
-	      return;
-	    if(duration_probability(base-d+1) <= -HUGE) {
-	      it++;
-	      continue;
-	    }
+              return;
+            if(base-d+1 >= offset)
+                {
+                    it = (valid_positions.find(id())->second).erase(it);
+                    continue;
+                }
+            if(duration_probability(base-d+1) <= -HUGE) {
+              it++;
+              continue;
+            }
+
+            double emission = observation()->prefix_sum_array_compute(d, base, getInputPhase());
+            if(emission <= -HUGE) {
+                it = (valid_positions.find(id())->second).erase(it);
+                continue;
+            }
+
             double gmax = gamma(from, d-1) + all_states[from]->transition()->log_probability_of(id());
             int pmax = from;
             for (int p = 1; p < (int)predecessors().size();p++){
@@ -517,22 +529,8 @@ namespace tops{
                     pmax = from;
                 }
             }
-            int phase = getInputPhase();
 
-
-            double emission = observation()->prefix_sum_array_compute(d, base, phase);
-            if(emission <= -HUGE) {
-                it = (valid_positions.find(id())->second).erase(it);
-                continue;
-            }
-
-            if(base-d+1 >= offset)
-                {
-                    it = (valid_positions.find(id())->second).erase(it);
-                    continue;
-                }
-            gmax = gmax +  duration_probability(base-d+1) + observation()->prefix_sum_array_compute(d, base, phase);
-
+            gmax = gmax +  duration_probability(base-d+1) + observation()->prefix_sum_array_compute(d, base, getInputPhase());
 
             if(gamma(id(), base) < gmax){
                 gamma(id(), base) = gmax;
