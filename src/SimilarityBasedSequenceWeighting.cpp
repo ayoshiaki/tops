@@ -100,7 +100,7 @@ namespace tops {
     std::string q = qstream.str();
     int psize = 0;
     std::map<std::string, double>::const_iterator it;
-    double sum = 1e-4;
+    double sum = 0;
     for(it = _counter.begin(); it != _counter.end();  it++)
       {
           std::string q2 = it->first;
@@ -127,8 +127,9 @@ namespace tops {
           sum += it->second;
         }
       }
-
-    return log(sum/(_normalizer  + 1e-4 * (pow((double)4, (double)(psize-_skip_length) ))));
+    if(close(sum , 0.0, 1e-10))
+        return -HUGE;
+    return log(sum/(_normalizer));
   }
   void SimilarityBasedSequenceWeighting::initialize (const ProbabilisticModelParameters & p )
   {
