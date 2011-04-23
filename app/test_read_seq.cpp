@@ -45,11 +45,12 @@ int main(int argc, char ** argv) {
   alphabet->createSymbol("C");
   alphabet->createSymbol("G");
   alphabet->createSymbol("T");
-  //  SequenceFormatManager::instance()->setFormat(SequenceFormatPtr(new FastaSequenceFormat()));
+  SequenceFormatManager::instance()->setFormat(SequenceFormatPtr(new FastaSequenceFormat()));
   while(!cin.eof())
     {
       SequenceEntryPtr  inseq = SequenceEntryPtr(new SequenceEntry(alphabet));
       cin >> *inseq;
+      std::cerr << inseq->getName() << std::endl;
       cout << *inseq;
     }
 

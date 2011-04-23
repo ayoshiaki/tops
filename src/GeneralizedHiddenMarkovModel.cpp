@@ -30,10 +30,26 @@
 
 namespace tops {
 
+  std::string GeneralizedHiddenMarkovModel::print_graph () const {
+    std::stringstream out;
+    for(int i = 0; i < (int)_all_states.size(); i++) 
+      {
+	out << _all_states[i]->name() << " " << _all_states[i]->name() << std::endl;
+      }
+    out << "#" << std::endl;
+    for(int i = 0; i < (int)_all_states.size(); i++) 
+      {
+	for(int j = 0; j < (int)_all_states.size(); j++) 
+	  {
+	    if(!close( exp(_all_states[i]->transition()->log_probability_of(j)),0.0, 1-1))
+	      out << _all_states[i]->name() << " " << _all_states[j]->name() << " " << exp(_all_states[i]->transition()->log_probability_of(j)) <<  std::endl;
+	  }
+      }
+    return out.str();
+  }
   void GeneralizedHiddenMarkovModel::restore_model(std::string & model_name,const ProbabilisticModelParameters & parameters) {
     ProbabilisticModelParameterValuePtr modelpar =
       parameters.getOptionalParameterValue(model_name);
-
     if (modelpar == NULL) {
       std::cerr << "ERROR: Missing definition of the model  "
                 << model_name << std::endl;
@@ -309,7 +325,7 @@ double GeneralizedHiddenMarkovModel::backward(const Sequence & s, Matrix &b) con
 }
 
   void GeneralizedHiddenMarkovModel::initialize_prefix_sum_arrays(const Sequence & s) const {
-#if 1
+#if 0
     struct timeval start, stop;
     gettimeofday(&start, (struct timezone *) NULL);
 #endif
@@ -317,7 +333,7 @@ double GeneralizedHiddenMarkovModel::backward(const Sequence & s, Matrix &b) con
     for (int i = 0; i < (int) _all_states.size(); i++) {
       _all_states[i]->observation()->initialize_prefix_sum_array(s);
     }
-#if 1
+#if 0
     gettimeofday(&stop, (struct timezone *)NULL);
     stop.tv_sec -= start.tv_sec;
     stop.tv_usec -= start.tv_usec;
@@ -788,17 +804,24 @@ Sequence & GeneralizedHiddenMarkovModel::chooseObservation(Sequence & h, int i,
     std::map<std::string, double> transpar = transitions_par->getDoubleMap();
     std::map<std::string, DoubleVector> trans;
     std::map<std::string, double>::const_iterator it;
+    boost::regex separator("\\|");
 
     for (it = transpar.begin(); it != transpar.end(); it++) {
       std::vector<std::string> splited;
-      boost::regex separator("\\|");
       split_regex(it->first, splited, separator);
       if(splited.size() == 1) {
         splited.push_back("");
       }
       std::string from (splited[1]);
       std::string to ( splited[0]);
-
+      if(!states->has(from) ) {
+         std::cerr << "ERROR: The state " << from << " is not in state list !\n" << std::endl;
+         exit(-1);
+      }
+      if(!states->has(to) ) {
+         std::cerr << "ERROR: The state " << to << " is not in state list !\n" << std::endl;
+         exit(-1);
+      }
 
       if (trans.find(from) == trans.end()) {
         int id = states->getSymbol(to)->id();
@@ -903,5 +926,6 @@ Sequence & GeneralizedHiddenMarkovModel::chooseObservation(Sequence & h, int i,
             }
   }
 
+  
 }
 

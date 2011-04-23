@@ -495,14 +495,18 @@ namespace tops{
 
         std::list<int>::iterator it;
         it =  (valid_positions.find(id())->second).begin();
+	//	std::cerr << base << " " << all_states[id()]->name() << " " << (valid_positions.find(id())->second).size() << std::endl;
         while(it != (valid_positions.find(id())->second).end()) {
             int d = (*it)+ 1;
             if(predecessors().size() <= 0)
-                return;
+	      return;
             int from = predecessors()[0];
             if((base - d ) < 0)
-                return;
-
+	      return;
+	    if(duration_probability(base-d+1) <= -HUGE) {
+	      it++;
+	      continue;
+	    }
             double gmax = gamma(from, d-1) + all_states[from]->transition()->log_probability_of(id());
             int pmax = from;
             for (int p = 1; p < (int)predecessors().size();p++){
@@ -527,7 +531,7 @@ namespace tops{
                     it = (valid_positions.find(id())->second).erase(it);
                     continue;
                 }
-            gmax = gmax + duration_probability(base-d+1) + observation()->prefix_sum_array_compute(d, base, phase);
+            gmax = gmax +  duration_probability(base-d+1) + observation()->prefix_sum_array_compute(d, base, phase);
 
 
             if(gamma(id(), base) < gmax){

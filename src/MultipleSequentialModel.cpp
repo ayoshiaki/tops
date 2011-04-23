@@ -215,11 +215,11 @@ namespace tops {
             }
         _sub_models.resize(modelnames.size());
         _max_size.resize(modelnames.size());
-        _idx_not_limited = _sub_models.size();
+        _idx_not_limited = _sub_models.size() - 1;
         int count = 0;
         for(int i = 0; i < (int)modelnames.size();i++)
             {
-                if(maxlength[i] == -1)
+                if(maxlength[i] < 0)
                     {
 
                         count++;

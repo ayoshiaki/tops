@@ -119,12 +119,13 @@ namespace tops {
       firstSeq = false;
     }
     while (!stream.eof()) {
-      std::getline(stream, line, '\n');
+      if(!std::getline(stream, line, '\n')) 
+         continue;
       unsigned int i;
       for (i = 0; i < line.length(); i++)
         if(!isspace(line[i]) && (line[i] != '\n'))
           break;
-      if(i == line.length())
+      if(line.length() <= 0 || i == line.length())
         continue;
 
       if(line[0] == '>') {
@@ -149,6 +150,8 @@ namespace tops {
         j++;
       }
     sequence = sequence.substr(0,j);
+    if(sequence.length () <= 0) 
+	return stream;
 
     SequenceFactory factory(in.getAlphabet());
     trim_spaces(sequence);

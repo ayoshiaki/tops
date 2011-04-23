@@ -231,6 +231,10 @@ namespace tops {
         //      not_implemented("factorable()");
       return NULL;
     }
+    virtual std::string print_graph () const {
+      not_implemented("print_graph()");
+      return "";
+    }
   };
 
   typedef boost::shared_ptr<ProbabilisticModel> ProbabilisticModelPtr;

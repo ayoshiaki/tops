@@ -68,7 +68,7 @@ namespace tops {
                 diff++;
 
             if(diff == 1) {
-              sum += it2->second * 0.001;
+              //sum += it2->second * 0.001;
               np_differ_1 ++;
             }
           }
