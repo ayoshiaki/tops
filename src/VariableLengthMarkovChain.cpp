@@ -24,6 +24,8 @@
 #include "Symbol.hpp"
 #include <boost/algorithm/string.hpp>
 namespace tops {
+
+  
   void VariableLengthMarkovChain::printDistribution(ContextTreePtr tree, ContextTreeNodePtr node, std::stringstream & out, AlphabetPtr alphabet) const {
     ContextTreeNodePtr current = node;
     std::vector <std::string> aux;

@@ -470,7 +470,7 @@ namespace tops {
       parameter_name,  prob_table, string_vector, double_vector, 
       int_vector, word, word_p, string_map, transition_map, nested_configuration, nested_parameter_spec;
     word_p 
-      = lexeme_d [ +(alnum_p | (ch_p('_') | '.' | '/' | '-' | ' ' | ','))]
+      = lexeme_d [ +(alnum_p | (ch_p('_') | '.' | '/' | '-' | ' ' | ',' | '+' ))]
       ;
     word
       = ch_p('"')  
