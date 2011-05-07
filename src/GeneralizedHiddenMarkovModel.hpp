@@ -63,7 +63,7 @@ namespace tops {
 
     virtual double efficient_forward(const Sequence & s, Matrix &alpha) const;
 
-
+    virtual std::string print_graph () const ;
 
     //! Forward algorithm
     virtual double forward(const Sequence & s, Matrix &alpha) const;

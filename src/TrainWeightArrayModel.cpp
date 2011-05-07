@@ -2,6 +2,7 @@
 #include "TrainWeightArrayModel.hpp"
 #include "InhomogeneousMarkovChain.hpp"
 #include "ProbabilisticModelParameter.hpp"
+#include "ProbabilisticModelCreatorClient.hpp"
 #include "SequenceFactory.hpp"
 namespace tops{
 
@@ -16,6 +17,15 @@ namespace tops{
     ProbabilisticModelParameterValuePtr pseudocountspar = parameters.getOptionalParameterValue("pseudo_counts");
     ProbabilisticModelParameterValuePtr fixseqpar = parameters.getOptionalParameterValue("fixed_sequence");
     ProbabilisticModelParameterValuePtr fixseqpospar = parameters.getOptionalParameterValue("fixed_sequence_position");
+    ProbabilisticModelParameterValuePtr aprioripar = parameters.getOptionalParameterValue("apriori");
+
+	ProbabilisticModelParameterValuePtr weightspar = parameters.getOptionalParameterValue("weights");
+	std::map <std::string, double> weights;
+	if(weightspar != NULL) {
+	  readMapFromFile(weights, weightspar->getString());
+	}
+
+
     if((alphabetpar == NULL) ||
        (trainingsetpar == NULL) ||
        (lengthpar == NULL) ||
@@ -26,6 +36,15 @@ namespace tops{
       }
     int offset = 0;
     double pseudocounts = 0;
+    if(pseudocountspar != NULL)
+        pseudocounts = pseudocountspar->getDouble();
+    ProbabilisticModelPtr apriori;
+    if(aprioripar != NULL)
+      {
+         ProbabilisticModelCreatorClient c;
+         apriori = c.create(aprioripar->getString());
+      }
+
     if(offsetpar != NULL)
       offset = offsetpar ->getInt();
     if(pseudocountspar != NULL)
@@ -70,7 +89,7 @@ namespace tops{
 
                       if(m < 0)
                           continue;
-                      if((m + o) >= (sample_set[j]->getSequence()).size())
+                      if((m + o) >= (int)(sample_set[j]->getSequence()).size())
                           continue;
 
 
@@ -95,20 +114,29 @@ namespace tops{
 
                       SequenceEntryPtr entry = SequenceEntryPtr(new SequenceEntry(alphabet));
                       entry->setSequence(s);
+                      entry->setName(sample_set[j]->getName());
                       positionalSample.push_back(entry);
                   }
           }
-        if(fixseq && (fixed_pos <= i) && (((int)fixed.size() - (i - (int)fixed_pos +1))>= 0)){
+        if(fixseq && (fixed_pos <= i) && ((int)i <= ((int)fixed_pos + (int)fixed.size() - 1))){
             ContextTreePtr tree = ContextTreePtr(new ContextTree(alphabet));
-            tree->initializeCounter(positionalSample, o, 0);
+            tree->initializeCounter(positionalSample, o, 0, weights);
             tree->normalize();
             positional_distribution[i] = tree;
         } else {
             ContextTreePtr tree = ContextTreePtr(new ContextTree(alphabet));
-            tree->initializeCounter(positionalSample, o, pseudocounts);
-            tree->normalize();
+
+            if(apriori != NULL  && apriori->factorable() != NULL){
+	      tree->initializeCounter(positionalSample, o, pseudocounts, weights);
+                tree->normalize(apriori, pseudocounts);
+            } else {
+	      tree->initializeCounter(positionalSample, o, pseudocounts, weights);
+                tree->normalize();
+
+            }
             positional_distribution[i] = tree;
         }
+
       }
     InhomogeneousMarkovChainPtr model = InhomogeneousMarkovChainPtr(new    InhomogeneousMarkovChain());
     model->setPositionSpecificDistribution(positional_distribution);
@@ -119,7 +147,11 @@ namespace tops{
     for(int j = 0; j < (int)sample_set.size(); j++)
         {
         sample_size += (sample_set[j]->getSequence()).size();
-        loglikelihood += model->evaluate((sample_set[j]->getSequence()), 0, (sample_set[j]->getSequence()).size()-1);
+        double v = model->evaluate((sample_set[j]->getSequence()), 0, (sample_set[j]->getSequence()).size()-1);
+        if (v <= -HUGE)
+            continue;
+
+        loglikelihood += v;
       }
     return model;
 

@@ -2,17 +2,17 @@
  *       ContextTree.hpp
  *
  *       Copyright 2011 Andre Yoshiaki Kashiwabara <akashiwabara@usp.br>
- *     
+ *
  *       This program is free software; you can redistribute it and/or modify
  *       it under the terms of the GNU  General Public License as published by
  *       the Free Software Foundation; either version 3 of the License, or
  *       (at your option) any later version.
- *     
+ *
  *       This program is distributed in the hope that it will be useful,
  *       but WITHOUT ANY WARRANTY; without even the implied warranty of
  *       MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *       GNU General Public License for more details.
- *      
+ *
  *       You should have received a copy of the GNU General Public License
  *       along with this program; if not, write to the Free Software
  *       Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
@@ -31,6 +31,8 @@ namespace tops {
   class ContextTreeNode;
   typedef boost::shared_ptr <ContextTreeNode> ContextTreeNodePtr;
   typedef std::vector< boost::shared_ptr<tops::ContextTreeNode> > ContextTreeNodeVector;
+    class ContextTree;
+   typedef boost::shared_ptr<ContextTree> ContextTreePtr;
   //! This is a context tree node
   class ContextTreeNode {
   private:
@@ -44,24 +46,28 @@ namespace tops {
     int _parent_id;
   public:
     ~ContextTreeNode(){ }
-    
+
     //! \param alphabet is the alphabet to be used
     ContextTreeNode(int alphabet_size);
-    
+
     //! Default constructor
     ContextTreeNode() ;
-    
-    //! Add a count for the symbol s
+
+    //! Add a count to the symbol s
     void addCount (int s);
 
-    //! Add v to the  counter for the symbol s
+    //! Add a count w to the symbol s
+    void addCount (int s, double w);
+
+
+    //! Add v to the  counter to the symbol s
     void setCount (int s, double v);
 
-    //! get the counter 
+    //! get the counter
     std::vector<double> & getCounter ();
 
     //! Set the alphabet size
-    int alphabet_size(); 
+    int alphabet_size();
 
 
     //! Set the parent id
@@ -102,14 +108,14 @@ namespace tops {
     //! returns true if this context node is a leaf
     bool isLeaf();
 
-    
+
     std::string str() const ;
 
 
   };
-  
 
-  //! This class represents a context tree 
+
+  //! This class represents a context tree
   class ContextTree {
   public:
     ~ContextTree() {
@@ -125,13 +131,13 @@ namespace tops {
     ContextTreeNodePtr getRoot() const ;
 
 
-    //! Create new context 
+    //! Create new context
     ContextTreeNodePtr createContext() ;
 
 
     ContextTreeNodePtr getContext (int id) ;
 
-    //! get the context for the sequence s[i-1], s[i-2], s[i-3]... 
+    //! get the context for the sequence s[i-1], s[i-2], s[i-3]...
     ContextTreeNodePtr getContext(const Sequence & s, int i);
 
     std::set <int> getLevelOneNodes();
@@ -140,12 +146,20 @@ namespace tops {
 
     void normalize();
 
+    //! normalize using a tree to get the a priori probabilities
+      void normalize(ProbabilisticModelPtr old, double pseudocount, int i);
+
+    //! normalize using a tree to get the a priori probabilities
+      void normalize(ProbabilisticModelPtr old, double pseudocount){
+          normalize(old,pseudocount,0);
+      }
+
     std::string str() const;
 
-    void initializeCounter(const SequenceEntryList & sequences, int order);
+    void initializeCounter(const SequenceEntryList & sequences, int order, const std::map<std::string, double> & weights);
 
-    void initializeCounter(const SequenceEntryList & sequences, int order, double pseudocounts);
-      
+    void initializeCounter(const SequenceEntryList & sequences, int order, double pseudocounts, const std::map<std::string, double> & weights);
+
     //! Prune similar subtrees
     void pruneTree(double delta) ;
 
@@ -158,7 +172,7 @@ namespace tops {
 
     DoubleMapParameterValuePtr getParameterValue () const;
 
-    int getNumberOfNodes() const 
+    int getNumberOfNodes() const
     {
       return _all_context.size();
     }
@@ -172,7 +186,7 @@ namespace tops {
   };
   typedef boost::shared_ptr<ContextTree> ContextTreePtr;
 
-  
+
 }
 
 #endif

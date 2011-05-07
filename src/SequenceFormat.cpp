@@ -2,17 +2,17 @@
  *       SequenceFormat.cpp
  *
  *       Copyright 2011 Andre Yoshiaki Kashiwabara <akashiwabara@usp.br>
- *     
+ *
  *       This program is free software; you can redistribute it and/or modify
  *       it under the terms of the GNU  General Public License as published by
  *       the Free Software Foundation; either version 3 of the License, or
  *       (at your option) any later version.
- *     
+ *
  *       This program is distributed in the hope that it will be useful,
  *       but WITHOUT ANY WARRANTY; without even the implied warranty of
  *       MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *       GNU General Public License for more details.
- *      
+ *
  *       You should have received a copy of the GNU General Public License
  *       along with this program; if not, write to the Free Software
  *       Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
@@ -36,15 +36,15 @@ namespace tops {
     stream << out.getName() << ":\t" ;
     if((out.getAlphabet())->size() > 0)
       for(int i = 0; i < (int)out.getSequence().size(); i+=1){
-	  stream << (out.getAlphabet())->getSymbol((out.getSequence())[i])->name() << out.getSeparator();
+          stream << (out.getAlphabet())->getSymbol((out.getSequence())[i])->name() << out.getSeparator();
       }
     else
       for(int i = 0; i < (int)out.getSequence().size(); i+=1){
-	stream << (out.getSequence())[i] << out.getSeparator();
+        stream << (out.getSequence())[i] << out.getSeparator();
       }
     stream << std::endl;
     return stream;
-    
+
   }
   std::istream & SequenceFormat::readSequence (std::istream & stream, SequenceEntry & in) {
     std::string line;
@@ -52,7 +52,7 @@ namespace tops {
     std::string sequence;
     SequenceFactory factory(in.getAlphabet());
     in.getSequence() = factory.createSequence(sequence);
-    
+
     if(stream.bad()){
       return stream;
     }
@@ -71,25 +71,27 @@ namespace tops {
       trim_spaces(line);
 
       std::vector<std::string> seq_entry;
-      boost::regex separator(":\t");
+      boost::regex separator(":");
       split_regex(line, seq_entry, separator);
-      if(seq_entry.size() != 2)
-	{
-	  std::cerr << "Invalid sequence entry !" << std::endl;
-	  exit(-1);
-	}
+      if(seq_entry.size() < 2)
+        {
+          std::cerr << "Invalid sequence format !" << std::endl;
+          exit(-1);
+        }
+      std::string seqname = "";
+      int last = seq_entry.size()-1;
+      if(seq_entry.size() >= 2)
+          {
+              seqname = seq_entry[0];
+          }
 
       boost::regex sep(" ");
-      std::vector <std::string> name_and_description;
-      split_regex(seq_entry[0], name_and_description, sep);
-      in.setName( name_and_description[0]);
+      in.setName( seqname);
       std::string description;
-      for(int i = 1; i < (int)name_and_description.size(); i++)
-	description += name_and_description[i];
-      in.setDescription ( description );
-      boost::regex symbol_separator(in.getSeparator());
-      trim_spaces(seq_entry[1]);
-      in.setSequence(factory.createSequence(seq_entry[1]));
+      trim_spaces(seq_entry[last]);
+      std::vector<int> invalid;
+      in.setSequence(factory.createSequence(seq_entry[last], invalid));
+      in.setInvalidPositions(invalid);
       return stream;
     }
     return stream;
@@ -99,15 +101,15 @@ namespace tops {
     stream << ">" << out.getName() << std::endl;
     if((out.getAlphabet())->size() > 0)
       for(int i = 0; i < (int)out.getSequence().size(); i+=1){
-	stream << (out.getAlphabet())->getSymbol((out.getSequence())[i])->name() ;
+        stream << (out.getAlphabet())->getSymbol((out.getSequence())[i])->name() ;
       }
     else
       for(int i = 0; i < (int)out.getSequence().size(); i+=1)
-	stream << (out.getSequence())[i] << out.getSeparator();
+        stream << (out.getSequence())[i] << out.getSeparator();
     stream << std::endl;
     return stream;
   }
-  std::istream & FastaSequenceFormat::readSequence (std::istream & stream, SequenceEntry & in) 
+  std::istream & FastaSequenceFormat::readSequence (std::istream & stream, SequenceEntry & in)
   {
     std::string line;
     std::string sequence ;
@@ -117,41 +119,45 @@ namespace tops {
       firstSeq = false;
     }
     while (!stream.eof()) {
-      std::getline(stream, line, '\n');
+      if(!std::getline(stream, line, '\n')) 
+         continue;
       unsigned int i;
       for (i = 0; i < line.length(); i++)
-	if(!isspace(line[i]) && (line[i] != '\n'))
-	  break;
-      if(i == line.length()) 
-	continue;
-      
+        if(!isspace(line[i]) && (line[i] != '\n'))
+          break;
+      if(line.length() <= 0 || i == line.length())
+        continue;
+
       if(line[0] == '>') {
-	if(firstSeq == true){
-	  _currentFastaHeader = line;
-	  firstSeq =false;
-	  continue;
-	}
-	else {
-	  _nextFastaHeader = line;
-	  break;
-	}
+        if(firstSeq == true){
+          _currentFastaHeader = line;
+          firstSeq =false;
+          continue;
+        }
+        else {
+          _nextFastaHeader = line;
+          break;
+        }
       }
       sequence += line;
     }
     int j = 0;
     for (int i = 0; i < (int)sequence.length(); i++)
       {
-	if(isspace(sequence[i]) || (sequence[i] == '\n') )
-	   continue;
-	sequence[j] = sequence[i];
-	j++;
+        if(isspace(sequence[i]) || (sequence[i] == '\n') )
+           continue;
+        sequence[j] = sequence[i];
+        j++;
       }
     sequence = sequence.substr(0,j);
+    if(sequence.length () <= 0) 
+	return stream;
 
     SequenceFactory factory(in.getAlphabet());
     trim_spaces(sequence);
-    in.setSequence(factory.createSequenceRemovedSpaces(sequence));
-
+    std::vector <int> invalid;
+    in.setSequence(factory.createSequenceRemovedSpaces(sequence, invalid));
+    in.setInvalidPositions(invalid);
     boost::regex sep(" ");
     std::vector <std::string> name_and_description;
     split_regex(_currentFastaHeader, name_and_description, sep);
@@ -161,15 +167,15 @@ namespace tops {
     for(int i = 1; i < (int)name_and_description.size(); i++)
       description += name_and_description[i];
     in.setDescription ( description );
-    
+
     return stream;
   }
-  
+
   SequenceFormatManagerPtr SequenceFormatManager::_inst ;
   SequenceFormatManagerPtr SequenceFormatManager::instance() {
     if(!_inst) {
       _inst = SequenceFormatManagerPtr(new SequenceFormatManager());
-    } 
+    }
     return _inst;
   }
 }

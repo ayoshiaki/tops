@@ -104,11 +104,11 @@ namespace tops
         ProbabilisticModelPtr m = _creator->create(parameters, loglikelihood, sample_size);
         if(m == NULL)
             {
-                std::cerr << "ERROR (BIC): model was not estimated by training algorithm " << std::endl;
+                std::cerr << "ERROR (BIC): could not estimate the model size using BIC " << std::endl;
                 exit(-1);
             }
         double model_bic =  loglikelihood  - 0.5* m->size() * log((double) sample_size);
-        if(bic < model_bic)
+        if((bic < model_bic) || (result == NULL))
           {
             bic = model_bic;
             result = m;

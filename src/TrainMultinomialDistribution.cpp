@@ -32,6 +32,7 @@ namespace tops {
 	ProbabilisticModelParameterValuePtr alphapar =
 			parameters.getMandatoryParameterValue("alphabet");
 
+
 	if (alphapar == NULL) {
 	  std::cerr << help() << std::endl;
 	  exit(-1);
@@ -59,7 +60,8 @@ namespace tops {
 
 ProbabilisticModelPtr TrainMultinomialDistribution::train(const SequenceEntryList & sample_set, AlphabetPtr alphabet) const{
 	ContextTreePtr tree = ContextTreePtr(new ContextTree(alphabet));
-	tree->initializeCounter(sample_set, 0);
+	std::map <std::string, double> w;
+	tree->initializeCounter(sample_set, 0, w);
 	tree->normalize();
 	MultinomialDistributionPtr m = tree->getRoot()->getDistribution();
 	m->setAlphabet(alphabet);

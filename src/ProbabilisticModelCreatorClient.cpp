@@ -2,17 +2,17 @@
  *       ProbabilisticModelCreatorClient.cpp
  *
  *       Copyright 2011 Andre Yoshiaki Kashiwabara <akashiwabara@usp.br>
- *     
+ *
  *       This program is free software; you can redistribute it and/or modify
  *       it under the terms of the GNU  General Public License as published by
  *       the Free Software Foundation; either version 3 of the License, or
  *       (at your option) any later version.
- *     
+ *
  *       This program is distributed in the hope that it will be useful,
  *       but WITHOUT ANY WARRANTY; without even the implied warranty of
  *       MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *       GNU General Public License for more details.
- *      
+ *
  *       You should have received a copy of the GNU General Public License
  *       along with this program; if not, write to the Free Software
  *       Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
@@ -20,7 +20,7 @@
  */
 
 #include "ProbabilisticModelCreatorClient.hpp"
-
+#include "StoreLoadedModel.hpp"
 
 #include "ProbabilisticModelCreator.hpp"
 #include "MultinomialDistributionCreator.hpp"
@@ -29,6 +29,7 @@
 #include "VariableLengthMarkovChainCreator.hpp"
 #include "InhomogeneousMarkovChainCreator.hpp"
 #include "HiddenMarkovModelCreator.hpp"
+#include "PairHiddenMarkovModelCreator.hpp"
 #include "GeneralizedHiddenMarkovModelCreator.hpp"
 #include "TargetModelCreator.hpp"
 #include "SmoothedHistogramKernelDensity.hpp"
@@ -67,18 +68,18 @@ namespace tops
     ProbabilisticModelParameterValuePtr modelnamepar = parameters.getMandatoryParameterValue("model_name");
     if(modelnamepar == NULL)
       {
-	std::cerr << "Cant create model with no name !" << std::endl;
-	exit(-1);
+        std::cerr << "Cant create model with no name !" << std::endl;
+        exit(-1);
       }
     string command = modelnamepar->getString();
     if(_createModelCommand.find(command) == _createModelCommand.end())
       {
-	cerr << "ERROR: invalid  model: " << command << endl;
-	cerr << "Implemented model are: " << endl;
-	map<string, ProbabilisticModelCreatorPtr>::iterator it;
-	for(it = _createModelCommand.begin(); it != _createModelCommand.end(); it++)
-	  cerr << "\t" << it->first << endl;
-	exit(-1);
+        cerr << "ERROR: invalid  model: " << command << endl;
+        cerr << "Implemented model are: " << endl;
+        map<string, ProbabilisticModelCreatorPtr>::iterator it;
+        for(it = _createModelCommand.begin(); it != _createModelCommand.end(); it++)
+          cerr << "\t" << it->first << endl;
+        exit(-1);
       }
     ProbabilisticModelPtr m = _createModelCommand[command]->create(parameters, models);
     return m;
@@ -93,19 +94,19 @@ namespace tops
     ProbabilisticModelParameterValuePtr modelnamepar = parameters.getMandatoryParameterValue("model_name");
     if(modelnamepar == NULL)
       {
-	std::cerr << "Cant create model with no name !" << std::endl;
-	return null;
+        std::cerr << "Cant create model with no name !" << std::endl;
+        return null;
       }
     string command = modelnamepar->getString();
     if(_createModelCommand.find(command) == _createModelCommand.end())
       {
-	cerr << "ERROR: invalid  model: " << command << endl;
-	cerr << "Implemented model are: " << endl;
-	map<string, ProbabilisticModelCreatorPtr>::iterator it;
-	for(it = _createModelCommand.begin(); it != _createModelCommand.end(); it++)
-	  cerr << "\t" << it->first << endl;
+        cerr << "ERROR: invalid  model: " << command << endl;
+        cerr << "Implemented model are: " << endl;
+        map<string, ProbabilisticModelCreatorPtr>::iterator it;
+        for(it = _createModelCommand.begin(); it != _createModelCommand.end(); it++)
+          cerr << "\t" << it->first << endl;
 
-	return null;
+        return null;
       }
     ProbabilisticModelPtr m = _createModelCommand[command]->create(parameters);
     return m;
@@ -116,10 +117,14 @@ namespace tops
     return train(readConfigurationFromFile(input_file_name));
   }
 
-  ProbabilisticModelPtr ProbabilisticModelCreatorClient::create(const std::string & input_file_name)
-  {
-    return create(readConfigurationFromFile(input_file_name));
-  }
+    ProbabilisticModelPtr ProbabilisticModelCreatorClient::create(const std::string & input_file_name)
+    {
+        ProbabilisticModelPtr m = StoreLoadedModel::instance()->get(input_file_name);
+        if(m != NULL)
+            return m;
+        m = create(readConfigurationFromFile(input_file_name));
+        return StoreLoadedModel::instance()->add(input_file_name, m);
+    }
 
   ProbabilisticModelParameters & ProbabilisticModelCreatorClient::readConfigurationFromFile(const std::string  & filename)
   {
@@ -130,20 +135,20 @@ namespace tops
     input.open(filename.c_str());
     if(!input.is_open())
       {
-	std::cerr << "Cant open file "  << filename << std::endl;
-	return _p;
+        std::cerr << "Cant open file "  << filename << std::endl;
+        return _p;
       }
     string conf;
     while(!input.eof())
       {
-	getline(input,line,'\n');
-	line += "\n";
-	conf.append(line);
+        getline(input,line,'\n');
+        line += "\n";
+        conf.append(line);
       }
     input.close();
     if(readConfig.load(conf)){
       _p = *(readConfig.parameters());
-      return _p; 
+      return _p;
     }
 
     std::cerr << "Error reading configuration file ! " << std::endl;
@@ -152,7 +157,7 @@ namespace tops
 
   ProbabilisticModelPtr ProbabilisticModelCreatorClient::train (ProbabilisticModelParameters & parameters)
   {
-    
+
     ProbabilisticModelParameterValuePtr create_model =
       parameters.getMandatoryParameterValue("training_algorithm");
     ProbabilisticModelParameterValuePtr bic =  parameters.getOptionalParameterValue("model_selection_criteria");
@@ -161,57 +166,57 @@ namespace tops
     if (create_model == NULL) {
       exit(-1);
     }
-    
+
     string command = create_model->getString();
-    
+
     ProbabilisticModelCreatorPtr creator;
     if (_trainingCommand.find(command) == _trainingCommand.end()) {
       cerr << "ERROR: invalid  training algorithm: " << command
-	   << endl;
+           << endl;
       cerr << "Implemented training algorithms are: " << endl;
       map<string, ProbabilisticModelCreatorPtr>::iterator it;
       for (it = _trainingCommand.begin(); it
-	     != _trainingCommand.end(); it++)
-	cerr << "\t" << it->first << endl;
+             != _trainingCommand.end(); it++)
+        cerr << "\t" << it->first << endl;
       exit(-1);
     } else
       creator = _trainingCommand[command];
-    
+
     if (bic != NULL) {
       if (_modelSelectionCommand.find(bic->getString())
-	  != _modelSelectionCommand.end()) {
-	creator = _modelSelectionCommand[bic->getString()];
-	creator->setCreator(_trainingCommand[command]);
+          != _modelSelectionCommand.end()) {
+        creator = _modelSelectionCommand[bic->getString()];
+        creator->setCreator(_trainingCommand[command]);
       } else {
-	cerr << "ERROR: invalid  model selection criteria: "
-	     << command << endl;
-	cerr << "Implemented model selection are: " << endl;
-	map<string, ProbabilisticModelCreatorPtr>::iterator it;
-	for (it = _modelSelectionCommand.begin(); it
-	       != _modelSelectionCommand.end(); it++)
-	  cerr << "\t" << it->first << endl;
-	exit(-1);
+        cerr << "ERROR: invalid  model selection criteria: "
+             << command << endl;
+        cerr << "Implemented model selection are: " << endl;
+        map<string, ProbabilisticModelCreatorPtr>::iterator it;
+        for (it = _modelSelectionCommand.begin(); it
+               != _modelSelectionCommand.end(); it++)
+          cerr << "\t" << it->first << endl;
+        exit(-1);
       }
-      
+
     }
-    
+
     if(decorator != NULL) {
       if (_decoratorCommand.find(decorator->getString())
-	  != _decoratorCommand.end()) {
-	_decoratorCommand[decorator->getString()]->setCreator(creator);
-	creator = _decoratorCommand[decorator->getString()];
+          != _decoratorCommand.end()) {
+        _decoratorCommand[decorator->getString()]->setCreator(creator);
+        creator = _decoratorCommand[decorator->getString()];
       } else {
-	cerr << "ERROR: invalid  decorator: "
-	     << command << endl;
-	cerr << "Implemented decorators are: " << endl;
-	map<string, ProbabilisticModelCreatorPtr>::iterator it;
-	for (it = _decoratorCommand.begin(); it
-	       != _decoratorCommand.end(); it++)
-	  cerr << "\t" << it->first << endl;
-	exit(-1);
+        cerr << "ERROR: invalid  decorator: "
+             << command << endl;
+        cerr << "Implemented decorators are: " << endl;
+        map<string, ProbabilisticModelCreatorPtr>::iterator it;
+        for (it = _decoratorCommand.begin(); it
+               != _decoratorCommand.end(); it++)
+          cerr << "\t" << it->first << endl;
+        exit(-1);
       }
-      
-      
+
+
     }
     ProbabilisticModelPtr model = creator->create(parameters);
 #if 0
@@ -228,7 +233,7 @@ namespace tops
     fprintf(stderr, "Elapsed time %ld%c%02d seconds\n", stop.tv_sec, '.', stop.tv_usec/1000);
 #endif
     return model;
-    
+
   }
 
 
@@ -241,7 +246,7 @@ namespace tops
       _trainingCommand[name] = creator;
   }
   void ProbabilisticModelCreatorClient::registry_new_model_selector(std::string name, ProbabilisticModelCreatorPtr creator){
-    if(_modelSelectionCommand.find(name) == _modelSelectionCommand.end()) 
+    if(_modelSelectionCommand.find(name) == _modelSelectionCommand.end())
       _modelSelectionCommand[name] = creator;
   }
   void ProbabilisticModelCreatorClient::registry_new_decorator(std::string name, ProbabilisticModelCreatorPtr creator){
@@ -275,6 +280,8 @@ namespace tops
       InhomogeneousMarkovChainCreatorPtr(new InhomogeneousMarkovChainCreator());
     _createModelCommand["HiddenMarkovModel"] =
       HiddenMarkovModelCreatorPtr(new HiddenMarkovModelCreator());
+    _createModelCommand["PairHiddenMarkovModel"] =
+      PairHiddenMarkovModelCreatorPtr(new PairHiddenMarkovModelCreator());
     _createModelCommand["GeneralizedHiddenMarkovModel"] =
       GeneralizedHiddenMarkovModelCreatorPtr(new GeneralizedHiddenMarkovModelCreator());
     _createModelCommand["Bernoulli"] =

@@ -86,6 +86,11 @@ namespace tops
     _counter[s] += 1.0;
   }
 
+  void ContextTreeNode::addCount (int s, double weight) {
+    _counter[s] += weight;
+  }
+
+
   void ContextTreeNode::setCount (int s, double v) {
     _counter[s] = v;
   }
@@ -197,6 +202,9 @@ namespace tops
         if(node->getChild(l) != NULL)
           printTree(node->getChild(l), out);
   }
+
+
+
 
   ContextTree::ContextTree(AlphabetPtr alphabet){
     _alphabet = alphabet;
@@ -310,7 +318,50 @@ namespace tops
       }
   }
 
+    void ContextTree::normalize(ProbabilisticModelPtr old, double pseudocount, int t)
+    {
+        if(old == NULL){
+            std::cerr << "ERROR: ContextTree -> a priori model is null !" << std::endl;
+            exit(-1);
+        }
+    std::vector <ContextTreeNodePtr> newAllVector;
+    for(int i = 0; i  < (int)_all_context.size(); i++)
+      {
+        double total = 0;
+        DoubleVector probs(_alphabet->size());
 
+        Sequence s;
+        ContextTreeNodePtr current = _all_context[i];
+        bool valid = true;
+        while (current != getRoot() ) {
+            s.push_back (current->symbol());
+            if(current->getParent() < 0) {
+                valid = false;
+                break;
+            }
+            current = _all_context[current->getParent()];
+        }
+        if(!valid)
+            continue;
+
+        for(int l = 0; l < (int)_alphabet->size(); l++) {
+            total += (double)(_all_context[i]->getCounter())[l];
+        }
+        for(int l = 0; l < (int)_alphabet->size(); l++){
+            Sequence s3;
+            s3 = s;
+            s3.push_back(l);
+
+            double prob = exp(old->evaluatePosition(s3,s3.size()-1, t));
+
+            probs[l] = (double)((_all_context[i]->getCounter())[l] + pseudocount*prob)/(total + pseudocount);
+        }
+
+        MultinomialDistributionPtr distr = MultinomialDistributionPtr(new MultinomialDistribution(probs));
+        distr->setAlphabet(_alphabet);
+        _all_context[i]->setDistribution(distr);
+      }
+    }
 
   std::string ContextTree::str() const{
     std::stringstream out;
@@ -320,11 +371,12 @@ namespace tops
     return out.str();
   }
 
-  void ContextTree::initializeCounter(const SequenceEntryList & sequences, int order)
+  void ContextTree::initializeCounter(const SequenceEntryList & sequences, int order, const std::map<std::string, double> & weights)
   {
-    initializeCounter(sequences, order,0);
+    initializeCounter(sequences, order,0, weights);
   }
-  void ContextTree::initializeCounter(const SequenceEntryList & sequences, int order, double pseudocounts)
+
+  void ContextTree::initializeCounter(const SequenceEntryList & sequences, int order, double pseudocounts, const std::map<std::string, double> & weights)
   {
     if (order < 0) order = 0;
 
@@ -337,6 +389,11 @@ namespace tops
     }
 
     for ( int l = 0; l < (int)sequences.size(); l ++){
+      std::string seqname = sequences[l]->getName();
+      double weight = 1.0;
+      if (weights.find(seqname) != weights.end())
+	weight = (weights.find(seqname)->second);
+      // std::cerr << seqname << " with weight " << weight << std::endl;
       for( int i = order; i < (int)(sequences[l]->getSequence()).size(); i++)
         {
           int currentSymbol = (sequences[l]->getSequence())[i];
@@ -344,7 +401,7 @@ namespace tops
 
           ContextTreeNodePtr w = getRoot();
 
-          w->addCount(currentSymbol);
+          w->addCount(currentSymbol, weight);
 
           while((j >= 0) &&  ((i - j) <= order))
             {
@@ -365,7 +422,7 @@ namespace tops
               }
 
 
-              w->addCount(currentSymbol);
+              w->addCount(currentSymbol, weight);
               j -- ;
             }
         }

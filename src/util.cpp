@@ -2,17 +2,17 @@
  *       util.cpp
  *
  *       Copyright 2011 Andre Yoshiaki Kashiwabara <akashiwabara@usp.br>
- *     
+ *
  *       This program is free software; you can redistribute it and/or modify
  *       it under the terms of the GNU  General Public License as published by
  *       the Free Software Foundation; either version 3 of the License, or
  *       (at your option) any later version.
- *     
+ *
  *       This program is distributed in the hope that it will be useful,
  *       but WITHOUT ANY WARRANTY; without even the implied warranty of
  *       MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *       GNU General Public License for more details.
- *      
+ *
  *       You should have received a copy of the GNU General Public License
  *       along with this program; if not, write to the Free Software
  *       Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
@@ -33,15 +33,24 @@ namespace tops {
       return 0.0;
     }
   }
-  
-// code from R-1.7.0/src/appl/bandwidths.c  
+
+  /* normal kernel */
+  double kernel_normal(double x, double h){
+      double y = (x/h) * (x/h) ;
+      double f = 1.0/(sqrt(2*M_PI));
+      double v =  (f/h) * exp (- y/2);
+      return v;
+  }
+
+
+// code from R-1.7.0/src/appl/bandwidths.c
 #define abs9(a) (a > 0 ? a:-a)
   void band_den_bin(int n, int nb, double *d, const DoubleVector &x,  DoubleVector &cnt)
   {
     int   i, j,  nn = n;
     int ii, jj, iij;
     double xmin, xmax, rang, dd;
-    for (i = 0; i < nb; i++) 
+    for (i = 0; i < nb; i++)
       cnt.push_back(0);
     xmin = xmax = x[0];
     for (i = 1; i < nn; i++) {
@@ -53,9 +62,9 @@ namespace tops {
     for (i = 1; i < nn; i++) {
       ii = (int)(x[i] / dd);
       for (j = 0; j < i; j++) {
-	jj = (int)(x[j] / dd);
-	iij = abs9((ii - jj));
-	cnt[iij]++;
+        jj = (int)(x[j] / dd);
+        iij = abs9((ii - jj));
+        cnt[iij]++;
       }
     }
   }
@@ -69,7 +78,7 @@ namespace tops {
       delta *= delta;
       if (delta >= 1000) break;
       term = exp(-delta / 2) *
-	(delta * delta * delta - 15 * delta * delta + 45 * delta - 15);
+        (delta * delta * delta - 15 * delta * delta + 45 * delta - 15);
       sum += term * x[i];
     }
     sum = 2 * sum - 15 * nn;    /* add in diagonal */
@@ -80,7 +89,7 @@ namespace tops {
   {
     int   i, nn = n, nbin = nb;
     double delta, sum, term;
-    
+
     sum = 0.0;
     for (i = 0; i < nbin; i++) {
       delta = i * (d) / (h);
@@ -92,8 +101,8 @@ namespace tops {
     sum = 2 * sum + nn * 3;     /* add in diagonal */
     *u = sum / (nn * (nn - 1) * pow(h, 5.0) * sqrt(2 * M_PI));
   }
-  
-  
+
+
   double mean(const DoubleVector &data){
     double sum = 0.0;
     for(unsigned int i = 0; i < data.size(); i++){
@@ -101,16 +110,16 @@ namespace tops {
     }
     return sum/(double)data.size();
   }
-  
+
   double var(const DoubleVector &data){
     double data_mean = mean(data);
     double sum = 0.0;
     for(unsigned int i = 0; i < data.size(); i++){
       sum += (data[i] - data_mean)*(data[i] - data_mean);
-    }  
+    }
     return sum/( (double) data.size() -1.0);
   }
-  
+
   /* quantile */
   double quantile (DoubleVector data, double q){
     int low_index = (int)floor(q * ((double)data.size()-1));
@@ -119,52 +128,77 @@ namespace tops {
     sort(data.begin(), data.end());
     return (1-h)*data[low_index] + h * data[high_index];
   }
-  
+
   /* interquantile */
   double iqr (const DoubleVector &data){
     double q1=  quantile(data, 0.25);
     double q2 = quantile(data, 0.75);
     return q2 - q1;
   }
-  
-  
 
-  void readSequencesFromFile(SequenceEntryList & s, 
-			     AlphabetPtr alphabet, 
-			     std::string  file_name) 
+
+
+  void readSequencesFromFile(SequenceEntryList & s,
+                             AlphabetPtr alphabet,
+                             std::string  file_name)
   {
     std::ifstream input(file_name.c_str());
     if(!input.good())
       {
-	std::cerr << "Can not open file " << file_name << std::endl;
-	exit(-1);
+        std::cerr << "Can not open file " << file_name << std::endl;
+        exit(-1);
       }
     while(!input.eof())
       {
-	SequenceEntryPtr  inseq = SequenceEntryPtr(new SequenceEntry(alphabet));
-	input >> *inseq;
-	if((inseq->getSequence()).size() > 0)
-	  s.push_back(inseq);
+        SequenceEntryPtr  inseq = SequenceEntryPtr(new SequenceEntry(alphabet));
+        input >> *inseq;
+        if((inseq->getSequence()).size() > 0)
+          s.push_back(inseq);
       }
     input.close();
   }
 
-  void readSequencesFromFile(SequenceList & s, 
-			     AlphabetPtr alphabet, 
-			     std::string  file_name) 
+  void readSequencesFromFile(SequenceList & s,
+                             AlphabetPtr alphabet,
+                             std::string  file_name)
   {
     std::ifstream input(file_name.c_str());
     if(!input.good())
       {
-	std::cerr << "Can not open file " << file_name << std::endl;
-	exit(-1);
+        std::cerr << "Can not open file " << file_name << std::endl;
+        exit(-1);
       }
     while(!input.eof())
       {
-	SequenceEntry  inseq(alphabet);
-	input >> inseq;
-	if((inseq.getSequence()).size() > 0)
-	  s.push_back(inseq.getSequence());
+        SequenceEntry  inseq(alphabet);
+        input >> inseq;
+        if((inseq.getSequence()).size() > 0)
+          s.push_back(inseq.getSequence());
+      }
+    input.close();
+  }
+
+  void readMapFromFile(std::map<std::string, double> & s,
+		       std::string  file_name)
+  {
+    std::ifstream input(file_name.c_str());
+    if(!input.good())
+      {
+        std::cerr << "Can not open file " << file_name << std::endl;
+        exit(-1);
+      }
+    std::string line;
+    while(!input.eof())
+      {
+	std::getline(input, line, '\n');
+	std::vector <std::string> x;
+	boost::regex separator("\t");
+	split_regex(line, x, separator);
+	if(x.size() >= 2) {
+	  std::string key = x[0];
+	  int value = atof((x[1]).c_str());
+	  s[key] = value;
+	}
       }
     input.close();
   }
@@ -184,14 +218,14 @@ namespace tops {
     int k;
     for(k = s.size() - 1; k >= 0; k--)
       {
-	if(!isspace(s[k])) 
-	  break;
+        if(!isspace(s[k]))
+          break;
       }
     s = s.substr(0, k+1);
     for(k = 0; k < (int)(s.size()); k++)
       {
-	if(!isspace(s[k])) 
-	  break;
+        if(!isspace(s[k]))
+          break;
       }
     s = s.substr(k, (s.size()) - k);
   }
@@ -208,48 +242,48 @@ namespace tops {
     double diff;
     if(min > log_b)
       {
-	diff = log_b - log_a;
-	if(diff != diff)
-	  return log_a;
-	return log_a + log(1 + exp(diff));
+        diff = log_b - log_a;
+        if(diff != diff)
+          return log_a;
+        return log_a + log(1 + exp(diff));
       }
     else
       {
-	diff = log_a - log_b;
-	if(diff != diff)
-	  return log_b;
-	return log_b + log(1 + exp(diff));
+        diff = log_a - log_b;
+        if(diff != diff)
+          return log_b;
+        return log_b + log(1 + exp(diff));
       }
   }
-  
-  
+
+
   double safe_division(double a, double b)
   {
     if((b < 1) && (a > b * (std::numeric_limits<double>::max)()))
       {
-	return (std::numeric_limits<double>::max)();
+        return (std::numeric_limits<double>::max)();
       }
     else if (((b > 1) && (a < b*(std::numeric_limits<double>::min)()) )|| (a == 0))
       {
-	return 0;
+        return 0;
       }
     else
       {
-	return a/b;
+        return a/b;
       }
-    
+
   }
-  
-  
+
+
   bool close(double a, double b, double tolerance)
   {
     double diff = fabs(a-b);
-    
+
     double div1 = safe_division(diff, fabs(a));
     double div2 = safe_division(diff, fabs(b));
     if( (div1 <= tolerance) && (div2 <= tolerance))
       {
-	return true;
+        return true;
       }
     return false;
   }
@@ -266,8 +300,8 @@ namespace tops {
     result /= data.size();
     return result;
   }
-  
-  
+
+
   double kernel_density_estimation_gaussian(double x, double bw, const DoubleVector &data){
     double result = 0.0;
     for(unsigned int i = 0; i < data.size(); i++) {
@@ -304,5 +338,5 @@ namespace tops {
 
   /*========*/
 
-  
+
 }

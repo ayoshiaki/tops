@@ -22,6 +22,7 @@
 #include "InhomogeneousFactorableModel.hpp"
 #include "Symbol.hpp"
 namespace tops {
+
   double InhomogeneousFactorableModel::evaluate(const Sequence & s, unsigned int begin, unsigned int end) const
   {
     double result = 0.0;
@@ -36,6 +37,8 @@ namespace tops {
     }
     return result;
   }
+
+
   double InhomogeneousFactorableModel::evaluate(const Sequence & s, unsigned int begin, unsigned int end, int phase) const
   {
     double result = 0.0;

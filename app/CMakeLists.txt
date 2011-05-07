@@ -14,6 +14,10 @@ ADD_EXECUTABLE(kullback_positional kullback_positional.cpp)
 ADD_EXECUTABLE(posterior_probabilities posterior_probabilities.cpp)
 ADD_EXECUTABLE(posterior_decoding posterior_decoding.cpp)
 ADD_EXECUTABLE(choose_path choose_path.cpp)
+ADD_EXECUTABLE(remove_invalid_symbols remove_invalid_symbols.cpp)
+ADD_EXECUTABLE(simulateAlignment simulateAlignment.cpp)
+ADD_EXECUTABLE(align align.cpp)
+ADD_EXECUTABLE(print_graph_from_model print_graph_from_model.cpp)
 
 TARGET_LINK_LIBRARIES(evaluate ToPS ${BOOST_REGEX_LIBRARY} ${RMATH_LIBRARY} ${BOOST_PROGRAM_OPTIONS_LIBRARY} )
 TARGET_LINK_LIBRARIES(train ToPS ${BOOST_REGEX_LIBRARY} ${RMATH_LIBRARY} ${BOOST_PROGRAM_OPTIONS_LIBRARY} )
@@ -25,13 +29,15 @@ TARGET_LINK_LIBRARIES(bayes_classifier ToPS ${BOOST_REGEX_LIBRARY} ${RMATH_LIBRA
 TARGET_LINK_LIBRARIES(sliding_window ToPS ${BOOST_REGEX_LIBRARY} ${RMATH_LIBRARY} ${BOOST_PROGRAM_OPTIONS_LIBRARY} )
 TARGET_LINK_LIBRARIES(kullback_positional ToPS ${BOOST_REGEX_LIBRARY} ${RMATH_LIBRARY} ${BOOST_PROGRAM_OPTIONS_LIBRARY} )
 TARGET_LINK_LIBRARIES(posterior_probabilities ToPS ${BOOST_REGEX_LIBRARY} ${RMATH_LIBRARY} ${BOOST_PROGRAM_OPTIONS_LIBRARY} )
-TARGET_LINK_LIBRARIES(posterior_decoding ToPS ${BOOST_REGEX_LIBRARY}
-${RMATH_LIBRARY} ${BOOST_PROGRAM_OPTIONS_LIBRARY} )
+TARGET_LINK_LIBRARIES(posterior_decoding ToPS ${BOOST_REGEX_LIBRARY}${RMATH_LIBRARY} ${BOOST_PROGRAM_OPTIONS_LIBRARY} )
 TARGET_LINK_LIBRARIES(choose_path ToPS ${BOOST_REGEX_LIBRARY} ${RMATH_LIBRARY} ${BOOST_PROGRAM_OPTIONS_LIBRARY} )
+TARGET_LINK_LIBRARIES(remove_invalid_symbols ToPS ${BOOST_REGEX_LIBRARY} ${RMATH_LIBRARY} ${BOOST_PROGRAM_OPTIONS_LIBRARY} )
+TARGET_LINK_LIBRARIES(simulateAlignment ToPS ${BOOST_REGEX_LIBRARY} ${RMATH_LIBRARY} ${BOOST_PROGRAM_OPTIONS_LIBRARY} )
+TARGET_LINK_LIBRARIES(align ToPS ${BOOST_REGEX_LIBRARY} ${RMATH_LIBRARY} ${BOOST_PROGRAM_OPTIONS_LIBRARY} )
+TARGET_LINK_LIBRARIES(posterior_decoding ToPS ${BOOST_REGEX_LIBRARY} ${RMATH_LIBRARY} ${BOOST_PROGRAM_OPTIONS_LIBRARY} )
+TARGET_LINK_LIBRARIES(print_graph_from_model ToPS ${BOOST_REGEX_LIBRARY} ${RMATH_LIBRARY} ${BOOST_PROGRAM_OPTIONS_LIBRARY} )
 
-install(TARGETS train viterbi_decoding simulate bayes_classifier
-        one_file_model sliding_window evaluate kullback_positional
-        posterior_probabilities posterior_decoding choose_path
-        RUNTIME DESTINATION bin
+install(TARGETS train viterbi_decoding simulate simulateAlignment align bayes_classifier one_file_model sliding_window evaluate kullback_positional posterior_probabilities posterior_decoding print_graph_from_model
+       RUNTIME DESTINATION bin
        LIBRARY DESTINATION lib
        ARCHIVE DESTINATION lib/static)

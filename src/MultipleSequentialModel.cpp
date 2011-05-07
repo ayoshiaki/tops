@@ -215,11 +215,11 @@ namespace tops {
             }
         _sub_models.resize(modelnames.size());
         _max_size.resize(modelnames.size());
-        _idx_not_limited = _sub_models.size();
+        _idx_not_limited = _sub_models.size() - 1;
         int count = 0;
         for(int i = 0; i < (int)modelnames.size();i++)
             {
-                if(maxlength[i] == -1)
+                if(maxlength[i] < 0)
                     {
 
                         count++;
@@ -254,4 +254,21 @@ namespace tops {
     {
         return _parameters;
     }
+
+    Sequence & MultipleSequentialModel::choose(Sequence & h, int size) const
+    {
+        int total_size = 0;
+        for(int i = 0;i < (int) _sub_models.size(); i++) {
+            Sequence x;
+            _sub_models[i]->choose(x, _max_size[i]);
+            for(int k = 0; k < _max_size[i]; k++){
+                h.push_back(x[k]);
+                total_size ++;
+                if(total_size >= size)
+                    return h;
+            }
+        }
+        return h;
+    }
+
 }

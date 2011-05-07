@@ -27,6 +27,7 @@
 #include <string>
 
 #include "TrainHMMBaumWelch.hpp"
+#include "TrainPHMMBaumWelch.hpp"
 #include "TrainVariableLengthMarkovChain.hpp"
 #include "TrainMultinomialDistribution.hpp"
 #include "TrainFixedLengthMarkovChain.hpp"
@@ -75,6 +76,8 @@ int main(int argc, char ** argv) {
                         = TrainFixedLengthMarkovChainPtr(new TrainFixedLengthMarkovChain());
         createModelCommand["BaumWelch"] = TrainHMMBaumWelchPtr(
                         new TrainHMMBaumWelch());
+	createModelCommand["PHMMBaumWelch"] = TrainPHMMBaumWelchPtr(
+			new TrainPHMMBaumWelch());					    
         createModelCommand["WeightArrayModel"] = TrainWeightArrayModelPtr(
                         new TrainWeightArrayModel());
         createModelCommand["VariableLengthInhomogeneousMarkovChain"]
@@ -223,7 +226,10 @@ int main(int argc, char ** argv) {
                                   stop.tv_usec += 1000000;
                                 }
                                 fprintf(stderr, "Elapsed time %ld%c%02d seconds\n", stop.tv_sec, '.', stop.tv_usec/1000);
-
+                                if(model == NULL) {
+                                    std::cerr << "ERROR: Could not create model !" << std::endl;
+                                    exit(-1);
+                                }
                                 if (vm.count("output")) {
                                         string file = vm["output"].as<string> ();
                                         ofstream output(file.c_str());

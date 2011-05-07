@@ -62,7 +62,7 @@ namespace tops {
 
         virtual double evaluate(const Sequence & s, unsigned int begin, unsigned int end, int phase) const ;
         virtual std::string str() const;
-
+        virtual Sequence &  choose(Sequence & h, int size) const;
     private:
         std::vector<ProbabilisticModelPtr> _sub_models;
         std::vector<int> _max_size;

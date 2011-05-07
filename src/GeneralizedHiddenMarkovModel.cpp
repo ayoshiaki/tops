@@ -30,11 +30,26 @@
 
 namespace tops {
 
-
+  std::string GeneralizedHiddenMarkovModel::print_graph () const {
+    std::stringstream out;
+    for(int i = 0; i < (int)_all_states.size(); i++) 
+      {
+	out << _all_states[i]->name() << " " << _all_states[i]->name() << std::endl;
+      }
+    out << "#" << std::endl;
+    for(int i = 0; i < (int)_all_states.size(); i++) 
+      {
+	for(int j = 0; j < (int)_all_states.size(); j++) 
+	  {
+	    if(!close( exp(_all_states[i]->transition()->log_probability_of(j)),0.0, 1-1))
+	      out << _all_states[i]->name() << " " << _all_states[j]->name() << " " << exp(_all_states[i]->transition()->log_probability_of(j)) <<  std::endl;
+	  }
+      }
+    return out.str();
+  }
   void GeneralizedHiddenMarkovModel::restore_model(std::string & model_name,const ProbabilisticModelParameters & parameters) {
     ProbabilisticModelParameterValuePtr modelpar =
       parameters.getOptionalParameterValue(model_name);
-
     if (modelpar == NULL) {
       std::cerr << "ERROR: Missing definition of the model  "
                 << model_name << std::endl;
@@ -69,11 +84,13 @@ namespace tops {
     }
      else
         {
+
           ProbabilisticModelPtr m = creator.create(cfg);
           if (m == NULL) {
             std::cerr << "Can not load model " << cfg << "! " << std::endl;
             return;
           }
+
           _models[model_name] = m;
         }
   }
@@ -324,7 +341,7 @@ double GeneralizedHiddenMarkovModel::backward(const Sequence & s, Matrix &b) con
       stop.tv_sec --;
       stop.tv_usec += 1000000;
     }
-    fprintf(stderr, "Elapsed time %ld%c%02d seconds\n", stop.tv_sec, '.', stop.tv_usec/1000);
+    fprintf(stderr, "PSA Elapsed time %ld%c%02d seconds\n", stop.tv_sec, '.', stop.tv_usec/1000);
 #endif
 
   }
@@ -460,17 +477,68 @@ double GeneralizedHiddenMarkovModel::viterbi(const Sequence &s, Sequence &path,
   Matrix psi(nstates, size);
   Matrix psilen(nstates, size);
 
+  std::map < int, std::list<int>  > valid_positions;
+  std::list <int> e;
+  for(int k = 0; k <nstates; k++)
+      valid_positions[k] = e;
+
+
+  std::vector<bool> possible_path;
+  possible_path.resize(nstates);
+
   // initialization
   for (int k = 0; k < nstates; k++) {
-    gamma(k, 0) = getInitialProbabilities()->log_probability_of(k)
-        + _all_states[k]->observation()->prefix_sum_array_compute(0, 0);
+      gamma(k, 0) = getInitialProbabilities()->log_probability_of(k)
+          + _all_states[k]->observation()->prefix_sum_array_compute(0, 0);
+      possible_path[k] = 1;
+      if(gamma(k,0) <= -HUGE)
+          {
+              possible_path[k] = 0;
+          }
   }
 
+  for(int i = 0; i < (int)possible_path.size(); i++)
+      {
+          std::vector <int> next_states = _all_states[i]->successors();
+          if(!possible_path[i])
+              continue;
+          for(int p = 0; p < (int)next_states.size(); p++)
+              {
+                  int succ = next_states[p];
+                  if (!_all_states[succ]->isGeometricDuration()) {
+                      (valid_positions.find(succ)->second).push_back(0);
+                  }
+              }
+      }
+
+
   for(int i = 1; i < size; i++){
-    for(int k = 0; k < nstates; k++){
-        gamma(k, i) = -HUGE;
-        _all_states[k]->findBestPredecessor (gamma, psi, psilen,  s, i, _all_states);
-    }
+      for(int k = 0; k < nstates; k++){
+
+          gamma(k, i) = -HUGE;
+          possible_path[k] = 1;
+          _all_states[k]->findBestPredecessor (gamma, psi, psilen,  s, i, _all_states, valid_positions);
+          if(gamma(k,i) <= -HUGE)
+              {
+                  possible_path[k] = 0;
+              }
+
+      }
+
+      for(int s = 0; s < (int)possible_path.size(); s++)
+          {
+              std::vector <int> next_states = _all_states[s]->successors();
+              if(!possible_path[s])
+                  continue;
+              for(int p = 0; p < (int)next_states.size(); p++)
+                  {
+                      int succ = next_states[p];
+                      if (!_all_states[succ]->isGeometricDuration()) {
+                          (valid_positions.find(succ)->second).push_back(i);
+                      }
+                  }
+          }
+
   }
   int L = size-1;
 
@@ -507,6 +575,16 @@ double GeneralizedHiddenMarkovModel::viterbi(const Sequence &s, Sequence &path,
       }
       state = p;
   }
+#if 0
+  for(int i = 0; i < size ; i ++) {
+      std::cerr << "[" << i << "]" << std::endl; ;
+      for(int k = 0; k < nstates; k++)
+          {
+
+              std::cerr << " " << _all_states[k] -> name() << " " << gamma(k,i) << " " << _all_states[psi(k, i)]->name() << " " << psilen(k, i) << std::endl;
+          }
+  }
+#endif
   return max;
 
 }
@@ -514,7 +592,7 @@ double GeneralizedHiddenMarkovModel::viterbi(const Sequence &s, Sequence &path,
 //! Choose the observation given a state
 Sequence & GeneralizedHiddenMarkovModel::chooseObservation(Sequence & h, int i,
                 int state) const {
-  assert(state < (int)_all_states.size());
+  assert(state >= 0 && state < (int)_all_states.size());
   int d = _all_states[state]->chooseDuration();
   int iphase = _all_states[state]->getInputPhase();
   _all_states[state]->observation()->chooseWithHistory(h, i, iphase, d);
@@ -523,7 +601,7 @@ Sequence & GeneralizedHiddenMarkovModel::chooseObservation(Sequence & h, int i,
 
   //! Choose a state
   int GeneralizedHiddenMarkovModel::chooseState(int state) const {
-    return _all_states[state]->transition()->choose();
+      return _all_states[state]->transition()->choose();
   }
 
   //! Choose the initial state
@@ -717,17 +795,24 @@ Sequence & GeneralizedHiddenMarkovModel::chooseObservation(Sequence & h, int i,
     std::map<std::string, double> transpar = transitions_par->getDoubleMap();
     std::map<std::string, DoubleVector> trans;
     std::map<std::string, double>::const_iterator it;
+    boost::regex separator("\\|");
 
     for (it = transpar.begin(); it != transpar.end(); it++) {
       std::vector<std::string> splited;
-      boost::regex separator("\\|");
       split_regex(it->first, splited, separator);
       if(splited.size() == 1) {
         splited.push_back("");
       }
       std::string from (splited[1]);
       std::string to ( splited[0]);
-
+      if(!states->has(from) ) {
+         std::cerr << "ERROR: The state " << from << " is not in state list !\n" << std::endl;
+         exit(-1);
+      }
+      if(!states->has(to) ) {
+         std::cerr << "ERROR: The state " << to << " is not in state list !\n" << std::endl;
+         exit(-1);
+      }
 
       if (trans.find(from) == trans.end()) {
         int id = states->getSymbol(to)->id();
@@ -824,8 +909,14 @@ Sequence & GeneralizedHiddenMarkovModel::chooseObservation(Sequence & h, int i,
 
     fixStatesPredecessorSuccessor();
 
-
+    for (int i = 0; i < (int)_all_states.size(); i++)
+        if (_all_states[i]->transition()->size() <= 0)
+            {
+                std::cerr << "ERROR: GHMM initialization, state " << _all_states[i]->name() << " has outdegree equal a zero !\n";
+                exit(-1);
+            }
   }
 
+  
 }
 

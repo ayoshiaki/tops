@@ -2,17 +2,17 @@
  *       SequenceEntry.hpp
  *
  *       Copyright 2011 Andre Yoshiaki Kashiwabara <akashiwabara@usp.br>
- *     
+ *
  *       This program is free software; you can redistribute it and/or modify
  *       it under the terms of the GNU  General Public License as published by
  *       the Free Software Foundation; either version 3 of the License, or
  *       (at your option) any later version.
- *     
+ *
  *       This program is distributed in the hope that it will be useful,
  *       but WITHOUT ANY WARRANTY; without even the implied warranty of
  *       MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *       GNU General Public License for more details.
- *      
+ *
  *       You should have received a copy of the GNU General Public License
  *       along with this program; if not, write to the Free Software
  *       Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
@@ -42,17 +42,27 @@ namespace tops {
     AlphabetPtr _alphabet;
     std::string _sep;
     SequenceFormatPtr _format;
+      std::vector <int>_invalidPositions;
   public:
-    SequenceEntry(){ 
+    SequenceEntry(){
       _format = (SequenceFormatManager::instance())->getFormat();
     };
-    SequenceEntry ( AlphabetPtr alphabet) : _alphabet(alphabet), _sep(" ") 
+    SequenceEntry ( AlphabetPtr alphabet) : _alphabet(alphabet), _sep(" ")
     {
       _format = (SequenceFormatManager::instance())->getFormat();
     }
     AlphabetPtr getAlphabet() {
       return _alphabet;
     }
+      void addInvalidPosition(int i) {
+          _invalidPositions.push_back(i);
+      }
+      void setInvalidPositions (std::vector <int> v) {
+          _invalidPositions = v;
+      }
+      std::vector <int> & invalidPositions(){
+          return _invalidPositions;
+      }
     void setSeparator(std::string sep) {
       _sep = sep;
     }
@@ -61,15 +71,15 @@ namespace tops {
     }
     Sequence &  getSequence()  {
       return _sequence;
-    }						
+    }
     void setSequence(Sequence  s) {
       _sequence = s;
     }
-    
+
     std::string  getName() {
       return _name;
     }
-    
+
     void setName(std::string name) {
       _name = name;
     }
@@ -77,7 +87,7 @@ namespace tops {
     void setDescription(std::string description) {
       _description = description;
     }
-    
+
     std::string  getDescription() {
       return _description;
     }
