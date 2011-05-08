@@ -23,6 +23,8 @@
 #define CONFIGURATION_READER_HPP
 #include <boost/shared_ptr.hpp>
 
+#include "crossplatform.hpp"
+
 #include <iostream>
 #include <string> 
 
@@ -32,15 +34,15 @@ using namespace std;
 
 namespace tops {
 
-  class Alphabet;
-  class ProbabilisticModelParameters;
+  class DLLEXPORT Alphabet;
+  class DLLEXPORT ProbabilisticModelParameters;
 
-  class ProbabilisticModelParameterValue;
+  class DLLEXPORT ProbabilisticModelParameterValue;
   typedef boost::shared_ptr<ProbabilisticModelParameterValue> ProbabilisticModelParameterValuePtr;
   typedef boost::shared_ptr<ProbabilisticModelParameters> ProbabilisticModelParametersPtr;
 
   //! This class is reads a configuration file
-  class ConfigurationReader {
+  class DLLEXPORT ConfigurationReader {
   public: 
 
     ConfigurationReader();

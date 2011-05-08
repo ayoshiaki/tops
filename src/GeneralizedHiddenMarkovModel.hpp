@@ -21,6 +21,9 @@
 
 #ifndef GENERALIZED_HIDDEN_MARKOV_MODEL_H
 #define GENERALIZED_HIDDEN_MARKOV_MODEL_H
+
+#include "crossplatform.hpp"
+
 #include <set>
 
 #include "MultinomialDistribution.hpp"
@@ -35,7 +38,7 @@ namespace tops {
 
 
   //! This is a class representing Hidden semi-Markov Models
-  class GeneralizedHiddenMarkovModel: public DecodableModel {
+  class DLLEXPORT GeneralizedHiddenMarkovModel: public DecodableModel {
   private:
       Matrix _alpha;
       Sequence _last;

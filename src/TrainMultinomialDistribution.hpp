@@ -22,6 +22,8 @@
 #ifndef TRAIN_FDD_HPP
 #define TRAIN_FDD_HPP
 
+#include "crossplatform.hpp"
+
 #include "ProbabilisticModel.hpp"
 #include "ProbabilisticModelCreator.hpp"
 #include "ConfigurationReader.hpp"
@@ -30,7 +32,7 @@
 namespace tops {
 
   //! Creates a Multinomial Distribution
-  class TrainMultinomialDistribution : public ProbabilisticModelCreator {
+  class DLLEXPORT TrainMultinomialDistribution : public ProbabilisticModelCreator {
   public:
     TrainMultinomialDistribution () {}
     virtual ~TrainMultinomialDistribution () {};

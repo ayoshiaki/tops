@@ -22,6 +22,8 @@
 #ifndef VLMC_MARKOV_CHAIN_HPP
 #define VLMC_MARKOV_CHAIN_HPP
 
+#include "crossplatform.hpp"
+
 #include "ProbabilisticModel.hpp"
 #include "Sequence.hpp"
 #include "FactorableModel.hpp"
@@ -35,7 +37,7 @@ namespace tops{
 
 
   //! This class is a Variable Length Markov Chain
-  class VariableLengthMarkovChain : public FactorableModel {
+  class DLLEXPORT VariableLengthMarkovChain : public FactorableModel {
   public:
     VariableLengthMarkovChain(){
     };

@@ -22,6 +22,8 @@
 #ifndef SIM_BASED_SEQ_WEIGHTING
 #define SIM_BASED_SEQ_WEIGHTING
 
+#include "crossplatform.hpp"
+
 #include "Sequence.hpp"
 #include "Alphabet.hpp"
 
@@ -35,7 +37,7 @@
 namespace tops {
 
   //! This class is the implementation of Similiarity Based Sequence Weighting
-  class SimilarityBasedSequenceWeighting : public ProbabilisticModel
+  class DLLEXPORT SimilarityBasedSequenceWeighting : public ProbabilisticModel
   {
   public:
 

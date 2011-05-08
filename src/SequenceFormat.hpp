@@ -22,15 +22,17 @@
 #ifndef SEQUENCE_FORMAT_HPP
 #define SEQUENCE_FORMAT_HPP
 
+#include "crossplatform.hpp"
+
 #include <istream>
 #include <ostream>
 #include <boost/shared_ptr.hpp>
 
 
 namespace tops {
-  class SequenceEntry;
+  class DLLEXPORT SequenceEntry;
   //! Represents a  format for the sequence
-  class SequenceFormat {
+  class DLLEXPORT SequenceFormat {
   public:
     SequenceFormat(){};
     virtual ~SequenceFormat(){}
@@ -40,7 +42,7 @@ namespace tops {
   typedef boost::shared_ptr<SequenceFormat> SequenceFormatPtr;
 
   //! Fasta Format
-  class FastaSequenceFormat : public SequenceFormat {
+  class DLLEXPORT FastaSequenceFormat : public SequenceFormat {
   private:
     std::string _nextFastaHeader;
     std::string _currentFastaHeader;
@@ -53,10 +55,10 @@ namespace tops {
   };
   typedef boost::shared_ptr <FastaSequenceFormat> FastaSequenceFormatPtr;
   
-  class SequenceFormatManager;
+  class DLLEXPORT SequenceFormatManager;
   typedef boost::shared_ptr <SequenceFormatManager> SequenceFormatManagerPtr;
   //! Sequence Format Manager
-  class SequenceFormatManager {
+  class DLLEXPORT SequenceFormatManager {
   public:
     static SequenceFormatManagerPtr instance();
     virtual ~SequenceFormatManager(){};

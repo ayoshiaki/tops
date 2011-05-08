@@ -1,6 +1,8 @@
 #ifndef TRAIN_PHMM_BAUM_WELCH_HPP
 #define TRAIN_PHMM_BAUM_WELCH_HPP
 
+#include "crossplatform.hpp"
+
 #include "ProbabilisticModel.hpp"
 #include "ProbabilisticModelCreator.hpp"
 #include "ConfigurationReader.hpp"
@@ -9,7 +11,7 @@
 namespace tops {
 
   //! Creates a HMM using Baum-Welch
-  class TrainPHMMBaumWelch : public ProbabilisticModelCreator {
+  class DLLEXPORT TrainPHMMBaumWelch : public ProbabilisticModelCreator {
   public:
     TrainPHMMBaumWelch () {}
     virtual ~TrainPHMMBaumWelch () {};

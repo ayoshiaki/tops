@@ -22,13 +22,15 @@
 #ifndef PREFIX_SUM_ARRAY_HPP
 #define PREFIX_SUM_ARRAY_HPP
 
+#include "crossplatform.hpp"
+
 #include <boost/shared_ptr.hpp>
 #include "Sequence.hpp"
 
 namespace tops {
 
 //! This class provides an interface for working with the prefix  sum arrays.
-class PrefixSumArray 
+class DLLEXPORT PrefixSumArray 
 {
 public:
   virtual ~PrefixSumArray(){};

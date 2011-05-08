@@ -22,6 +22,8 @@
 #ifndef TargetModel_H
 #define TargetModel_H
 
+#include "crossplatform.hpp"
+
 #include "Sequence.hpp"
 #include "Alphabet.hpp"
 
@@ -35,7 +37,7 @@
 namespace tops {
 
   //! This class is the Target Model
-  class TargetModel : public ProbabilisticModel
+  class DLLEXPORT TargetModel : public ProbabilisticModel
   {
   public:
     

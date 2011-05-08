@@ -22,19 +22,20 @@
 #ifndef CONTEXT_TREE_HPP
 #define CONTEXT_TREE_HPP
 
+#include "crossplatform.hpp"
 
 #include "MultinomialDistribution.hpp"
 #include "ProbabilisticModelParameter.hpp"
 #include <boost/shared_ptr.hpp>
 #include <set>
 namespace tops {
-  class ContextTreeNode;
+  class DLLEXPORT ContextTreeNode;
   typedef boost::shared_ptr <ContextTreeNode> ContextTreeNodePtr;
   typedef std::vector< boost::shared_ptr<tops::ContextTreeNode> > ContextTreeNodeVector;
-    class ContextTree;
+    class DLLEXPORT ContextTree;
    typedef boost::shared_ptr<ContextTree> ContextTreePtr;
   //! This is a context tree node
-  class ContextTreeNode {
+  class DLLEXPORT ContextTreeNode {
   private:
     MultinomialDistributionPtr _distribution;
     ContextTreeNodeVector _child;
@@ -116,7 +117,7 @@ namespace tops {
 
 
   //! This class represents a context tree
-  class ContextTree {
+  class DLLEXPORT ContextTree {
   public:
     ~ContextTree() {
     }
@@ -165,7 +166,7 @@ namespace tops {
 
 
     //! Prune subtrees with small counters
-    void pruneTreeSmallSampleSize(int small) ;
+    void pruneTreeSmallSampleSize(int small_) ;
 
     //! Initialize context tree using the Rissanen algorithm
     void initializeContextTreeRissanen(const SequenceEntryList & sequences);

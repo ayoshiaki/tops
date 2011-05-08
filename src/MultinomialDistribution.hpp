@@ -22,6 +22,8 @@
 #ifndef FINITE_DISCRETE_DISTRIBUTION_H
 #define FINITE_DISCRETE_DISTRIBUTION_H
 
+#include "crossplatform.hpp"
+
 #include "Sequence.hpp"
 #include "Alphabet.hpp"
 
@@ -34,12 +36,12 @@
 namespace tops {
 
   //! This  represent  probability distributions  over a finite set of symbols
-  class MultinomialDistribution :  public FactorableModel
+  class DLLEXPORT MultinomialDistribution :  public FactorableModel
   {
   private:
     DoubleVector _log_probabilities;
     Matrix _log_probabilities_matrix;
-    double _huge;
+    double _huge_;
     int _size;
     bool _geometric_tail;
     double _mean;

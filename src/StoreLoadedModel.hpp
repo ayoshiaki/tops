@@ -1,12 +1,15 @@
 #ifndef STORE_LOADED_MODEL_HPP
 #define STORE_LOADED_MODEL_HPP
+
+#include "crossplatform.hpp"
+
 #include <boost/shared_ptr.hpp>
 #include "ProbabilisticModel.hpp"
 namespace tops {
 
-  class StoreLoadedModel;
+  class DLLEXPORT StoreLoadedModel;
 
-  class StoreLoadedModel {
+  class DLLEXPORT StoreLoadedModel {
   public:
 
       virtual ~StoreLoadedModel(){};

@@ -21,13 +21,16 @@
 
 #ifndef SMOOTHED_HISTOGRAM_STANKE_HPP
 #define SMOOTHED_HISTOGRAM_STANKE_HPP
+
+#include "crossplatform.hpp"
+
 #include "ProbabilisticModelCreator.hpp"
 
 namespace tops 
 {
 
   //! Use this to create a smoothed histogram
-  class SmoothedHistogramStanke:  public ProbabilisticModelCreator {
+  class DLLEXPORT SmoothedHistogramStanke:  public ProbabilisticModelCreator {
   public:
     SmoothedHistogramStanke () {}
     virtual ~SmoothedHistogramStanke () {};

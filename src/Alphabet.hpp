@@ -22,6 +22,8 @@
 #ifndef ALPHABET_H
 #define ALPHABET_H
 
+#include "crossplatform.hpp"
+
 #include <boost/shared_ptr.hpp>
 #include <boost/pool/pool_alloc.hpp>
 
@@ -35,12 +37,12 @@
 
 
 namespace tops {
-  class Symbol;
+  class DLLEXPORT Symbol;
   typedef boost::shared_ptr <Symbol> SymbolPtr;
-  class ProbabilisticModelParameterValue;
+  class DLLEXPORT ProbabilisticModelParameterValue;
   typedef boost::shared_ptr <ProbabilisticModelParameterValue> ProbabilisticModelParameterValuePtr;
   //! A class representing Alphabet.
-  class Alphabet
+  class DLLEXPORT Alphabet
   {
   public:
     //!  Creates a new symbol

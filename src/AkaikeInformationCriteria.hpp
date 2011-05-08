@@ -22,6 +22,8 @@
 #ifndef AKAIKE_INFORMATION_CRITERIA_HPP
 #define AKAIKE_INFORMATION_CRITERIA_HPP
 
+#include "crossplatform.hpp"
+
 #include "ProbabilisticModel.hpp"
 #include "ProbabilisticModelCreator.hpp"
 #include "ConfigurationReader.hpp"
@@ -30,7 +32,7 @@
 namespace tops
 {
   //! This class implements the Akaike Information Criteria. 
-  class AkaikeInformationCriteria : public ProbabilisticModelCreator {
+  class DLLEXPORT AkaikeInformationCriteria : public ProbabilisticModelCreator {
   private:
     ProbabilisticModelCreatorPtr _creator;
   public:

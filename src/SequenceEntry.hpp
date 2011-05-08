@@ -21,6 +21,9 @@
 
 #ifndef Sequence_ENTRY_HPP
 #define Sequence_ENTRY_HPP
+
+#include "crossplatform.hpp"
+
 #include <istream>
 #include <ostream>
 #include <string>
@@ -32,10 +35,10 @@
 
 namespace tops {
   //! Represent a sequence entry
-  class SequenceEntry {
+  class DLLEXPORT SequenceEntry {
   private:
-    friend std::ostream & operator << (std::ostream & stream, SequenceEntry & out);
-    friend std::istream & operator >> (std::istream & stream, SequenceEntry & in);
+    DLLEXPORT friend std::ostream & operator << (std::ostream & stream, SequenceEntry & out);
+    DLLEXPORT friend std::istream & operator >> (std::istream & stream, SequenceEntry & in);
     std::string _name;
     std::string _description;
     Sequence _sequence;

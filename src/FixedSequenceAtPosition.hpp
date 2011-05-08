@@ -22,11 +22,13 @@
 #ifndef FIXED_SEQUENCE_AT_POSITION_HPP
 #define FIXED_SEQUENCE_AT_POSITION_HPP
 
+#include "crossplatform.hpp"
+
 #include "ProbabilisticModelDecorator.hpp"
 #include "MultinomialDistribution.hpp"
 namespace tops { 
   //! A decorator that forces the emission of the same sequence at a fixed position of the sequence.
-  class FixedSequenceAtPosition : public ProbabilisticModelDecorator {
+  class DLLEXPORT FixedSequenceAtPosition : public ProbabilisticModelDecorator {
   private:
     int _position;
     Sequence _sequence;

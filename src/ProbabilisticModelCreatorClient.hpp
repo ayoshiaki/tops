@@ -22,13 +22,14 @@
 #ifndef PROBABILISTIC_MODEL_CREATOR_CLIENT_HPP
 #define PROBABILISTIC_MODEL_CREATOR_CLIENT_HPP
 
+#include "crossplatform.hpp"
 
 #include "ProbabilisticModel.hpp"
 #include "ProbabilisticModelParameter.hpp"
 
 namespace tops {
   //! Creates a new probabilistic model
-  class ProbabilisticModelCreatorClient {
+  class DLLEXPORT ProbabilisticModelCreatorClient {
   public:
     ProbabilisticModelCreatorClient();
     ProbabilisticModelPtr create(ProbabilisticModelParameters & parameters);

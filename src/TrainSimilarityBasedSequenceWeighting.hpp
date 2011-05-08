@@ -22,6 +22,8 @@
 #ifndef TRAIN_SBSW_ESTIMATION_HPP
 #define TRAIN_SBSW_ESTIMATION_HPP
 
+#include "crossplatform.hpp"
+
 #include "ProbabilisticModel.hpp"
 #include "ProbabilisticModelCreator.hpp"
 #include "ConfigurationReader.hpp"
@@ -30,7 +32,7 @@
 namespace tops {
 
   //! Creates a similarity based sequence weighting model
-  class TrainSimilarityBasedSequenceWeighting : public ProbabilisticModelCreator {
+  class DLLEXPORT TrainSimilarityBasedSequenceWeighting : public ProbabilisticModelCreator {
   public:
     TrainSimilarityBasedSequenceWeighting () {}
     virtual ~TrainSimilarityBasedSequenceWeighting () {};

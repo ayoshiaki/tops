@@ -22,13 +22,15 @@
 #ifndef MSM_CREATOR_HPP
 #define MSM_CREATOR_HPP
 
+#include "crossplatform.hpp"
+
 #include "ProbabilisticModelCreator.hpp"
 #include "ProbabilisticModel.hpp"
 #include <boost/shared_ptr.hpp>
 
 namespace tops {
   //! This class is  a factory for the Target Model
-  class MultipleSequentialModelCreator : public ProbabilisticModelCreator 
+  class DLLEXPORT MultipleSequentialModelCreator : public ProbabilisticModelCreator 
   {
   public:
     MultipleSequentialModelCreator() {}

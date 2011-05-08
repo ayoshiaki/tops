@@ -21,13 +21,16 @@
 
 #ifndef SMOOTHED_HISTOGRAM_BURGE_HPP
 #define SMOOTHED_HISTOGRAM_BURGE_HPP
+
+#include "crossplatform.hpp"
+
 #include "ProbabilisticModelCreator.hpp"
 
 namespace tops 
 {
 
   //! Creates a smoothed histogram using Burge algorithm
-  class SmoothedHistogramBurge:  public ProbabilisticModelCreator {
+  class DLLEXPORT SmoothedHistogramBurge:  public ProbabilisticModelCreator {
   public:
     SmoothedHistogramBurge () {}
     virtual ~SmoothedHistogramBurge () {};

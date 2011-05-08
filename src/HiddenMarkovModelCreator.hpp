@@ -22,13 +22,15 @@
 #ifndef HIDDEN_MARKOV_MODEL_CREATOR_HPP
 #define HIDDEN_MARKOV_MODEL_CREATOR_HPP
 
+#include "crossplatform.hpp"
+
 #include "ProbabilisticModelCreator.hpp"
 #include "ProbabilisticModel.hpp"
 #include <boost/shared_ptr.hpp>
 
 namespace tops {
   //! This class is  a factory for the finite discrete distribution
-  class HiddenMarkovModelCreator : public ProbabilisticModelCreator 
+  class DLLEXPORT HiddenMarkovModelCreator : public ProbabilisticModelCreator 
   {
   public:
     HiddenMarkovModelCreator() {}

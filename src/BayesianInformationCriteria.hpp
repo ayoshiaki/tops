@@ -22,6 +22,8 @@
 #ifndef BAYESIAN_INFORMATION_CRITERIA_HPP
 #define BAYESIAN_INFORMATION_CRITERIA_HPP
 
+#include "crossplatform.hpp"
+
 #include "ProbabilisticModel.hpp"
 #include "ProbabilisticModelCreator.hpp"
 #include "ConfigurationReader.hpp"
@@ -29,7 +31,7 @@
 namespace tops
 {
   //! Bayesian Information Criteria
-  class BayesianInformationCriteria : public ProbabilisticModelCreator {
+  class DLLEXPORT BayesianInformationCriteria : public ProbabilisticModelCreator {
   private:
     ProbabilisticModelCreatorPtr _creator;
   public:

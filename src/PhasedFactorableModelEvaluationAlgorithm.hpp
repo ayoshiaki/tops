@@ -22,6 +22,8 @@
 #ifndef PHASED_FACTORABLE_EVALUATION_ALGORITHM_H
 #define PHASED_FACTORABLE_EVALUATION_ALGORITHM_H
 
+#include "crossplatform.hpp"
+
 #include "EvaluationAlgorithm.hpp" 
 #include "Sequence.hpp"
 #include "ProbabilisticModel.hpp"
@@ -32,7 +34,7 @@
 namespace tops {
 
   //! Evaluation algorithm for factorable models
-  class PhasedFactorableModelEvaluationAlgorithm : public  EvaluationAlgorithm {
+  class DLLEXPORT PhasedFactorableModelEvaluationAlgorithm : public  EvaluationAlgorithm {
   private:
     std::vector<DoubleVector> _alpha;
     std::vector<DoubleVector> _precision;

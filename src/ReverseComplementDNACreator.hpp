@@ -21,10 +21,13 @@
 
 #ifndef REVERSE_COMPLEMENT_CREATOR_HPP
 #define REVERSE_COMPLEMENT_CREATOR_HPP
+
+#include "crossplatform.hpp"
+
 #include "ProbabilisticModelCreator.hpp"
 
 namespace tops {
-  class ReverseComplementDNACreator :public ProbabilisticModelCreator { 
+  class DLLEXPORT ReverseComplementDNACreator :public ProbabilisticModelCreator { 
   public:
     //! Creates a probability model 
     /*! \param parameters is a set of parameters that is utilized to build the model */

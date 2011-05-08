@@ -22,13 +22,15 @@
 #ifndef NULL_PREFIX_SUM_ARRAY_HPP
 #define NULL_PREFIX_SUM_ARRAY_HPP
 
+#include "crossplatform.hpp"
+
 #include <boost/shared_ptr.hpp>
 #include "Sequence.hpp"
 #include "ProbabilisticModel.hpp"
 namespace tops {
 
   //! This class is a generic prefix sum array.
-  class NullPrefixSumArray : public PrefixSumArray 
+  class DLLEXPORT NullPrefixSumArray : public PrefixSumArray 
   {
   private:
     ProbabilisticModel *_model;

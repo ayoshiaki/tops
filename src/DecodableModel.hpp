@@ -22,6 +22,7 @@
 #ifndef DECODABLE_MODEL_HPP
 #define DECODABLE_MODEL_HPP
 
+#include "crossplatform.hpp"
 
 #include "ProbabilisticModel.hpp"
 #include "Sequence.hpp"
@@ -30,7 +31,7 @@
 
 namespace tops {
   //! Interface defining probabilistic model with the viterbi, forward and backward algorithm
-  class DecodableModel : public ProbabilisticModel  {
+  class DLLEXPORT DecodableModel : public ProbabilisticModel  {
   public:
     DecodableModel(){};
     virtual ~DecodableModel(){};

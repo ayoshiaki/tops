@@ -21,13 +21,16 @@
 
 #ifndef SMOOTHED_HISTOGRAM_KERNEL_DENSITY_HPP
 #define SMOOTHED_HISTOGRAM_KERNEL_DENSITY_HPP
+
+#include "crossplatform.hpp"
+
 #include "ProbabilisticModelCreator.hpp"
 
 namespace tops 
 {
 
   //! Estimates a smoothed histogram using kernel density estimation
-  class SmoothedHistogramKernelDensity:  public ProbabilisticModelCreator {
+  class DLLEXPORT SmoothedHistogramKernelDensity:  public ProbabilisticModelCreator {
   public:
     SmoothedHistogramKernelDensity () {}
     virtual ~SmoothedHistogramKernelDensity () {};

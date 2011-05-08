@@ -22,6 +22,8 @@
 #ifndef VLMC_CREATOR_HPP
 #define VLMC_CREATOR_HPP
 
+#include "crossplatform.hpp"
+
 #include "ProbabilisticModelCreator.hpp"
 #include "ProbabilisticModel.hpp"
 #include "VariableLengthMarkovChain.hpp"
@@ -29,7 +31,7 @@
 
 namespace tops {
   //! This class is  a factory for the variable length markov chain
-  class VariableLengthMarkovChainCreator : public ProbabilisticModelCreator 
+  class DLLEXPORT VariableLengthMarkovChainCreator : public ProbabilisticModelCreator 
   {
   public:
     VariableLengthMarkovChainCreator() {};

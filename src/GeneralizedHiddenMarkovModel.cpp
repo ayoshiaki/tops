@@ -26,7 +26,7 @@
 #include "GHMMStates.hpp"
 #include "util.hpp"
 #include <sys/types.h>
-#include <sys/time.h>
+
 
 namespace tops {
 

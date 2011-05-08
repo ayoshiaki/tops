@@ -19,11 +19,13 @@
  *       MA 02110-1301, USA.
  */
 
+#include "crossplatform.hpp"
+
 #include "ProbabilisticModel.hpp"
 #include <string>
 namespace tops {
   //! Decorator for the probabilistic model
-  class ProbabilisticModelDecorator : public ProbabilisticModel {
+  class DLLEXPORT ProbabilisticModelDecorator : public ProbabilisticModel {
   private:
     ProbabilisticModelPtr _model;
     std::string _submodelname;

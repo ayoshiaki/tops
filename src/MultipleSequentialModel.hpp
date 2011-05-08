@@ -22,6 +22,8 @@
 #ifndef MULTIPLE_SEQUENTIAL_MODEL
 #define MULTIPLE_SEQUENTIAL_MODEL
 
+#include "crossplatform.hpp"
+
 #include "Sequence.hpp"
 #include "Alphabet.hpp"
 
@@ -36,7 +38,7 @@
 namespace tops {
 
     //! This class is a model that concatenates multiple models
-    class MultipleSequentialModel : public ProbabilisticModel
+    class DLLEXPORT MultipleSequentialModel : public ProbabilisticModel
     {
     public:
 

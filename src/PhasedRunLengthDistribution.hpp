@@ -22,11 +22,13 @@
 #ifndef PHASED_RUN_LENGTH_DISTRIBUTION_HPP
 #define PHASED_RUN_LENGTH_DISTRIBUTION_HPP
 
+#include "crossplatform.hpp"
+
 #include "ProbabilisticModelDecorator.hpp"
 #include "MultinomialDistribution.hpp"
 namespace tops {
   //! Provides mechanisms to control the phase of a probabilistic model
-  class PhasedRunLengthDistribution : public ProbabilisticModelDecorator {
+  class DLLEXPORT PhasedRunLengthDistribution : public ProbabilisticModelDecorator {
   private:
     int _delta;
     int _iphase;

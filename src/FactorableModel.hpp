@@ -21,6 +21,9 @@
 
 #ifndef FACTORABLE_MODEL_HPP
 #define FACTORABLE_MODEL_HPP
+
+#include "crossplatform.hpp"
+
 #include "Sequence.hpp"
 #include "ProbabilisticModel.hpp"
 #include <boost/shared_ptr.hpp>
@@ -28,7 +31,7 @@
 
 namespace tops {
   //! Abstract class defining models in which the likelihood of the sequence is factorable in the sense that they can be expressed as a product of terms evaluated at each position in a sequence.
-  class FactorableModel : public ProbabilisticModel {
+  class DLLEXPORT FactorableModel : public ProbabilisticModel {
   private:
     double _dummy;
     DoubleVector _alpha;

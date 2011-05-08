@@ -1,6 +1,8 @@
 #ifndef PAIR_HIDDEN_MARKOV_MODEL
 #define PAIR_HIDDEN_MARKOV_MODEL
 
+#include "crossplatform.hpp"
+
 #include "HiddenMarkovModel.hpp"
 #include "PairHiddenMarkovModel.hpp"
 #include "ProbabilisticModel.hpp"
@@ -16,7 +18,7 @@
 #include <vector>
 
 namespace tops{
-  class PHMMState: public HMMState {
+  class DLLEXPORT PHMMState: public HMMState {
 
   private:
     int _emissionSeq1, _emissionSeq2;
@@ -71,7 +73,7 @@ namespace tops{
 
   typedef boost::shared_ptr <PHMMState> PHMMStatePtr;
 
-  class PairHiddenMarkovModel : public ProbabilisticModel{
+  class DLLEXPORT PairHiddenMarkovModel : public ProbabilisticModel{
   private:
     int _gap_id;
     int _end_id;

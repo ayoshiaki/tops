@@ -22,13 +22,15 @@
 #ifndef SBSW_CREATOR_HPP
 #define SBSW_CREATOR_HPP
 
+#include "crossplatform.hpp"
+
 #include "ProbabilisticModelCreator.hpp"
 #include "ProbabilisticModel.hpp"
 #include <boost/shared_ptr.hpp>
 
 namespace tops {
   //! This class is  a factory for the Target Model
-  class SimilarityBasedSequenceWeightingCreator : public ProbabilisticModelCreator 
+  class DLLEXPORT SimilarityBasedSequenceWeightingCreator : public ProbabilisticModelCreator 
   {
   public:
     SimilarityBasedSequenceWeightingCreator() {}

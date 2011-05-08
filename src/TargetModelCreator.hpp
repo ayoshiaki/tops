@@ -22,13 +22,15 @@
 #ifndef TARGET_MODEL_CREATOR_HPP
 #define TARGET_MODEL_CREATOR_HPP
 
+#include "crossplatform.hpp"
+
 #include "ProbabilisticModelCreator.hpp"
 #include "ProbabilisticModel.hpp"
 #include <boost/shared_ptr.hpp>
 
 namespace tops {
   //! This class is  a factory for the Target Model
-  class TargetModelCreator : public ProbabilisticModelCreator 
+  class DLLEXPORT TargetModelCreator : public ProbabilisticModelCreator 
   {
   public:
     TargetModelCreator() {}

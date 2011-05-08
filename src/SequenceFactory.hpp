@@ -21,11 +21,14 @@
 
 #ifndef SEQUENCE_FACTORY_H
 #define SEQUENCE_FACTORY_H
+
+#include "crossplatform.hpp"
+
 #include <boost/shared_ptr.hpp>
 #include "Sequence.hpp"
 
 namespace tops{
-  class Alphabet;
+  class DLLEXPORT Alphabet;
   typedef boost::shared_ptr<Alphabet> AlphabetPtr;
   struct my_tolower
   {
@@ -36,7 +39,7 @@ namespace tops{
   };
 
   //! Provides factory methods for creating objects of type Sequence
-  class SequenceFactory
+  class DLLEXPORT SequenceFactory
   {
   private:
     AlphabetPtr _alphabet;

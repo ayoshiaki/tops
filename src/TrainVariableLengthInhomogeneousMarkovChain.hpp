@@ -22,6 +22,8 @@
 #ifndef TRAIN_VLMC_WAM_HPP
 #define TRAIN_VLMC_WAM_HPP
 
+#include "crossplatform.hpp"
+
 #include "ProbabilisticModel.hpp"
 #include "ProbabilisticModelCreator.hpp"
 #include "ConfigurationReader.hpp"
@@ -30,7 +32,7 @@
 namespace tops {
 
   //! Train a inhomogeneous VLMC
-  class TrainVariableLengthInhomogeneousMarkovChain : public ProbabilisticModelCreator {
+  class DLLEXPORT TrainVariableLengthInhomogeneousMarkovChain : public ProbabilisticModelCreator {
   public:
     TrainVariableLengthInhomogeneousMarkovChain () {}
     virtual ~TrainVariableLengthInhomogeneousMarkovChain () {};

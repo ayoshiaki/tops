@@ -22,6 +22,8 @@
 #ifndef WEIGHT_ARRAY_MODEL_HPP
 #define WEIGHT_ARRAY_MODEL_HPP
 
+#include "crossplatform.hpp"
+
 #include "ContextTree.hpp"
 #include "ProbabilisticModel.hpp"
 #include "InhomogeneousFactorableModel.hpp"
@@ -31,7 +33,7 @@
 namespace tops {
 
   //! Inhomogeneous Markov chain
-  class InhomogeneousMarkovChain : public InhomogeneousFactorableModel
+  class DLLEXPORT InhomogeneousMarkovChain : public InhomogeneousFactorableModel
   {
   private:
     std::vector <ContextTreePtr> _context_trees;

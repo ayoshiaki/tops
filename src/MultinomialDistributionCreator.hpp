@@ -22,6 +22,8 @@
 #ifndef FINITE_DISCRETE_DISTRIBUTION_CREATOR_HPP
 #define FINITE_DISCRETE_DISTRIBUTION_CREATOR_HPP
 
+#include "crossplatform.hpp"
+
 #include "ProbabilisticModelCreator.hpp"
 #include "ProbabilisticModel.hpp"
 #include "MultinomialDistribution.hpp"
@@ -29,7 +31,7 @@
 
 namespace tops {
   //! This class is  a factory for the finite discrete distribution
-  class MultinomialDistributionCreator : public ProbabilisticModelCreator 
+  class DLLEXPORT MultinomialDistributionCreator : public ProbabilisticModelCreator 
   {
   public:
     MultinomialDistributionCreator() {}

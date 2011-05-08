@@ -121,8 +121,8 @@ int main (int argc, char ** argv)
 	      s.push_back(j);
 	      double p = exp(positiveModel->inhomogeneous()->evaluatePosition(s, 0, i));
 	      double q = exp(negativeModel->inhomogeneous()->evaluatePosition(s, 0, i));
-	      kl += p * log(p/q)/log(2);
-	      entropy += p * log(p)/log(2);
+	      kl += p * logf(p/q)/logf(2);
+	      entropy += p * logf(p)/logf(2);
 	    }
 	  std::cout << i << "\t" << kl << "\t" << entropy << std::endl;
 	}

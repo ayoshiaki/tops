@@ -22,6 +22,8 @@
 #ifndef TRAIN_WAM_HPP
 #define TRAIN_WAM_HPP
 
+#include "crossplatform.hpp"
+
 #include "ProbabilisticModel.hpp"
 #include "ProbabilisticModelCreator.hpp"
 #include "ConfigurationReader.hpp"
@@ -30,7 +32,7 @@
 namespace tops {
 
   //! A creator that trains a Weight Array Model
-  class TrainWeightArrayModel : public ProbabilisticModelCreator {
+  class DLLEXPORT TrainWeightArrayModel : public ProbabilisticModelCreator {
   public:
     TrainWeightArrayModel () {}
     virtual ~TrainWeightArrayModel () {};

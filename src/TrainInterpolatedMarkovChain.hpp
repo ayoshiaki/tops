@@ -22,6 +22,8 @@
 #ifndef TRAIN_INTERPOLATED_MC_ESTIMATION_HPP
 #define TRAIN_INTERPOLATED_MC_ESTIMATION_HPP
 
+#include "crossplatform.hpp"
+
 #include "ProbabilisticModel.hpp"
 #include "ProbabilisticModelCreator.hpp"
 #include "ConfigurationReader.hpp"
@@ -30,7 +32,7 @@
 namespace tops {
 
   //! Creates a fixed length markov chain
-  class TrainInterpolatedMarkovChain : public ProbabilisticModelCreator {
+  class DLLEXPORT TrainInterpolatedMarkovChain : public ProbabilisticModelCreator {
   public:
     TrainInterpolatedMarkovChain () {}
     virtual ~TrainInterpolatedMarkovChain () {};

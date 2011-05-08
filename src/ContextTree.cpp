@@ -429,7 +429,7 @@ namespace tops
     }
   }
 
-  void ContextTree::pruneTreeSmallSampleSize(int small)
+  void ContextTree::pruneTreeSmallSampleSize(int small_)
   {
 
     std::set<int> x = getLevelOneNodes();
@@ -458,14 +458,14 @@ namespace tops
               {
                 totalchild += (childNode->getCounter())[m];
               }
-            if(totalchild < small){
+            if(totalchild < small_){
               for(int m = 0; m < (int)_alphabet->size(); m++)
                 {
                   (childNode->getCounter())[m] = (parentNode->getCounter())[m];
                 }
             }
           }
-        if(total < small)
+        if(total < small_)
           {
             parentNode->deleteChildren();
             ContextTreeNodePtr parentNode2 = getContext(parentNode->getParent());
@@ -493,7 +493,7 @@ namespace tops
     std::set<int> x = getLevelOneNodes();
     std::vector<int> nodesToPrune (x.begin(),x.end());
     std::set<int>::iterator it;
-    double small = ((double)_alphabet->size())*log(sample_size);
+    double small_ = ((double)_alphabet->size())*log(sample_size);
 
     while(nodesToPrune.size() > 0)
       {
@@ -519,7 +519,7 @@ namespace tops
                 double diff = (double)(parentNode->getCounter())[m] / total;
                 diff -= (double)(childNode->getCounter())[m] /totalChild;
                 assert(childNode->isLeaf());
-                if((double)(childNode->getCounter())[m] < small)
+                if((double)(childNode->getCounter())[m] < small_)
                   {
                     foundSmall = true;
                     break;
@@ -533,7 +533,7 @@ namespace tops
             if(foundSmall)
               break;
           }
-        if((total < small) ||
+        if((total < small_) ||
            (total_diff <delta) ||
            (foundSmall==true))
           {

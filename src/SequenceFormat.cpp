@@ -27,8 +27,8 @@
 #include "Symbol.hpp"
 #include <stdlib.h>
 #include <sys/types.h>
-#include <sys/times.h>
-#include <sys/param.h>
+
+
 
 namespace tops {
 

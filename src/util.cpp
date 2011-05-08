@@ -54,8 +54,8 @@ namespace tops {
       cnt.push_back(0);
     xmin = xmax = x[0];
     for (i = 1; i < nn; i++) {
-      xmin = std::min(xmin, x[i]);
-      xmax = std::max(xmax, x[i]);
+      xmin = _min(xmin, x[i]);
+      xmax = _min(xmax, x[i]);
     }
     rang = (xmax - xmin) * 1.01;
     *d = dd = rang / (nb);
@@ -320,7 +320,7 @@ namespace tops {
     double variance =  var(data);
   DoubleVector count;
   band_den_bin ((int)n, nb, &d, data, count);
-  double scale = std::min(std::sqrt(variance), iqr(data)/1.349);
+  double scale = _min(std::sqrt(variance), iqr(data)/1.349);
   double b = 1.23 * scale * pow(n, (-1.0/9.0));
   double c1 = 1.0 / (2.0*sqrt(M_PI) * n);
   double td;

@@ -22,11 +22,13 @@
 #ifndef IH_FACTORABLE_MODEL_HPP
 #define IH_FACTORABLE_MODEL_HPP
 
+#include "crossplatform.hpp"
+
 #include "ProbabilisticModel.hpp"
 
 namespace tops {
   //! Interface defining inhomogeneous models in which the  likelihood of the sequence is factorable in the sense that they can be expressed as a product of terms evaluated at each position in a sequence 
-  class InhomogeneousFactorableModel : public ProbabilisticModel {
+  class DLLEXPORT InhomogeneousFactorableModel : public ProbabilisticModel {
   private:
     ProbabilisticModel * _model;
     std::vector<DoubleVector> _alpha;

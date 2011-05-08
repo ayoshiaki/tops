@@ -22,6 +22,8 @@
 #ifndef TRAIN_PHASED_MARKOV_CHAIN_HPP
 #define TRAIN_PHASED_MARKOV_CHAIN_HPP
 
+#include "crossplatform.hpp"
+
 #include "ProbabilisticModel.hpp"
 #include "ProbabilisticModelCreator.hpp"
 #include "ConfigurationReader.hpp"
@@ -30,7 +32,7 @@
 namespace tops {
 
   //! Train a Phased Markov Chain
-  class TrainPhasedMarkovChain : public ProbabilisticModelCreator {
+  class DLLEXPORT TrainPhasedMarkovChain : public ProbabilisticModelCreator {
   public:
     TrainPhasedMarkovChain () {}
     virtual ~TrainPhasedMarkovChain () {};

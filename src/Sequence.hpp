@@ -22,6 +22,8 @@
 #ifndef SEQUENCE_HPP
 #define SEQUENCE_HPP
 
+#include "crossplatform.hpp"
+
 #include <boost/pool/pool_alloc.hpp>
 #include <vector>
 

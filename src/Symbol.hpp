@@ -22,17 +22,19 @@
 #ifndef SYMBOL_H
 #define SYMBOL_H
 
+#include "crossplatform.hpp"
+
 #include <boost/shared_ptr.hpp>
 #include <string>
 
 
 namespace tops {
 
-  class Alphabet;
+  class DLLEXPORT Alphabet;
   typedef boost::shared_ptr<Alphabet> AlphabetPtr;
 
   //! This class represents a symbol
-  class Symbol
+  class DLLEXPORT Symbol
   {
   public:
     ~Symbol(){}

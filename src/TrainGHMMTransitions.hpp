@@ -22,14 +22,16 @@
 #ifndef TRAIN_GHMM_TRANSITIONS_HPP
 #define TRAIN_GHMM_TRANSITIONS_HPP
 
+#include "crossplatform.hpp"
+
 #include <boost/shared_ptr.hpp>
 #include "ProbabilisticModelCreator.hpp"
 namespace tops {
 
-  class ProbabilisticModelParameters;
+  class DLLEXPORT ProbabilisticModelParameters;
 
   //! This class is  a factory for the Multinomial Distribution
-  class TrainGHMMTransitionsCreator : public ProbabilisticModelCreator 
+  class DLLEXPORT TrainGHMMTransitionsCreator : public ProbabilisticModelCreator 
   {
   public:
     TrainGHMMTransitionsCreator(){}

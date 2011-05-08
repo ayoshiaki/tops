@@ -22,6 +22,8 @@
 #ifndef FACTORABLE_PREFIX_SUM_ARRAY_HPP
 #define FACTORABLE_PREFIX_SUM_ARRAY_HPP
 
+#include "crossplatform.hpp"
+
 #include <boost/shared_ptr.hpp>
 #include "Sequence.hpp"
 #include "PrefixSumArray.hpp"
@@ -31,7 +33,7 @@
 namespace tops {
 
 //! This class provides an interface for working with the prefix  sum arrays.
-  class FactorableModelPrefixSumArray : public PrefixSumArray
+  class DLLEXPORT FactorableModelPrefixSumArray : public PrefixSumArray
   {
   private:
     ProbabilisticModel * _model;

@@ -21,10 +21,14 @@
 
 #ifndef DEGENERATE_DISTRIBUTION_H
 #define DEGENERATE_DISTRIBUTION_H 
+
+#include "crossplatform.hpp"
+
 #include "MultinomialDistribution.hpp"
+
 namespace tops {
   //! A probabilistic model that emits a constant integer value.
-  class DegenerateDistribution : public MultinomialDistribution
+  class DLLEXPORT DegenerateDistribution : public MultinomialDistribution
   {
     friend class boost::serialization::access;
     template <class Archive> 
@@ -35,17 +39,17 @@ namespace tops {
     }
   private:
     int _constant;
-    double _huge;
+    double _huge_;
     double _zero;
   public:
     ~DegenerateDistribution() {}
     DegenerateDistribution() {
-      _huge = -HUGE;
+      _huge_ = -HUGE;
       _zero = 0.0;
     }
     DegenerateDistribution(int c) : MultinomialDistribution("DegenerateDistribution")
     {
-      _huge = -HUGE;
+      _huge_ = -HUGE;
       _zero = 0.0;
       _constant=c;
     }
@@ -76,7 +80,7 @@ namespace tops {
     virtual double & log_probability_of(int c) 
     {
       if(c != _constant) 
-	return _huge;
+	return _huge_;
       return _zero;
     }
 

@@ -22,6 +22,8 @@
 #ifndef PROBABILISTIC_MODEL_CREATOR_HPP
 #define PROBABILISTIC_MODEL_CREATOR_HPP
 
+#include "crossplatform.hpp"
+
 #include "ProbabilisticModel.hpp"
 #include "ConfigurationReader.hpp"
 
@@ -29,7 +31,7 @@
 namespace tops {
 
   //! Represents an algorithm to create a probabilistic model
-  class ProbabilisticModelCreator {
+  class DLLEXPORT ProbabilisticModelCreator {
   public:
     ProbabilisticModelCreator () {}
     virtual ~ProbabilisticModelCreator () {};

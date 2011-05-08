@@ -22,6 +22,8 @@
 #ifndef TRAIN_FIXED_LENGTH_MC_ESTIMATION_HPP
 #define TRAIN_FIXED_LENGTH_MC_ESTIMATION_HPP
 
+#include "crossplatform.hpp"
+
 #include "ProbabilisticModel.hpp"
 #include "ProbabilisticModelCreator.hpp"
 #include "ConfigurationReader.hpp"
@@ -30,7 +32,7 @@
 namespace tops {
 
   //! Creates a fixed length markov chain
-  class TrainFixedLengthMarkovChain : public ProbabilisticModelCreator {
+  class DLLEXPORT TrainFixedLengthMarkovChain : public ProbabilisticModelCreator {
   public:
     TrainFixedLengthMarkovChain () {}
     virtual ~TrainFixedLengthMarkovChain () {};

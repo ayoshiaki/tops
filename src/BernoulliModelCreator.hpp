@@ -22,13 +22,15 @@
 #ifndef BERNOULLI_CREATOR_HPP
 #define BERNOULLI_CREATOR_HPP
 
+#include "crossplatform.hpp"
+
 #include "ProbabilisticModelCreator.hpp"
 #include "ProbabilisticModel.hpp"
 #include <boost/shared_ptr.hpp>
 
 namespace tops {
   //! This class is  a factory for the bernoulli distribution
-  class BernoulliModelCreator : public ProbabilisticModelCreator 
+  class DLLEXPORT BernoulliModelCreator : public ProbabilisticModelCreator 
   {
   public:
     virtual ~BernoulliModelCreator(){};

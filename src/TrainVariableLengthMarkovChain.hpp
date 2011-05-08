@@ -22,6 +22,8 @@
 #ifndef TRAIN_VARIABLE_LENGTH_MARKOV_CHAIN_HPP
 #define TRAIN_VARIABLE_LENGTH_MARKOV_CHAIN_HPP
 
+#include "crossplatform.hpp"
+
 #include "ProbabilisticModel.hpp"
 #include "ProbabilisticModelCreator.hpp"
 #include "ConfigurationReader.hpp"
@@ -30,7 +32,7 @@
 namespace tops {
 
   //! This class trains the Variable Length Markov Chain using the context algorithm.
-  class TrainVariableLengthMarkovChain : public ProbabilisticModelCreator {
+  class DLLEXPORT TrainVariableLengthMarkovChain : public ProbabilisticModelCreator {
   public:
     TrainVariableLengthMarkovChain () {}
     virtual ~TrainVariableLengthMarkovChain () {};

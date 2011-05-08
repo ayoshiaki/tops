@@ -1,13 +1,15 @@
 #ifndef PAIR_HIDDEN_MARKOV_MODEL_CREATOR_HPP
 #define PAIR_HIDDEN_MARKOV_MODEL_CREATOR_HPP
 
+#include "crossplatform.hpp"
+
 #include "ProbabilisticModelCreator.hpp"
 #include "ProbabilisticModel.hpp"
 #include <boost/shared_ptr.hpp>
 
 namespace tops {
   //! This class is  a factory for the finite discrete distribution
-  class PairHiddenMarkovModelCreator : public ProbabilisticModelCreator 
+  class DLLEXPORT PairHiddenMarkovModelCreator : public ProbabilisticModelCreator 
   {
   public:
     PairHiddenMarkovModelCreator() {}

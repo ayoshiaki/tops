@@ -34,7 +34,7 @@
 #include <iostream>
 #include <stdlib.h>
 #include <sys/types.h>
-#include <sys/time.h>
+
 using namespace tops;
 using namespace std;
 using namespace boost::program_options;

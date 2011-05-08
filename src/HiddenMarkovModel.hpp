@@ -22,6 +22,7 @@
 #ifndef HIDDEN_MARKOV_MODEL_HPP
 #define HIDDEN_MARKOV_MODEL_HPP
 
+#include "crossplatform.hpp"
 
 #include "ProbabilisticModel.hpp"
 #include "DecodableModel.hpp"
@@ -36,7 +37,7 @@
 
 namespace tops {
 
-  class HMMState {
+  class DLLEXPORT HMMState {
   protected:
     int _id;
     SymbolPtr _name;
@@ -80,7 +81,7 @@ namespace tops {
   typedef boost::shared_ptr <HMMState> HMMStatePtr;
 
   //! This is represents a hidden markov model
-  class HiddenMarkovModel :   public DecodableModel
+  class DLLEXPORT HiddenMarkovModel :   public DecodableModel
   {
   public:
     

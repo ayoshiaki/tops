@@ -22,6 +22,8 @@
 #ifndef PROBABILISTIC_MODEL_HPP
 #define PROBABILISTIC_MODEL_HPP
 
+#include "crossplatform.hpp"
+
 #include <cmath>
 #include <iostream>
 
@@ -36,15 +38,15 @@
 #include "GHMMStates.hpp"
 
 namespace tops {
-  class DecodableModel;
-  class PairHiddenMarkovModel;
-  class FactorableModel;
-  class InhomogeneousFactorableModel;
-  class ProbabilisticModelCreator;
+  class DLLEXPORT DecodableModel;
+  class DLLEXPORT PairHiddenMarkovModel;
+  class DLLEXPORT FactorableModel;
+  class DLLEXPORT InhomogeneousFactorableModel;
+  class DLLEXPORT ProbabilisticModelCreator;
   typedef boost::shared_ptr<ProbabilisticModelCreator> ProbabilisticModelCreatorPtr;
 
   //! This is an abstract class representing a generative probabilistic model.
-  class ProbabilisticModel
+  class DLLEXPORT ProbabilisticModel
   {
   private:
     AlphabetPtr _alphabet;

@@ -22,12 +22,14 @@
 #ifndef REVERSE_COMPLEMENT_HPP
 #define REVERSE_COMPLEMENT_HPP
 
+#include "crossplatform.hpp"
+
 #include "ProbabilisticModelDecorator.hpp"
 #include "MultinomialDistribution.hpp"
 #include "Symbol.hpp"
 namespace tops { 
 
-  class ReverseComplementDNA : public ProbabilisticModelDecorator {
+  class DLLEXPORT ReverseComplementDNA : public ProbabilisticModelDecorator {
   private:
     AlphabetPtr revAlphabet;
     int _seqLength;

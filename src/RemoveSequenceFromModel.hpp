@@ -22,13 +22,15 @@
 #ifndef REMOVE_SEQUENCE_FROM_MODEL_HPP
 #define REMOVE_SEQUENCE_FROM_MODEL_HPP
 
+#include "crossplatform.hpp"
+
 #include "ProbabilisticModel.hpp"
 #include "ProbabilisticModelCreator.hpp"
 #include "ConfigurationReader.hpp"
 
 namespace tops
 {
-  class RemoveSequenceFromModel : public ProbabilisticModelCreator {
+  class DLLEXPORT RemoveSequenceFromModel : public ProbabilisticModelCreator {
   private:
     ProbabilisticModelCreatorPtr _creator;
   public:

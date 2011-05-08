@@ -51,7 +51,7 @@
 #include <iostream>
 #include <stdlib.h>
 #include <sys/types.h>
-#include <sys/time.h>
+
 using namespace tops;
 using namespace std;
 using namespace boost::program_options;
@@ -216,16 +216,10 @@ int main(int argc, char ** argv) {
 
                                 }
                                 struct timeval start, stop;
-                                gettimeofday(&start, (struct timezone *) NULL);
+                                clock_t begin = clock();
                                 ProbabilisticModelPtr model = creator->create( *(readConfig.parameters()));
-                                gettimeofday(&stop, (struct timezone *)NULL);
-                                stop.tv_sec -= start.tv_sec;
-                                stop.tv_usec -= start.tv_usec;
-                                if(stop.tv_usec  < 0){
-                                  stop.tv_sec --;
-                                  stop.tv_usec += 1000000;
-                                }
-                                fprintf(stderr, "Elapsed time %ld%c%02d seconds\n", stop.tv_sec, '.', stop.tv_usec/1000);
+                                clock_t end = clock();
+                              	std::cerr << "TIME: " << (double)(end - begin)/CLOCKS_PER_SEC << std::endl;
                                 if(model == NULL) {
                                     std::cerr << "ERROR: Could not create model !" << std::endl;
                                     exit(-1);

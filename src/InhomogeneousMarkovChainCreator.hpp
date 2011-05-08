@@ -22,13 +22,15 @@
 #ifndef IHM_CREATOR_HPP
 #define IHM_CREATOR_HPP
 
+#include "crossplatform.hpp"
+
 #include "ProbabilisticModelCreator.hpp"
 #include "ProbabilisticModel.hpp"
 #include <boost/shared_ptr.hpp>
 
 namespace tops {
   //! This class is  a factory for the variable length markov chain
-  class InhomogeneousMarkovChainCreator : public ProbabilisticModelCreator 
+  class DLLEXPORT InhomogeneousMarkovChainCreator : public ProbabilisticModelCreator 
   {
   public:
     InhomogeneousMarkovChainCreator() {}
