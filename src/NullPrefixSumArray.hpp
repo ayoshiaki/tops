@@ -2,17 +2,20 @@
  *       NullPrefixSumArray.hpp
  *
  *       Copyright 2011 Andre Yoshiaki Kashiwabara <akashiwabara@usp.br>
- *     
+ *                      Ígor Bonádio <ibonadio@ime.usp.br>
+ *                      Vitor Onuchic <vitoronuchic@gmail.com>
+ *                      Alan Mitchell Durham <aland@usp.br>
+ *
  *       This program is free software; you can redistribute it and/or modify
  *       it under the terms of the GNU  General Public License as published by
  *       the Free Software Foundation; either version 3 of the License, or
  *       (at your option) any later version.
- *     
+ *
  *       This program is distributed in the hope that it will be useful,
  *       but WITHOUT ANY WARRANTY; without even the implied warranty of
  *       MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *       GNU General Public License for more details.
- *      
+ *
  *       You should have received a copy of the GNU General Public License
  *       along with this program; if not, write to the Free Software
  *       Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
@@ -22,13 +25,15 @@
 #ifndef NULL_PREFIX_SUM_ARRAY_HPP
 #define NULL_PREFIX_SUM_ARRAY_HPP
 
+#include "crossplatform.hpp"
+
 #include <boost/shared_ptr.hpp>
 #include "Sequence.hpp"
 #include "ProbabilisticModel.hpp"
 namespace tops {
 
   //! This class is a generic prefix sum array.
-  class NullPrefixSumArray : public PrefixSumArray 
+  class DLLEXPORT NullPrefixSumArray : public PrefixSumArray
   {
   private:
     ProbabilisticModel *_model;
@@ -36,14 +41,14 @@ namespace tops {
   public:
     NullPrefixSumArray(ProbabilisticModel *model): _model(model){}
     virtual ~NullPrefixSumArray(){};
-  
+
     //! Initialize the prefix sum array
     virtual void initialize(const Sequence & s) {
       initialize(s, 0);
     }
-    
+
     //! Initialize the prefix sum array
-    virtual void initialize(const Sequence & s, int phase) { 
+    virtual void initialize(const Sequence & s, int phase) {
       _s = s;
     }
 

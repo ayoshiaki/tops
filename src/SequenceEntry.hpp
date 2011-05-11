@@ -2,6 +2,9 @@
  *       SequenceEntry.hpp
  *
  *       Copyright 2011 Andre Yoshiaki Kashiwabara <akashiwabara@usp.br>
+ *                      Ígor Bonádio <ibonadio@ime.usp.br>
+ *                      Vitor Onuchic <vitoronuchic@gmail.com>
+ *                      Alan Mitchell Durham <aland@usp.br>
  *
  *       This program is free software; you can redistribute it and/or modify
  *       it under the terms of the GNU  General Public License as published by
@@ -21,6 +24,9 @@
 
 #ifndef Sequence_ENTRY_HPP
 #define Sequence_ENTRY_HPP
+
+#include "crossplatform.hpp"
+
 #include <istream>
 #include <ostream>
 #include <string>
@@ -32,10 +38,10 @@
 
 namespace tops {
   //! Represent a sequence entry
-  class SequenceEntry {
+  class DLLEXPORT SequenceEntry {
   private:
-    friend std::ostream & operator << (std::ostream & stream, SequenceEntry & out);
-    friend std::istream & operator >> (std::istream & stream, SequenceEntry & in);
+    DLLEXPORT friend std::ostream & operator << (std::ostream & stream, SequenceEntry & out);
+    DLLEXPORT friend std::istream & operator >> (std::istream & stream, SequenceEntry & in);
     std::string _name;
     std::string _description;
     Sequence _sequence;

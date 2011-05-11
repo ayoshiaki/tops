@@ -2,6 +2,9 @@
  *       PhasedRunLengthDistribution.hpp
  *
  *       Copyright 2011 Andre Yoshiaki Kashiwabara <akashiwabara@usp.br>
+ *                      Ígor Bonádio <ibonadio@ime.usp.br>
+ *                      Vitor Onuchic <vitoronuchic@gmail.com>
+ *                      Alan Mitchell Durham <aland@usp.br>
  *
  *       This program is free software; you can redistribute it and/or modify
  *       it under the terms of the GNU  General Public License as published by
@@ -22,11 +25,13 @@
 #ifndef PHASED_RUN_LENGTH_DISTRIBUTION_HPP
 #define PHASED_RUN_LENGTH_DISTRIBUTION_HPP
 
+#include "crossplatform.hpp"
+
 #include "ProbabilisticModelDecorator.hpp"
 #include "MultinomialDistribution.hpp"
 namespace tops {
   //! Provides mechanisms to control the phase of a probabilistic model
-  class PhasedRunLengthDistribution : public ProbabilisticModelDecorator {
+  class DLLEXPORT PhasedRunLengthDistribution : public ProbabilisticModelDecorator {
   private:
     int _delta;
     int _iphase;

@@ -2,6 +2,9 @@
  *       util.cpp
  *
  *       Copyright 2011 Andre Yoshiaki Kashiwabara <akashiwabara@usp.br>
+ *                      Ígor Bonádio <ibonadio@ime.usp.br>
+ *                      Vitor Onuchic <vitoronuchic@gmail.com>
+ *                      Alan Mitchell Durham <aland@usp.br>
  *
  *       This program is free software; you can redistribute it and/or modify
  *       it under the terms of the GNU  General Public License as published by
@@ -54,8 +57,8 @@ namespace tops {
       cnt.push_back(0);
     xmin = xmax = x[0];
     for (i = 1; i < nn; i++) {
-      xmin = std::min(xmin, x[i]);
-      xmax = std::max(xmax, x[i]);
+      xmin = _min(xmin, x[i]);
+      xmax = _min(xmax, x[i]);
     }
     rang = (xmax - xmin) * 1.01;
     *d = dd = rang / (nb);
@@ -179,7 +182,7 @@ namespace tops {
   }
 
   void readMapFromFile(std::map<std::string, double> & s,
-		       std::string  file_name)
+                       std::string  file_name)
   {
     std::ifstream input(file_name.c_str());
     if(!input.good())
@@ -190,15 +193,15 @@ namespace tops {
     std::string line;
     while(!input.eof())
       {
-	std::getline(input, line, '\n');
-	std::vector <std::string> x;
-	boost::regex separator("\t");
-	split_regex(line, x, separator);
-	if(x.size() >= 2) {
-	  std::string key = x[0];
-	  int value = atof((x[1]).c_str());
-	  s[key] = value;
-	}
+        std::getline(input, line, '\n');
+        std::vector <std::string> x;
+        boost::regex separator("\t");
+        split_regex(line, x, separator);
+        if(x.size() >= 2) {
+          std::string key = x[0];
+          int value = atof((x[1]).c_str());
+          s[key] = value;
+        }
       }
     input.close();
   }
@@ -320,7 +323,7 @@ namespace tops {
     double variance =  var(data);
   DoubleVector count;
   band_den_bin ((int)n, nb, &d, data, count);
-  double scale = std::min(std::sqrt(variance), iqr(data)/1.349);
+  double scale = _min(std::sqrt(variance), iqr(data)/1.349);
   double b = 1.23 * scale * pow(n, (-1.0/9.0));
   double c1 = 1.0 / (2.0*sqrt(M_PI) * n);
   double td;

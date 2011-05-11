@@ -2,17 +2,20 @@
  *       ProbabilisticModelParameter.hpp
  *
  *       Copyright 2011 Andre Yoshiaki Kashiwabara <akashiwabara@usp.br>
- *     
+ *                      Ígor Bonádio <ibonadio@ime.usp.br>
+ *                      Vitor Onuchic <vitoronuchic@gmail.com>
+ *                      Alan Mitchell Durham <aland@usp.br>
+ *
  *       This program is free software; you can redistribute it and/or modify
  *       it under the terms of the GNU  General Public License as published by
  *       the Free Software Foundation; either version 3 of the License, or
  *       (at your option) any later version.
- *     
+ *
  *       This program is distributed in the hope that it will be useful,
  *       but WITHOUT ANY WARRANTY; without even the implied warranty of
  *       MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *       GNU General Public License for more details.
- *      
+ *
  *       You should have received a copy of the GNU General Public License
  *       along with this program; if not, write to the Free Software
  *       Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
@@ -21,6 +24,8 @@
 
 #ifndef CONFIGURATION_PARAMETER_VALUE_HPP
 #define CONFIGURATION_PARAMETER_VALUE_HPP
+
+#include "crossplatform.hpp"
 
 #include <boost/numeric/ublas/vector.hpp>
 #include <boost/numeric/ublas/matrix.hpp>
@@ -40,40 +45,40 @@ namespace tops {
   typedef boost::numeric::ublas::matrix<double> Matrix;
   typedef std::vector <std::string> StringVector;
   typedef std::map <std::string, std::string> StringMap;
-  class ProbabilisticModelParameterValue;
+  class DLLEXPORT ProbabilisticModelParameterValue;
   typedef boost::shared_ptr <ProbabilisticModelParameterValue> ProbabilisticModelParameterValuePtr;
   //! This class registers a set of parameters
-  class ProbabilisticModelParameters  {
+  class DLLEXPORT ProbabilisticModelParameters  {
     std::map <std::string, ProbabilisticModelParameterValuePtr> _parameters;
   public:
     ProbabilisticModelParameters(){}
     void add(const char * name, ProbabilisticModelParameterValuePtr value);
-    
+
     //! Adds a new model parameter
     void add(std::string name, ProbabilisticModelParameterValuePtr value);
-    
+
     //! set a model parameter
     void set(std::string name, ProbabilisticModelParameterValuePtr value);
-    
+
     //! Get a mandatory parameter
     ProbabilisticModelParameterValuePtr getMandatoryParameterValue(const std::string & name) const;
 
     //! Get a optional parameter
     ProbabilisticModelParameterValuePtr getOptionalParameterValue(const std::string & name) const;
-    
-    std::map <std::string, ProbabilisticModelParameterValuePtr>  parameters() const;
-    
-  };
-  
 
-  
+    std::map <std::string, ProbabilisticModelParameterValuePtr>  parameters() const;
+
+  };
+
+
+
   //! Represents a parameter value
-  class ProbabilisticModelParameterValue {
+  class DLLEXPORT ProbabilisticModelParameterValue {
   private:
     StringVector s;
     DoubleVector d;
     IntVector i;
-    std::vector <DoubleVector> m;    
+    std::vector <DoubleVector> m;
     std::map<std::string,double> p;
     std::map<std::string,std::string> str_map;
     std::string _str;
@@ -95,7 +100,7 @@ namespace tops {
     virtual std::string str() const;
   };
 
-  class ProbabilisticModelParameterListValue : public ProbabilisticModelParameterValue { 
+  class DLLEXPORT ProbabilisticModelParameterListValue : public ProbabilisticModelParameterValue {
   public:
     ProbabilisticModelParameterListValue(){_root = false;}
     ProbabilisticModelParameterListValue ( ProbabilisticModelParameters p) : _parameters(p) {
@@ -112,9 +117,9 @@ namespace tops {
     bool _root;
   };
   typedef boost::shared_ptr<ProbabilisticModelParameterListValue> ProbabilisticModelParameterListValuePtr;
-    
+
   //! Double parameter value
-  class DoubleParameterValue: public ProbabilisticModelParameterValue {
+  class DLLEXPORT DoubleParameterValue: public ProbabilisticModelParameterValue {
   private:
     double _d;
   public:
@@ -131,7 +136,7 @@ namespace tops {
   };
 
   //! Integer parameter value
-  class IntParameterValue: public ProbabilisticModelParameterValue {
+  class DLLEXPORT IntParameterValue: public ProbabilisticModelParameterValue {
   private:
     int _v;
   public:
@@ -146,7 +151,7 @@ namespace tops {
   };
 
   //! String parameter value
-  class StringParameterValue: public ProbabilisticModelParameterValue {
+  class DLLEXPORT StringParameterValue: public ProbabilisticModelParameterValue {
   private:
     std::string _v;
   public:
@@ -162,7 +167,7 @@ namespace tops {
   };
 
   //! integer vector parameter value
-  class IntVectorParameterValue: public ProbabilisticModelParameterValue {
+  class DLLEXPORT IntVectorParameterValue: public ProbabilisticModelParameterValue {
   private:
     IntVector _v;
   public:
@@ -175,7 +180,7 @@ namespace tops {
     virtual std::string str() const;
   };
   //! probability table
-  class DoubleMapParameterValue: public ProbabilisticModelParameterValue {
+  class DLLEXPORT DoubleMapParameterValue: public ProbabilisticModelParameterValue {
   private:
     std::map <std::string,double> _v;
   public:
@@ -188,7 +193,7 @@ namespace tops {
     virtual std::string parameter_type () const;
     DoubleMapParameterValue(std::vector<std::string> keys, std::vector<double> value) {
       for(int i = 0; i < (int)value.size(); i++)
-	_v[keys[i]] = value[i];
+        _v[keys[i]] = value[i];
     }
     virtual ~DoubleMapParameterValue(){}
     virtual std::map<std::string, double> & getDoubleMap() ;
@@ -196,7 +201,7 @@ namespace tops {
 
   };
   //! double vector parameter value
-  class DoubleVectorParameterValue: public ProbabilisticModelParameterValue {
+  class DLLEXPORT DoubleVectorParameterValue: public ProbabilisticModelParameterValue {
   private:
     DoubleVector _v;
   public:
@@ -214,17 +219,17 @@ namespace tops {
   };
 
   //! string vector parameter value
-  class StringMapParameterValue: public ProbabilisticModelParameterValue {
+  class DLLEXPORT StringMapParameterValue: public ProbabilisticModelParameterValue {
   private:
     std::map<std::string,std::string> _str_map;
   public:
 
-    StringMapParameterValue(std::vector<std::string> keys,std::vector<std::string> values) 
-    {   
+    StringMapParameterValue(std::vector<std::string> keys,std::vector<std::string> values)
+    {
       for(int i = 0; (i  < (int)keys.size()) && (i < (int)values.size()); i++)
-	_str_map[keys[i]] = values[i];
+        _str_map[keys[i]] = values[i];
     }
-    StringMapParameterValue(std::map<std::string,std::string> m) 
+    StringMapParameterValue(std::map<std::string,std::string> m)
     {
       _str_map = m;
     }
@@ -238,7 +243,7 @@ namespace tops {
   };
 
   //! string vector parameter value
-  class StringVectorParameterValue: public ProbabilisticModelParameterValue {
+  class DLLEXPORT StringVectorParameterValue: public ProbabilisticModelParameterValue {
   private:
     StringVector _v;
   public:
@@ -252,13 +257,13 @@ namespace tops {
     virtual std::string parameter_type () const ;
     virtual std::string str() const;
   };
-  
+
 
   typedef boost::shared_ptr <IntParameterValue> IntParameterValuePtr;
   typedef boost::shared_ptr <DoubleParameterValue> DoubleParameterValuePtr;
   typedef boost::shared_ptr <StringParameterValue> StringParameterValuePtr;
   typedef boost::shared_ptr <StringMapParameterValue> StringMapParameterValuePtr;
-  
+
   typedef boost::shared_ptr <IntVectorParameterValue> IntVectorParameterValuePtr;
   typedef boost::shared_ptr <DoubleVectorParameterValue> DoubleVectorParameterValuePtr;
   typedef boost::shared_ptr <StringVectorParameterValue> StringVectorParameterValuePtr;

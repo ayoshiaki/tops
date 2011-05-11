@@ -2,6 +2,9 @@
  *       GeneralizedHiddenMarkovModel.cpp
  *
  *       Copyright 2011 Andre Yoshiaki Kashiwabara <akashiwabara@usp.br>
+ *                      Ígor Bonádio <ibonadio@ime.usp.br>
+ *                      Vitor Onuchic <vitoronuchic@gmail.com>
+ *                      Alan Mitchell Durham <aland@usp.br>
  *
  *       This program is free software; you can redistribute it and/or modify
  *       it under the terms of the GNU  General Public License as published by
@@ -26,24 +29,24 @@
 #include "GHMMStates.hpp"
 #include "util.hpp"
 #include <sys/types.h>
-#include <sys/time.h>
+
 
 namespace tops {
 
   std::string GeneralizedHiddenMarkovModel::print_graph () const {
     std::stringstream out;
-    for(int i = 0; i < (int)_all_states.size(); i++) 
+    for(int i = 0; i < (int)_all_states.size(); i++)
       {
-	out << _all_states[i]->name() << " " << _all_states[i]->name() << std::endl;
+        out << _all_states[i]->name() << " " << _all_states[i]->name() << std::endl;
       }
     out << "#" << std::endl;
-    for(int i = 0; i < (int)_all_states.size(); i++) 
+    for(int i = 0; i < (int)_all_states.size(); i++)
       {
-	for(int j = 0; j < (int)_all_states.size(); j++) 
-	  {
-	    if(!close( exp(_all_states[i]->transition()->log_probability_of(j)),0.0, 1-1))
-	      out << _all_states[i]->name() << " " << _all_states[j]->name() << " " << exp(_all_states[i]->transition()->log_probability_of(j)) <<  std::endl;
-	  }
+        for(int j = 0; j < (int)_all_states.size(); j++)
+          {
+            if(!close( exp(_all_states[i]->transition()->log_probability_of(j)),0.0, 1-1))
+              out << _all_states[i]->name() << " " << _all_states[j]->name() << " " << exp(_all_states[i]->transition()->log_probability_of(j)) <<  std::endl;
+          }
       }
     return out.str();
   }
@@ -591,15 +594,6 @@ double GeneralizedHiddenMarkovModel::viterbi(const Sequence &s, Sequence &path,
   return max;
 
 }
-//! Posterior Probabilities: P(yi=k|x)
-void GeneralizedHiddenMarkovModel::posteriorProbabilities (const Sequence &s, Matrix & probabilities) const{
-  std::cerr << "posteriorProbabilities not implemented" << std::endl;
-}
-
-//! Posterior Decoding: ^yi = argmax_k P(yi=k|x)
-void GeneralizedHiddenMarkovModel::posteriorDecoding (const Sequence &s, Sequence &path, Matrix & probabilities) const{
-  std::cerr << "posteriorDecoding not implemented" << std::endl;
-}
 
 //! Choose the observation given a state
 Sequence & GeneralizedHiddenMarkovModel::chooseObservation(Sequence & h, int i,
@@ -939,6 +933,6 @@ Sequence & GeneralizedHiddenMarkovModel::chooseObservation(Sequence & h, int i,
             }
   }
 
-  
+
 }
 

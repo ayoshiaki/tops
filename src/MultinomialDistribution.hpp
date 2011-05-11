@@ -2,6 +2,9 @@
  *       MultinomialDistribution.hpp
  *
  *       Copyright 2011 Andre Yoshiaki Kashiwabara <akashiwabara@usp.br>
+ *                      Ígor Bonádio <ibonadio@ime.usp.br>
+ *                      Vitor Onuchic <vitoronuchic@gmail.com>
+ *                      Alan Mitchell Durham <aland@usp.br>
  *
  *       This program is free software; you can redistribute it and/or modify
  *       it under the terms of the GNU  General Public License as published by
@@ -22,6 +25,8 @@
 #ifndef FINITE_DISCRETE_DISTRIBUTION_H
 #define FINITE_DISCRETE_DISTRIBUTION_H
 
+#include "crossplatform.hpp"
+
 #include "Sequence.hpp"
 #include "Alphabet.hpp"
 
@@ -34,12 +39,12 @@
 namespace tops {
 
   //! This  represent  probability distributions  over a finite set of symbols
-  class MultinomialDistribution :  public FactorableModel
+  class DLLEXPORT MultinomialDistribution :  public FactorableModel
   {
   private:
     DoubleVector _log_probabilities;
     Matrix _log_probabilities_matrix;
-    double _huge;
+    double _huge_;
     int _size;
     bool _geometric_tail;
     double _mean;

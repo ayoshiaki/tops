@@ -2,6 +2,9 @@
  *       ProbabilisticModel.hpp
  *
  *       Copyright 2011 Andre Yoshiaki Kashiwabara <akashiwabara@usp.br>
+ *                      Ígor Bonádio <ibonadio@ime.usp.br>
+ *                      Vitor Onuchic <vitoronuchic@gmail.com>
+ *                      Alan Mitchell Durham <aland@usp.br>
  *
  *       This program is free software; you can redistribute it and/or modify
  *       it under the terms of the GNU  General Public License as published by
@@ -22,6 +25,8 @@
 #ifndef PROBABILISTIC_MODEL_HPP
 #define PROBABILISTIC_MODEL_HPP
 
+#include "crossplatform.hpp"
+
 #include <cmath>
 #include <iostream>
 
@@ -36,15 +41,15 @@
 #include "GHMMStates.hpp"
 
 namespace tops {
-  class DecodableModel;
-  class PairHiddenMarkovModel;
-  class FactorableModel;
-  class InhomogeneousFactorableModel;
-  class ProbabilisticModelCreator;
+  class DLLEXPORT DecodableModel;
+  class DLLEXPORT PairHiddenMarkovModel;
+  class DLLEXPORT FactorableModel;
+  class DLLEXPORT InhomogeneousFactorableModel;
+  class DLLEXPORT ProbabilisticModelCreator;
   typedef boost::shared_ptr<ProbabilisticModelCreator> ProbabilisticModelCreatorPtr;
 
   //! This is an abstract class representing a generative probabilistic model.
-  class ProbabilisticModel
+  class DLLEXPORT ProbabilisticModel
   {
   private:
     AlphabetPtr _alphabet;

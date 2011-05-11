@@ -2,6 +2,9 @@
  *       SequenceFormat.cpp
  *
  *       Copyright 2011 Andre Yoshiaki Kashiwabara <akashiwabara@usp.br>
+ *                      Ígor Bonádio <ibonadio@ime.usp.br>
+ *                      Vitor Onuchic <vitoronuchic@gmail.com>
+ *                      Alan Mitchell Durham <aland@usp.br>
  *
  *       This program is free software; you can redistribute it and/or modify
  *       it under the terms of the GNU  General Public License as published by
@@ -27,8 +30,8 @@
 #include "Symbol.hpp"
 #include <stdlib.h>
 #include <sys/types.h>
-#include <sys/times.h>
-#include <sys/param.h>
+
+
 
 namespace tops {
 
@@ -119,7 +122,7 @@ namespace tops {
       firstSeq = false;
     }
     while (!stream.eof()) {
-      if(!std::getline(stream, line, '\n')) 
+      if(!std::getline(stream, line, '\n'))
          continue;
       unsigned int i;
       for (i = 0; i < line.length(); i++)
@@ -150,8 +153,8 @@ namespace tops {
         j++;
       }
     sequence = sequence.substr(0,j);
-    if(sequence.length () <= 0) 
-	return stream;
+    if(sequence.length () <= 0)
+        return stream;
 
     SequenceFactory factory(in.getAlphabet());
     trim_spaces(sequence);

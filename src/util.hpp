@@ -2,6 +2,9 @@
  *       util.hpp
  *
  *       Copyright 2011 Andre Yoshiaki Kashiwabara <akashiwabara@usp.br>
+ *                      Ígor Bonádio <ibonadio@ime.usp.br>
+ *                      Vitor Onuchic <vitoronuchic@gmail.com>
+ *                      Alan Mitchell Durham <aland@usp.br>
  *
  *       This program is free software; you can redistribute it and/or modify
  *       it under the terms of the GNU  General Public License as published by
@@ -22,6 +25,10 @@
 #ifndef UTIL_H
 #define UTIL_H
 
+#include "crossplatform.hpp"
+
+#define _USE_MATH_DEFINES
+
 #include <iostream>
 #include <fstream>
 #include <boost/regex.hpp>
@@ -31,6 +38,18 @@
 #include "Sequence.hpp"
 #include "SequenceEntry.hpp"
 #include <boost/numeric/ublas/matrix.hpp>
+#include <boost/math/special_functions/erf.hpp>
+
+#ifdef WIN32
+ #define _min _cpp_min
+ #define _max _ccp_max
+#else
+ #define _min std::min
+ #define _max std::max
+#endif
+
+#define _erf boost::math::erf
+
 namespace tops {
 
   typedef std::vector <double> DoubleVector;
@@ -47,7 +66,7 @@ namespace tops {
   void split_regex (const std::string & s, std::vector <std::string> & result, const boost::regex & re);
 
   //! Calculates the value of log(exp(log_a) + exp(log_b))
-  double log_sum( double log_a, double log_b);
+  DLLEXPORT double log_sum( double log_a, double log_b);
 
   //! Divides the a by b
   double safe_division(double a, double b);

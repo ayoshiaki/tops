@@ -2,6 +2,9 @@
  *       GeneralizedHiddenMarkovModel.hpp
  *
  *       Copyright 2011 Andre Yoshiaki Kashiwabara <akashiwabara@usp.br>
+ *                      Ígor Bonádio <ibonadio@ime.usp.br>
+ *                      Vitor Onuchic <vitoronuchic@gmail.com>
+ *                      Alan Mitchell Durham <aland@usp.br>
  *
  *       This program is free software; you can redistribute it and/or modify
  *       it under the terms of the GNU  General Public License as published by
@@ -21,6 +24,9 @@
 
 #ifndef GENERALIZED_HIDDEN_MARKOV_MODEL_H
 #define GENERALIZED_HIDDEN_MARKOV_MODEL_H
+
+#include "crossplatform.hpp"
+
 #include <set>
 
 #include "MultinomialDistribution.hpp"
@@ -35,7 +41,7 @@ namespace tops {
 
 
   //! This is a class representing Hidden semi-Markov Models
-  class GeneralizedHiddenMarkovModel: public DecodableModel {
+  class DLLEXPORT GeneralizedHiddenMarkovModel: public DecodableModel {
   private:
       Matrix _alpha;
       Sequence _last;
@@ -79,15 +85,9 @@ namespace tops {
       virtual void choosePath(const Sequence &s, Sequence &path) ;
 
       virtual void initializeChoosePathAlgorithm(const Sequence &s);
+
     //! Inefficient Viterbi algorithm
-    virtual double
-    _viterbi(const Sequence &s, Sequence &path, Matrix & gamma) const;
-
-    //! Posterior Probabilities: P(yi=k|x)
-    virtual void posteriorProbabilities (const Sequence &s, Matrix & probabilities) const;
-
-    //! Posterior Decoding: ^yi = argmax_k P(yi=k|x)
-    virtual void posteriorDecoding (const Sequence &s, Sequence &path, Matrix & probabilities) const;
+    virtual double _viterbi(const Sequence &s, Sequence &path, Matrix & gamma) const;
 
     //! Choose the observation given a state
     virtual Sequence & chooseObservation(Sequence & h, int i, int state) const;

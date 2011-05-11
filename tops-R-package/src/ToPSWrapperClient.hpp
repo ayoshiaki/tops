@@ -16,7 +16,7 @@ extern "C" {
 #include <R_ext/PrtUtil.h>
 }
 
-class ToPSWrapperClient {
+class DLLEXPORT ToPSWrapperClient {
 public:
   SEXP convert (tops::ProbabilisticModelPtr model) ;
 };

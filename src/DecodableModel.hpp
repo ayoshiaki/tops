@@ -2,6 +2,9 @@
  *       DecodableModel.hpp
  *
  *       Copyright 2011 Andre Yoshiaki Kashiwabara <akashiwabara@usp.br>
+ *                      Ígor Bonádio <ibonadio@ime.usp.br>
+ *                      Vitor Onuchic <vitoronuchic@gmail.com>
+ *                      Alan Mitchell Durham <aland@usp.br>
  *
  *       This program is free software; you can redistribute it and/or modify
  *       it under the terms of the GNU  General Public License as published by
@@ -22,6 +25,7 @@
 #ifndef DECODABLE_MODEL_HPP
 #define DECODABLE_MODEL_HPP
 
+#include "crossplatform.hpp"
 
 #include "ProbabilisticModel.hpp"
 #include "Sequence.hpp"
@@ -30,7 +34,7 @@
 
 namespace tops {
   //! Interface defining probabilistic model with the viterbi, forward and backward algorithm
-  class DecodableModel : public ProbabilisticModel  {
+  class DLLEXPORT DecodableModel : public ProbabilisticModel  {
   public:
     DecodableModel(){};
     virtual ~DecodableModel(){};
@@ -57,10 +61,10 @@ namespace tops {
       virtual void choosePath(const Sequence &s, Sequence &path);
 
     //! Posterior Probabilities: P(yi=k|x)
-    virtual void posteriorProbabilities (const Sequence &s, Matrix & probabilities) const = 0;
+    virtual void posteriorProbabilities (const Sequence &s, Matrix & probabilities) const;
 
     //! Posterior Decoding: ^yi = argmax_k P(yi=k|x)
-    virtual void posteriorDecoding (const Sequence &s, Sequence &path, Matrix & probabilities) const = 0;
+    virtual void posteriorDecoding (const Sequence &s, Sequence &path, Matrix & probabilities) const;
 
     //! Choose the observation given a state
     /*!\param h is the history */

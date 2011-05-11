@@ -2,6 +2,9 @@
  *       SimilarityBasedSequenceWeighting.hpp
  *
  *       Copyright 2011 Andre Yoshiaki Kashiwabara <akashiwabara@usp.br>
+ *                      Ígor Bonádio <ibonadio@ime.usp.br>
+ *                      Vitor Onuchic <vitoronuchic@gmail.com>
+ *                      Alan Mitchell Durham <aland@usp.br>
  *
  *       This program is free software; you can redistribute it and/or modify
  *       it under the terms of the GNU  General Public License as published by
@@ -22,6 +25,8 @@
 #ifndef SIM_BASED_SEQ_WEIGHTING
 #define SIM_BASED_SEQ_WEIGHTING
 
+#include "crossplatform.hpp"
+
 #include "Sequence.hpp"
 #include "Alphabet.hpp"
 
@@ -35,7 +40,7 @@
 namespace tops {
 
   //! This class is the implementation of Similiarity Based Sequence Weighting
-  class SimilarityBasedSequenceWeighting : public ProbabilisticModel
+  class DLLEXPORT SimilarityBasedSequenceWeighting : public ProbabilisticModel
   {
   public:
 

@@ -28,7 +28,7 @@ extern "C" {
 #include "ProbabilisticModelParameter.hpp"
 
 
-class ProbabilisticModelParameterValueAdapter{
+class DLLEXPORT ProbabilisticModelParameterValueAdapter{
 public:
   ProbabilisticModelParameterValueAdapter(){};
   virtual void initialize(tops::ProbabilisticModelParameterValuePtr v){}
@@ -44,7 +44,7 @@ public:
 };
 typedef boost::shared_ptr<ProbabilisticModelParameterValueAdapter> ProbabilisticModelParameterValueAdapterPtr;
 
-class ProbabilisticModelParameterListValueAdapter: public tops::ProbabilisticModelParameterListValue 
+class DLLEXPORT ProbabilisticModelParameterListValueAdapter: public tops::ProbabilisticModelParameterListValue 
 						 , public ProbabilisticModelParameterValueAdapter
 						 , public boost::enable_shared_from_this<ProbabilisticModelParameterListValueAdapter> 
 {
@@ -58,7 +58,7 @@ public:
 typedef boost::shared_ptr<ProbabilisticModelParameterListValueAdapter> ProbabilisticModelParameterListValueAdapterPtr;
 
 
-class DoubleParameterValueAdapter: public tops::DoubleParameterValue , public ProbabilisticModelParameterValueAdapter						 , public boost::enable_shared_from_this<DoubleParameterValueAdapter>  {
+class DLLEXPORT DoubleParameterValueAdapter: public tops::DoubleParameterValue , public ProbabilisticModelParameterValueAdapter						 , public boost::enable_shared_from_this<DoubleParameterValueAdapter>  {
 public:
   DoubleParameterValueAdapter(){};
   virtual void initialize(tops::ProbabilisticModelParameterValuePtr v);
@@ -68,7 +68,7 @@ public:
 };
 typedef boost::shared_ptr<DoubleParameterValueAdapter> DoubleParameterValueAdapterPtr;
 
-class IntParameterValueAdapter: public tops::IntParameterValue , public ProbabilisticModelParameterValueAdapter 						 , public boost::enable_shared_from_this<IntParameterValueAdapter> {
+class DLLEXPORT IntParameterValueAdapter: public tops::IntParameterValue , public ProbabilisticModelParameterValueAdapter 						 , public boost::enable_shared_from_this<IntParameterValueAdapter> {
 public:
   IntParameterValueAdapter(){};
   virtual void initialize(tops::ProbabilisticModelParameterValuePtr v);
@@ -78,7 +78,7 @@ public:
 };
 typedef boost::shared_ptr<IntParameterValueAdapter> IntParameterValueAdapterPtr;
 
-class StringParameterValueAdapter: public tops::StringParameterValue , public ProbabilisticModelParameterValueAdapter 						 , public boost::enable_shared_from_this<StringParameterValueAdapter> {
+class DLLEXPORT StringParameterValueAdapter: public tops::StringParameterValue , public ProbabilisticModelParameterValueAdapter 						 , public boost::enable_shared_from_this<StringParameterValueAdapter> {
 public:
   StringParameterValueAdapter() {};
   virtual void initialize(tops::ProbabilisticModelParameterValuePtr v);
@@ -88,7 +88,7 @@ public:
 };
 typedef boost::shared_ptr<StringParameterValueAdapter> StringParameterValueAdapterPtr;
 
-class IntVectorParameterValueAdapter: public tops::IntVectorParameterValue, public ProbabilisticModelParameterValueAdapter 						 , public boost::enable_shared_from_this<IntVectorParameterValueAdapter> {
+class DLLEXPORT IntVectorParameterValueAdapter: public tops::IntVectorParameterValue, public ProbabilisticModelParameterValueAdapter 						 , public boost::enable_shared_from_this<IntVectorParameterValueAdapter> {
 public:
   IntVectorParameterValueAdapter() {};
   virtual void initialize(tops::ProbabilisticModelParameterValuePtr v);
@@ -98,7 +98,7 @@ public:
 };
 typedef boost::shared_ptr<IntVectorParameterValueAdapter> IntVectorParameterValueAdapterPtr;
 
-class DoubleMapParameterValueAdapter: public tops::DoubleMapParameterValue , public ProbabilisticModelParameterValueAdapter 						 , public boost::enable_shared_from_this<DoubleMapParameterValueAdapter> {
+class DLLEXPORT DoubleMapParameterValueAdapter: public tops::DoubleMapParameterValue , public ProbabilisticModelParameterValueAdapter 						 , public boost::enable_shared_from_this<DoubleMapParameterValueAdapter> {
 public:
   DoubleMapParameterValueAdapter() {};
   virtual void initialize(tops::ProbabilisticModelParameterValuePtr v);
@@ -108,7 +108,7 @@ public:
 };
 typedef boost::shared_ptr<DoubleMapParameterValueAdapter> DoubleMapParameterValueAdapterPtr;
 
-class DoubleVectorParameterValueAdapter: public tops::DoubleVectorParameterValue , public ProbabilisticModelParameterValueAdapter 						 , public boost::enable_shared_from_this<DoubleVectorParameterValueAdapter> {
+class DLLEXPORT DoubleVectorParameterValueAdapter: public tops::DoubleVectorParameterValue , public ProbabilisticModelParameterValueAdapter 						 , public boost::enable_shared_from_this<DoubleVectorParameterValueAdapter> {
 public:
   DoubleVectorParameterValueAdapter() {};
   virtual void initialize(tops::ProbabilisticModelParameterValuePtr v);
@@ -118,7 +118,7 @@ public:
 };
 typedef boost::shared_ptr<DoubleVectorParameterValueAdapter> DoubleVectorParameterValueAdapterPtr;
 
-class StringMapParameterValueAdapter: public tops::StringMapParameterValue, public ProbabilisticModelParameterValueAdapter 						 , public boost::enable_shared_from_this<StringMapParameterValueAdapter> {
+class DLLEXPORT StringMapParameterValueAdapter: public tops::StringMapParameterValue, public ProbabilisticModelParameterValueAdapter 						 , public boost::enable_shared_from_this<StringMapParameterValueAdapter> {
 public:
   StringMapParameterValueAdapter(){};
   virtual void initialize(tops::ProbabilisticModelParameterValuePtr v);
@@ -129,7 +129,7 @@ public:
 };
 typedef boost::shared_ptr<StringMapParameterValueAdapter> StringMapParameterValueAdapterPtr;
 
-class StringVectorParameterValueAdapter: public tops::StringVectorParameterValue, public ProbabilisticModelParameterValueAdapter 						 , public boost::enable_shared_from_this<StringVectorParameterValueAdapter> {
+class DLLEXPORT StringVectorParameterValueAdapter: public tops::StringVectorParameterValue, public ProbabilisticModelParameterValueAdapter 						 , public boost::enable_shared_from_this<StringVectorParameterValueAdapter> {
 public:
   StringVectorParameterValueAdapter(){};
   virtual void initialize(tops::ProbabilisticModelParameterValuePtr v);
@@ -139,7 +139,7 @@ public:
 };
 typedef boost::shared_ptr<StringVectorParameterValueAdapter> StringVectorParameterValueAdapterPtr;
 
-class ProbabilisticModelParameterValueFactory {
+class DLLEXPORT ProbabilisticModelParameterValueFactory {
 public:
   ProbabilisticModelParameterValueFactory();
   virtual ProbabilisticModelParameterValueAdapterPtr adapter(tops::ProbabilisticModelParameterValuePtr parameter) ;

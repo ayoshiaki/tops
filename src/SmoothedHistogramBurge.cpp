@@ -2,6 +2,9 @@
  *       SmoothedHistogramBurge.cpp
  *
  *       Copyright 2011 Andre Yoshiaki Kashiwabara <akashiwabara@usp.br>
+ *                      Ígor Bonádio <ibonadio@ime.usp.br>
+ *                      Vitor Onuchic <vitoronuchic@gmail.com>
+ *                      Alan Mitchell Durham <aland@usp.br>
  *
  *       This program is free software; you can redistribute it and/or modify
  *       it under the terms of the GNU  General Public License as published by
@@ -79,8 +82,8 @@ namespace tops {
           double nx = iter->second;
           double mean = x+1.0;
           double sd = sqrt(2*((double)(x+1.0))*C/nx);
-          double px2 = 0.5*(1 + erf((((double)k+1.5) - mean))/ (sd*sqrt(2.0)));
-          double px1 = 0.5*(1 + erf((((double)k+0.5) - mean))/ (sd*sqrt(2.0)));
+          double px2 = 0.5*(1 + _erf((((double)k+1.5) - mean))/ (sd*sqrt(2.0)));
+          double px1 = 0.5*(1 + _erf((((double)k+0.5) - mean))/ (sd*sqrt(2.0)));
           assert(nx > 0.0);
           assert(mean > 0.0);
           assert(sd > 0.0);

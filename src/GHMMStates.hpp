@@ -2,6 +2,9 @@
  *       GHMMStates.hpp
  *
  *       Copyright 2011 Andre Yoshiaki Kashiwabara <akashiwabara@usp.br>
+ *                      Ígor Bonádio <ibonadio@ime.usp.br>
+ *                      Vitor Onuchic <vitoronuchic@gmail.com>
+ *                      Alan Mitchell Durham <aland@usp.br>
  *
  *       This program is free software; you can redistribute it and/or modify
  *       it under the terms of the GNU  General Public License as published by
@@ -21,6 +24,9 @@
 
 #ifndef GHMM_STATES_HPP
 #define GHMM_STATES_HPP
+
+#include "crossplatform.hpp"
+
 #include <vector>
 #include <boost/shared_ptr.hpp>
 #include <string>
@@ -30,18 +36,18 @@
 
 namespace tops {
 
-  class ProbabilisticModel;
+  class DLLEXPORT ProbabilisticModel;
   typedef boost::shared_ptr <ProbabilisticModel> ProbabilisticModelPtr;
-  class MultinomialDistribution;
+  class DLLEXPORT MultinomialDistribution;
   typedef boost::shared_ptr <MultinomialDistribution> MultinomialDistributionPtr;
-  class Symbol;
+  class DLLEXPORT Symbol;
   typedef boost::shared_ptr<Symbol> SymbolPtr;
 
-    class GHMMState;
+    class DLLEXPORT GHMMState;
     typedef boost::shared_ptr<GHMMState> GHMMStatePtr;
     typedef std::vector<GHMMStatePtr> GHMMStates;
   //! Represents a GHMM State
-  class GHMMState {
+  class DLLEXPORT GHMMState {
   public:
     GHMMState();
     GHMMState(ProbabilisticModelPtr observation,
@@ -107,7 +113,7 @@ namespace tops {
     std::string _observationModelName;
   };
   //! GHMM signal states
-  class GHMMSignalState: public GHMMState {
+  class DLLEXPORT GHMMSignalState: public GHMMState {
   public:
     GHMMSignalState() ;
     GHMMSignalState(ProbabilisticModelPtr observation,
@@ -134,7 +140,7 @@ namespace tops {
 
   };
   //! GHMM Explicit duration state
-  class GHMMExplicitDurationState: public GHMMState {
+  class DLLEXPORT GHMMExplicitDurationState: public GHMMState {
   public:
     virtual ~GHMMExplicitDurationState() ;
 

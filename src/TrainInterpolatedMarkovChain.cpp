@@ -2,6 +2,9 @@
  *       TrainInterpolatedMarkovChain.cpp
  *
  *       Copyright 2011 Andre Yoshiaki Kashiwabara <akashiwabara@usp.br>
+ *                      Ígor Bonádio <ibonadio@ime.usp.br>
+ *                      Vitor Onuchic <vitoronuchic@gmail.com>
+ *                      Alan Mitchell Durham <aland@usp.br>
  *
  *       This program is free software; you can redistribute it and/or modify
  *       it under the terms of the GNU  General Public License as published by
@@ -40,11 +43,11 @@ ProbabilisticModelPtr TrainInterpolatedMarkovChain::create(
         ProbabilisticModelParameterValuePtr pseudocountspar = parameters.getOptionalParameterValue("pseudo_counts");
         ProbabilisticModelParameterValuePtr aprioripar = parameters.getOptionalParameterValue("apriori");
 
-	ProbabilisticModelParameterValuePtr weightspar = parameters.getOptionalParameterValue("weights");
-	std::map <std::string, double> weights;
-	if(weightspar != NULL) {
-	  readMapFromFile(weights, weightspar->getString());
-	}
+        ProbabilisticModelParameterValuePtr weightspar = parameters.getOptionalParameterValue("weights");
+        std::map <std::string, double> weights;
+        if(weightspar != NULL) {
+          readMapFromFile(weights, weightspar->getString());
+        }
 
 
 
@@ -75,11 +78,11 @@ ProbabilisticModelPtr TrainInterpolatedMarkovChain::create(
         ContextTreePtr tree = ContextTreePtr(new ContextTree(alphabet));
 
         if(apriori != NULL ){
-	  tree->initializeCounter(sample_set, orderpar->getInt(), 0, weights);
+          tree->initializeCounter(sample_set, orderpar->getInt(), 0, weights);
             tree->pruneTreeSmallSampleSize(400);
             tree->normalize(apriori, pseudocounts, 0);
         } else {
-	  tree->initializeCounter(sample_set, orderpar->getInt(), pseudocounts, weights);
+          tree->initializeCounter(sample_set, orderpar->getInt(), pseudocounts, weights);
             tree->pruneTreeSmallSampleSize(400);
             tree->normalize();
         }

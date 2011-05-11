@@ -2,6 +2,9 @@
  *       SmoothedHistogramStanke.cpp
  *
  *       Copyright 2011 Andre Yoshiaki Kashiwabara <akashiwabara@usp.br>
+ *                      Ígor Bonádio <ibonadio@ime.usp.br>
+ *                      Vitor Onuchic <vitoronuchic@gmail.com>
+ *                      Alan Mitchell Durham <aland@usp.br>
  *
  *       This program is free software; you can redistribute it and/or modify
  *       it under the terms of the GNU  General Public License as published by
@@ -36,6 +39,12 @@ namespace tops {
     ProbabilisticModelParameterValuePtr slopep =
       parameters.getOptionalParameterValue("slope");
 
+    ProbabilisticModelParameterValuePtr weightspar = parameters.getOptionalParameterValue("weights");
+    std::map <std::string, double> weights;
+    if(weightspar != NULL) {
+      readMapFromFile(weights, weightspar->getString());
+    }
+
     double a = 0.5;
     int m = 8;
 
@@ -59,12 +68,18 @@ namespace tops {
 
     DoubleVector data;
     AlphabetPtr alpha = AlphabetPtr(new Alphabet());;
-    SequenceList sample_set;
+    SequenceEntryList sample_set;
     readSequencesFromFile(sample_set, alpha, training_set_parameter->getString());
-    for(int i = 0; i < (int)sample_set.size();i++)
-      for(int j = 0; j < (int) sample_set[i].size(); j++)
-        data.push_back(sample_set[i][j]);
+    for(int i = 0; i < (int)sample_set.size();i++) {
+      int rep = 1;
+      if(weights.find(sample_set[i]->getName()) != weights.end())
+        rep = (weights.find(sample_set[i]->getName()))->second;
 
+      for(int j = 0; j < (int) (sample_set[i]->getSequence()).size(); j++) {
+        for(int k = 0;k< rep; k++)
+            data.push_back((sample_set[i]->getSequence())[j]);
+      }
+    }
     std::map<long,double> sum;
     double total = 0.0;
     std::map<long,double> d;

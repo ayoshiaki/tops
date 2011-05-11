@@ -1,10 +1,11 @@
 /*
- *       StoreLoadedModel.hpp
+ *       crossplatform.hpp
  *
- *       Copyright 2011 Andre Yoshiaki Kashiwabara <akashiwabara@usp.br>
- *                      Ígor Bonádio <ibonadio@ime.usp.br>
+ *       Copyright 2011 Ígor Bonádio <ibonadio@ime.usp.br>
+ *                      Andre Yoshiaki Kashiwabara <akashiwabara@usp.br>
  *                      Vitor Onuchic <vitoronuchic@gmail.com>
  *                      Alan Mitchell Durham <aland@usp.br>
+ *
  *
  *       This program is free software; you can redistribute it and/or modify
  *       it under the terms of the GNU  General Public License as published by
@@ -22,41 +23,13 @@
  *       MA 02110-1301, USA.
  */
 
-#ifndef STORE_LOADED_MODEL_HPP
-#define STORE_LOADED_MODEL_HPP
+#ifndef CROSS_PLATFORM_HPP
+#define CROSS_PLATFORM_HPP
 
-#include "crossplatform.hpp"
-
-#include <boost/shared_ptr.hpp>
-#include "ProbabilisticModel.hpp"
-namespace tops {
-
-  class DLLEXPORT StoreLoadedModel;
-
-  class DLLEXPORT StoreLoadedModel {
-  public:
-
-      virtual ~StoreLoadedModel(){};
-
-
-      virtual ProbabilisticModelPtr add(std::string  name, ProbabilisticModelPtr model) ;
-
-      virtual  ProbabilisticModelPtr get(std::string  name) ;
-
-      static StoreLoadedModel * instance() ;
-
-
-  protected:
-    StoreLoadedModel() {
-    };
-  private:
-      ProbabilisticModelPtr null;
-      static StoreLoadedModel * _inst;
-      std::map <std::string, ProbabilisticModelPtr> _models;
-  };
-
-
-}
-
+#ifdef WIN32
+ #define DLLEXPORT __declspec( dllexport )
+#else
+ #define DLLEXPORT
+#endif
 
 #endif

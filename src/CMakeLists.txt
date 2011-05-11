@@ -1,9 +1,22 @@
-INCLUDE_DIRECTORIES( ${Boost_INCLUDE_DIR} )
-INCLUDE_DIRECTORIES( ${RMATH_INCLUDE_DIR} )
+IF(UNIX)
+  INCLUDE_DIRECTORIES( ${Boost_INCLUDE_DIR} )
+  INCLUDE_DIRECTORIES( ${RMATH_INCLUDE_DIR} )
+ENDIF(UNIX)
+
+IF(WIN32)
+  ADD_DEFINITIONS(-DWIN32)
+ENDIF(WIN32)
+
+IF(UNIX)
+  SET(TOPS_DEP ${BOOST_REGEX_LIBRARY} ${RMATH_LIBRARY})
+ENDIF(UNIX)
+
+
+
 
 ADD_LIBRARY(ToPS SHARED Symbol Alphabet  util GHMMStates   MultinomialDistribution  VariableLengthMarkovChain InhomogeneousMarkovChain  HiddenMarkovModel ConfigurationReader MultinomialDistributionCreator  VariableLengthMarkovChainCreator InhomogeneousMarkovChainCreator  HiddenMarkovModelCreator GeneralizedHiddenMarkovModelCreator  SequenceEntry SequenceFactory GeneralizedHiddenMarkovModel TrainVariableLengthMarkovChain TrainFixedLengthMarkovChain TrainInterpolatedMarkovChain TrainHMMBaumWelch ContextTree TrainWeightArrayModel BayesianInformationCriteria TrainVariableLengthInhomogeneousMarkovChain ProbabilisticModelCreatorClient AkaikeInformationCriteria TrainPhasedMarkovChain FactorableModel DecodableModel InhomogeneousFactorableModel SmoothedHistogramKernelDensity FixedSequenceAtPosition FixedSequenceAtPositionCreator PhasedRunLengthDistribution PhasedRunLengthDistributionCreator SmoothedHistogramStanke TrainPhasedMarkovChainContextAlgorithm RemoveSequenceFromModel SmoothedHistogramBurge SequenceFormat TrainMultinomialDistribution TargetModel TargetModelCreator ReverseComplementDNA ReverseComplementDNACreator ProbabilisticModelParameter TrainGHMMTransitions BernoulliModelCreator TrainInterpolatedPhasedMarkovChain SimilarityBasedSequenceWeightingCreator SimilarityBasedSequenceWeighting TrainSimilarityBasedSequenceWeighting MultipleSequentialModelCreator MultipleSequentialModel StoreLoadedModel PairHiddenMarkovModel PairHiddenMarkovModelCreator TrainPHMMBaumWelch )
 
-TARGET_LINK_LIBRARIES(ToPS ${BOOST_REGEX_LIBRARY} ${RMATH_LIBRARY} )
+TARGET_LINK_LIBRARIES(ToPS ${TOPS_DEP} )
 
 install(TARGETS ToPS
         RUNTIME DESTINATION bin

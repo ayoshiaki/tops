@@ -2,17 +2,20 @@
  *       HiddenMarkovModel.hpp
  *
  *       Copyright 2011 Andre Yoshiaki Kashiwabara <akashiwabara@usp.br>
- *     
+ *                      Ígor Bonádio <ibonadio@ime.usp.br>
+ *                      Vitor Onuchic <vitoronuchic@gmail.com>
+ *                      Alan Mitchell Durham <aland@usp.br>
+ *
  *       This program is free software; you can redistribute it and/or modify
  *       it under the terms of the GNU  General Public License as published by
  *       the Free Software Foundation; either version 3 of the License, or
  *       (at your option) any later version.
- *     
+ *
  *       This program is distributed in the hope that it will be useful,
  *       but WITHOUT ANY WARRANTY; without even the implied warranty of
  *       MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *       GNU General Public License for more details.
- *      
+ *
  *       You should have received a copy of the GNU General Public License
  *       along with this program; if not, write to the Free Software
  *       Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
@@ -22,6 +25,7 @@
 #ifndef HIDDEN_MARKOV_MODEL_HPP
 #define HIDDEN_MARKOV_MODEL_HPP
 
+#include "crossplatform.hpp"
 
 #include "ProbabilisticModel.hpp"
 #include "DecodableModel.hpp"
@@ -36,7 +40,7 @@
 
 namespace tops {
 
-  class HMMState {
+  class DLLEXPORT HMMState {
   protected:
     int _id;
     SymbolPtr _name;
@@ -52,7 +56,7 @@ namespace tops {
     {
       _emission = e;
     }
-    void setTransition (MultinomialDistributionPtr t) 
+    void setTransition (MultinomialDistributionPtr t)
     {
       _transitions = t;
     }
@@ -74,16 +78,16 @@ namespace tops {
     void setId(int i) {
       _id = i;
     }
-      
-    
+
+
   };
   typedef boost::shared_ptr <HMMState> HMMStatePtr;
 
   //! This is represents a hidden markov model
-  class HiddenMarkovModel :   public DecodableModel
+  class DLLEXPORT HiddenMarkovModel :   public DecodableModel
   {
   public:
-    
+
     HiddenMarkovModel() {
     };
 
@@ -98,10 +102,10 @@ namespace tops {
       _states = states;
     }
 
-    
+
     virtual ~HiddenMarkovModel(){}
 
-    //! Choose the observation given a state 
+    //! Choose the observation given a state
     virtual Sequence &  chooseObservation ( Sequence & h,int i,  int state) const ;
     //! Choose a state
     virtual int chooseState(int state ) const ;
@@ -111,36 +115,30 @@ namespace tops {
       return _state_names;
     }
     virtual std::string getStateName(int state) const;
-    
+
     virtual std::string str () const ;
-    
+
     virtual void setState (int id, HMMStatePtr state)
     {
-      if(_states.size() < _state_names->size()) 
-	_states.resize(_state_names->size());
+      if(_states.size() < _state_names->size())
+        _states.resize(_state_names->size());
       _states[id] = state;
       state->setId(id);
     }
 
-    virtual HMMStatePtr getState(int id) const 
+    virtual HMMStatePtr getState(int id) const
     {
       return _states[id];
     }
     //! Forward algorithm
     virtual double forward(const Sequence & s, Matrix &alpha) const;
-    
+
     //! Backward algorithm
     virtual double backward(const Sequence & s, Matrix &beta) const;
-    
+
     //! Viterbi algorithm
     virtual double viterbi (const Sequence &s, Sequence &path, Matrix & gamma) const ;
-    
-    //! Posterior Probabilities: P(yi=k|x)
-    virtual void posteriorProbabilities (const Sequence &s, Matrix & probabilities) const;
-    
-    //! Posterior Decoding: ^yi = argmax_k P(yi=k|x)
-    virtual void posteriorDecoding (const Sequence &s, Sequence &path, Matrix & probabilities) const;
-    
+
     virtual std::string model_name() const {
       return "HiddenMarkovModel";
     }
@@ -151,7 +149,7 @@ namespace tops {
       return this;
     }
     virtual void trainBaumWelch (SequenceList & training_set, int maxiterations, double diff) ;
-    
+
     virtual void initialize(const ProbabilisticModelParameters & par) ;
 
     virtual ProbabilisticModelParameters parameters() const ;
@@ -170,7 +168,7 @@ namespace tops {
     void scale(std::vector<double> & in, int t);
     std::vector<double> iterate(Sequence & obs);
   };
-  
+
   typedef boost::shared_ptr<HiddenMarkovModel> HiddenMarkovModelPtr;
 }
 

@@ -2,6 +2,9 @@
  *       VariableLengthMarkovChain.cpp
  *
  *       Copyright 2011 Andre Yoshiaki Kashiwabara <akashiwabara@usp.br>
+ *                      Ígor Bonádio <ibonadio@ime.usp.br>
+ *                      Vitor Onuchic <vitoronuchic@gmail.com>
+ *                      Alan Mitchell Durham <aland@usp.br>
  *
  *       This program is free software; you can redistribute it and/or modify
  *       it under the terms of the GNU  General Public License as published by
@@ -25,7 +28,7 @@
 #include <boost/algorithm/string.hpp>
 namespace tops {
 
-  
+
   void VariableLengthMarkovChain::printDistribution(ContextTreePtr tree, ContextTreeNodePtr node, std::stringstream & out, AlphabetPtr alphabet) const {
     ContextTreeNodePtr current = node;
     std::vector <std::string> aux;

@@ -2,6 +2,9 @@
  *       ContextTree.cpp
  *
  *       Copyright 2011 Andre Yoshiaki Kashiwabara <akashiwabara@usp.br>
+ *                      Ígor Bonádio <ibonadio@ime.usp.br>
+ *                      Vitor Onuchic <vitoronuchic@gmail.com>
+ *                      Alan Mitchell Durham <aland@usp.br>
  *
  *       This program is free software; you can redistribute it and/or modify
  *       it under the terms of the GNU  General Public License as published by
@@ -392,7 +395,7 @@ namespace tops
       std::string seqname = sequences[l]->getName();
       double weight = 1.0;
       if (weights.find(seqname) != weights.end())
-	weight = (weights.find(seqname)->second);
+        weight = (weights.find(seqname)->second);
       // std::cerr << seqname << " with weight " << weight << std::endl;
       for( int i = order; i < (int)(sequences[l]->getSequence()).size(); i++)
         {
@@ -429,7 +432,7 @@ namespace tops
     }
   }
 
-  void ContextTree::pruneTreeSmallSampleSize(int small)
+  void ContextTree::pruneTreeSmallSampleSize(int small_)
   {
 
     std::set<int> x = getLevelOneNodes();
@@ -458,14 +461,14 @@ namespace tops
               {
                 totalchild += (childNode->getCounter())[m];
               }
-            if(totalchild < small){
+            if(totalchild < small_){
               for(int m = 0; m < (int)_alphabet->size(); m++)
                 {
                   (childNode->getCounter())[m] = (parentNode->getCounter())[m];
                 }
             }
           }
-        if(total < small)
+        if(total < small_)
           {
             parentNode->deleteChildren();
             ContextTreeNodePtr parentNode2 = getContext(parentNode->getParent());
@@ -493,7 +496,7 @@ namespace tops
     std::set<int> x = getLevelOneNodes();
     std::vector<int> nodesToPrune (x.begin(),x.end());
     std::set<int>::iterator it;
-    double small = ((double)_alphabet->size())*log(sample_size);
+    double small_ = ((double)_alphabet->size())*log(sample_size);
 
     while(nodesToPrune.size() > 0)
       {
@@ -519,7 +522,7 @@ namespace tops
                 double diff = (double)(parentNode->getCounter())[m] / total;
                 diff -= (double)(childNode->getCounter())[m] /totalChild;
                 assert(childNode->isLeaf());
-                if((double)(childNode->getCounter())[m] < small)
+                if((double)(childNode->getCounter())[m] < small_)
                   {
                     foundSmall = true;
                     break;
@@ -533,7 +536,7 @@ namespace tops
             if(foundSmall)
               break;
           }
-        if((total < small) ||
+        if((total < small_) ||
            (total_diff <delta) ||
            (foundSmall==true))
           {

@@ -2,6 +2,9 @@
  *       VariableLengthMarkovChain.hpp
  *
  *       Copyright 2011 Andre Yoshiaki Kashiwabara <akashiwabara@usp.br>
+ *                      Ígor Bonádio <ibonadio@ime.usp.br>
+ *                      Vitor Onuchic <vitoronuchic@gmail.com>
+ *                      Alan Mitchell Durham <aland@usp.br>
  *
  *       This program is free software; you can redistribute it and/or modify
  *       it under the terms of the GNU  General Public License as published by
@@ -22,6 +25,8 @@
 #ifndef VLMC_MARKOV_CHAIN_HPP
 #define VLMC_MARKOV_CHAIN_HPP
 
+#include "crossplatform.hpp"
+
 #include "ProbabilisticModel.hpp"
 #include "Sequence.hpp"
 #include "FactorableModel.hpp"
@@ -35,7 +40,7 @@ namespace tops{
 
 
   //! This class is a Variable Length Markov Chain
-  class VariableLengthMarkovChain : public FactorableModel {
+  class DLLEXPORT VariableLengthMarkovChain : public FactorableModel {
   public:
     VariableLengthMarkovChain(){
     };

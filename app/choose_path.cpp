@@ -2,6 +2,9 @@
  *       sampling_path.cpp
  *
  *       Copyright 2011 Andre Yoshiaki Kashiwabara <akashiwabara@usp.br>
+ *                      Ígor Bonádio <ibonadio@ime.usp.br>
+ *                      Vitor Onuchic <vitoronuchic@gmail.com>
+ *                      Alan Mitchell Durham <aland@usp.br>
  *
  *       This program is free software; you can redistribute it and/or modify
  *       it under the terms of the GNU  General Public License as published by
@@ -31,6 +34,8 @@
 #include "SequenceEntry.hpp"
 #include "ProbabilisticModelCreatorClient.hpp"
 
+#include "version.hpp"
+
 using namespace tops;
 using namespace std;
 using namespace boost::program_options;
@@ -57,8 +62,10 @@ int main (int argc, char ** argv)
       notify(vm);
       if(vm.count("help"))
         {
-          cout << desc << "\n";
-          return 1;
+            cout << argv[0] << ": ToPS version " << APP_VERSION << std::endl;
+            cout << std::endl;
+            cout << desc << "\n";
+            return 1;
         }
         if(vm.count("fasta") )
           SequenceFormatManager::instance()->setFormat(FastaSequenceFormatPtr(new FastaSequenceFormat()));
@@ -107,17 +114,23 @@ int main (int argc, char ** argv)
     }
   catch (boost::program_options::invalid_command_line_syntax &e)
     {
-      cerr << "error: " << e.what() << std::endl;
-      cerr << desc << endl;
+        cout << argv[0] << ": ToPS version " << APP_VERSION << std::endl;
+        cout << std::endl;
+        cout << "error: " << e.what() << std::endl;
+        cout << desc << endl;
     }
   catch (boost::program_options::unknown_option &e)
     {
-      cerr << "error: " << e.what() << std::endl;
-      cerr << desc << endl;
+        cout << argv[0] << ": ToPS version " << APP_VERSION << std::endl;
+        cout << std::endl;
+        cout << "error: " << e.what() << std::endl;
+        cout << desc << endl;
     }
   catch (boost::bad_any_cast & e)
     {
-      cerr << desc << endl;
+        cout << argv[0] << ": ToPS version " << APP_VERSION << std::endl;
+        cout << std::endl;
+        cout << desc << endl;
     }
   return 0;
 }

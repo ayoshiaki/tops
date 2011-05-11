@@ -2,17 +2,20 @@
  *       FixedSequenceAtPosition.cpp
  *
  *       Copyright 2011 Andre Yoshiaki Kashiwabara <akashiwabara@usp.br>
- *     
+ *                      Ígor Bonádio <ibonadio@ime.usp.br>
+ *                      Vitor Onuchic <vitoronuchic@gmail.com>
+ *                      Alan Mitchell Durham <aland@usp.br>
+ *
  *       This program is free software; you can redistribute it and/or modify
  *       it under the terms of the GNU  General Public License as published by
  *       the Free Software Foundation; either version 3 of the License, or
  *       (at your option) any later version.
- *     
+ *
  *       This program is distributed in the hope that it will be useful,
  *       but WITHOUT ANY WARRANTY; without even the implied warranty of
  *       MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *       GNU General Public License for more details.
- *      
+ *
  *       You should have received a copy of the GNU General Public License
  *       along with this program; if not, write to the Free Software
  *       Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
@@ -33,10 +36,10 @@ namespace tops {
     int j;
     for(j = 0; (j < (int)_sequence.size()) && ((_position  + j) < (int)s.size()); j++)
       if(_sequence[j] != s[_position + j] )
-	break;
+        break;
     if(j != (int)_sequence.size())
       result += _probabilities->log_probability_of(1);
-    else 
+    else
       result += _probabilities ->log_probability_of(0);
     return result;
   }
@@ -51,14 +54,14 @@ namespace tops {
     _matchSeq.resize(s.size());
     for(int i = 0; i < (int)s.size(); i++)
       {
-	int j;
-	for(j = 0; (j < (int)_sequence.size()) && ((_position  + j) < (int)s.size()); j++)
-	  if(_sequence[j] != s[_position + j] )
-	    break;
-	if(j == (int)_sequence.size())
-	  _matchSeq[i] = true;
-	else
-	  _matchSeq[i] = false;
+        int j;
+        for(j = 0; (j < (int)_sequence.size()) && ((_position  + j) < (int)s.size()); j++)
+          if(_sequence[j] != s[_position + j] )
+            break;
+        if(j == (int)_sequence.size())
+          _matchSeq[i] = true;
+        else
+          _matchSeq[i] = false;
       }
   }
 
@@ -102,7 +105,7 @@ namespace tops {
     double r = ProbabilisticModelDecorator::prefix_sum_array_compute(begin, end);
     if(_matchSeq[begin])
       r += _probabilities->log_probability_of(1);
-    else 
+    else
       r+= _probabilities->log_probability_of(0);
     return r;
   }
@@ -110,7 +113,7 @@ namespace tops {
     double r = ProbabilisticModelDecorator::prefix_sum_array_compute(begin, end, phase);
     if(_matchSeq[begin])
       r += _probabilities->log_probability_of(1);
-    else 
+    else
       r+= _probabilities->log_probability_of(0);
     return r;
   }
@@ -118,7 +121,7 @@ namespace tops {
   bool FixedSequenceAtPosition::initialize_prefix_sum_array(const Sequence & s, int phase){
     if(ProbabilisticModelDecorator::initialize_prefix_sum_array(s, phase))
       {
-	return true;
+        return true;
       }
     initializeMatchedPositions(s);
     return true;
@@ -145,8 +148,8 @@ namespace tops {
       out << "\"" ;
       out << subModel()->alphabet()->getSymbol(_sequence[0])->name();
       for( int i = 1; i < (int)_sequence.size(); i++){
-	out << " " ;
-	out << subModel()->alphabet()->getSymbol(_sequence[i])->name();
+        out << " " ;
+        out << subModel()->alphabet()->getSymbol(_sequence[i])->name();
       }
       out << "\"" << std::endl;
     }
@@ -155,7 +158,7 @@ namespace tops {
     out << std::endl;
 
     std::string modelname = ProbabilisticModelDecorator::subModelName();
-    if(modelname.length() > 0) 
+    if(modelname.length() > 0)
       out << "model = " << modelname << std::endl ;
     else
       out << "model = [" << subModel()->str() << "]" << std::endl ;

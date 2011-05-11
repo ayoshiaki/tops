@@ -2,6 +2,9 @@
  *       TrainPhasedMarkovChain.cpp
  *
  *       Copyright 2011 Andre Yoshiaki Kashiwabara <akashiwabara@usp.br>
+ *                      Ígor Bonádio <ibonadio@ime.usp.br>
+ *                      Vitor Onuchic <vitoronuchic@gmail.com>
+ *                      Alan Mitchell Durham <aland@usp.br>
  *
  *       This program is free software; you can redistribute it and/or modify
  *       it under the terms of the GNU  General Public License as published by
@@ -45,11 +48,11 @@ ProbabilisticModelPtr TrainPhasedMarkovChain::create(
           parameters.getMandatoryParameterValue("number_of_phases");
     ProbabilisticModelParameterValuePtr pseudocountspar = parameters.getOptionalParameterValue("pseudo_counts");
         ProbabilisticModelParameterValuePtr aprioripar = parameters.getOptionalParameterValue("apriori");
-	ProbabilisticModelParameterValuePtr weightspar = parameters.getOptionalParameterValue("weights");
-	std::map <std::string, double> weights;
-	if(weightspar != NULL) {
-	  readMapFromFile(weights, weightspar->getString());
-	}
+        ProbabilisticModelParameterValuePtr weightspar = parameters.getOptionalParameterValue("weights");
+        std::map <std::string, double> weights;
+        if(weightspar != NULL) {
+          readMapFromFile(weights, weightspar->getString());
+        }
 
     double pseudocounts = 0;
     if(pseudocountspar != NULL)
@@ -106,11 +109,11 @@ ProbabilisticModelPtr TrainPhasedMarkovChain::create(
                 ContextTreePtr tree = ContextTreePtr(new ContextTree(alphabet));
 
                 if(apriori != NULL){
-		  tree->initializeCounter(sample_set, orderpar->getInt(), 0, weights);
+                  tree->initializeCounter(sample_set, orderpar->getInt(), 0, weights);
                     tree->normalize(apriori, pseudocounts, i);
                 } else {
 
-		  tree->initializeCounter(sample_set, orderpar->getInt(), pseudocounts, weights);
+                  tree->initializeCounter(sample_set, orderpar->getInt(), pseudocounts, weights);
                     tree->normalize();
                 }
 
