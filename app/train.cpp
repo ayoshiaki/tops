@@ -2,6 +2,9 @@
  *       train.cpp
  *
  *       Copyright 2011 Andre Yoshiaki Kashiwabara <akashiwabara@usp.br>
+ *                      Ígor Bonádio <ibonadio@ime.usp.br>
+ *                      Vitor Onuchic <vitoronuchic@gmail.com>
+ *                      Alan Mitchell Durham <aland@usp.br>
  *
  *       This program is free software; you can redistribute it and/or modify
  *       it under the terms of the GNU  General Public License as published by
@@ -46,7 +49,7 @@
 #include "TrainPhasedMarkovChainContextAlgorithm.hpp"
 #include "RemoveSequenceFromModel.hpp"
 #include "SequenceFormat.hpp"
-
+#include "version.hpp"
 #include <fstream>
 #include <iostream>
 #include <stdlib.h>
@@ -76,8 +79,8 @@ int main(int argc, char ** argv) {
                         = TrainFixedLengthMarkovChainPtr(new TrainFixedLengthMarkovChain());
         createModelCommand["BaumWelch"] = TrainHMMBaumWelchPtr(
                         new TrainHMMBaumWelch());
-	createModelCommand["PHMMBaumWelch"] = TrainPHMMBaumWelchPtr(
-			new TrainPHMMBaumWelch());					    
+        createModelCommand["PHMMBaumWelch"] = TrainPHMMBaumWelchPtr(
+                        new TrainPHMMBaumWelch());
         createModelCommand["WeightArrayModel"] = TrainWeightArrayModelPtr(
                         new TrainWeightArrayModel());
         createModelCommand["VariableLengthInhomogeneousMarkovChain"]
@@ -117,6 +120,9 @@ int main(int argc, char ** argv) {
                 if (vm.count("fasta"))
                   SequenceFormatManager::instance()->setFormat(FastaSequenceFormatPtr(new FastaSequenceFormat()));
                 if (vm.count("help")) {
+                    cout << argv[0] << ": ToPS version " << APP_VERSION << std::endl;
+                    cout << std::endl;
+
                   cerr << desc << "\n";
                   cerr << "Implemented algorithms are: " << endl;
                   map<string, ProbabilisticModelCreatorPtr>::iterator it;
@@ -219,7 +225,7 @@ int main(int argc, char ** argv) {
                                 clock_t begin = clock();
                                 ProbabilisticModelPtr model = creator->create( *(readConfig.parameters()));
                                 clock_t end = clock();
-                              	std::cerr << "TIME: " << (double)(end - begin)/CLOCKS_PER_SEC << std::endl;
+                                std::cerr << "TIME: " << (double)(end - begin)/CLOCKS_PER_SEC << std::endl;
                                 if(model == NULL) {
                                     std::cerr << "ERROR: Could not create model !" << std::endl;
                                     exit(-1);
@@ -233,17 +239,26 @@ int main(int argc, char ** argv) {
                                         std::cout << model->str() << std::endl;
                         }
                 } else {
-                        cerr << desc << endl;
+                    cout << argv[0] << ": ToPS version " << APP_VERSION << std::endl;
+                    cout << std::endl;
+                    cout << desc << "\n";
+
                         exit(-1);
                 }
         } catch (boost::program_options::invalid_command_line_syntax &e) {
-                std::cerr << "error: " << e.what() << std::endl;
-                cerr << desc << endl;
+                    cout << argv[0] << ": ToPS version " << APP_VERSION << std::endl;
+                    cout << std::endl;
+                    cout << "error: " << e.what() << std::endl;
+                    cout << desc << "\n";
         } catch (boost::program_options::unknown_option &e) {
-                std::cerr << "error: " << e.what() << std::endl;
-                cerr << desc << endl;
+                    cout << argv[0] << ": ToPS version " << APP_VERSION << std::endl;
+                    cout << std::endl;
+                    cout << "error: " << e.what() << std::endl;
+                    cout << desc << "\n";
         } catch (boost::bad_any_cast & e) {
-                cerr << desc << endl;
+                    cout << argv[0] << ": ToPS version " << APP_VERSION << std::endl;
+                    cout << std::endl;
+                    cout << desc << "\n";
         }
 
         return 0;

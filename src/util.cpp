@@ -2,6 +2,9 @@
  *       util.cpp
  *
  *       Copyright 2011 Andre Yoshiaki Kashiwabara <akashiwabara@usp.br>
+ *                      Ígor Bonádio <ibonadio@ime.usp.br>
+ *                      Vitor Onuchic <vitoronuchic@gmail.com>
+ *                      Alan Mitchell Durham <aland@usp.br>
  *
  *       This program is free software; you can redistribute it and/or modify
  *       it under the terms of the GNU  General Public License as published by
@@ -179,7 +182,7 @@ namespace tops {
   }
 
   void readMapFromFile(std::map<std::string, double> & s,
-		       std::string  file_name)
+                       std::string  file_name)
   {
     std::ifstream input(file_name.c_str());
     if(!input.good())
@@ -190,15 +193,15 @@ namespace tops {
     std::string line;
     while(!input.eof())
       {
-	std::getline(input, line, '\n');
-	std::vector <std::string> x;
-	boost::regex separator("\t");
-	split_regex(line, x, separator);
-	if(x.size() >= 2) {
-	  std::string key = x[0];
-	  int value = atof((x[1]).c_str());
-	  s[key] = value;
-	}
+        std::getline(input, line, '\n');
+        std::vector <std::string> x;
+        boost::regex separator("\t");
+        split_regex(line, x, separator);
+        if(x.size() >= 2) {
+          std::string key = x[0];
+          int value = atof((x[1]).c_str());
+          s[key] = value;
+        }
       }
     input.close();
   }

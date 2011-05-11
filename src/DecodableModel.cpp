@@ -2,6 +2,9 @@
  *       DecodableModel.cpp
  *
  *       Copyright 2011 Andre Yoshiaki Kashiwabara <akashiwabara@usp.br>
+ *                      Ígor Bonádio <ibonadio@ime.usp.br>
+ *                      Vitor Onuchic <vitoronuchic@gmail.com>
+ *                      Alan Mitchell Durham <aland@usp.br>
  *
  *       This program is free software; you can redistribute it and/or modify
  *       it under the terms of the GNU  General Public License as published by
@@ -70,36 +73,36 @@ namespace tops {
     path.resize(size);
     return h;
   }
-  
+
   //! Posterior Probabilities: P(yi=k|x)
   void DecodableModel::posteriorProbabilities (const Sequence &sequence, Matrix & probabilities) const
   {
     int nstates = (int)getStateNames()->size();
     int size = sequence.size();
     Matrix p (nstates, size);
-    
+
     Matrix alpha; // forward
     Matrix beta;  // backward
-    
+
     double full = forward(sequence, alpha);
     backward(sequence, beta);
-    
+
     for(int k = 0; k < nstates; k++)
       for(int i = 0; i < size; i++)
         p(k, i) = alpha(k, i) + beta(k, i) - full;
-        
+
     probabilities = p;
   }
-  
+
   //! Posterior Decoding: ^yi = argmax_k P(yi=k|x)
   void DecodableModel::posteriorDecoding (const Sequence &sequence, Sequence &path, Matrix & probabilities) const{
     int nstates = (int)getStateNames()->size();
     int size = sequence.size();
-    
+
     posteriorProbabilities(sequence, probabilities);
-    
+
     path.resize(size);
-    
+
     double max;
     for(int i = 0; i < size; i++)
     {
@@ -115,5 +118,5 @@ namespace tops {
       }
     }
   }
-  
+
 }

@@ -2,6 +2,9 @@
  *       GeneralizedHiddenMarkovModel.hpp
  *
  *       Copyright 2011 Andre Yoshiaki Kashiwabara <akashiwabara@usp.br>
+ *                      Ígor Bonádio <ibonadio@ime.usp.br>
+ *                      Vitor Onuchic <vitoronuchic@gmail.com>
+ *                      Alan Mitchell Durham <aland@usp.br>
  *
  *       This program is free software; you can redistribute it and/or modify
  *       it under the terms of the GNU  General Public License as published by
@@ -82,7 +85,7 @@ namespace tops {
       virtual void choosePath(const Sequence &s, Sequence &path) ;
 
       virtual void initializeChoosePathAlgorithm(const Sequence &s);
-      
+
     //! Inefficient Viterbi algorithm
     virtual double _viterbi(const Sequence &s, Sequence &path, Matrix & gamma) const;
 

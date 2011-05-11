@@ -2,17 +2,20 @@
  *       ConfigurationReader.cpp
  *
  *       Copyright 2011 Andre Yoshiaki Kashiwabara <akashiwabara@usp.br>
- *     
+ *                      Ígor Bonádio <ibonadio@ime.usp.br>
+ *                      Vitor Onuchic <vitoronuchic@gmail.com>
+ *                      Alan Mitchell Durham <aland@usp.br>
+ *
  *       This program is free software; you can redistribute it and/or modify
  *       it under the terms of the GNU  General Public License as published by
  *       the Free Software Foundation; either version 3 of the License, or
  *       (at your option) any later version.
- *     
+ *
  *       This program is distributed in the hope that it will be useful,
  *       but WITHOUT ANY WARRANTY; without even the implied warranty of
  *       MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *       GNU General Public License for more details.
- *      
+ *
  *       You should have received a copy of the GNU General Public License
  *       along with this program; if not, write to the Free Software
  *       Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
@@ -238,10 +241,10 @@ namespace tops {
     {
       std::string str;
       std::copy(first+1, last-2, std::back_inserter(str));
-      
+
       double v = 0.0;
       if( (_c->getCurrentParameterValue()->getDoubleMap()).find(str) == (_c->getCurrentParameterValue()->getDoubleMap()).end()) {
-	(_c->getCurrentParameterValue()->getDoubleMap())[str] = v;
+        (_c->getCurrentParameterValue()->getDoubleMap())[str] = v;
       }
       _c->setAuxString(str);
     }
@@ -256,14 +259,14 @@ namespace tops {
     template<typename IteratorT>
     void operator()(IteratorT first, IteratorT last) const
     {
-      DoubleMapParameterValuePtr probTable = 
-	DoubleMapParameterValuePtr(new DoubleMapParameterValue());
+      DoubleMapParameterValuePtr probTable =
+        DoubleMapParameterValuePtr(new DoubleMapParameterValue());
       std::string str;
       std::copy(first+1, last-2, std::back_inserter(str));
 
       double v =0.0;
       if( (probTable->getDoubleMap()).find(str) == (probTable->getDoubleMap()).end()) {
-	(probTable->getDoubleMap())[str] = v;
+        (probTable->getDoubleMap())[str] = v;
       }
       _c->setAuxString(str);
       _c->setCurrentParameterValue(probTable);
@@ -294,13 +297,13 @@ namespace tops {
     template<typename IteratorT>
     void operator()(IteratorT first, IteratorT last) const
     {
-      StringMapParameterValuePtr str_map = 
-	StringMapParameterValuePtr(new StringMapParameterValue());
+      StringMapParameterValuePtr str_map =
+        StringMapParameterValuePtr(new StringMapParameterValue());
       std::string str;
       std::copy(first+1, last-1, std::back_inserter(str));
       std::string v;
       if( (str_map->getStringMap()).find(str) == (str_map->getStringMap()).end()) {
-	(str_map->getStringMap())[str] = v;
+        (str_map->getStringMap())[str] = v;
       }
       _c->setAuxString(str);
       _c->setCurrentParameterValue(str_map);
@@ -335,7 +338,7 @@ namespace tops {
       std::copy(first+1, last-1, std::back_inserter(str));
       std::string v;
       if( (_c->getCurrentParameterValue()->getStringMap()).find(str) == (_c->getCurrentParameterValue()->getStringMap()).end()) {
-	(_c->getCurrentParameterValue()->getStringMap())[str] = v;
+        (_c->getCurrentParameterValue()->getStringMap())[str] = v;
       }
       _c->setAuxString(str);
     }
@@ -343,7 +346,7 @@ namespace tops {
     ConfigurationReader * _c;
   };
 
-  
+
 
   struct create_transition
   {
@@ -351,8 +354,8 @@ namespace tops {
     template<typename IteratorT>
     void operator()(IteratorT first, IteratorT last) const
     {
-      DoubleMapParameterValuePtr m = 
-	DoubleMapParameterValuePtr(new DoubleMapParameterValue());
+      DoubleMapParameterValuePtr m =
+        DoubleMapParameterValuePtr(new DoubleMapParameterValue());
 
       std::string str;
       std::copy(first, last-1, std::back_inserter(str));
@@ -364,15 +367,15 @@ namespace tops {
       tops::trim_spaces(symbol);
       tops::trim_spaces(context);
       if(context.size() == 0)
-	out << symbol ;
+        out << symbol ;
       else
-	out << symbol << "|" << context ;
+        out << symbol << "|" << context ;
       str = out.str();
 
 
 
       if( (m->getDoubleMap()).find(str) == (m->getDoubleMap()).end()) {
-	(m->getDoubleMap())[str] = v;
+        (m->getDoubleMap())[str] = v;
       }
       _c->setAuxString(str);
       _c->setCurrentParameterValue(m);
@@ -397,13 +400,13 @@ namespace tops {
       tops::trim_spaces(symbol);
       tops::trim_spaces(context);
       if(context.size() == 0)
-	out << symbol ;
+        out << symbol ;
       else
-	out << symbol << "|" << context ;
+        out << symbol << "|" << context ;
       str = out.str();
 
       if( (_c->getCurrentParameterValue()->getDoubleMap()).find(str) == (_c->getCurrentParameterValue()->getDoubleMap()).end()) {
-	(_c->getCurrentParameterValue()->getDoubleMap())[str] = v;
+        (_c->getCurrentParameterValue()->getDoubleMap())[str] = v;
       }
       _c->setAuxString(str);
       //      std::cerr << "CREATING_TRANSITION_ENTRY: " << str << std::endl;
@@ -444,7 +447,7 @@ namespace tops {
   private:
   };
 
-  bool ConfigurationReader::loadFromFile(const std::string & filename) 
+  bool ConfigurationReader::loadFromFile(const std::string & filename)
   {
     std::ifstream input;
     std::string line;
@@ -463,83 +466,83 @@ namespace tops {
     return load( conf);
   }
 
-  bool  ConfigurationReader::load(std::string & data) 
+  bool  ConfigurationReader::load(std::string & data)
   {
 
-    rule<phrase_scanner_t> config_file, parameter_spec, parameter_value, 
-      parameter_name,  prob_table, string_vector, double_vector, 
+    rule<phrase_scanner_t> config_file, parameter_spec, parameter_value,
+      parameter_name,  prob_table, string_vector, double_vector,
       int_vector, word, word_p, string_map, transition_map, nested_configuration, nested_parameter_spec;
-    word_p 
+    word_p
       = lexeme_d [ +(alnum_p | (ch_p('_') | '.' | '/' | '-' | ' ' | ',' | '+' ))]
       ;
     word
-      = ch_p('"')  
-      >> word_p  
+      = ch_p('"')
+      >> word_p
       >> ch_p('"')
       ;
-    double_vector 
-      = ch_p('(') 
-      >> real_p[create_double_vector(this)] 
-      >> * (',' >>  real_p[add_value_to_double_vector(this)]) 
+    double_vector
+      = ch_p('(')
+      >> real_p[create_double_vector(this)]
+      >> * (',' >>  real_p[add_value_to_double_vector(this)])
       >> ')'
       ;
-    string_vector 
-      = ch_p('(') 
-      >> word[create_string_vector(this)] 
-      >> * (',' >>  word[add_value_to_string_vector(this)]) 
+    string_vector
+      = ch_p('(')
+      >> word[create_string_vector(this)]
+      >> * (',' >>  word[add_value_to_string_vector(this)])
       >> ')'
       ;
     transition_map
       = ch_p('(')
       >> '"'
       >> ( + word_p)  [set_first_word(this)]
-      >> '"' 
+      >> '"'
       >>
       (  (ch_p('|')  >> '"' >> ( *word_p ) [set_second_word(this)] >> '"' >> ':' )
-	 | 
-	 ch_p(':')  ) [create_transition(this)]
+         |
+         ch_p(':')  ) [create_transition(this)]
       >> real_p [add_prob(this)]
-      
-      >> *( ch_p(';') 
-	    >> '"'
-	    >> (+ word_p)  [set_first_word(this)]
-	    >> '"' 
-	    >>
-	    (  (ch_p('|')  >> '"' >> ( *word_p )[set_second_word(this)] >> '"' >> ':' )
-	       | 
-	       ch_p(':')  )  [create_transition_entry(this)]
-	    >> real_p [add_prob(this)] )
+
+      >> *( ch_p(';')
+            >> '"'
+            >> (+ word_p)  [set_first_word(this)]
+            >> '"'
+            >>
+            (  (ch_p('|')  >> '"' >> ( *word_p )[set_second_word(this)] >> '"' >> ':' )
+               |
+               ch_p(':')  )  [create_transition_entry(this)]
+            >> real_p [add_prob(this)] )
       >> !( ch_p(';') ) >> ')'
       ;
-    string_map 
-      = ch_p('(') 
-      >> ('"' 
-	  >> +word_p
-	  >> '"' )[create_string_map(this)]
+    string_map
+      = ch_p('(')
+      >> ('"'
+          >> +word_p
+          >> '"' )[create_string_map(this)]
       >>  ch_p(':')
       >> ('"'
-	  >> +word_p 
-	  >> '"' ) [add_str_map (this)]
-      >> *( ';' 
-	    >> (  '"' 
-		  >> +word_p 
-		  >>   '"')[add_new_map(this)] 
-	    >>  ':' 
-	    >> ('"' 
-		>> +word_p 
-		>> '"' ) [add_str_map(this)] )
-	    
+          >> +word_p
+          >> '"' ) [add_str_map (this)]
+      >> *( ';'
+            >> (  '"'
+                  >> +word_p
+                  >>   '"')[add_new_map(this)]
+            >>  ':'
+            >> ('"'
+                >> +word_p
+                >> '"' ) [add_str_map(this)] )
+
       >> ';'
       >> ')'
       ;
-    parameter_name 
+    parameter_name
       = lexeme_d [ alpha_p >> *(alnum_p | (ch_p('_') | '.' | '/'))]
       ;
-    parameter_value 
-      = double_vector 
+    parameter_value
+      = double_vector
       | parameter_name [set_parameter_value_string(this)]
       | word  [set_parameter_value_word(this)]
-      | string_vector 
+      | string_vector
       | transition_map
       | strict_real_p [set_parameter_value_double(this)]
       | int_p [set_parameter_value_int(this)]
@@ -547,8 +550,8 @@ namespace tops {
       | string_map
       ;
 
-    nested_parameter_spec 
-      = parameter_name >> '=' >> parameter_value 
+    nested_parameter_spec
+      = parameter_name >> '=' >> parameter_value
       ;
     parameter_spec
       = parameter_name[set_parameter_name(this)] >> '=' >> parameter_value ;
@@ -556,7 +559,7 @@ namespace tops {
     nested_configuration
       = (ch_p('[') >> +nested_parameter_spec >> ch_p(']'))
       ;
-    config_file 
+    config_file
       =  parameter_spec[store_parameter(this)] >> (config_file | !end_p)
       ;
 
@@ -565,30 +568,30 @@ namespace tops {
     int k = 0;
     for(int i = 0; i < (int)data.size(); i++)
       {
-	if (data[i] == '#' ) 
-	  inComment = true;
-	if(data[i] == '\n') 
-	  inComment = false;
-	if(!inComment)
-	  {
-	    data[k] = data[i];
-	    k++;
-	  }
+        if (data[i] == '#' )
+          inComment = true;
+        if(data[i] == '\n')
+          inComment = false;
+        if(!inComment)
+          {
+            data[k] = data[i];
+            k++;
+          }
 
       }
     data.resize(k);
 
     info = parse(data.c_str(),  config_file, space_p);
-    if(info.full) 
+    if(info.full)
       {
-	return true;
+        return true;
       }
-    else 
+    else
       {
-	std::cout << "-------------------------\n";
-	std::cout << "Parsing failed " << info.stop <<"\n";
-	std::cout << "-------------------------\n";
-	return false;
+        std::cout << "-------------------------\n";
+        std::cout << "Parsing failed " << info.stop <<"\n";
+        std::cout << "-------------------------\n";
+        return false;
       }
 
   }
@@ -635,7 +638,7 @@ namespace tops {
   std::string ConfigurationReader::getAuxString3(){
     return _aux_string_3;
   }
-    
+
   void ConfigurationReader::setAuxString2(const std::string & aux){
     _aux_string_2 = aux;
   }

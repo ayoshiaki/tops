@@ -2,6 +2,9 @@
  *       GeneralizedHiddenMarkovModel.cpp
  *
  *       Copyright 2011 Andre Yoshiaki Kashiwabara <akashiwabara@usp.br>
+ *                      Ígor Bonádio <ibonadio@ime.usp.br>
+ *                      Vitor Onuchic <vitoronuchic@gmail.com>
+ *                      Alan Mitchell Durham <aland@usp.br>
  *
  *       This program is free software; you can redistribute it and/or modify
  *       it under the terms of the GNU  General Public License as published by
@@ -32,18 +35,18 @@ namespace tops {
 
   std::string GeneralizedHiddenMarkovModel::print_graph () const {
     std::stringstream out;
-    for(int i = 0; i < (int)_all_states.size(); i++) 
+    for(int i = 0; i < (int)_all_states.size(); i++)
       {
-	out << _all_states[i]->name() << " " << _all_states[i]->name() << std::endl;
+        out << _all_states[i]->name() << " " << _all_states[i]->name() << std::endl;
       }
     out << "#" << std::endl;
-    for(int i = 0; i < (int)_all_states.size(); i++) 
+    for(int i = 0; i < (int)_all_states.size(); i++)
       {
-	for(int j = 0; j < (int)_all_states.size(); j++) 
-	  {
-	    if(!close( exp(_all_states[i]->transition()->log_probability_of(j)),0.0, 1-1))
-	      out << _all_states[i]->name() << " " << _all_states[j]->name() << " " << exp(_all_states[i]->transition()->log_probability_of(j)) <<  std::endl;
-	  }
+        for(int j = 0; j < (int)_all_states.size(); j++)
+          {
+            if(!close( exp(_all_states[i]->transition()->log_probability_of(j)),0.0, 1-1))
+              out << _all_states[i]->name() << " " << _all_states[j]->name() << " " << exp(_all_states[i]->transition()->log_probability_of(j)) <<  std::endl;
+          }
       }
     return out.str();
   }
@@ -917,6 +920,6 @@ Sequence & GeneralizedHiddenMarkovModel::chooseObservation(Sequence & h, int i,
             }
   }
 
-  
+
 }
 

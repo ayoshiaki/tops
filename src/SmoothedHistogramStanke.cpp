@@ -2,6 +2,9 @@
  *       SmoothedHistogramStanke.cpp
  *
  *       Copyright 2011 Andre Yoshiaki Kashiwabara <akashiwabara@usp.br>
+ *                      Ígor Bonádio <ibonadio@ime.usp.br>
+ *                      Vitor Onuchic <vitoronuchic@gmail.com>
+ *                      Alan Mitchell Durham <aland@usp.br>
  *
  *       This program is free software; you can redistribute it and/or modify
  *       it under the terms of the GNU  General Public License as published by
@@ -70,11 +73,11 @@ namespace tops {
     for(int i = 0; i < (int)sample_set.size();i++) {
       int rep = 1;
       if(weights.find(sample_set[i]->getName()) != weights.end())
-	rep = (weights.find(sample_set[i]->getName()))->second;
-      
+        rep = (weights.find(sample_set[i]->getName()))->second;
+
       for(int j = 0; j < (int) (sample_set[i]->getSequence()).size(); j++) {
-	for(int k = 0;k< rep; k++)
-	    data.push_back((sample_set[i]->getSequence())[j]);
+        for(int k = 0;k< rep; k++)
+            data.push_back((sample_set[i]->getSequence())[j]);
       }
     }
     std::map<long,double> sum;

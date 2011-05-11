@@ -6,9 +6,14 @@ find_package(Boost 1.35 COMPONENTS regex)
 find_package(Boost 1.35 COMPONENTS program_options)
 
 # find_package(PerlLibs)
-
-ADD_DEFINITIONS("-Wall  -O3 -finline-functions -funroll-loops -ftree-vectorize -ffast-math  -g")
 # ADD_DEFINITIONS("-Wall -g")
+find_package(Git)
+if(GIT_FOUND)
+        execute_process(COMMAND perl update_version.pl)
+endif(GIT_FOUND)
+
+ADD_DEFINITIONS("-Wall -O3 -finline-functions -funroll-loops -ftree-vectorize -ffast-math  -g")
+
 
 IF(UNIX)
   SET(BOOST_REGEX_LIBRARY ${Boost_REGEX_LIBRARY})
@@ -17,7 +22,10 @@ IF(UNIX)
   FIND_LIBRARY(BOOST_PROGRAM_OPTIONS_LIBRARY boost_program_options-mt PATHS ${Boost_LIBRARY_DIRS} )
 ENDIF(UNIX)
 
+
+
 add_subdirectory(src)
 add_subdirectory(app)
+
 
 

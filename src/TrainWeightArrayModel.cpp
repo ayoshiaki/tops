@@ -1,3 +1,27 @@
+/*
+ *       TrainWeightArrayModel.cpp
+ *
+ *       Copyright 2011 Andre Yoshiaki Kashiwabara <akashiwabara@usp.br>
+ *                      Ígor Bonádio <ibonadio@ime.usp.br>
+ *                      Vitor Onuchic <vitoronuchic@gmail.com>
+ *                      Alan Mitchell Durham <aland@usp.br>
+ *
+ *       This program is free software; you can redistribute it and/or modify
+ *       it under the terms of the GNU  General Public License as published by
+ *       the Free Software Foundation; either version 3 of the License, or
+ *       (at your option) any later version.
+ *
+ *       This program is distributed in the hope that it will be useful,
+ *       but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *       MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *       GNU General Public License for more details.
+ *
+ *       You should have received a copy of the GNU General Public License
+ *       along with this program; if not, write to the Free Software
+ *       Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+ *       MA 02110-1301, USA.
+ */
+
 #include "ContextTree.hpp"
 #include "TrainWeightArrayModel.hpp"
 #include "InhomogeneousMarkovChain.hpp"
@@ -19,11 +43,11 @@ namespace tops{
     ProbabilisticModelParameterValuePtr fixseqpospar = parameters.getOptionalParameterValue("fixed_sequence_position");
     ProbabilisticModelParameterValuePtr aprioripar = parameters.getOptionalParameterValue("apriori");
 
-	ProbabilisticModelParameterValuePtr weightspar = parameters.getOptionalParameterValue("weights");
-	std::map <std::string, double> weights;
-	if(weightspar != NULL) {
-	  readMapFromFile(weights, weightspar->getString());
-	}
+        ProbabilisticModelParameterValuePtr weightspar = parameters.getOptionalParameterValue("weights");
+        std::map <std::string, double> weights;
+        if(weightspar != NULL) {
+          readMapFromFile(weights, weightspar->getString());
+        }
 
 
     if((alphabetpar == NULL) ||
@@ -127,10 +151,10 @@ namespace tops{
             ContextTreePtr tree = ContextTreePtr(new ContextTree(alphabet));
 
             if(apriori != NULL  && apriori->factorable() != NULL){
-	      tree->initializeCounter(positionalSample, o, pseudocounts, weights);
+              tree->initializeCounter(positionalSample, o, pseudocounts, weights);
                 tree->normalize(apriori, pseudocounts);
             } else {
-	      tree->initializeCounter(positionalSample, o, pseudocounts, weights);
+              tree->initializeCounter(positionalSample, o, pseudocounts, weights);
                 tree->normalize();
 
             }

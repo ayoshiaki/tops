@@ -2,6 +2,9 @@
  *       ContextTree.cpp
  *
  *       Copyright 2011 Andre Yoshiaki Kashiwabara <akashiwabara@usp.br>
+ *                      Ígor Bonádio <ibonadio@ime.usp.br>
+ *                      Vitor Onuchic <vitoronuchic@gmail.com>
+ *                      Alan Mitchell Durham <aland@usp.br>
  *
  *       This program is free software; you can redistribute it and/or modify
  *       it under the terms of the GNU  General Public License as published by
@@ -392,7 +395,7 @@ namespace tops
       std::string seqname = sequences[l]->getName();
       double weight = 1.0;
       if (weights.find(seqname) != weights.end())
-	weight = (weights.find(seqname)->second);
+        weight = (weights.find(seqname)->second);
       // std::cerr << seqname << " with weight " << weight << std::endl;
       for( int i = order; i < (int)(sequences[l]->getSequence()).size(); i++)
         {
