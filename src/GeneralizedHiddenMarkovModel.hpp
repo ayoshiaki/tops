@@ -118,14 +118,14 @@ namespace tops {
     virtual DecodableModel * decodable() {
       return this;
     }
-      void configureExplicitDurationState(std::string observation_model_name, MultinomialDistributionPtr transition_distr,
-                                          std::string duration_model_name, std::string state_name, int iphase, int ophase);
+    int configureExplicitDurationState(std::string observation_model_name, MultinomialDistributionPtr transition_distr,
+				       std::string duration_model_name, std::string state_name, int iphase, int ophase);
+    
+    int configureSignalState(std::string observation_model_name,
+			     MultinomialDistributionPtr transition_distr,
+			     int size, std::string state_name, int iphase, int ophase);
 
-    void configureSignalState(std::string observation_model_name,
-                              MultinomialDistributionPtr transition_distr,
-                              int size, std::string state_name, int iphase, int ophase);
-
-    void configureGeometricDurationState(std::string observation_model_name,
+    int configureGeometricDurationState(std::string observation_model_name,
                                          MultinomialDistributionPtr transition_distr,
                                          std::string state_name, int iphase, int ophase);
     void setInitialProbability(MultinomialDistributionPtr init);

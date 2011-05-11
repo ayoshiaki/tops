@@ -109,7 +109,7 @@ void GeneralizedHiddenMarkovModel::setTerminalProbability(
         _terminal_probabilities = term;
 }
 
-void GeneralizedHiddenMarkovModel::configureSignalState(std::string observation_model_name,
+int GeneralizedHiddenMarkovModel::configureSignalState(std::string observation_model_name,
                                                         MultinomialDistributionPtr transition_distr,
                                                         int size, std::string state_name, int iphase, int ophase){
   SymbolPtr symbol = _state_names->getSymbol(state_name);
@@ -121,9 +121,10 @@ void GeneralizedHiddenMarkovModel::configureSignalState(std::string observation_
   signal->setOutputPhase(ophase);
   _all_states[symbol->id()] = signal;
   _signal_states.push_back(signal);
+  return symbol->id();
 }
 
-void GeneralizedHiddenMarkovModel::configureGeometricDurationState(std::string model_name,
+int GeneralizedHiddenMarkovModel::configureGeometricDurationState(std::string model_name,
                                                                    MultinomialDistributionPtr transition_distr, std::string state_name, int iphase, int ophase) {
   ProbabilisticModelPtr model = _models[model_name];
   SymbolPtr symbol = _state_names->getSymbol(state_name);
@@ -134,10 +135,11 @@ void GeneralizedHiddenMarkovModel::configureGeometricDurationState(std::string m
   _all_states[symbol->id()] = state;
   state->observationModelName(model_name);
   _geometric_duration_states.push_back(state);
+  return symbol->id();
 }
 
 
-void GeneralizedHiddenMarkovModel::configureExplicitDurationState(std::string observation_model_name, MultinomialDistributionPtr transition_distr,
+int GeneralizedHiddenMarkovModel::configureExplicitDurationState(std::string observation_model_name, MultinomialDistributionPtr transition_distr,
                                                                   std::string duration_model_name, std::string state_name, int iphase, int ophase)
 {
 
@@ -152,6 +154,7 @@ void GeneralizedHiddenMarkovModel::configureExplicitDurationState(std::string ob
   state->setInputPhase(iphase);
   state->setOutputPhase(ophase);
   _all_states[symbol->id()] = state;
+  return symbol->id();
 }
 
 
@@ -840,6 +843,7 @@ Sequence & GeneralizedHiddenMarkovModel::chooseObservation(Sequence & h, int i,
     setAlphabet(observation_symbols);
     for (int i = 0; i < (int) state_names.size(); i++) {
       trim_spaces(state_names[i]);
+      int id;
       ProbabilisticModelParameterValuePtr statepar =
         parameters.getOptionalParameterValue(state_names[i]);
       if (statepar == NULL) {
@@ -868,7 +872,8 @@ Sequence & GeneralizedHiddenMarkovModel::chooseObservation(Sequence & h, int i,
         ProbabilisticModelParameterValuePtr inputphasepar =
           statepars->getOptionalParameterValue("input_phase");
 
-
+	ProbabilisticModelParameterValuePtr extendEmissionpar =
+          statepars->getOptionalParameterValue("extend_emission");
 
 
         if (observationpar == NULL) {
@@ -893,9 +898,9 @@ Sequence & GeneralizedHiddenMarkovModel::chooseObservation(Sequence & h, int i,
             ophase = outputphasepar->getInt();
         if (durationpar == NULL) {
             if (lengthpar == NULL) {
-                configureGeometricDurationState(model_name, transition, state_names[i], iphase, ophase);
+                id = configureGeometricDurationState(model_name, transition, state_names[i], iphase, ophase);
             } else {
-                configureSignalState(model_name,
+                id = configureSignalState(model_name,
                                      transition,
                                      lengthpar->getDouble(),
                                      state_names[i], iphase, ophase);
@@ -906,9 +911,17 @@ Sequence & GeneralizedHiddenMarkovModel::chooseObservation(Sequence & h, int i,
             // Explicit duration state
             std::string duration_model_name = durationpar->getString();
             restore_model(duration_model_name,  parameters);
-            configureExplicitDurationState(model_name, transition, duration_model_name, state_names[i], iphase, ophase);
-
+            id = configureExplicitDurationState(model_name, transition, duration_model_name, state_names[i], iphase, ophase);
+	    if(extendEmissionpar != NULL) {
+	      int startEmissionOffset = (int)(extendEmissionpar->getDoubleVector())[0];
+	      int endEmissionOffset = (int)(extendEmissionpar->getDoubleVector())[1];
+	      _all_states[id]->setStart(startEmissionOffset);
+	      _all_states[id]->setStop(endEmissionOffset);
+	    }
         }
+	
+
+
 
       }
 

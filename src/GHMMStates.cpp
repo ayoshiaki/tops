@@ -22,6 +22,7 @@
 #include "GHMMStates.hpp"
 #include "ProbabilisticModel.hpp"
 #include "MultinomialDistribution.hpp"
+#include "InhomogeneousFactorableModel.hpp"
 #include "Symbol.hpp"
 #include <list>
 
@@ -519,6 +520,20 @@ namespace tops{
                 continue;
             }
 
+	    // check if it can emmit the current state given the boundaries
+	    int nphase = getInputPhase();
+	    if(observation()->inhomogeneous() != NULL)
+	      nphase = observation()->inhomogeneous()->maximumTimeValue() + 1;
+	    if(getStart() > 0 && getStop() > 0) {
+	      if((d-getStart() >= 0) && (base + getStop () < s.size())) {
+		double joinable = observation()->prefix_sum_array_compute(d-getStart(),base+getStop(), mod(getInputPhase()-getStart(), nphase));
+		//std::cerr << all_states[id()]->name() << " " << base << " " << d-getStart() << " " << base + getStop() << " " << getInputPhase() << " " << mod(getInputPhase() - getStart(), nphase) << " " << nphase << std::endl;
+		if(joinable <= -HUGE) {
+		  it++;
+		  continue;
+		}
+	      }
+	    }
             double gmax = gamma(from, d-1) + all_states[from]->transition()->log_probability_of(id());
             int pmax = from;
             for (int p = 1; p < (int)predecessors().size();p++){
