@@ -58,7 +58,7 @@ namespace tops{
     virtual ContextTreePtr getTree(){
       return _tree;
     }
-
+    std::string print_graph () const ;
     //! Evaluate the position i of the sequence s.
     virtual double evaluatePosition(const Sequence & s, unsigned int i) const;
 
