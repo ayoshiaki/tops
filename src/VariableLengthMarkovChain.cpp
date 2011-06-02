@@ -28,6 +28,30 @@
 #include <boost/algorithm/string.hpp>
 namespace tops {
 
+    std::string VariableLengthMarkovChain::print_graph () const {
+        std::stringstream out;
+        AlphabetPtr alphabet = ProbabilisticModel::alphabet();
+        int nnodes = _tree->getNumberOfNodes();
+        for (int i = 0; i < nnodes; i++) {
+            ContextTreeNodePtr current = _tree->getContext(i);
+            ContextTreeNodePtr root = _tree->getRoot();
+            std::vector <std::string> aux;
+            while(current != root) {
+                aux.push_back(alphabet->getSymbol(current->symbol())->name() );
+                current = _tree->getContext(current->getParent());
+            }
+            std::stringstream node_id;
+            for (int j = aux.size() - 1; j >= 0; j--)
+                node_id  << aux[j] ;
+            out << _tree->getContext(i)->id() << " " <<  node_id.str() << std::endl;
+        }
+        out << "#" << std::endl;
+        for (int i = 0; i < nnodes; i++) {
+            out << _tree->getContext(i)->id() << " " <<  _tree->getContext(_tree->getContext(i)->getParent())->id()  << std::endl;
+        }
+        return out.str();
+    }
+
 
   void VariableLengthMarkovChain::printDistribution(ContextTreePtr tree, ContextTreeNodePtr node, std::stringstream & out, AlphabetPtr alphabet) const {
     ContextTreeNodePtr current = node;

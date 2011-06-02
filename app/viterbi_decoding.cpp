@@ -87,6 +87,7 @@ int main (int argc, char ** argv)
       SequenceEntry entry(alphabet);
       SequenceFormatManager::instance()->setFormat(SequenceFormatPtr(new SequenceFormat()));
       SequenceEntry output(model->decodable()->getStateNames());
+      std::cin.rdbuf()->pubsetbuf(0, 0); // make it unbuffered
       while(!cin.eof()) {
         cin >> entry;
         if(entry.getSequence().size() == 0)
@@ -101,6 +102,7 @@ int main (int argc, char ** argv)
         new_name <<     entry.getName() <<  ": " << score;
         output.setName(new_name.str());
         output.setSequence(states);
+        std::cout.rdbuf()->pubsetbuf(0, 0); // make it unbuffered
         cout << output;
       }
       //      input.close();
