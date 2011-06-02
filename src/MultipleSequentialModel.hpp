@@ -40,6 +40,7 @@
 
 namespace tops {
 
+
     //! This class is a model that concatenates multiple models
     class DLLEXPORT MultipleSequentialModel : public ProbabilisticModel
     {

@@ -63,14 +63,14 @@ int main (int argc, char ** argv)
             cout << std::endl;
 
           cout << desc << "\n";
-          return 1;
+          return 0;
         }
       if(vm.count("model")<= 0) {
 
             cout << argv[0] << ": ToPS version " << APP_VERSION << std::endl;
             cout << std::endl;
         cerr << desc << "\n";
-        return -1;
+        return 0;
 
       }
       if (vm.count("fasta"))

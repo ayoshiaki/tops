@@ -65,13 +65,13 @@ int main (int argc, char ** argv)
             cout << argv[0] << ": ToPS version " << APP_VERSION << std::endl;
             cout << std::endl;
             cout << desc << "\n";
-            return 1;
+            return 0;
         }
       if(vm.count("positive")<= 0) {
             cout << argv[0] << ": ToPS version " << APP_VERSION << std::endl;
             cout << std::endl;
             cout << desc << "\n";
-        return -1;
+        return 0;
 
       }
       if(vm.count("negative")<= 0) {
@@ -79,7 +79,7 @@ int main (int argc, char ** argv)
             cout << std::endl;
             cout << desc << "\n";
 
-        return -1;
+        return 0;
       }
       if(vm.count("length")<= 0) {
             cout << argv[0] << ": ToPS version " << APP_VERSION << std::endl;
@@ -87,7 +87,7 @@ int main (int argc, char ** argv)
             cout << desc << "\n";
         cerr << "ERROR: Length of the window is a mandatory parameter" << std::endl;
         cerr << desc << "\n";
-        return -1;
+        return 0;
       }
 
       if (vm.count("fasta"))

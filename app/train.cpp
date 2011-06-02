@@ -129,7 +129,7 @@ int main(int argc, char ** argv) {
                   for (it = createModelCommand.begin(); it
                          != createModelCommand.end(); it++)
                     cerr << "\t" << it->first << endl;
-                  exit(-1);
+                  exit(0);
                   return 1;
                 }
 
@@ -143,7 +143,7 @@ int main(int argc, char ** argv) {
                         input.open(file.c_str());
                         if (!input.is_open()) {
                                 std::cerr << "Cant open file " << file << std::endl;
-                                exit(-1);
+                                exit(0);
                         }
                         string conf;
                         while (!input.eof()) {
@@ -166,7 +166,7 @@ int main(int argc, char ** argv) {
                                                                 "decorator");
 
                                 if (create_model == NULL) {
-                                        exit(-1);
+                                        exit(0);
                                 }
 
                                 string command = create_model->getString();
@@ -181,7 +181,7 @@ int main(int argc, char ** argv) {
                                         for (it = createModelCommand.begin(); it
                                                         != createModelCommand.end(); it++)
                                                 cerr << "\t" << it->first << endl;
-                                        exit(-1);
+                                        exit(0);
                                 } else
                                         creator = createModelCommand[command];
 
@@ -198,7 +198,7 @@ int main(int argc, char ** argv) {
                                                 for (it = modelSelectionCommand.begin(); it
                                                                 != modelSelectionCommand.end(); it++)
                                                         cerr << "\t" << it->first << endl;
-                                                exit(-1);
+                                                exit(0);
                                         }
 
                                 }
@@ -216,7 +216,7 @@ int main(int argc, char ** argv) {
                                     for (it = decoratorCommand.begin(); it
                                            != decoratorCommand.end(); it++)
                                       cerr << "\t" << it->first << endl;
-                                    exit(-1);
+                                    exit(0);
                                   }
 
 
@@ -243,7 +243,7 @@ int main(int argc, char ** argv) {
                     cout << std::endl;
                     cout << desc << "\n";
 
-                        exit(-1);
+                        exit(0);
                 }
         } catch (boost::program_options::invalid_command_line_syntax &e) {
                     cout << argv[0] << ": ToPS version " << APP_VERSION << std::endl;
