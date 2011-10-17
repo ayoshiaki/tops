@@ -84,6 +84,8 @@ namespace tops{
 
     //! Returns the parameters of the model
     virtual ProbabilisticModelParameters parameters() const;
+
+    virtual void removeSequenceFromModel(const Sequence & s,  int phase);
   private:
     ContextTreePtr _tree;
 

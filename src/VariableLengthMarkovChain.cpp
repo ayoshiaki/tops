@@ -251,4 +251,93 @@ namespace tops {
       }
 
   }
+
+  void VariableLengthMarkovChain::removeSequenceFromModel(const Sequence & s,  int phase){
+      ContextTreeNodePtr c =  _tree->getRoot();
+    ContextTreeNodePtr p;
+    int j;
+    for(j = s.size()-2; j >=0; j--){
+      if(c->isLeaf())
+        break;
+      p = c;
+      c = c->getChild(s[j]);
+      if(c == NULL)
+        {
+          c = p;
+          break;
+        }
+    }
+    for(; j >= 0; j--) {
+      for(int l = 0; l < (int)alphabet()->size(); l++) {
+        ContextTreeNodePtr n = _tree->createContext();
+        DoubleVector prob;
+        for(int i = 0; i < n->alphabet_size(); i++)
+          prob.push_back(exp(c ->getDistribution()->log_probability_of(i)));
+        MultinomialDistributionPtr distr = MultinomialDistributionPtr(new MultinomialDistribution(prob));
+        n->setDistribution(distr);
+        c->setChild(n, l);
+      }
+      c = c->getChild(s[j]);
+    }
+
+    ContextTreeNodePtr current = _tree->getContext(s,s.size()-1);
+
+
+    current->getDistribution()->log_probability_of(s[s.size()-1], -HUGE);
+    double sum = 0;
+    for(int symbol = 0; symbol < alphabet()->size(); symbol++)
+        {
+            sum += exp(current->getDistribution()->log_probability_of(symbol));
+        }
+    for(int symbol = 0; symbol < alphabet()->size(); symbol++)
+        {
+            if(symbol != s[s.size()-1]) {
+                double x = exp(current->getDistribution()->log_probability_of(symbol));
+                current->getDistribution()->log_probability_of(symbol, log(x/sum));
+            }
+        }
+
+
+    std::vector <ContextTreeNodePtr> children = current->getChildren();
+    if(current->isLeaf())
+      return;
+    std::vector <ContextTreeNodePtr> stack;
+    for(int i = 0 ; i < (int)children.size(); i++)
+        stack.push_back(children[i]);
+#if 1
+    while(stack.size() > 0) {
+      current = stack.back();
+      stack.pop_back();
+      if(current == NULL)
+        continue;
+      assert(current->getDistribution() != NULL);
+
+
+
+    current->getDistribution()->log_probability_of(s[s.size()-1], -HUGE);
+    double sum = 0;
+    for(int symbol = 0; symbol < alphabet()->size(); symbol++)
+        {
+            sum += exp(current->getDistribution()->log_probability_of(symbol));
+        }
+    for(int symbol = 0; symbol < alphabet()->size(); symbol++)
+        {
+            if(symbol != s[s.size()-1]) {
+                double x = exp(current->getDistribution()->log_probability_of(symbol));
+                current->getDistribution()->log_probability_of(symbol, log(x/sum));
+            }
+        }
+      if(current->isLeaf())
+        continue;
+      children = current->getChildren();
+      for(int i = 0 ; i < (int)children.size(); i++)
+        stack.push_back(children[i]);
+    }
+#endif
+
+
+
+
+  }
+
 }
