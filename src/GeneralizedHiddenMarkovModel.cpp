@@ -579,6 +579,11 @@ double GeneralizedHiddenMarkovModel::viterbi(const Sequence &s, Sequence &path,
           path[L] = state;
           L--;
       }
+      if(d == 0)
+          {
+              std::cerr << "Something wrong: [ predicted state duration equals to " << d << "]" << std::endl;
+              break;
+          }
       state = p;
   }
 #if 0
@@ -866,7 +871,7 @@ Sequence & GeneralizedHiddenMarkovModel::chooseObservation(Sequence & h, int i,
         ProbabilisticModelParameterValuePtr inputphasepar =
           statepars->getOptionalParameterValue("input_phase");
 
-	ProbabilisticModelParameterValuePtr extendEmissionpar =
+  ProbabilisticModelParameterValuePtr extendEmissionpar =
           statepars->getOptionalParameterValue("extend_emission");
 
 
@@ -906,14 +911,14 @@ Sequence & GeneralizedHiddenMarkovModel::chooseObservation(Sequence & h, int i,
             std::string duration_model_name = durationpar->getString();
             restore_model(duration_model_name,  parameters);
             id = configureExplicitDurationState(model_name, transition, duration_model_name, state_names[i], iphase, ophase);
-	    if(extendEmissionpar != NULL) {
-	      int startEmissionOffset = (int)(extendEmissionpar->getDoubleVector())[0];
-	      int endEmissionOffset = (int)(extendEmissionpar->getDoubleVector())[1];
-	      _all_states[id]->setStart(startEmissionOffset);
-	      _all_states[id]->setStop(endEmissionOffset);
-	    }
+      if(extendEmissionpar != NULL) {
+        int startEmissionOffset = (int)(extendEmissionpar->getDoubleVector())[0];
+        int endEmissionOffset = (int)(extendEmissionpar->getDoubleVector())[1];
+        _all_states[id]->setStart(startEmissionOffset);
+        _all_states[id]->setStop(endEmissionOffset);
+      }
         }
-	
+
 
 
 

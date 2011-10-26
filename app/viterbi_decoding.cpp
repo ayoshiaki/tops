@@ -95,6 +95,7 @@ int main (int argc, char ** argv)
         Matrix v;
         Sequence states;
         clock_t begin = clock();
+
         double score = model->decodable()->viterbi(entry.getSequence(), states, v);
         clock_t end = clock();
         std::cerr << "TIME: " << (double)(end - begin)/CLOCKS_PER_SEC << std::endl;
