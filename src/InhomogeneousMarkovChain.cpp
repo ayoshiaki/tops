@@ -9,7 +9,7 @@
  *       This program is free software; you can redistribute it and/or modify
  *       it under the terms of the GNU  General Public License as published by
  *       the Free Software Foundation; either version 3 of the License, or
- *       (at your option) any later version.
+ *       (at your option) any loater version.
  *
  *       This program is distributed in the hope that it will be useful,
  *       but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -163,7 +163,10 @@ namespace tops{
         {
             if(symbol != s[s.size()-1]) {
                 double x = exp(current->getDistribution()->log_probability_of(symbol));
-                current->getDistribution()->log_probability_of(symbol, log(x/sum));
+		current->getDistribution()->log_probability_of(symbol, log(x/sum));
+		if(close(x, 0, 1e-10))
+		  current->getDistribution()->log_probability_of(symbol, -HUGE);
+		
             }
         }
 
@@ -195,6 +198,9 @@ namespace tops{
             if(symbol != s[s.size()-1]) {
                 double x = exp(current->getDistribution()->log_probability_of(symbol));
                 current->getDistribution()->log_probability_of(symbol, log(x/sum));
+		if(close(x, 0, 1e-10))
+		  current->getDistribution()->log_probability_of(symbol, -HUGE);
+
             }
         }
       if(current->isLeaf())
