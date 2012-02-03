@@ -531,9 +531,8 @@ namespace tops {
             >> ('"'
                 >> +word_p
                 >> '"' ) [add_str_map(this)] )
+      >> !( ch_p(';') ) >> ')'
 
-      >> ';'
-      >> ')'
       ;
     parameter_name
       = lexeme_d [ alpha_p >> *(alnum_p | (ch_p('_') | '.' | '/'))]
