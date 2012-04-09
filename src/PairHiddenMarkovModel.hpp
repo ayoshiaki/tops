@@ -29,18 +29,26 @@
 #include "crossplatform.hpp"
 
 #include "HiddenMarkovModel.hpp"
-#include "PairHiddenMarkovModel.hpp"
 #include "ProbabilisticModel.hpp"
 #include "DecodableModel.hpp"
 #include "Sequence.hpp"
 #include "Alphabet.hpp"
 #include "ContextTree.hpp"
 #include "Symbol.hpp"
-
+#include "SparseMatrix.hpp"
 #include "PairHiddenMarkovModelCreator.hpp"
 #include "util.hpp"
+#include "ProbabilisticModelParameter.hpp"
+#include "Symbol.hpp"
 #include <cstdarg>
 #include <vector>
+#include <iostream>
+#include <cmath>
+#include <sstream>
+#include <vector>
+#include <iterator>
+#include <stdio.h>
+#include <algorithm>
 
 namespace tops{
   class DLLEXPORT PHMMState: public HMMState {
@@ -118,6 +126,10 @@ namespace tops{
       tops::ProbabilisticModel::setAlphabet(observation_symbols);
     }
 
+    int getGapId(){
+      return _gap_id;
+    }
+
     virtual ~PairHiddenMarkovModel(){}
 
     //Forward, Backward and Viterbi algorithms. We assume there are no cycles of silent states.
@@ -125,13 +137,19 @@ namespace tops{
 
     virtual double backward(const Sequence & seq1, const Sequence & seq2, vector<Matrix> &a);
 
+    virtual double backwardSum(int k,int i,int j,vector<Matrix> &a,const Sequence & seq1, const Sequence & seq2);
+
     virtual double viterbi(const Sequence & seq1, const Sequence & seq2, Sequence & path, Sequence & al1, Sequence & al2, vector<Matrix> &a);
 
-    virtual void posteriorProbabilities (const Sequence &seq1, const Sequence &seq2, vector<Matrix> & probabilities);
+    virtual float posteriorProbabilities (const Sequence &seq1, const Sequence &seq2, SparseMatrixPtr &ppMatch,SparseMatrixPtr &ppGap1, SparseMatrixPtr &ppGap2);
+
+    virtual float expectedAccuracy(SparseMatrixPtr postProbs, SparseMatrixPtr postProbsGap1, SparseMatrixPtr postProbsGap2);
+
+    virtual float expectedAccuracyWithGaps(SparseMatrixPtr postProbs, SparseMatrixPtr postProbsGap1, SparseMatrixPtr postProbsGap2);
 
     virtual void generateSequence(Sequence &seq1, Sequence &seq2, Sequence &path);
 
-    virtual void trainBaumWelch(SequenceList & sample1, SequenceList & sample2, int maxiterations, double diff_threshold);
+    virtual void trainBaumWelch(SequenceList & sample, int maxiterations, double diff_threshold);
 
     virtual std::string model_name() const {
       return "PairHiddenMarkovModel";

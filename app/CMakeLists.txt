@@ -29,6 +29,10 @@ ADD_EXECUTABLE(choose_path choose_path.cpp)
 ADD_EXECUTABLE(remove_invalid_symbols remove_invalid_symbols.cpp)
 ADD_EXECUTABLE(simulateAlignment simulateAlignment.cpp)
 ADD_EXECUTABLE(align align.cpp)
+ADD_EXECUTABLE(testeFBGHMM testeFBGHMM.cpp)
+ADD_EXECUTABLE(testeGPHMM testeGPHMM.cpp)
+ADD_EXECUTABLE(predalign predalign.cpp)
+ADD_EXECUTABLE(runAllPredalignTests runAllPredalignTests.cpp)
 ADD_EXECUTABLE(print_graph_from_model print_graph_from_model.cpp)
 
 TARGET_LINK_LIBRARIES(evaluate ${APP_DEP} )
@@ -46,10 +50,14 @@ TARGET_LINK_LIBRARIES(choose_path ${APP_DEP} )
 TARGET_LINK_LIBRARIES(remove_invalid_symbols ${APP_DEP} )
 TARGET_LINK_LIBRARIES(simulateAlignment ${APP_DEP} )
 TARGET_LINK_LIBRARIES(align ${APP_DEP} )
+TARGET_LINK_LIBRARIES(testeFBGHMM ${APP_DEP} )
+TARGET_LINK_LIBRARIES(testeGPHMM ${APP_DEP} )
+TARGET_LINK_LIBRARIES(predalign ${APP_DEP} )
+TARGET_LINK_LIBRARIES(runAllPredalignTests ${APP_DEP} )
 TARGET_LINK_LIBRARIES(posterior_decoding ${APP_DEP} )
 TARGET_LINK_LIBRARIES(print_graph_from_model ${APP_DEP} )
 
-install(TARGETS train viterbi_decoding simulate simulateAlignment align bayes_classifier one_file_model sliding_window evaluate kullback_positional posterior_probabilities posterior_decoding print_graph_from_model
+install(TARGETS train viterbi_decoding simulate testeFBGHMM testeGPHMM simulateAlignment align predalign runAllPredalignTests bayes_classifier one_file_model sliding_window evaluate kullback_positional posterior_probabilities posterior_decoding print_graph_from_model
        RUNTIME DESTINATION bin
        LIBRARY DESTINATION lib
        ARCHIVE DESTINATION lib/static)

@@ -36,6 +36,7 @@
 #include "DecodableModel.hpp"
 #include "GHMMStates.hpp"
 #include "util.hpp"
+#include "SparseMatrix.hpp"
 
 namespace tops {
 
@@ -51,6 +52,7 @@ namespace tops {
     MultinomialDistributionPtr _terminal_probabilities;
     GHMMStates _all_states;
     AlphabetPtr _state_names;
+    int _nclasses;
     GHMMStates _geometric_duration_states;
     GHMMSignalStates _signal_states;
     GHMMExplicitDurationStates _explicit_duration_states;
@@ -67,7 +69,7 @@ namespace tops {
 
     void fixStatesPredecessorSuccessor();
 
-    virtual double efficient_forward(const Sequence & s, Matrix &alpha) const;
+    virtual double inefficient_forward(const Sequence & s, Matrix &alpha) const;
 
     virtual std::string print_graph () const ;
 
@@ -76,6 +78,12 @@ namespace tops {
 
     //! Backward algorithm
     virtual double backward(const Sequence & s, Matrix &beta) const;
+
+    virtual void posteriorProbabilities (const Sequence &s, SparseMatrixPtr probabilities) const;
+
+    virtual void setNumClasses(int nclasses);
+
+    virtual int getNumClasses();
 
     //! Viterbi algorithm
     virtual double
@@ -119,15 +127,15 @@ namespace tops {
       return this;
     }
     int configureExplicitDurationState(std::string observation_model_name, MultinomialDistributionPtr transition_distr,
-				       std::string duration_model_name, std::string state_name, int iphase, int ophase);
+				       std::string duration_model_name, std::string state_name, int iphase, int ophase, std::vector<int> classes);
     
     int configureSignalState(std::string observation_model_name,
 			     MultinomialDistributionPtr transition_distr,
-			     int size, std::string state_name, int iphase, int ophase);
+			     int size, std::string state_name, int iphase, int ophase, std::vector<int> classes);
 
     int configureGeometricDurationState(std::string observation_model_name,
                                          MultinomialDistributionPtr transition_distr,
-                                         std::string state_name, int iphase, int ophase);
+					std::string state_name, int iphase, int ophase, std::vector<int> classes);
     void setInitialProbability(MultinomialDistributionPtr init);
     void setTerminalProbability(MultinomialDistributionPtr term);
     void setObservationSymbols(AlphabetPtr obs) {

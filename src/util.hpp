@@ -24,6 +24,7 @@
 
 #ifndef UTIL_H
 #define UTIL_H
+#define NDEBUG
 
 #include "crossplatform.hpp"
 
@@ -38,6 +39,7 @@
 #include "Sequence.hpp"
 #include "SequenceEntry.hpp"
 #include <boost/numeric/ublas/matrix.hpp>
+#include <boost/numeric/ublas/matrix_sparse.hpp>
 #include <boost/math/special_functions/erf.hpp>
 
 #ifdef WIN32
@@ -55,6 +57,8 @@ namespace tops {
   typedef std::vector <double> DoubleVector;
   typedef std::vector <int> IntVector;
   typedef boost::numeric::ublas::matrix<double> Matrix;
+  typedef boost::numeric::ublas::mapped_matrix<double> MMatrix;
+  typedef boost::numeric::ublas::compressed_matrix<float,boost::numeric::ublas::row_major> CMatrix;
   typedef boost::numeric::ublas::matrix<int> IntMatrix;
   typedef std::vector <std::string> StringVector;
   typedef std::map <std::string, std::string> StringMap;

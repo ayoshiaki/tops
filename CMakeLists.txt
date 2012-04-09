@@ -12,7 +12,7 @@ if(GIT_FOUND)
         execute_process(COMMAND perl update_version.pl)
 endif(GIT_FOUND)
 
-ADD_DEFINITIONS("-Wall -O3 -finline-functions -funroll-loops -ftree-vectorize -ffast-math  -g")
+ADD_DEFINITIONS("-Wall -O3 -finline-functions -funroll-loops -ftree-vectorize -ffast-math  -g -O3")
 
 
 IF(UNIX)
