@@ -143,7 +143,7 @@ namespace tops{
 
     virtual float posteriorProbabilities (const Sequence &seq1, const Sequence &seq2, SparseMatrixPtr &ppMatch,SparseMatrixPtr &ppGap1, SparseMatrixPtr &ppGap2);
 
-    virtual float expectedAccuracy(SparseMatrixPtr postProbs, SparseMatrixPtr postProbsGap1, SparseMatrixPtr postProbsGap2);
+    virtual float expectedAccuracy(SparseMatrixPtr postProbs);
 
     virtual float expectedAccuracyWithGaps(SparseMatrixPtr postProbs, SparseMatrixPtr postProbsGap1, SparseMatrixPtr postProbsGap2);
 
