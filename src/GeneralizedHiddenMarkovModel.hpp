@@ -79,7 +79,11 @@ namespace tops {
     //! Backward algorithm
     virtual double backward(const Sequence & s, Matrix &beta) const;
 
-    virtual void posteriorProbabilities (const Sequence &s, SparseMatrixPtr probabilities) const;
+    virtual void posteriorProbabilitiesWithClasses (const Sequence &s, SparseMatrixPtr probabilities) const;
+
+    virtual void posteriorProbabilitiesNoClasses (const Sequence &s, SparseMatrixPtr &probabilities) const;
+
+    float MEAPred(const Sequence &s, Sequence &path);
 
     virtual void setNumClasses(int nclasses);
 

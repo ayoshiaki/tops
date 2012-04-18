@@ -15,7 +15,8 @@ IF(UNIX)
 ENDIF(UNIX)
 
 ADD_EXECUTABLE(train train.cpp)
-ADD_EXECUTABLE(viterbi_decoding viterbi_decoding.cpp)
+ADD_EXECUTABLE(viterbi_decoding viterbi_decoding.cpp) 
+ADD_EXECUTABLE(mea_decoding mea_decoding.cpp) 
 ADD_EXECUTABLE(simulate simulate.cpp)
 ADD_EXECUTABLE(bayes_classifier bayes_classifier.cpp)
 ADD_EXECUTABLE(one_file_model one_file_model.cpp)
@@ -39,7 +40,8 @@ TARGET_LINK_LIBRARIES(evaluate ${APP_DEP} )
 TARGET_LINK_LIBRARIES(train ${APP_DEP} )
 TARGET_LINK_LIBRARIES(test_read_seq ${APP_DEP} )
 TARGET_LINK_LIBRARIES(one_file_model ${APP_DEP} )
-TARGET_LINK_LIBRARIES(viterbi_decoding ${APP_DEP} )
+TARGET_LINK_LIBRARIES(viterbi_decoding ${APP_DEP} ) 
+TARGET_LINK_LIBRARIES(mea_decoding ${APP_DEP} ) 
 TARGET_LINK_LIBRARIES(simulate ${APP_DEP} )
 TARGET_LINK_LIBRARIES(bayes_classifier ${APP_DEP} )
 TARGET_LINK_LIBRARIES(sliding_window ${APP_DEP} )
@@ -57,7 +59,7 @@ TARGET_LINK_LIBRARIES(runAllPredalignTests ${APP_DEP} )
 TARGET_LINK_LIBRARIES(posterior_decoding ${APP_DEP} )
 TARGET_LINK_LIBRARIES(print_graph_from_model ${APP_DEP} )
 
-install(TARGETS train viterbi_decoding simulate testeFBGHMM testeGPHMM simulateAlignment align predalign runAllPredalignTests bayes_classifier one_file_model sliding_window evaluate kullback_positional posterior_probabilities posterior_decoding print_graph_from_model
+install(TARGETS train viterbi_decoding mea_decoding simulate testeFBGHMM testeGPHMM simulateAlignment align predalign runAllPredalignTests bayes_classifier one_file_model sliding_window evaluate kullback_positional posterior_probabilities posterior_decoding print_graph_from_model
        RUNTIME DESTINATION bin
        LIBRARY DESTINATION lib
        ARCHIVE DESTINATION lib/static)

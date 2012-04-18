@@ -79,6 +79,11 @@ namespace tops {
     return;
   }
     
+  float DecodableModel::MEAPred(const Sequence &s, Sequence &path){
+    cerr << "This model does not implement MEAPred" << endl;
+    exit(-1);
+  }
+
   void DecodableModel::posteriorProbabilities (const Sequence &sequence, Matrix & probabilities) const
   {
     int nstates = (int)getStateNames()->size();

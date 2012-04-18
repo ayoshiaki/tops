@@ -689,31 +689,32 @@ namespace tops{
     }
   }
   
-  void GHMMState::posteriorSum (Matrix & alpha, Matrix & beta, Matrix &postProbs, const Sequence & s, int base, const GHMMStates & all_states, std::vector< std::list<int> > &valid_positions, double prob){
+  void GHMMState::posteriorSum (Matrix & alpha, Matrix & beta, Matrix &postProbs, const Sequence & s, int base, const GHMMStates & all_states, std::vector< std::list<int> > &valid_positions, double prob, int stateNumber){
     alpha(id(), base) = -HUGE;
     if(predecessors().size() <= 0)
       return;
-    int from = predecessors()[0];
     int phase = getInputPhase();
     double emission = observation()->prefix_sum_array_compute(base, base, phase);
-    alpha(id(), base) =  alpha(from, base-1) + all_states[from]->transition()->log_probability_of(id()) + emission;
-    for (int k = 1; k < (int)predecessors().size(); k++)
+    for (int k = 0; k < (int)predecessors().size(); k++)
       {
-	from = predecessors()[k];
+	int from = predecessors()[k];
 	alpha(id(), base) =  log_sum(alpha(from, base - 1) + all_states[from]->transition()->log_probability_of(id()) +  emission, alpha(id(), base));
       }
-    for(int c = 0; c < (int)classes().size(); c++){
-      postProbs(classes()[c],base) = log_sum(postProbs(classes()[c],base), alpha(id(),base) + beta(id(),base) - prob);
+    if(stateNumber == -1){
+      for(int c = 0; c < (int)classes().size(); c++){
+	postProbs(classes()[c],base) = log_sum(postProbs(classes()[c],base), alpha(id(),base) + beta(id(),base) - prob);
+      }
     }
+    else if(stateNumber != -1)
+      postProbs(id(),base) = log_sum(postProbs(id(),base), alpha(id(),base) + beta(id(),base) - prob);
   }
 
-  void GHMMSignalState::posteriorSum (Matrix & alpha, Matrix & beta, Matrix &postProbs, const Sequence & s, int base, const GHMMStates & all_states, std::vector< std::list<int> > &valid_positions, double prob){    
+  void GHMMSignalState::posteriorSum (Matrix & alpha, Matrix & beta, Matrix &postProbs, const Sequence & s, int base, const GHMMStates & all_states, std::vector< std::list<int> > &valid_positions, double prob, int stateNumber){    
     alpha(id(), base)  = -HUGE;
     int d = size();
     if(predecessors().size() <= 0)
       return;
     
-    int from = predecessors()[0];
     if((base - d ) < 0)
       return;
     int phase = getInputPhase();
@@ -721,20 +722,24 @@ namespace tops{
     if(emission <= -HUGE)
       return;
     
-    alpha(id(), base) =  alpha(from, base-d) + all_states[from]->transition()->log_probability_of(id())  + emission;
-    for (int k = 1; k < (int)predecessors().size(); k++)
+    for (int k = 0; k < (int)predecessors().size(); k++)
       {
-	from = predecessors()[k];
-	double s = alpha(from, base -d) + all_states[from]->transition()->log_probability_of(id()) + emission;
-	alpha(id(), base) =  log_sum(s, alpha(id(), base));
-	if(s > -HUGE){
+	int from = predecessors()[k];
+	double w = alpha(from, base -d) + all_states[from]->transition()->log_probability_of(id()) + emission;
+	alpha(id(), base) =  log_sum(w, alpha(id(), base));
+	if(w > -HUGE && stateNumber == -1){
 	  int c = 0;
 	  for(int i = base-d+1; i <= base; i++){
-	    postProbs(classes()[c],i) = log_sum(postProbs(classes()[c],i), s + beta(id(),base) - prob);
+	    postProbs(classes()[c],i) = log_sum(postProbs(classes()[c],i), w + beta(id(),base) - prob);
 	    c++;
 	    if(c == (int)classes().size())
 	      c = 0;
 	  }	  
+	}
+	else if(w > -HUGE && stateNumber != -1){
+	  for(int i = base-d+1; i <= base; i++){
+	    postProbs(id(),i) = log_sum(postProbs(id(),i), w + beta(id(),base) - prob);
+	  }
 	}
       }
     if(alpha(id(),base) > -HUGE){
@@ -747,7 +752,7 @@ namespace tops{
     }
   }
 
-  void GHMMExplicitDurationState::posteriorSum (Matrix & alpha, Matrix &beta, Matrix &postProbs, const Sequence & s, int base, const GHMMStates & all_states, std::vector< std::list<int> > &valid_positions, double prob){
+  void GHMMExplicitDurationState::posteriorSum (Matrix & alpha, Matrix &beta, Matrix &postProbs, const Sequence & s, int base, const GHMMStates & all_states, std::vector< std::list<int> > &valid_positions, double prob, int stateNumber){
     alpha(id(), base) = -HUGE;
     if(predecessors().size() <= 0)
       return;
@@ -790,21 +795,24 @@ namespace tops{
 	  }
 	}
       }
-      int from = predecessors()[0];
       double emission = observation()->prefix_sum_array_compute((*it)+1, base, getInputPhase());
-      alpha(id(), base) = log_sum(alpha(from, (*it)) + all_states[from]->transition()->log_probability_of(id()) + duration + emission, alpha(id(), base));
-      for (int k = 1; k < (int)predecessors().size(); k++){
-	from = predecessors()[k];
-	double s = alpha(from, (*it)) + all_states[from]->transition()->log_probability_of(id()) + duration + emission;
-	alpha(id(), base) = log_sum(s, alpha(id(), base));
-	if(s > -HUGE){
+      for (int k = 0; k < (int)predecessors().size(); k++){
+	int from = predecessors()[k];
+	double w = alpha(from, (*it)) + all_states[from]->transition()->log_probability_of(id()) + duration + emission;
+	alpha(id(), base) = log_sum(w, alpha(id(), base));
+	if(w > -HUGE && stateNumber == -1){
 	  int c = 0;
 	  for(int i = (*it)+1; i <= base; i++){
-	    postProbs(classes()[c],i) = log_sum(postProbs(classes()[c],i), s + beta(id(),base) - prob);
+	    postProbs(classes()[c],i) = log_sum(postProbs(classes()[c],i), w + beta(id(),base) - prob);
 	    c++;
 	    if(c == (int)classes().size())
 	      c = 0;
 	  }	 
+	}
+	else if(w > -HUGE && stateNumber != -1){
+	  for(int i = (*it)+1; i <= base; i++){
+	    postProbs(id(),i) = log_sum(postProbs(id(),i), w + beta(id(),base) - prob);
+	  }
 	}
       }
       it++;

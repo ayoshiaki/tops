@@ -182,53 +182,162 @@ int GeneralizedHiddenMarkovModel::configureExplicitDurationState(std::string obs
             }
     }
 
-    void GeneralizedHiddenMarkovModel::choosePath(const Sequence &s, Sequence &path) {
-        initializeChoosePathAlgorithm(s);
-        int size = s.size();
-        int nstates =_all_states.size();
-        DoubleVector lastStateProbability(nstates);
-        double sum = -HUGE;
-        int L = size - 1;
-        path.resize(s.size());
+  void GeneralizedHiddenMarkovModel::choosePath(const Sequence &s, Sequence &path) {
+    initializeChoosePathAlgorithm(s);
+    int size = s.size();
+    int nstates =_all_states.size();
+    DoubleVector lastStateProbability(nstates);
+    double sum = -HUGE;
+    int L = size - 1;
+    path.resize(s.size());
 #if 0
-        for(int i = 0; i < size; i++)
-            {
-                std::cerr << i << " " << std::endl;
-                for (int j = 0; j < nstates; j++)
-                    {
-                        std::cerr << " " << _all_states[j]->name() << " " << _alpha(j, i) << std::endl;
-                    }
-            }
+    for(int i = 0; i < size; i++)
+      {
+	std::cerr << i << " " << std::endl;
+	for (int j = 0; j < nstates; j++)
+	  {
+	    std::cerr << " " << _all_states[j]->name() << " " << _alpha(j, i) << std::endl;
+	  }
+      }
 #endif
-        for(int k = 0; k < nstates; k++)
-            {
-                sum = log_sum(sum, _alpha(k,L) );
-            }
-        for(int k = 0; k < nstates; k++)
-            {
-                lastStateProbability[k] = exp(_alpha(k, L) - sum);
-            }
-        MultinomialDistributionPtr m = MultinomialDistributionPtr(new MultinomialDistribution(lastStateProbability));
+    for(int k = 0; k < nstates; k++)
+      {
+	sum = log_sum(sum, _alpha(k,L) );
+      }
+    for(int k = 0; k < nstates; k++)
+      {
+	lastStateProbability[k] = exp(_alpha(k, L) - sum);
+      }
+    MultinomialDistributionPtr m = MultinomialDistributionPtr(new MultinomialDistribution(lastStateProbability));
+    
+    int q = m->choose();
+    int position = L;
+    
+    while (position > 0 ){
+      int new_position;
+      int state;
+      new_position = 0;
+      state = q;
+      _all_states[q]->choosePredecessor(_alpha, position, state, new_position, _all_states);
+      for(int p = new_position + 1; p <= position; p++)
+	{
+	  path[p] = q;
+	}
+      position = new_position;
+      q = state;
+    }
+  }
 
-        int q = m->choose();
-        int position = L;
+  float GeneralizedHiddenMarkovModel::MEAPred(const Sequence &s, Sequence &path){
+    SparseMatrixPtr probs;
+    int size = s.size();
+    int nstates = _all_states.size();
+    posteriorProbabilitiesNoClasses(s,probs);
+    Matrix ea(size,nstates);
+    IntMatrix ptrs(size,nstates);
 
-        while (position > 0 ){
-            int new_position;
-            int state;
-            new_position = 0;
-            state = q;
-            _all_states[q]->choosePredecessor(_alpha, position, state, new_position, _all_states);
-            for(int p = new_position + 1; p <= position; p++)
-                {
-                    path[p] = q;
-                }
-            position = new_position;
-            q = state;
-        }
+    //Initialization
+    for(int k = 0; k < nstates; k++){
+      float prob = probs->get(0,k);
+      ea(0,k) = prob;
+    }
+    
+    //Recursion
+    for(int i = 1; i < size; i++){
+      for(int k = 0; k < nstates; k++){
+	float max = 0.0;
+	int state = -1;
+	std::vector<int> preds = _all_states[k]->predecessors();
+	preds.push_back(k);
+	for(int p = 0; p < (int)preds.size(); p++){
+	  int id = preds[p];
+	  if(max < ea(i-1,id)){
+	    max = ea(i-1,id);
+	    state = id;
+	  }
+	}
+	ea(i,k) = max + probs->get(i,k);
+	ptrs(i,k) = state;
+      }
     }
 
-  void GeneralizedHiddenMarkovModel::posteriorProbabilities (const Sequence &s, SparseMatrixPtr probabilities) const{
+    //Traceback
+    path.resize(size);
+    float mea = 0.0;
+    int state = -1;
+    for(int k = 0; k < nstates; k++){
+      if(ea(size-1,k) > mea){
+	mea = ea(size-1,k);
+	state = k;
+      }
+    }
+    path[size-1] = state;
+    for(int i = size-1; i > 0; i--){
+      state = ptrs(i,path[i]);
+      path[i-1] = state;
+    }
+    return mea/size;
+  }
+  
+  void GeneralizedHiddenMarkovModel::posteriorProbabilitiesNoClasses (const Sequence &s, SparseMatrixPtr &probabilities) const{
+    int size = s.size();
+    int nstates = _all_states.size();
+    initialize_prefix_sum_arrays(s);
+    
+    Matrix beta;
+    double prob = backward(s,beta);
+
+    Matrix alpha (nstates, size);
+
+    Matrix postProbs(nstates,size);
+    probabilities = SparseMatrixPtr(new SparseMatrix(size,nstates));
+    
+    std::vector< std::list<int> > valid_positions;
+    valid_positions.resize(nstates);
+    std::list <int> e;
+    for(int k = 0; k <nstates; k++)
+      valid_positions[k] = e;
+    
+    // initialization
+    for (int c = 0; c < nstates; c++) {
+      postProbs(c,0) = -HUGE;
+    }
+    for (int k = 0; k < nstates; k++) {
+      alpha(k, 0) = getInitialProbabilities()->log_probability_of(k)
+	+ _all_states[k]->observation()->prefix_sum_array_compute(0, 0, _all_states[k]->getInputPhase()) + _all_states[k]->duration_probability(1);
+      if(alpha(k,0) > -HUGE){
+	postProbs(k,0) = alpha(k,0) + beta(k,0) - prob;
+	std::vector<int> succ = _all_states[k]->successors();
+	for(int p = 0; p < (int)succ.size(); p++){
+	  int id = succ[p];
+	  if(!_all_states[id]->isGeometricDuration())
+	    valid_positions[id].push_back(0);
+	}
+      }
+    }
+
+    for (int i = 1; i < size; i++) {
+      for(int c = 0; c < nstates; c++)
+	postProbs(c,i) = -HUGE;
+      for(int k = 0; k < nstates; k++) {	
+	_all_states[k]->posteriorSum(alpha, beta, postProbs, s, i, _all_states, valid_positions, prob, k);
+      }
+    }
+    
+    for(int i = 0; i < size; i++){
+      for(int c = 0; c < nstates; c++){
+	probabilities->add(i,c,exp(postProbs(c,i)));
+      }
+    }
+
+    /*double sum = alpha(0, size-1) + _terminal_probabilities->log_probability_of(0);
+    for(int k = 1; k < nstates; k++)
+      sum = log_sum(sum, alpha(k, size-1) + _terminal_probabilities->log_probability_of(k));
+      cout << "prob = " << prob << "  postProb = " << sum << endl;*/
+      //cout << (probabilities.value_data()).size() << "  " << postProbs.size1()*postProbs.size2() << endl;
+  }
+
+  void GeneralizedHiddenMarkovModel::posteriorProbabilitiesWithClasses (const Sequence &s, SparseMatrixPtr probabilities) const{
     int size = s.size();
     int nstates = _all_states.size();
     initialize_prefix_sum_arrays(s);
@@ -270,7 +379,7 @@ int GeneralizedHiddenMarkovModel::configureExplicitDurationState(std::string obs
       for(int c = 0; c < _nclasses; c++)
 	postProbs(c,i) = -HUGE;
       for(int k = 0; k < nstates; k++) {	
-	_all_states[k]->posteriorSum(alpha, beta, postProbs, s, i, _all_states, valid_positions, prob);
+	_all_states[k]->posteriorSum(alpha, beta, postProbs, s, i, _all_states, valid_positions, prob, -1);
       }
     }
     
