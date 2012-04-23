@@ -28,27 +28,50 @@ namespace tops{
     cerr << "Done! (" << t.elapsed() << "s)" << endl << endl;
 
     map<string,map<string,SparseMatrixPtr > > consPPAlign;
+    map<string,map<string,SparseMatrixPtr > > consPPGap1;
+    map<string,map<string,SparseMatrixPtr > > consPPGap2;
 
+    cerr << "\tNo consistency." << endl;
+    cerr << "\t\tGenerating alignment with modified sequence annealing...";
+    t.restart();
     for(int i = 0; i < (int)_names.size(); i++){
       for(int j = i+1; j < (int)_names.size(); j++){
-	_ppAlign[_names[i]][_names[j]]->prod(1, consPPAlign[_names[i]][_names[j]]);
+	_ppAlign[_names[i]][_names[j]]->addGaps(_ppGap1[_names[i]][_names[j]], _ppGap2[_names[i]][_names[j]]);
       }
     }
-
-    cerr << "\tApplying predalign consistency transformation...";
-    t.restart();
-    predalignAlConsistencyWithEas(consPPAlign, _ppGap1, _ppGap2, numit, _eas);
-    cerr << "Done! (" << t.elapsed() << "s)" << endl;
-    cerr << "\tGenerating alignment with gaps...";
-    t.restart();
-    initializePostProbsList(consPPAlign);  
+    initializePostProbsList(_ppAlign);  
     generateGraph();
     generateAlignment(almodel);
     string outFile = "";
     outFile.append(outDir);
-    outFile.append("C1");
+    outFile.append("C0");
     outFile.append(alFileName);
     ofstream fout;
+    fout.open(outFile.c_str());
+    for(int i = 0; i < (int)_seqs.size(); i++){
+      fout << _alignment[i];
+    }
+    fout << endl;
+    fout.close();
+    cerr << "Done! (" << t.elapsed() << "s)" << endl;
+
+    clearAll();
+
+    cerr << "\t\tGenerating alignment with original sequence annealing...";
+    t.restart();
+    for(int i = 0; i < (int)_names.size(); i++){
+      for(int j = i+1; j < (int)_names.size(); j++){
+	_ppAlign[_names[i]][_names[j]]->removeLastLine();
+	_ppAlign[_names[i]][_names[j]]->removeLastColumn();
+      }
+    }
+    initializePostProbsList(_ppAlign);  
+    generateGraph();
+    generateAlignment(almodel);
+    outFile = "";
+    outFile.append(outDir);
+    outFile.append("C1");
+    outFile.append(alFileName);
     fout.open(outFile.c_str());
     for(int i = 0; i < (int)_seqs.size(); i++){
       fout << _alignment[i];
@@ -59,14 +82,20 @@ namespace tops{
 
     clearAll();
 
-    cerr << "\tGenerating alignment without gaps...";
-    t.restart();
     for(int i = 0; i < (int)_names.size(); i++){
       for(int j = i+1; j < (int)_names.size(); j++){
-	consPPAlign[_names[i]][_names[j]]->removeLastLine();
-	consPPAlign[_names[i]][_names[j]]->removeLastColumn();
+	_ppAlign[_names[i]][_names[j]]->prod(1, consPPAlign[_names[i]][_names[j]]);
+	_ppGap1[_names[i]][_names[j]]->prod(1,consPPGap1[_names[i]][_names[j]]);
+	_ppGap2[_names[i]][_names[j]]->prod(1,consPPGap2[_names[i]][_names[j]]);
       }
     }
+
+    cerr << "\tApplying consistency transformation with weights and gaps...";
+    t.restart();
+    predalignAlConsistencyWithEas(consPPAlign, consPPGap1, consPPGap2, numit, _eas);
+    cerr << "Done! (" << t.elapsed() << "s)" << endl;
+    cerr << "\t\tGenerating alignment with modified sequence annealing...";
+    t.restart();
     initializePostProbsList(consPPAlign);  
     generateGraph();
     generateAlignment(almodel);
@@ -80,23 +109,18 @@ namespace tops{
     }
     fout << endl;
     fout.close();
-    cerr << "Done! (" << t.elapsed() << "s)" << endl << endl;
+    cerr << "Done! (" << t.elapsed() << "s)" << endl;
 
     clearAll();
+
+    cerr << "\t\tGenerating alignment original sequence annealing...";
+    t.restart();
     for(int i = 0; i < (int)_names.size(); i++){
       for(int j = i+1; j < (int)_names.size(); j++){
-	_ppAlign[_names[i]][_names[j]]->prod(1, consPPAlign[_names[i]][_names[j]]);
-	_ppGap1[_names[i]][_names[j]]->clear();
-	_ppGap2[_names[i]][_names[j]]->clear();
+	consPPAlign[_names[i]][_names[j]]->removeLastLine();
+	consPPAlign[_names[i]][_names[j]]->removeLastColumn();
       }
     }
-    
-    cerr << "\tApplying picxaa consistency transformation...";
-    t.restart();
-    picxaaAlConsistency(consPPAlign, _eas, numit);
-    cerr << "Done! (" << t.elapsed() << "s)" << endl;
-    cerr << "\tGenerating alignment...";
-    t.restart();
     initializePostProbsList(consPPAlign);  
     generateGraph();
     generateAlignment(almodel);
@@ -113,19 +137,154 @@ namespace tops{
     cerr << "Done! (" << t.elapsed() << "s)" << endl << endl;
 
     clearAll();
+
+    for(int i = 0; i < (int)_names.size(); i++){
+      for(int j = i+1; j < (int)_names.size(); j++){
+	_ppAlign[_names[i]][_names[j]]->prod(1, consPPAlign[_names[i]][_names[j]]);
+	_ppGap1[_names[i]][_names[j]]->prod(1,consPPGap1[_names[i]][_names[j]]);
+	_ppGap2[_names[i]][_names[j]]->prod(1,consPPGap2[_names[i]][_names[j]]);
+      }
+    }
+
+    cerr << "\tApplying consistency transformation without weights and with gaps...";
+    t.restart();
+    predalignAlConsistencyNoEas(consPPAlign, _ppGap1, _ppGap2, numit);
+    cerr << "Done! (" << t.elapsed() << "s)" << endl;
+    cerr << "\t\tGenerating alignment with modified sequence annealing...";
+    t.restart();
+    initializePostProbsList(consPPAlign);  
+    generateGraph();
+    generateAlignment(almodel);
+    outFile = "";
+    outFile.append(outDir);
+    outFile.append("C4");
+    outFile.append(alFileName);
+    fout.open(outFile.c_str());
+    for(int i = 0; i < (int)_seqs.size(); i++){
+      fout << _alignment[i];
+    }
+    fout << endl;
+    fout.close();
+    cerr << "Done! (" << t.elapsed() << "s)" << endl;
+
+    clearAll();
+
+    cerr << "\t\tGenerating alignment original sequence annealing...";
+    t.restart();
+    for(int i = 0; i < (int)_names.size(); i++){
+      for(int j = i+1; j < (int)_names.size(); j++){
+	consPPAlign[_names[i]][_names[j]]->removeLastLine();
+	consPPAlign[_names[i]][_names[j]]->removeLastColumn();
+      }
+    }
+    initializePostProbsList(consPPAlign);  
+    generateGraph();
+    generateAlignment(almodel);
+    outFile = "";
+    outFile.append(outDir);
+    outFile.append("C5");
+    outFile.append(alFileName);
+    fout.open(outFile.c_str());
+    for(int i = 0; i < (int)_seqs.size(); i++){
+      fout << _alignment[i];
+    }
+    fout << endl;
+    fout.close();
+    cerr << "Done! (" << t.elapsed() << "s)" << endl << endl;
+
+    clearAll();
+
+    for(int i = 0; i < (int)_names.size(); i++){
+      for(int j = i+1; j < (int)_names.size(); j++){
+	_ppAlign[_names[i]][_names[j]]->prod(1, consPPAlign[_names[i]][_names[j]]);
+	consPPGap1[_names[i]][_names[j]]->clear();
+	consPPGap2[_names[i]][_names[j]]->clear();
+      }
+    }
+    
+    cerr << "\tApplying picxaa consistency transformation...";
+    t.restart();
+    picxaaAlConsistency(consPPAlign, _eas, numit);
+    cerr << "Done! (" << t.elapsed() << "s)" << endl;
+    cerr << "\t\tGenerating alignment with original sequence annealing...";
+    t.restart();
+    initializePostProbsList(consPPAlign);  
+    generateGraph();
+    generateAlignment(almodel);
+    outFile = "";
+    outFile.append(outDir);
+    outFile.append("C6");
+    outFile.append(alFileName);
+    fout.open(outFile.c_str());
+    for(int i = 0; i < (int)_seqs.size(); i++){
+      fout << _alignment[i];
+    }
+    fout << endl;
+    fout.close();
+    cerr << "Done! (" << t.elapsed() << "s)" << endl;
+
+    clearAll();
+
+    cerr << "\t\tGenerating alignment with modified sequence annealing...";
+    t.restart();
+    for(int i = 0; i < (int)_names.size(); i++){
+      for(int j = i+1; j < (int)_names.size(); j++){
+	consPPAlign[_names[i]][_names[j]]->addGaps(_ppGap1[_names[i]][_names[j]], _ppGap2[_names[i]][_names[j]]);
+      }
+    }
+    initializePostProbsList(consPPAlign);  
+    generateGraph();
+    generateAlignment(almodel);
+    outFile = "";
+    outFile.append(outDir);
+    outFile.append("C7");
+    outFile.append(alFileName);
+    fout.open(outFile.c_str());
+    for(int i = 0; i < (int)_seqs.size(); i++){
+      fout << _alignment[i];
+    }
+    fout << endl;
+    fout.close();
+    cerr << "Done! (" << t.elapsed() << "s)" << endl << endl;
+
+    clearAll();
     
     cerr << "\tApplying classic consistency transformation...";
     t.restart();
     classicAlConsistency(_ppAlign, numit);
     cerr << "Done! (" << t.elapsed() << "s)" << endl;
-    cerr << "\tGenerating alignment...";
+    cerr << "\t\tGenerating alignment with original sequence annealing...";
     t.restart();
     initializePostProbsList(_ppAlign);  
     generateGraph();
     generateAlignment(almodel);
     outFile = "";
     outFile.append(outDir);
-    outFile.append("C4");
+    outFile.append("C8");
+    outFile.append(alFileName);
+    fout.open(outFile.c_str());
+    for(int i = 0; i < (int)_seqs.size(); i++){
+      fout << _alignment[i];
+    }
+    fout << endl;
+    fout.close();
+    cerr << "Done! (" << t.elapsed() << "s)" << endl;
+
+    clearAll();
+
+    cerr << "\t\tGenerating alignment with modified sequence annealing...";
+    t.restart();
+    for(int i = 0; i < (int)_names.size(); i++){
+      for(int j = i+1; j < (int)_names.size(); j++){
+	_ppAlign[_names[i]][_names[j]]->addGaps(_ppGap1[_names[i]][_names[j]], _ppGap2[_names[i]][_names[j]]);
+      }
+    }
+    initializePostProbsList(_ppAlign);  
+    generateGraph();
+    generateAlignment(almodel);
+    outFile = "";
+    outFile.append(outDir);
+    outFile.append("C9");
     outFile.append(alFileName);
     fout.open(outFile.c_str());
     for(int i = 0; i < (int)_seqs.size(); i++){
