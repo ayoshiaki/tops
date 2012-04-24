@@ -164,6 +164,8 @@ namespace tops{
   void SparseMatrix::removeLastLine(){
     M.pop_back();
     _nrows--;
+    nextr = 0;
+    nextc = M[0].begin();
   }
 
   void SparseMatrix::removeLastColumn(){
@@ -171,6 +173,8 @@ namespace tops{
       M[i].erase(_ncolumns-1);
     }
     _ncolumns--;
+    nextr = 0;
+    nextc = M[0].begin();
   }
 
   void SparseMatrix::sum_prod(SparseMatrixPtr N, SparseMatrixPtr R, float n){
