@@ -7,7 +7,7 @@ namespace tops{
 
   float SparseMatrix::postProbs_thresh = 0.001;
   float SparseMatrix::cut_thresh = 0.01;
-  
+
   void SparseMatrix::resize(int nrows, int ncols){
     M.resize(nrows);
     _nrows = nrows;

@@ -697,9 +697,9 @@ namespace tops{
 	  s2 = j;
 	  hasElement = ppAlign[_names[i]][_names[j]]->next(&p1,&p2,&(p.prob));
 	  p.pos1.first = s1;
-	  p.pos1.second = p1;
+	  p.pos1.second = p1-1;
 	  p.pos2.first = s2;
-	  p.pos2.second = p2;
+	  p.pos2.second = p2-1;
 	  /*p.prob = (p.prob)/(ppAlign[_names[i]][_names[j]]->get(p1,_seqs[j].size())+ppAlign[_names[i]][_names[j]]->get(_seqs[i].size(),p2));
 	  if(p.prob < 0.5){
 	    continue;

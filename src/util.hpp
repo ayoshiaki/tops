@@ -57,6 +57,7 @@ namespace tops {
   typedef std::vector <double> DoubleVector;
   typedef std::vector <int> IntVector;
   typedef boost::numeric::ublas::matrix<double> Matrix;
+  typedef boost::numeric::ublas::matrix<float> fMatrix;
   typedef boost::numeric::ublas::mapped_matrix<double> MMatrix;
   typedef boost::numeric::ublas::compressed_matrix<float,boost::numeric::ublas::row_major> CMatrix;
   typedef boost::numeric::ublas::matrix<int> IntMatrix;
@@ -71,6 +72,9 @@ namespace tops {
 
   //! Calculates the value of log(exp(log_a) + exp(log_b))
   DLLEXPORT double log_sum( double log_a, double log_b);
+
+  double lookup (double x);
+
 
   //! Divides the a by b
   double safe_division(double a, double b);

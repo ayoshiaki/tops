@@ -1,4 +1,5 @@
 #include <boost/program_options.hpp>
+#include <boost/timer.hpp>
 #include <map>
 #include <iostream>
 #include <string>
@@ -18,6 +19,47 @@
 using namespace tops;
 using namespace std;
 using namespace boost::program_options;
+
+void testeVector(){
+  float t1,t2;
+  boost::timer t;
+  double sf = 0;
+  t.restart();
+  vector<Matrix> m(5);
+  for(int k = 0; k < 5; k++)
+    m[k].resize(1000,1000);
+  
+  for(int k = 0; k < 5; k++){
+    for(int i = 0; i < 1000; i++){
+      for(int j = 0; j < 1000; j++){
+	m[k](i,j) = 1.0;
+      }
+    }
+  }
+  for(int k = 0; k < 5; k++){
+    for(int i = 0; i < 1000; i++){
+      for(int j = 0; j < 1000; j++){
+	sf += m[k](i,j);
+      }
+    }
+  }
+  t1 = t.elapsed();
+  cout << sf << endl;
+
+  sf = 0;
+  t.restart();
+  vector<double> v(5000000);
+  for(int i = 0; i < 5000000; i++){
+    v[i] = 1;
+  }
+  for(int i = 0; i < 5000000; i++){
+    sf += v[i];
+  }
+  t2 = t.elapsed();
+  cout << sf << endl;
+
+  cout << "t1 = " << t1 << " t2 = " << t2 << endl;
+}
 
 /*void testFunc(ProbabilisticModelPtr model, SequenceList seqs1, SequenceList seqs2)
 {  
@@ -72,7 +114,7 @@ using namespace boost::program_options;
   }
   }*/
 
-void testeSparseMatrix(){
+    /*void testeSparseMatrix(){
   SparseMatrixPtr M = SparseMatrixPtr(new SparseMatrix(3,5));
   SparseMatrixPtr N = SparseMatrixPtr(new SparseMatrix(5,3));
   SparseMatrixPtr R = SparseMatrixPtr(new SparseMatrix(3,3));
@@ -97,11 +139,11 @@ void testeSparseMatrix(){
   N->printFullMatrix();
   cout << endl;
   R->printFullMatrix();
-}
+  }*/
 
 int main (int argc, char ** argv)
 {
-  testeSparseMatrix();
+  testeVector();
   /*srand(time(NULL));
 
     options_description desc("Allowed options");

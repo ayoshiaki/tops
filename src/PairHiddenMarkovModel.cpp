@@ -30,47 +30,44 @@ namespace tops {
   //////// Decoding algorithms ////////////////////////////
   /////////////////////////////////////////////////////////
 
-  float PairHiddenMarkovModel::posteriorProbabilities (const Sequence &seq1, const Sequence &seq2, SparseMatrixPtr &ppMatch,SparseMatrixPtr &ppGap1, SparseMatrixPtr &ppGap2)
+  float PairHiddenMarkovModel::posteriorProbabilities (const Sequence &seq1, const Sequence &seq2, SparseMatrixPtr &sparsePPMatch,SparseMatrixPtr &sparsePPGap1, SparseMatrixPtr &sparsePPGap2)
   {
     int nstates = _states.size();
     int length1 = seq1.size();
     int length2 = seq2.size();
-    ppMatch = SparseMatrixPtr(new SparseMatrix(length1,length2));
-    ppGap1 = SparseMatrixPtr(new SparseMatrix(length1,length2));
-    ppGap2 = SparseMatrixPtr(new SparseMatrix(length1,length2));
+    fMatrix ppMatch(length1+1,length2+1);
+    fMatrix ppGap1(length1+1,length2+1);
+    fMatrix ppGap2(length1+1,length2+1);
     vector<Matrix> alpha; // forward
     vector<Matrix> beta;  // backward
 
     double full = forward(seq1, seq2, alpha);
-    double full2 = backward(seq1, seq2, beta);
-    for(int i = 0; i < length1; i++){
+    backward(seq1, seq2, beta);
+    for(int i = 0; i <= length1; i++){
       //double teste = 0.0;
-      for(int j = 0; j < length2; j++){
-	double p0 = -HUGE;
-	double p1 = -HUGE;
-	double p2 = -HUGE;
+      for(int j = 0; j <= length2; j++){
+	ppMatch(i,j) = 0;
+	ppGap1(i,j) = 0;
+	ppGap2(i,j) = 0;
 	for(int k = 0; k < nstates; k++){
-	  if(getPHMMState(k)->eSeq1() == 1 && getPHMMState(k)->eSeq2() == 1)
-	    p0 = log_sum(p0, alpha[k](i+1,j+1) + beta[k](i+1,j+1) - full);
-	  else if(getPHMMState(k)->eSeq1() == 1 && getPHMMState(k)->eSeq2() == 0){
-	    if(j == 0)
-	      p1 = log_sum(p1, alpha[k](i+1,j) + beta[k](i+1,j) - full);
-	    p1 = log_sum(p1, alpha[k](i+1,j+1) + beta[k](i+1,j+1) - full);
+	  if(_states[k]->eSeq1() == 1 && _states[k]->eSeq2() == 1)
+	    ppMatch(i,j) += exp(alpha[k](i,j) + beta[k](i,j) - full);
+	  else if(_states[k]->eSeq1() == 0 && _states[k]->eSeq2() == 1){
+	    ppGap1(i,j) += exp(alpha[k](i,j) + beta[k](i,j) - full);
 	  }
-	  else if(getPHMMState(k)->eSeq1() == 0 && getPHMMState(k)->eSeq2() == 1){
-	    if(i == 0)
-	      p2 = log_sum(p2, alpha[k](i,j+1) + beta[k](i,j+1) - full);
-	    p2 = log_sum(p2, alpha[k](i+1,j+1) + beta[k](i+1,j+1) - full);
+	  else if(_states[k]->eSeq1() == 1 && _states[k]->eSeq2() == 0){
+	    ppGap2(i,j) += exp(alpha[k](i,j) + beta[k](i,j) - full);
 	  }
         }
-	ppMatch->add(i,j,exp(p0));
-	ppGap1->add(i,j,exp(p2));
-	ppGap2->add(i,j,exp(p1));
 	//teste += exp(p0) + exp(p1); essa soma da 1. probabilidade de alinhar a base com qualquer outra, mais a prob de alinhar com um gap.
       }
       //cout << "teste = " << teste << endl;
     }
-    float ea = expectedAccuracy(ppMatch);
+    float ea = expectedAccuracy(length1+1,length2+1,ppMatch);
+    sparsePPMatch = SparseMatrixPtr(new SparseMatrix(length1+1,length2+1,ppMatch));
+    sparsePPGap1 = SparseMatrixPtr(new SparseMatrix(length1+1,length2+1,ppGap1));
+    sparsePPGap2 = SparseMatrixPtr(new SparseMatrix(length1+1,length2+1,ppGap2));
+    
     return ea;
   }
 
@@ -125,29 +122,29 @@ namespace tops {
     return mea;
   }
 
-  float PairHiddenMarkovModel::expectedAccuracy(SparseMatrixPtr postProbs){
-    int size1 = postProbs->nrows();
-    int size2 = postProbs->ncols();
+  float PairHiddenMarkovModel::expectedAccuracy(int size1, int size2, fMatrix &postProbs){
     int allen = size1;
     if(size2 < allen)
-    allen = size2;
-    SparseMatrixPtr ea = SparseMatrixPtr(new SparseMatrix(size1,size2));
-    for(int i = 0; i < size1; i++){
-      for(int j = 0; j < size2; j++){
-	if(i == 0 || j == 0){
-	  continue;
+      allen = size2;
+    fMatrix ea(size1,size2);
+
+    for(int i = 0; i < size1; i++)
+      ea(i,0) = 0.0;
+    for(int j = 1; j < size2; j++)
+      ea(0,j) = 0.0;
+    
+    for(int i = 1; i < size1; i++){
+      for(int j = 1; j < size2; j++){
+	ea(i,j) = ea(i-1,j);
+	if(ea(i,j) <= ea(i,j-1)){
+	  ea(i,j) = ea(i,j-1);
 	}
-	ea->add(i,j,ea->get(i-1,j));
-	if(ea->get(i,j) <= ea->get(i,j-1)){
-	  ea->add(i,j,ea->get(i,j-1));
-	}
-	if(ea->get(i,j) <= ea->get(i-1,j-1)+postProbs->get(i,j)){
-	  ea->add(i,j,ea->get(i-1,j-1)+postProbs->get(i,j));
+	if(ea(i,j) <= ea(i-1,j-1)+postProbs(i,j)){
+	  ea(i,j) = ea(i-1,j-1)+postProbs(i,j);
 	}
       }
     }
-    float mea = ea->get(size1-1,size2-1)/allen;
-    return mea;
+    return ea(size1-1,size2-1)/allen;;
   } 
 
   double PairHiddenMarkovModel::viterbi(const Sequence & seq1, const Sequence & seq2, Sequence & statePath, Sequence & alignment1, Sequence & alignment2, vector<Matrix> &a)
@@ -190,8 +187,8 @@ namespace tops {
               pathMatrix[k](i,j) = -1;
             continue;
           }
-          int ne1 = getPHMMState(k)->eSeq1();
-          int ne2 = getPHMMState(k)->eSeq2();
+          int ne1 = _states[k]->eSeq1();
+          int ne2 = _states[k]->eSeq2();
           if(ne1 == 0 && ne2 == 0)
             continue;
 
@@ -202,20 +199,20 @@ namespace tops {
           }
 
           double aux = -HUGE;
-          for(int l = 0; l < (int)(getPHMMState(k)->iTransitions()).size(); l++){
-            int id = getPHMMState(k)->getITransId(l);
-            aux = alpha[id](i-ne1,j-ne2) + getPHMMState(id)->transitions()->log_probability_of(k);
+          for(int l = 0; l < (int)(_states[k]->iTransitions()).size(); l++){
+            int id = _states[k]->getITransId(l);
+            aux = alpha[id](i-ne1,j-ne2) + _states[id]->transitions()->log_probability_of(k);
             if(aux > alpha[k](i,j)){
               alpha[k](i,j) = aux;
               pathMatrix[k](i,j) = id;
             }
           }
           if(ne1 > 0 && ne2 > 0)
-            alpha[k](i,j) += getPHMMState(k)->emission()->log_probability_of_pair(seq1[i-1],seq2[j-1]);
+            alpha[k](i,j) += _states[k]->emission()->log_probability_of_pair(seq1[i-1],seq2[j-1]);
           else if(ne1 > 0 && ne2 == 0)
-            alpha[k](i,j) += getPHMMState(k)->emission()->log_probability_of_pair(seq1[i-1],_gap_id);
+            alpha[k](i,j) += _states[k]->emission()->log_probability_of_pair(seq1[i-1],_gap_id);
           else
-            alpha[k](i,j) += getPHMMState(k)->emission()->log_probability_of_pair(_gap_id,seq2[j-1]);
+            alpha[k](i,j) += _states[k]->emission()->log_probability_of_pair(_gap_id,seq2[j-1]);
         }
         for(int k = 0; k < nsilentstates; k++){
           if(i == 0 && j == 0)
@@ -224,9 +221,9 @@ namespace tops {
           alpha[id1](i,j) = -HUGE;
           if(id1 == (int)_begin_id)
             continue;
-          for(int l = 0; l < (int)(getPHMMState(id1)->iTransitions()).size(); l++){
-            int id2 = getPHMMState(id1)->getITransId(l);
-            double aux = alpha[id2](i,j) + getPHMMState(id2)->transitions()->log_probability_of(id1);
+          for(int l = 0; l < (int)(_states[id1]->iTransitions()).size(); l++){
+            int id2 = _states[id1]->getITransId(l);
+            double aux = alpha[id2](i,j) + _states[id2]->transitions()->log_probability_of(id1);
             if(aux > alpha[id1](i,j)){
               alpha[id1](i,j) = aux;
               pathMatrix[id1](i,j) = id2;
@@ -240,7 +237,7 @@ namespace tops {
     double score = -HUGE;
     int p;
     for(int i = 0; i < nstates; i++){
-      alpha[i](length1,length2) += getPHMMState(i)->transitions()->log_probability_of(_end_id);
+      alpha[i](length1,length2) += _states[i]->transitions()->log_probability_of(_end_id);
       if(score < alpha[i](length1,length2)){
         score = alpha[i](length1,length2);
         p = i;
@@ -254,20 +251,20 @@ namespace tops {
     al2.push_back(_gap_id);
     while(length1 >= 0 || length2 >= 0){
       path.push_back(p);
-      if(getPHMMState(p)->eSeq1() == 0 && getPHMMState(p)->eSeq2() == 0){
+      if(_states[p]->eSeq1() == 0 && _states[p]->eSeq2() == 0){
         al1.push_back(_gap_id);
         al2.push_back(_gap_id);
         if(length1 == 0 && length2 == 0)
           break;
         p = pathMatrix[p](length1,length2);
       }
-      else if(getPHMMState(p)->eSeq1() > 0 && getPHMMState(p)->eSeq2() == 0){
+      else if(_states[p]->eSeq1() > 0 && _states[p]->eSeq2() == 0){
         al1.push_back(seq1[length1-1]);
         al2.push_back(_gap_id);
         p = pathMatrix[p](length1,length2);
         length1--;
       }
-      else if(getPHMMState(p)->eSeq1() == 0 && getPHMMState(p)->eSeq2() > 0){
+      else if(_states[p]->eSeq1() == 0 && _states[p]->eSeq2() > 0){
         al1.push_back(_gap_id);
         al2.push_back(seq2[length2-1]);
         p = pathMatrix[p](length1,length2);
@@ -323,8 +320,8 @@ namespace tops {
             continue;
           if(i == 0 && j == 0)
             continue;
-          int ne1 = getPHMMState(k)->eSeq1();
-          int ne2 = getPHMMState(k)->eSeq2();
+          int ne1 = _states[k]->eSeq1();
+          int ne2 = _states[k]->eSeq2();
           if(ne1 == 0 && ne2 == 0)
             continue;
           if(i - ne1 < 0 || j - ne2 < 0){
@@ -333,24 +330,25 @@ namespace tops {
           }
 
           double aux = -HUGE;
-          for(int l = 0; l < (int)(getPHMMState(k)->iTransitions()).size(); l++){
-            int id = getPHMMState(k)->getITransId(l);
+	  int numitrans = _states[k]->iTransSize();
+          for(int l = 0; l < numitrans; l++){
+            int id = _states[k]->getITransId(l);
 	    if(id == _begin_id){
 	      if(i-ne1 == 0 && j-ne2 == 0){
-		aux = log_sum(aux, getPHMMState(_begin_id)->transitions()->log_probability_of(k));
+		aux = log_sum(aux, _states[_begin_id]->transitions()->log_probability_of(k));
 		continue;
 	      }
 	      else
 		continue;
 	    }
-            aux = log_sum(aux, a[id](i-ne1,j-ne2) + getPHMMState(id)->transitions()->log_probability_of(k));
+            aux = log_sum(aux, a[id](i-ne1,j-ne2) + _states[id]->transitions()->log_probability_of(k));
           }
           if(ne1 > 0 && ne2 > 0)
-            a[k](i,j) = aux + getPHMMState(k)->emission()->log_probability_of_pair(seq1[i-1],seq2[j-1]);
+            a[k](i,j) = aux + _states[k]->emission()->log_probability_of_pair(seq1[i-1],seq2[j-1]);
           else if(ne1 > 0 && ne2 == 0)
-            a[k](i,j) = aux + getPHMMState(k)->emission()->log_probability_of_pair(seq1[i-1],_gap_id);
+            a[k](i,j) = aux + _states[k]->emission()->log_probability_of_pair(seq1[i-1],_gap_id);
           else
-            a[k](i,j) = aux + getPHMMState(k)->emission()->log_probability_of_pair(_gap_id,seq2[j-1]);
+            a[k](i,j) = aux + _states[k]->emission()->log_probability_of_pair(_gap_id,seq2[j-1]);
         }
 
         for(int k = 0; k < nsilentstates; k++){
@@ -360,9 +358,9 @@ namespace tops {
           if(id1 == _begin_id || id1 == _end_id)
             continue;
           a[id1](i,j) = -HUGE;
-          for(int l = 0; l < (int)(getPHMMState(id1)->iTransitions()).size(); l++){
-            int id2 = getPHMMState(id1)->getITransId(l);
-            a[id1](i,j) = log_sum(a[id1](i,j), a[id2](i,j) + getPHMMState(id2)->transitions()->log_probability_of(id1));
+          for(int l = 0; l < (int)(_states[id1]->iTransitions()).size(); l++){
+            int id2 = _states[id1]->getITransId(l);
+            a[id1](i,j) = log_sum(a[id1](i,j), a[id2](i,j) + _states[id2]->transitions()->log_probability_of(id1));
           }
         }
       }
@@ -372,7 +370,7 @@ namespace tops {
     double sum = -HUGE;
     for(int i = 0; i < nstates; i++){
       if(i != _begin_id && i != _end_id)
-	sum = log_sum(sum, a[i](length1,length2) + getPHMMState(i)->transitions()->log_probability_of(_end_id));
+	sum = log_sum(sum, a[i](length1,length2) + _states[i]->transitions()->log_probability_of(_end_id));
     }
     return sum;
   }
@@ -395,7 +393,7 @@ namespace tops {
     //Initialization
     for(int k = 0; k < nstates; k++){
       if(k != _end_id && k != _begin_id)
-	a[k](length1,length2) = getPHMMState(k)->transitions()->log_probability_of(_end_id);
+	a[k](length1,length2) = _states[k]->transitions()->log_probability_of(_end_id);
     }
 
     //Recursion
@@ -418,7 +416,7 @@ namespace tops {
 	    continue;
           if(i == length1 && j == length2)
             continue;
-          if(getPHMMState(k)->eSeq1() == 0 && getPHMMState(k)->eSeq2() == 0)
+          if(_states[k]->eSeq1() == 0 && _states[k]->eSeq2() == 0)
             continue;
           a[k](i,j) = backwardSum(k,i,j,a,seq1,seq2);
         }
@@ -429,37 +427,38 @@ namespace tops {
     return backwardSum(_begin_id,0,0,a,seq1,seq2);	
   }
 
-  double PairHiddenMarkovModel::backwardSum(int k,int i,int j,vector<Matrix> &a,const Sequence & seq1, const Sequence & seq2){
+  double PairHiddenMarkovModel::backwardSum(int k,int i,int j,vector<Matrix> &a,const Sequence &seq1, const Sequence &seq2){
     int length1 = seq1.size();
     int length2 = seq2.size();
+    int numotrans = _states[k]->oTransSize();
     double sum = -HUGE;
-    for(int l = 0; l < (int)(getPHMMState(k)->oTransitions()).size(); l++){
-      int id = getPHMMState(k)->getOTransId(l);
+    for(int l = 0; l < numotrans; l++){
+      int id = _states[k]->getOTransId(l);
       if(id == _end_id)
 	continue;
-      int ne1 = getPHMMState(id)->eSeq1();
-      int ne2 = getPHMMState(id)->eSeq2();
+      int ne1 = _states[id]->eSeq1();
+      int ne2 = _states[id]->eSeq2();
       if(i + ne1 > length1 || j + ne2 > length2)
 	continue;
       if(ne1 > 0 && ne2 > 0)
 	sum = log_sum(sum,
 		      a[id](i+ne1,j+ne2) +
-		      getPHMMState(k)->transitions()->log_probability_of(id) +
-		      getPHMMState(id)->emission()->log_probability_of_pair(seq1[i-1+ne1],seq2[j-1+ne2]));
+		      _states[k]->transitions()->log_probability_of(id) +
+		      _states[id]->emission()->log_probability_of_pair(seq1[i-1+ne1],seq2[j-1+ne2]));
       else if(ne1 > 0 && ne2 == 0)
 	sum = log_sum(sum,
 		      a[id](i+ne1,j+ne2) +
-		      getPHMMState(k)->transitions()->log_probability_of(id) +
-		      getPHMMState(id)->emission()->log_probability_of_pair(seq1[i-1+ne1],_gap_id));
+		      _states[k]->transitions()->log_probability_of(id) +
+		      _states[id]->emission()->log_probability_of_pair(seq1[i-1+ne1],_gap_id));
       else if(ne1 == 0 && ne2 >0)
 	sum = log_sum(sum,
 		      a[id](i+ne1,j+ne2) +
-		      getPHMMState(k)->transitions()->log_probability_of(id) +
-		      getPHMMState(id)->emission()->log_probability_of_pair(_gap_id,seq2[j-1+ne2]));
+		      _states[k]->transitions()->log_probability_of(id) +
+		      _states[id]->emission()->log_probability_of_pair(_gap_id,seq2[j-1+ne2]));
       else
 	sum = log_sum(sum,
 		      a[id](i+ne1,j+ne2) +
-		      getPHMMState(k)->transitions()->log_probability_of(id));
+		      _states[k]->transitions()->log_probability_of(id));
     }
     return sum;
   }
@@ -486,8 +485,8 @@ namespace tops {
       Matrix A (nstates, nstates);
       for(int a = 0; a < nstates; a++){
         for(int b = 0; b < nstates; b++){
-	  if(!close(exp(getPHMMState(a)->transitions()->log_probability_of(b)), 0.0, 1e-10))
-	    A(a,b) = getPHMMState(a)->transitions()->log_probability_of(b) + log(3);	  
+	  if(!close(exp(_states[a]->transitions()->log_probability_of(b)), 0.0, 1e-10))
+	    A(a,b) = _states[a]->transitions()->log_probability_of(b) + log(3);	  
 	  else
 	    A(a,b) = -HUGE;
         }
@@ -500,11 +499,11 @@ namespace tops {
         sumE[i] = -HUGE;
         for(int a = 0; a < alphabet_size; a++){
           for(int b = 0; b < alphabet_size; b++){
-	    if(!close(exp(getPHMMState(i)->emission()->log_probability_of_pair(a,b)), 0.0, 1e-10)){
-	      if(getPHMMState(i)->eSeq1() > 0 && getPHMMState(i)->eSeq2() > 0)
-		E[i](a,b) = getPHMMState(i)->emission()->log_probability_of_pair(a,b) + log(210);
+	    if(!close(exp(_states[i]->emission()->log_probability_of_pair(a,b)), 0.0, 1e-10)){
+	      if(_states[i]->eSeq1() > 0 && _states[i]->eSeq2() > 0)
+		E[i](a,b) = _states[i]->emission()->log_probability_of_pair(a,b) + log(210);
 	      else
-		E[i](a,b) = getPHMMState(i)->emission()->log_probability_of_pair(a,b) + log(19);
+		E[i](a,b) = _states[i]->emission()->log_probability_of_pair(a,b) + log(19);
 	    }	    
 	    else
 	      E[i](a,b) = -HUGE;
@@ -529,11 +528,11 @@ namespace tops {
 		continue;
 	      }
 	      if(k == _begin_id && l != _end_id){
-		A(k,l) = log_sum(A(k,l), getPHMMState(k)->transitions()->log_probability_of(l) + beta[l](0,0) - P);
+		A(k,l) = log_sum(A(k,l), _states[k]->transitions()->log_probability_of(l) + beta[l](0,0) - P);
 		continue;
 	      }
 	      if(l == _end_id && k != _begin_id){
-		A(k,l) = log_sum(A(k,l), alpha[k](length1,length2) + getPHMMState(k)->transitions()->log_probability_of(l)-P);
+		A(k,l) = log_sum(A(k,l), alpha[k](length1,length2) + _states[k]->transitions()->log_probability_of(l)-P);
 		continue;
 	      }
 	      if(k == _begin_id && l == _end_id){
@@ -556,22 +555,22 @@ namespace tops {
 		  
 		  if(ne1 == 1 && ne2 == 1)
 		    A(k,l) = log_sum(A(k,l), alpha[k](i,j) +
-				     getPHMMState(k)->transitions()->log_probability_of(l) +
+				     _states[k]->transitions()->log_probability_of(l) +
 				     getPHMMState(l)->emission()->log_probability_of_pair(sample[s1][i],sample[s2][j]) +
 				     beta[l](i+ne1,j+ne2)-P);
 		  if(ne1 == 0 && ne2 == 1)
 		    A(k,l) = log_sum(A(k,l), alpha[k](i,j) +
-				     getPHMMState(k)->transitions()->log_probability_of(l) +
+				     _states[k]->transitions()->log_probability_of(l) +
 				     getPHMMState(l)->emission()->log_probability_of_pair(_gap_id,sample[s2][j]) +
 				     beta[l](i+ne1,j+ne2)-P);
 		  if(ne1 == 1 && ne2 == 0)
 		    A(k,l) = log_sum(A(k,l), alpha[k](i,j) +
-				     getPHMMState(k)->transitions()->log_probability_of(l) +
+				     _states[k]->transitions()->log_probability_of(l) +
 				     getPHMMState(l)->emission()->log_probability_of_pair(sample[s1][i],_gap_id) +
 				     beta[l](i+ne1,j+ne2)-P);
 		  if(ne1 == 0 && ne2 == 0)
 		    A(k,l) = log_sum(A(k,l), alpha[k](i,j) +
-				     getPHMMState(k)->transitions()->log_probability_of(l) +
+				     _states[k]->transitions()->log_probability_of(l) +
 				     beta[l](i+ne1,j+ne2)-P);
 		}
 	      }
@@ -594,21 +593,21 @@ namespace tops {
 	}
       }
       for(int k = 0; k < nstates; k++){
-	if(getPHMMState(k)->eSeq1() == 0 && getPHMMState(k)->eSeq2() == 0)
+	if(_states[k]->eSeq1() == 0 && _states[k]->eSeq2() == 0)
 	  continue;
 	for(int a = 0; a < alphabet_size; a++){
 	  for(int b = 0; b < alphabet_size; b++){
 	    E[k](a,b) -= sumE[k];
-	    getPHMMState(k)->emission()->log_probability_of_pair(a,b,E[k](a,b));
+	    _states[k]->emission()->log_probability_of_pair(a,b,E[k](a,b));
 	  }
 	}
       }
       for(int k = 0; k < nstates; k++){
-	if(getPHMMState(k)->oTransitions().size() == 0)
+	if(_states[k]->oTransitions().size() == 0)
 	  continue;
 	for(int l = 0; l < nstates; l++){
 	  A(k,l) -= sumA[k];
-	  getPHMMState(k)->transitions()->log_probability_of(l, A(k,l));
+	  _states[k]->transitions()->log_probability_of(l, A(k,l));
 	}
       }
       //cerr << "sumP = " << sumP << endl;
@@ -854,14 +853,14 @@ namespace tops {
     int it = 0;
     for(int i = 0; i < nstates; i++){
       for(int j = 0; j < nstates; j++){
-          if(close(exp(getPHMMState(i)->transitions()->log_probability_of(j)), 0.0, 1e-10))
+          if(close(exp(_states[i]->transitions()->log_probability_of(j)), 0.0, 1e-10))
             continue;
           if(it == 0){
-            out << "\"" << getStateName(i) << "\" | \"" << getStateName(i) << "\": " << exp(getPHMMState(i)->transitions()->log_probability_of(j)) ;
+            out << "\"" << getStateName(i) << "\" | \"" << getStateName(i) << "\": " << exp(_states[i]->transitions()->log_probability_of(j)) ;
             it++;
           }
           else
-            out << ";\n \"" << getStateName(j) << "\" | \"" << getStateName(i) << "\": " << exp(getPHMMState(i)->transitions()->log_probability_of(j));
+            out << ";\n \"" << getStateName(j) << "\" | \"" << getStateName(i) << "\": " << exp(_states[i]->transitions()->log_probability_of(j));
       }
     }
     out << ";)" << std::endl;
@@ -872,23 +871,23 @@ namespace tops {
     for(int i = 0; i < nstates; i++){
       for(int k = 0; k < (int)alphabet()->size(); k++){
         for(int j = 0; j < (int)alphabet()->size(); j++){
-          if(close(exp(getPHMMState(i)->emission()->log_probability_of_pair(k,j)), 0.0, 1e-10))
+          if(close(exp(_states[i]->emission()->log_probability_of_pair(k,j)), 0.0, 1e-10))
             continue;
           if(it == 0){
-            out << "\"" <<  alphabet()->getSymbol(k)->name() << alphabet()->getSymbol(j)->name() << "\" | \"" << getStateName(i) << "\": " << exp(getPHMMState(i)->emission()->log_probability_of_pair(k,j)) ;
+            out << "\"" <<  alphabet()->getSymbol(k)->name() << alphabet()->getSymbol(j)->name() << "\" | \"" << getStateName(i) << "\": " << exp(_states[i]->emission()->log_probability_of_pair(k,j)) ;
             it++;
           }
           else
-            out << ";\n \"" << alphabet()->getSymbol(k)->name() << alphabet()->getSymbol(j)->name() << "\" | \"" <<  getStateName(i) << "\": " << exp(getPHMMState(i)->emission()->log_probability_of_pair(k,j));
+            out << ";\n \"" << alphabet()->getSymbol(k)->name() << alphabet()->getSymbol(j)->name() << "\" | \"" <<  getStateName(i) << "\": " << exp(_states[i]->emission()->log_probability_of_pair(k,j));
         }
       }
     }
     out << ";)" << std::endl;
 
     out << "number_of_emissions = (";
-    out << "\"" << getStateName(0) << "\" : \"" << getPHMMState(0)->eSeq1() << "," << getPHMMState(0)->eSeq2() << "\"";
+    out << "\"" << getStateName(0) << "\" : \"" << _states[0]->eSeq1() << "," << _states[0]->eSeq2() << "\"";
     for(int i = 1; i < nstates; i++)
-      out << ";\n\"" << getStateName(i) << "\" : \"" << getPHMMState(i)->eSeq1() << "," << getPHMMState(i)->eSeq2() << "\"";
+      out << ";\n\"" << getStateName(i) << "\" : \"" << _states[i]->eSeq1() << "," << _states[i]->eSeq2() << "\"";
     out << ";)" << endl;
     return out.str();
   }  
@@ -904,13 +903,13 @@ namespace tops {
 
     while(state_id != _end_id){
       state_id = getPHMMState(state_id)->transitions()->choose();
-      if(getPHMMState(state_id)->eSeq1() == 0 && getPHMMState(state_id)->eSeq2() == 0){
+      if(_states[state_id]->eSeq1() == 0 && _states[state_id]->eSeq2() == 0){
         p.push_back(state_id);
         s1.push_back(_gap_id);
         s2.push_back(_gap_id);
         continue;
       }
-      getPHMMState(state_id)->emission()->choosePair(&obs1,&obs2);
+      _states[state_id]->emission()->choosePair(&obs1,&obs2);
       p.push_back(state_id);
       s1.push_back(obs1);
       s2.push_back(obs2);

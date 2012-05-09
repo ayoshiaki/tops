@@ -49,6 +49,7 @@
 #include <iterator>
 #include <stdio.h>
 #include <algorithm>
+#include <boost/timer.hpp>
 
 namespace tops{
   class DLLEXPORT PHMMState: public HMMState {
@@ -91,6 +92,10 @@ namespace tops{
       return _incomingTransitions;
     }
 
+    int iTransSize(){
+      return _incomingTransitions.size();
+    }
+
     int getITransId(int i){
       return _incomingTransitions[i];
     }
@@ -98,13 +103,37 @@ namespace tops{
     vector<int> oTransitions(){
       return _outgoingTransitions;
     }
+    
+    int oTransSize(){
+      return _outgoingTransitions.size();
+    }
 
     int getOTransId(int i){
       return _outgoingTransitions[i];
     }
+
+    virtual void forwardSum(int pos1, int pos2, int gap_id){
+      cerr << "Sub-class responsability: forwardSum()" << endl;
+      exit(-1);
+    }
   };
 
   typedef boost::shared_ptr <PHMMState> PHMMStatePtr;
+
+  class DLLEXPORT MatchState: public PHMMState {
+    
+    MatchState(int id, SymbolPtr name, MultinomialDistributionPtr emission,  MultinomialDistributionPtr transitions, IntVector iTransitions, IntVector oTransitions){
+      _id = id;
+      _name = name;
+      _emission = emission;
+      _transitions = transitions;
+      _incomingTransitions = iTransitions;
+      _outgoingTransitions = oTransitions;
+    }
+
+    
+
+
 
   class DLLEXPORT PairHiddenMarkovModel : public ProbabilisticModel{
   private:
@@ -137,13 +166,13 @@ namespace tops{
 
     virtual double backward(const Sequence & seq1, const Sequence & seq2, vector<Matrix> &a);
 
-    virtual double backwardSum(int k,int i,int j,vector<Matrix> &a,const Sequence & seq1, const Sequence & seq2);
+    virtual double backwardSum(int k,int i,int j,vector<Matrix> &a,const Sequence &seq1, const Sequence &seq2);
 
     virtual double viterbi(const Sequence & seq1, const Sequence & seq2, Sequence & path, Sequence & al1, Sequence & al2, vector<Matrix> &a);
 
     virtual float posteriorProbabilities (const Sequence &seq1, const Sequence &seq2, SparseMatrixPtr &ppMatch,SparseMatrixPtr &ppGap1, SparseMatrixPtr &ppGap2);
 
-    virtual float expectedAccuracy(SparseMatrixPtr postProbs);
+    virtual float expectedAccuracy(int size1, int size2, fMatrix &postProbs);
 
     virtual float expectedAccuracyWithGaps(SparseMatrixPtr postProbs, SparseMatrixPtr postProbsGap1, SparseMatrixPtr postProbsGap2);
 

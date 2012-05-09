@@ -2,6 +2,7 @@
 #define SPARSE_MATRIX_HPP
 
 #include "crossplatform.hpp"
+#include "util.hpp"
 #include <vector>
 #include <map>
 #include <boost/shared_ptr.hpp>
@@ -33,6 +34,22 @@ namespace tops{
       nextr = 0;
       nextc = M[0].begin();
     }
+
+    SparseMatrix(int nrows, int ncols, fMatrix postProbs){
+      M.resize(nrows);
+      _nrows = nrows;
+      _ncolumns = ncols;
+      for(int i = 0; i < nrows; i++){
+	for(int j = 0; j < ncols; j++){
+	  if(postProbs(i,j) >= postProbs_thresh){
+	    M[i][j] = postProbs(i,j);
+	  }
+	}
+      }
+      nextr = 0;
+      nextc = M[0].begin();
+    }
+
     static void setppthresh(float n){
       postProbs_thresh = n;
     }
