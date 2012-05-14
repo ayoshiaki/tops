@@ -74,9 +74,8 @@ int main (int argc, char ** argv)
 	  names.push_back(sample_set[i]->getName());
 	}
 	SparseMatrix::setppthresh(0.01);
-	SparseMatrix::setcutthresh(0.01);
 	MultipleAlignmentPtr ma = MultipleAlignmentPtr(new MultipleAlignment());
-      	ma->trainAndComputePPs(model_file, seqs, names, 0, outFile);
+      	//ma->trainAndComputePPs(model_file, seqs, names, 0, outFile);
 	return 0;
       }
 
@@ -100,9 +99,8 @@ int main (int argc, char ** argv)
 	for(int i = 0; i < (int)names.size(); i++)
 	  predmodels[names[i]] = predmodel;
 	SparseMatrix::setppthresh(0.01);
-	SparseMatrix::setcutthresh(0.01);
 	MultipleAlignmentPtr ma = MultipleAlignmentPtr(new MultipleAlignment());
-	ma->initializeFromFile(almodel,seqs,names,numit,consScheme,inFile);
+	//ma->initializeFromFile(almodel,seqs,names,numit,consScheme,inFile);
 	return 0;
       }	
       
@@ -126,7 +124,6 @@ int main (int argc, char ** argv)
 	predmodels[names[i]] = predmodel;
 
       SparseMatrix::setppthresh(0.01);
-      SparseMatrix::setcutthresh(0.01);
 
       MultipleAlignmentPtr ma = MultipleAlignmentPtr(new MultipleAlignment());
       

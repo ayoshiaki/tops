@@ -84,9 +84,9 @@ namespace tops{
 
     for(int i = 0; i < (int)_names.size(); i++){
       for(int j = i+1; j < (int)_names.size(); j++){
-	_ppAlign[_names[i]][_names[j]]->prod(1, consPPAlign[_names[i]][_names[j]]);
-	_ppGap1[_names[i]][_names[j]]->prod(1,consPPGap1[_names[i]][_names[j]]);
-	_ppGap2[_names[i]][_names[j]]->prod(1,consPPGap2[_names[i]][_names[j]]);
+	consPPAlign[_names[i]][_names[j]] = SparseMatrixPtr(new SparseMatrix(_ppAlign[_names[i]][_names[j]]));
+	consPPGap1[_names[i]][_names[j]] = SparseMatrixPtr(new SparseMatrix(_ppGap1[_names[i]][_names[j]]));
+	consPPGap2[_names[i]][_names[j]] = SparseMatrixPtr(new SparseMatrix(_ppGap2[_names[i]][_names[j]]));
       }
     }
 
@@ -140,9 +140,9 @@ namespace tops{
 
     for(int i = 0; i < (int)_names.size(); i++){
       for(int j = i+1; j < (int)_names.size(); j++){
-	_ppAlign[_names[i]][_names[j]]->prod(1, consPPAlign[_names[i]][_names[j]]);
-	_ppGap1[_names[i]][_names[j]]->prod(1,consPPGap1[_names[i]][_names[j]]);
-	_ppGap2[_names[i]][_names[j]]->prod(1,consPPGap2[_names[i]][_names[j]]);
+	consPPAlign[_names[i]][_names[j]] = SparseMatrixPtr(new SparseMatrix(_ppAlign[_names[i]][_names[j]]));
+	consPPGap1[_names[i]][_names[j]] = SparseMatrixPtr(new SparseMatrix(_ppGap1[_names[i]][_names[j]]));
+	consPPGap2[_names[i]][_names[j]] = SparseMatrixPtr(new SparseMatrix(_ppGap2[_names[i]][_names[j]]));
       }
     }
 
@@ -196,9 +196,9 @@ namespace tops{
 
     for(int i = 0; i < (int)_names.size(); i++){
       for(int j = i+1; j < (int)_names.size(); j++){
-	_ppAlign[_names[i]][_names[j]]->prod(1, consPPAlign[_names[i]][_names[j]]);
-	consPPGap1[_names[i]][_names[j]]->clear();
-	consPPGap2[_names[i]][_names[j]]->clear();
+	consPPAlign[_names[i]][_names[j]] = SparseMatrixPtr(new SparseMatrix(_ppAlign[_names[i]][_names[j]]));
+	consPPGap1[_names[i]][_names[j]].reset();
+	consPPGap2[_names[i]][_names[j]].reset();
       }
     }
     
@@ -249,6 +249,12 @@ namespace tops{
 
     clearAll();
     
+    for(int i = 0; i < (int)_names.size(); i++){
+      for(int j = i+1; j < (int)_names.size(); j++){
+	consPPAlign[_names[i]][_names[j]].reset();
+      }
+    }
+
     cerr << "\tApplying classic consistency transformation...";
     t.restart();
     classicAlConsistency(_ppAlign, numit);
@@ -333,7 +339,7 @@ namespace tops{
     cout << endl;
   }
 
-  void MultipleAlignment::initializeFromFile(ProbabilisticModelPtr almodel, SequenceList seqs, vector<string> names, int numit, int consScheme, string inputFileName){
+  /*void MultipleAlignment::initializeFromFile(ProbabilisticModelPtr almodel, SequenceList seqs, vector<string> names, int numit, int consScheme, string inputFileName){
     _seqs = seqs;
     _names = names;
 
@@ -415,9 +421,9 @@ namespace tops{
       cout << _alignment[i];
     }
     cout << endl;
-  }
+    }*/
 
-  void MultipleAlignment::trainAndComputePPs(string initialModelFile, SequenceList seqs, vector<string> names, int maxTrainIter, string outFile){
+  /*  void MultipleAlignment::trainAndComputePPs(string initialModelFile, SequenceList seqs, vector<string> names, int maxTrainIter, string outFile){
     int numseqs = seqs.size();
     ProbabilisticModelCreatorClient creator;
     ProbabilisticModelPtr model;
@@ -451,7 +457,7 @@ namespace tops{
       }
     }
     fout.close();
-  }
+    }*/
 
   //////////////////////////////////////////////////
   //Posterior probabilities calculation functions///
@@ -493,107 +499,139 @@ namespace tops{
   ////////////////////////////////////////////
     
   void MultipleAlignment::picxaaAlConsistency(map< string, map< string, SparseMatrixPtr > > &ppAlign,  map<string, map<string, float> > eas, int numit){
-    map< string, map< string, SparseMatrixPtr > > consistentPPAlign;
     for(int r = 0; r < numit; r++){
+      map< string, map< string, SparseMatrixPtr > > consistentPPAlign;
       for(int i = 0; i < (int)_names.size(); i++){
 	for(int j = i+1; j < (int)_names.size(); j++){
-	  float sumea = eas[_names[i]][_names[j]]*eas[_names[i]][_names[j]];
-	  ppAlign[_names[i]][_names[j]]->prod(eas[_names[i]][_names[j]]*eas[_names[i]][_names[j]], consistentPPAlign[_names[i]][_names[j]]);
+	  float sumea = 2.0*eas[_names[i]][_names[j]]*eas[_names[i]][_names[j]];
+	  fMatrix postMatch;
+	  ppAlign[_names[i]][_names[j]]->getfMatrixTimesX(postMatch, 2.0*eas[_names[i]][_names[j]]*eas[_names[i]][_names[j]]);
 	  for(int m = 0; m < (int)_names.size(); m++){
 	    if(m == i || m ==j)
 	      continue;
 	    else if(m < i){
-	      consistentPPAlign[_names[i]][_names[j]]->sum_trans_prod(ppAlign[_names[m]][_names[i]], ppAlign[_names[m]][_names[j]], (eas[_names[m]][_names[i]]*eas[_names[m]][_names[j]]));
+	      ppAlign[_names[m]][_names[i]]->leftTransXright(ppAlign[_names[m]][_names[j]], postMatch, (eas[_names[m]][_names[i]]*eas[_names[m]][_names[j]]));
 	      sumea += (eas[_names[m]][_names[i]]*eas[_names[m]][_names[j]]);
 	    }
 	    else if(m > i && m < j){
-	      consistentPPAlign[_names[i]][_names[j]]->sum_prod(ppAlign[_names[i]][_names[m]],ppAlign[_names[m]][_names[j]],(eas[_names[i]][_names[m]]*eas[_names[m]][_names[j]]));
+	      ppAlign[_names[i]][_names[m]]->leftXright(ppAlign[_names[m]][_names[j]], postMatch, (eas[_names[i]][_names[m]]*eas[_names[m]][_names[j]]));
 	      sumea += (eas[_names[i]][_names[m]]*eas[_names[m]][_names[j]]);
 	    }
 	    else if(m > j){
-	      consistentPPAlign[_names[i]][_names[j]]->sum_prod_trans(ppAlign[_names[i]][_names[m]],ppAlign[_names[j]][_names[m]],(eas[_names[i]][_names[m]]*eas[_names[j]][_names[m]]));
+	      SparseMatrixPtr AUX = SparseMatrixPtr(new SparseMatrix());
+	      AUX->transposeOf(ppAlign[_names[j]][_names[m]]);
+	      ppAlign[_names[i]][_names[m]]->leftXright(AUX, postMatch, (eas[_names[i]][_names[m]]*eas[_names[j]][_names[m]]));
+	      AUX.reset();
 	      sumea += (eas[_names[i]][_names[m]]*eas[_names[j]][_names[m]]);
 	    }
 	  }
-	  consistentPPAlign[_names[i]][_names[j]]->prodclean(1/sumea);
+	  consistentPPAlign[_names[i]][_names[j]] = SparseMatrixPtr(new SparseMatrix(postMatch,ppAlign[_names[i]][_names[j]], sumea));
 	}	
       }
-      ppAlign = consistentPPAlign;
+      for(int i = 0; i < (int)_names.size(); i++){
+	for(int j = i+1; j < (int)_names.size(); j++){
+	  ppAlign[_names[i]][_names[j]].reset();
+	  ppAlign[_names[i]][_names[j]] = consistentPPAlign[_names[i]][_names[j]];
+	}
+      }
     }
   }
 
   void MultipleAlignment::classicAlConsistency(map< string, map< string, SparseMatrixPtr > > &ppAlign, int numit){
-    map< string, map< string, SparseMatrixPtr > > consistentPPAlign;
     for(int r = 0; r < numit; r++){
+      map< string, map< string, SparseMatrixPtr > > consistentPPAlign;
       for(int i = 0; i < (int)_names.size(); i++){
 	for(int j = i+1; j < (int)_names.size(); j++){
-	  ppAlign[_names[i]][_names[j]]->prod(1.0/(_names.size()-1), consistentPPAlign[_names[i]][_names[j]]);
+	  fMatrix postMatch;
+	  ppAlign[_names[i]][_names[j]]->getfMatrixTimesX(postMatch, 2.0);
 	  for(int m = 0; m < (int)_names.size(); m++){
 	    if(m == i || m ==j)
 	      continue;
 	    else if(m < i){
-	      consistentPPAlign[_names[i]][_names[j]]->sum_trans_prod(ppAlign[_names[m]][_names[i]], ppAlign[_names[m]][_names[j]], 1.0/(_names.size()-1));
+	      ppAlign[_names[m]][_names[i]]->leftTransXright(ppAlign[_names[m]][_names[j]], postMatch);
 	    }
 	    else if(m > i && m < j){
-	      consistentPPAlign[_names[i]][_names[j]]->sum_prod(ppAlign[_names[i]][_names[m]],ppAlign[_names[m]][_names[j]],1.0/(_names.size()-1));
+	      ppAlign[_names[i]][_names[m]]->leftXright(ppAlign[_names[m]][_names[j]], postMatch);
 	    }
 	    else if(m > j){
-	      consistentPPAlign[_names[i]][_names[j]]->sum_prod_trans(ppAlign[_names[i]][_names[m]],ppAlign[_names[j]][_names[m]],1.0/(_names.size()-1));
+	      SparseMatrixPtr AUX = SparseMatrixPtr(new SparseMatrix());
+	      AUX->transposeOf(ppAlign[_names[j]][_names[m]]);
+	      ppAlign[_names[i]][_names[m]]->leftXright(AUX, postMatch);
+	      AUX.reset();
 	    }
 	  }
-	  consistentPPAlign[_names[i]][_names[j]]->clean();
+	  consistentPPAlign[_names[i]][_names[j]] = SparseMatrixPtr(new SparseMatrix(postMatch,ppAlign[_names[i]][_names[j]], (float)_names.size()));
 	}	
       }
-      ppAlign = consistentPPAlign;
+      for(int i = 0; i < (int)_names.size(); i++){
+	for(int j = i+1; j < (int)_names.size(); j++){
+	  ppAlign[_names[i]][_names[j]].reset();
+	  ppAlign[_names[i]][_names[j]] = consistentPPAlign[_names[i]][_names[j]];
+	}
+      }
     }
   }
 
   void MultipleAlignment::predalignAlConsistencyNoEas(map< string, map< string, SparseMatrixPtr > > &ppAlign, map< string, map< string, SparseMatrixPtr > > &ppGap1,map< string, map< string, SparseMatrixPtr > > &ppGap2, int numit){
-    map< string, map< string, SparseMatrixPtr > > consistentPPAlign;
-    map< string, map< string, SparseMatrixPtr > > consistentPPGap1;
-    map< string, map< string, SparseMatrixPtr > > consistentPPGap2;
+
     for(int r = 0; r < numit; r++){
+      map< string, map< string, SparseMatrixPtr > > consistentPPAlign;
+      map< string, map< string, SparseMatrixPtr > > consistentPPGap1;
+      map< string, map< string, SparseMatrixPtr > > consistentPPGap2;
       for(int i = 0; i < (int)_names.size(); i++){
 	for(int j = i+1; j < (int)_names.size(); j++){
-	  ppAlign[_names[i]][_names[j]]->prod(1.0/(_names.size()-1), consistentPPAlign[_names[i]][_names[j]]);
-	  ppGap1[_names[i]][_names[j]]->prod(1.0/(_names.size()-1), consistentPPGap1[_names[i]][_names[j]]);
-	  ppGap2[_names[i]][_names[j]]->prod(1.0/(_names.size()-1), consistentPPGap2[_names[i]][_names[j]]);
+	  fMatrix postMatch;
+	  fMatrix postGap1;
+	  fMatrix postGap2;
+	  ppAlign[_names[i]][_names[j]]->getfMatrixTimesX(postMatch, 2.0);
+	  ppGap1[_names[i]][_names[j]]->getfMatrixTimesX(postGap1, 1.0);
+	  ppGap2[_names[i]][_names[j]]->getfMatrixTimesX(postGap2, 1.0);
 	  for(int m = 0; m < (int)_names.size(); m++){
-	    if(m == i || m ==j)
+	    if(m == i || m == j)
 	      continue;
 	    else if(m < i){
-	      SparseMatrixPtr AUX;
-	      ppAlign[_names[m]][_names[i]]->trans_prod(ppAlign[_names[m]][_names[j]], AUX, 1.0/(_names.size()-1));
-	      AUX->sum_trans_prod(ppGap1[_names[m]][_names[i]], ppGap1[_names[m]][_names[j]], 1.0/(_names.size()-1));
-	      consistentPPAlign[_names[i]][_names[j]]->sum(AUX);
-	      consistentPPGap1[_names[i]][_names[j]]->sum_trans_prod(ppAlign[_names[m]][_names[i]],ppGap2[_names[m]][_names[j]],1.0/(_names.size()-1));
-	      consistentPPGap2[_names[i]][_names[j]]->sum_trans_prod(ppGap2[_names[m]][_names[i]], ppAlign[_names[m]][_names[j]],1.0/(_names.size()-1));
+	      ppAlign[_names[m]][_names[i]]->leftTransXright(ppAlign[_names[m]][_names[j]], postMatch);
+	      ppGap1[_names[m]][_names[i]]->leftTransXright(ppGap1[_names[m]][_names[j]], postMatch);
+	      ppAlign[_names[m]][_names[i]]->leftTransXright(ppGap2[_names[m]][_names[j]], postGap2);
+	      ppGap2[_names[m]][_names[i]]->leftTransXright(ppAlign[_names[m]][_names[j]], postGap1);
 	    }
 	    else if(m > i && m < j){
-	      SparseMatrixPtr AUX;
-	      ppAlign[_names[i]][_names[m]]->prod(ppAlign[_names[m]][_names[j]], AUX, 1.0/(_names.size()-1));
-	      AUX->sum_prod(ppGap2[_names[i]][_names[m]], ppGap1[_names[m]][_names[j]], 1.0/(_names.size()-1));
-	      consistentPPAlign[_names[i]][_names[j]]->sum(AUX);
-	      consistentPPGap1[_names[i]][_names[j]]->sum_prod(ppAlign[_names[i]][_names[m]],ppGap2[_names[m]][_names[j]],1.0/(_names.size()-1));
-	      consistentPPGap2[_names[i]][_names[j]]->sum_prod(ppGap1[_names[i]][_names[m]],ppAlign[_names[m]][_names[j]],1.0/(_names.size()-1));
+	      ppAlign[_names[i]][_names[m]]->leftXright(ppAlign[_names[m]][_names[j]], postMatch);
+	      ppGap2[_names[i]][_names[m]]->leftXright(ppGap1[_names[m]][_names[j]], postMatch);
+	      ppAlign[_names[i]][_names[m]]->leftXright(ppGap2[_names[m]][_names[j]], postGap2);
+	      ppGap1[_names[i]][_names[m]]->leftXright(ppAlign[_names[m]][_names[j]], postGap1);
 	    }
 	    else if(m > j){
-	      SparseMatrixPtr AUX;
-	      ppAlign[_names[i]][_names[m]]->prod_trans(ppAlign[_names[j]][_names[m]], AUX, 1.0/(_names.size()-1));
-	      AUX->sum_prod_trans(ppGap2[_names[i]][_names[m]], ppGap2[_names[j]][_names[m]], 1.0/(_names.size()-1));
-	      consistentPPAlign[_names[i]][_names[j]]->sum(AUX);
-	      consistentPPGap1[_names[i]][_names[j]]->sum_prod_trans(ppAlign[_names[i]][_names[m]],ppGap1[_names[j]][_names[m]],1.0/(_names.size()-1));
-	      consistentPPGap2[_names[i]][_names[j]]->sum_prod_trans(ppGap1[_names[i]][_names[m]],ppAlign[_names[j]][_names[m]],1.0/(_names.size()-1));
+	      SparseMatrixPtr AUX1 = SparseMatrixPtr(new SparseMatrix());
+	      SparseMatrixPtr AUX2 = SparseMatrixPtr(new SparseMatrix());
+	      SparseMatrixPtr AUX3 = SparseMatrixPtr(new SparseMatrix());
+	      AUX1->transposeOf(ppAlign[_names[j]][_names[m]]);
+	      ppAlign[_names[i]][_names[m]]->leftXright(AUX1, postMatch);
+	      ppGap1[_names[i]][_names[m]]->leftXright(AUX1, postGap1);
+	      AUX1.reset();
+	      AUX2->transposeOf(ppGap2[_names[j]][_names[m]]);
+	      ppGap2[_names[i]][_names[m]]->leftXright(AUX2, postMatch);
+	      AUX2.reset();
+	      AUX3->transposeOf(ppGap1[_names[j]][_names[m]]);
+	      ppAlign[_names[i]][_names[m]]->leftXright(AUX3, postGap2);
+	      AUX3.reset();
 	    }
 	  }
-	  consistentPPAlign[_names[i]][_names[j]]->clean();
-	  consistentPPGap1[_names[i]][_names[j]]->clean();
-	  consistentPPGap2[_names[i]][_names[j]]->clean();
+	  consistentPPAlign[_names[i]][_names[j]] = SparseMatrixPtr(new SparseMatrix(postMatch,ppAlign[_names[i]][_names[j]], (float)_names.size()));
+	  consistentPPGap1[_names[i]][_names[j]] = SparseMatrixPtr(new SparseMatrix(postGap1,ppGap1[_names[i]][_names[j]], (float)(_names.size()-1)));
+	  consistentPPGap2[_names[i]][_names[j]] = SparseMatrixPtr(new SparseMatrix(postGap2,ppGap2[_names[i]][_names[j]], (float)(_names.size()-1)));
 	}	
       }
-      ppAlign = consistentPPAlign;
-      ppGap1 = consistentPPGap1;
-      ppGap2 = consistentPPGap2;
+      for(int i = 0; i < (int)_names.size(); i++){
+	for(int j = i+1; j < (int)_names.size(); j++){
+	  ppAlign[_names[i]][_names[j]].reset();
+	  ppAlign[_names[i]][_names[j]] = consistentPPAlign[_names[i]][_names[j]];
+	  ppGap1[_names[i]][_names[j]].reset();
+	  ppGap1[_names[i]][_names[j]] = consistentPPGap1[_names[i]][_names[j]];
+	  ppGap2[_names[i]][_names[j]].reset();
+	  ppGap2[_names[i]][_names[j]] = consistentPPGap2[_names[i]][_names[j]];
+	}
+      }
     }
     for(int i = 0; i < (int)_names.size(); i++){
       for(int j = i+1; j < (int)_names.size(); j++){
@@ -603,55 +641,69 @@ namespace tops{
   }
 
   void MultipleAlignment::predalignAlConsistencyWithEas(map< string, map< string, SparseMatrixPtr > > &ppAlign, map< string, map< string, SparseMatrixPtr > > &ppGap1,map< string, map< string, SparseMatrixPtr > > &ppGap2, int numit, map<string, map<string, float> > eas){
-    map< string, map< string, SparseMatrixPtr > > consistentPPAlign;
-    map< string, map< string, SparseMatrixPtr > > consistentPPGap1;
-    map< string, map< string, SparseMatrixPtr > > consistentPPGap2;
+
     for(int r = 0; r < numit; r++){
+      map< string, map< string, SparseMatrixPtr > > consistentPPAlign;
+      map< string, map< string, SparseMatrixPtr > > consistentPPGap1;
+      map< string, map< string, SparseMatrixPtr > > consistentPPGap2;
       for(int i = 0; i < (int)_names.size(); i++){
 	for(int j = i+1; j < (int)_names.size(); j++){
-	  float sumea = eas[_names[i]][_names[j]]*eas[_names[i]][_names[j]];
-	  ppAlign[_names[i]][_names[j]]->prod(eas[_names[i]][_names[j]]*eas[_names[i]][_names[j]], consistentPPAlign[_names[i]][_names[j]]);
-	  ppGap1[_names[i]][_names[j]]->prod(eas[_names[i]][_names[j]]*eas[_names[i]][_names[j]], consistentPPGap1[_names[i]][_names[j]]);
-	  ppGap2[_names[i]][_names[j]]->prod(eas[_names[i]][_names[j]]*eas[_names[i]][_names[j]], consistentPPGap2[_names[i]][_names[j]]);
+	  fMatrix postMatch;
+	  fMatrix postGap1;
+	  fMatrix postGap2;
+	  float sumea = 2.0*eas[_names[i]][_names[j]]*eas[_names[i]][_names[j]];
+	  ppAlign[_names[i]][_names[j]]->getfMatrixTimesX(postMatch, 2.0*eas[_names[i]][_names[j]]*eas[_names[i]][_names[j]]);
+	  ppGap1[_names[i]][_names[j]]->getfMatrixTimesX(postGap1, 1.0);
+	  ppGap2[_names[i]][_names[j]]->getfMatrixTimesX(postGap2, 1.0);
 	  for(int m = 0; m < (int)_names.size(); m++){
-	    if(m == i || m ==j)
+	    if(m == i || m == j)
 	      continue;
 	    else if(m < i){
-	      SparseMatrixPtr AUX;
-	      ppAlign[_names[m]][_names[i]]->trans_prod(ppAlign[_names[m]][_names[j]], AUX, eas[_names[m]][_names[i]]*eas[_names[m]][_names[j]]);
-	      AUX->sum_trans_prod(ppGap1[_names[m]][_names[i]], ppGap1[_names[m]][_names[j]], eas[_names[m]][_names[i]]*eas[_names[m]][_names[j]]);
-	      consistentPPAlign[_names[i]][_names[j]]->sum(AUX);
-	      consistentPPGap1[_names[i]][_names[j]]->sum_trans_prod(ppAlign[_names[m]][_names[i]],ppGap2[_names[m]][_names[j]],eas[_names[m]][_names[i]]*eas[_names[m]][_names[j]]);
-	      consistentPPGap2[_names[i]][_names[j]]->sum_trans_prod(ppGap2[_names[m]][_names[i]], ppAlign[_names[m]][_names[j]],eas[_names[m]][_names[i]]*eas[_names[m]][_names[j]]);
-	      sumea += (eas[_names[m]][_names[i]]*eas[_names[m]][_names[j]]);
+	      ppAlign[_names[m]][_names[i]]->leftTransXright(ppAlign[_names[m]][_names[j]], postMatch, eas[_names[m]][_names[i]]*eas[_names[m]][_names[j]]);
+	      ppGap1[_names[m]][_names[i]]->leftTransXright(ppGap1[_names[m]][_names[j]], postMatch, eas[_names[m]][_names[i]]*eas[_names[m]][_names[j]]);
+	      ppAlign[_names[m]][_names[i]]->leftTransXright(ppGap2[_names[m]][_names[j]], postGap2, eas[_names[m]][_names[i]]*eas[_names[m]][_names[j]]);
+	      ppGap2[_names[m]][_names[i]]->leftTransXright(ppAlign[_names[m]][_names[j]], postGap1, eas[_names[m]][_names[i]]*eas[_names[m]][_names[j]]);
+	      sumea += eas[_names[m]][_names[i]]*eas[_names[m]][_names[j]];
 	    }
 	    else if(m > i && m < j){
-	      SparseMatrixPtr AUX;
-	      ppAlign[_names[i]][_names[m]]->prod(ppAlign[_names[m]][_names[j]], AUX, eas[_names[i]][_names[m]]*eas[_names[m]][_names[j]]);
-	      AUX->sum_prod(ppGap2[_names[i]][_names[m]], ppGap1[_names[m]][_names[j]], eas[_names[i]][_names[m]]*eas[_names[m]][_names[j]]);
-	      consistentPPAlign[_names[i]][_names[j]]->sum(AUX);
-	      consistentPPGap1[_names[i]][_names[j]]->sum_prod(ppAlign[_names[i]][_names[m]],ppGap2[_names[m]][_names[j]],eas[_names[i]][_names[m]]*eas[_names[m]][_names[j]]);
-	      consistentPPGap2[_names[i]][_names[j]]->sum_prod(ppGap1[_names[i]][_names[m]],ppAlign[_names[m]][_names[j]],eas[_names[i]][_names[m]]*eas[_names[m]][_names[j]]);
-	      sumea += (eas[_names[i]][_names[m]]*eas[_names[m]][_names[j]]);
+	      ppAlign[_names[i]][_names[m]]->leftXright(ppAlign[_names[m]][_names[j]], postMatch, eas[_names[i]][_names[m]]*eas[_names[m]][_names[j]]);
+	      ppGap2[_names[i]][_names[m]]->leftXright(ppGap1[_names[m]][_names[j]], postMatch, eas[_names[i]][_names[m]]*eas[_names[m]][_names[j]]);
+	      ppAlign[_names[i]][_names[m]]->leftXright(ppGap2[_names[m]][_names[j]], postGap2, eas[_names[i]][_names[m]]*eas[_names[m]][_names[j]]);
+	      ppGap1[_names[i]][_names[m]]->leftXright(ppAlign[_names[m]][_names[j]], postGap1, eas[_names[i]][_names[m]]*eas[_names[m]][_names[j]]);
+	      sumea += eas[_names[i]][_names[m]]*eas[_names[m]][_names[j]];
 	    }
 	    else if(m > j){
-	      SparseMatrixPtr AUX;
-	      ppAlign[_names[i]][_names[m]]->prod_trans(ppAlign[_names[j]][_names[m]], AUX, eas[_names[i]][_names[m]]*eas[_names[j]][_names[m]]);
-	      AUX->sum_prod_trans(ppGap2[_names[i]][_names[m]], ppGap2[_names[j]][_names[m]], eas[_names[i]][_names[m]]*eas[_names[j]][_names[m]]);
-	      consistentPPAlign[_names[i]][_names[j]]->sum(AUX);
-	      consistentPPGap1[_names[i]][_names[j]]->sum_prod_trans(ppAlign[_names[i]][_names[m]],ppGap1[_names[j]][_names[m]],eas[_names[i]][_names[m]]*eas[_names[j]][_names[m]]);
-	      consistentPPGap2[_names[i]][_names[j]]->sum_prod_trans(ppGap1[_names[i]][_names[m]],ppAlign[_names[j]][_names[m]],eas[_names[i]][_names[m]]*eas[_names[j]][_names[m]]);
-	      sumea += (eas[_names[i]][_names[m]]*eas[_names[j]][_names[m]]);
+	      SparseMatrixPtr AUX1 = SparseMatrixPtr(new SparseMatrix());
+	      SparseMatrixPtr AUX2 = SparseMatrixPtr(new SparseMatrix());
+	      SparseMatrixPtr AUX3 = SparseMatrixPtr(new SparseMatrix());
+	      AUX1->transposeOf(ppAlign[_names[j]][_names[m]]);
+	      ppAlign[_names[i]][_names[m]]->leftXright(AUX1, postMatch, eas[_names[i]][_names[m]]*eas[_names[j]][_names[m]]);
+	      ppGap1[_names[i]][_names[m]]->leftXright(AUX1, postGap1, eas[_names[i]][_names[m]]*eas[_names[j]][_names[m]]);
+	      AUX1.reset();
+	      AUX2->transposeOf(ppGap2[_names[j]][_names[m]]);
+	      ppGap2[_names[i]][_names[m]]->leftXright(AUX2, postMatch, eas[_names[i]][_names[m]]*eas[_names[j]][_names[m]]);
+	      AUX2.reset();
+	      AUX3->transposeOf(ppGap1[_names[j]][_names[m]]);
+	      ppAlign[_names[i]][_names[m]]->leftXright(AUX3, postGap2, eas[_names[i]][_names[m]]*eas[_names[j]][_names[m]]);
+	      AUX3.reset();
+	      sumea += eas[_names[i]][_names[m]]*eas[_names[j]][_names[m]];
 	    }
 	  }
-	  consistentPPAlign[_names[i]][_names[j]]->prodclean(1/sumea);
-	  consistentPPGap1[_names[i]][_names[j]]->prodclean(1/sumea);
-	  consistentPPGap2[_names[i]][_names[j]]->prodclean(1/sumea);
+	  consistentPPAlign[_names[i]][_names[j]] = SparseMatrixPtr(new SparseMatrix(postMatch,ppAlign[_names[i]][_names[j]], sumea));
+	  consistentPPGap1[_names[i]][_names[j]] = SparseMatrixPtr(new SparseMatrix(postGap1,ppGap1[_names[i]][_names[j]], sumea));
+	  consistentPPGap2[_names[i]][_names[j]] = SparseMatrixPtr(new SparseMatrix(postGap2,ppGap2[_names[i]][_names[j]], sumea));
 	}	
       }
-      ppAlign = consistentPPAlign;
-      ppGap1 = consistentPPGap1;
-      ppGap2 = consistentPPGap2;
+      for(int i = 0; i < (int)_names.size(); i++){
+	for(int j = i+1; j < (int)_names.size(); j++){
+	  ppAlign[_names[i]][_names[j]].reset();
+	  ppAlign[_names[i]][_names[j]] = consistentPPAlign[_names[i]][_names[j]];
+	  ppGap1[_names[i]][_names[j]].reset();
+	  ppGap1[_names[i]][_names[j]] = consistentPPGap1[_names[i]][_names[j]];
+	  ppGap2[_names[i]][_names[j]].reset();
+	  ppGap2[_names[i]][_names[j]] = consistentPPGap2[_names[i]][_names[j]];
+	}
+      }
     }
     for(int i = 0; i < (int)_names.size(); i++){
       for(int j = i+1; j < (int)_names.size(); j++){
@@ -660,7 +712,7 @@ namespace tops{
     }
   }
 
-  void MultipleAlignment::predalConsistencies(map<string,ProbabilisticModelPtr> predmodels, map< string, map< string, vector<SparseMatrixPtr> > > &ppAlign){
+  /*  void MultipleAlignment::predalConsistencies(map<string,ProbabilisticModelPtr> predmodels, map< string, map< string, vector<SparseMatrixPtr> > > &ppAlign){
     map<string, SparseMatrixPtr > ppPred;
     postProbPred(predmodels,ppPred);
     for(int i = 0; i < (int)_names.size(); i++){
@@ -673,7 +725,7 @@ namespace tops{
 	ppAlign[_names[i]][_names[j]][0]->cutoff_sum_times(sameClassProbs,1.0);
       }
     }
-  }
+    }*/
 
 
   ///////////////////////////////////////////////////
@@ -992,7 +1044,7 @@ namespace tops{
     _graph.erase(_graph.begin()+_numberOfColumns,_graph.end());
   }
       
-  void MultipleAlignment::unvisit(vector<column> v){
+  void MultipleAlignment::unvisit(vector<column> &v){
     for(int i = 0; i < (int)v.size(); i++){
       _graph[v[i].index].visited = false;
     }

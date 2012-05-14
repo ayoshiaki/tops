@@ -6,7 +6,7 @@ using namespace std;
 namespace tops{
 
   float SparseMatrix::postProbs_thresh = 0.001;
-  float SparseMatrix::cut_thresh = 0.01;
+  float SparseMatrix::log_postProbs_thresh = log(0.001);
 
   void SparseMatrix::resize(int nrows, int ncols){
     M.resize(nrows);
@@ -22,37 +22,18 @@ namespace tops{
     return _ncolumns;
   }
 
-  void SparseMatrix::addNoCutoff(int i, int j, float value){
-    if(i < 0 || i >= _nrows || 0 > j || j >= _ncolumns){
-      cout << "Bad index when adding in sparse matrix!" << endl;
-      cout << "nrows = " << _nrows << " ncols = " << _ncolumns << " i = " << i << " j = " << j << endl;
-      exit(-1);
+  void SparseMatrix::buildPredMatrix(int nrows, int ncols, Matrix &postProbs){
+    _nrows = nrows+1;
+    _ncolumns = ncols+1;
+    M.resize(_nrows);
+    for(int i = 0; i < nrows; i++){
+      for(int j = 0; j < ncols; j++){
+	if(postProbs(i,j) >= log_postProbs_thresh)
+	  M[i+1][j+1] = exp(postProbs(i,j));
+      }
     }
-    if(value == 0)
-      return;
-    M[i][j] = value;
-  }
-
-  void SparseMatrix::add(int i, int j, float value){
-    if(value < postProbs_thresh)
-      return;
-    if(i < 0 || i >= _nrows || 0 > j || j >= _ncolumns){
-      cout << "Bad index when adding in sparse matrix!" << endl;
-      cout << "nrows = " << _nrows << " ncols = " << _ncolumns << " i = " << i << " j = " << j << endl;
-      exit(-1);
-    }
-    if(value == 0)
-      return;
-    M[i][j] = value;
-  }
-
-  void SparseMatrix::remove(int i, int j){
-    if(i < 0 || i >= _nrows || 0 > j || j >= _ncolumns){
-      cout << "Bad index when removing from sparse matrix!" << endl;
-      cout << "nrows = " << _nrows << " ncols = " << _ncolumns << " i = " << i << " j = " << j << endl;
-      exit(-1);
-    }
-    M[i].erase(j);
+    nextr = 0;
+    nextc = M[0].begin();
   }
 
   bool SparseMatrix::next(int *i, int *j, float *prob){
@@ -79,88 +60,31 @@ namespace tops{
     return true;
   }
 
-  void SparseMatrix::sum(int i, int j, float value){
-    map<int,float>::iterator it = M[i].find(j);
-    if(it != M[i].end())
-      it->second += value;
-    else
-      addNoCutoff(i,j,value);
-  }
-
-  float SparseMatrix::get(int i, int j){
-    if(i < 0 || i >= _nrows || 0 > j || j >= _ncolumns){
-      cout << "Bad index when adding in sparse matrix!" << endl;
-      exit(-1);
-    }
-    map<int,float>::iterator it = M[i].find(j);
-    if(it != M[i].end())
-      return it->second;
-    else
-      return 0.0;
-  }
-  
-  vector< map<int,float> > SparseMatrix::matrix(){
+  vector< map<int,float> > &SparseMatrix::matrix(){
     return M;
   }
 
-  void SparseMatrix::matrix(vector< map<int,float> > N){
-    M = N;
-    nextr = 0;
-    nextc = M[0].begin();
+  map<int,float>::iterator SparseMatrix::lineBegin(int i){
+    return M[i].begin();
+  }
+  map<int,float>::iterator SparseMatrix::lineEnd(int i){
+    return M[i].end();
   }
 
-  void SparseMatrix::clear(){
-    for(int i = 0; i < (int)M.size(); i++)
-      M[i].clear();
-    M.clear();
-  }
-
-  void SparseMatrix::clean(){
+  void SparseMatrix::getfMatrixTimesX(fMatrix &fM, float x){
+    fM.resize(_nrows,_ncolumns);
     for(int i = 0; i < _nrows; i++){
-      map<int,float>::iterator it = M[i].begin();
-      while(it != M[i].end()){
-	map<int,float>::iterator itaux = it;
-	it++;
-	if(itaux->second < postProbs_thresh){
-	  M[i].erase(itaux);
-	}
+      for(int j = 0; j < _ncolumns; j++){
+	fM(i,j) = 0;
       }
     }
-    nextr = 0;
-    nextc = M[0].begin();
-  }
-
-  void SparseMatrix::clean(SparseMatrixPtr R){
     for(int i = 0; i < _nrows; i++){
-      map<int,float>::iterator it = M[i].begin();
-      while(it != M[i].end()){
-	map<int,float>::iterator itaux = it;
-	it++;
-	if(itaux->second < postProbs_thresh || R->get(i,itaux->first) == 0){
-	  M[i].erase(itaux);
-	}
+      for(map<int,float>::iterator it = M[i].begin(); it != M[i].end(); it++){
+	fM(i,it->first) = x * it->second;
       }
     }
-    nextr = 0;
-    nextc = M[0].begin();
   }
 
-  void SparseMatrix::prodclean(float n){
-    for(int i = 0; i < _nrows; i++){
-      map<int,float>::iterator it = M[i].begin();
-      while(it != M[i].end()){
-	map<int,float>::iterator itaux = it;
-	it++;
-	itaux->second *= n;
-	if(itaux->second < postProbs_thresh){
-	  M[i].erase(itaux);
-	}
-      }
-    }
-    nextr = 0;
-    nextc = M[0].begin();
-  }
-    
   void SparseMatrix::removeLastLine(){
     M.pop_back();
     _nrows--;
@@ -177,243 +101,121 @@ namespace tops{
     nextc = M[0].begin();
   }
 
-  void SparseMatrix::sum_prod(SparseMatrixPtr N, SparseMatrixPtr R, float n){
-    if(_nrows != N->nrows() || _ncolumns != R->ncols() || N->ncols() != R->nrows()){
-      cout << "Cannot compute the product. Wrong number of rows or columns! (sum_prod)" << endl;
-      exit(-1);
-    }
-   
-    vector< map<int,float> > M1, M2;
-    map<int,float>::const_iterator itn;
-    map<int,float>::const_iterator itr;
-    
-    M1 = N->matrix();
-    M2 = R->matrix();
-    
-    for(int i = 0; i < N->nrows(); i++){
-      for(itn = M1[i].begin(); itn != M1[i].end(); itn++){
-	for(itr = M2[itn->first].begin(); itr != M2[itn->first].end(); itr++){
-	  sum(i, itr->first, itn->second * itr->second * n);
-	}
-      }
-    }
-    //clean();
-  }
-
-  void SparseMatrix::prod(SparseMatrixPtr N, SparseMatrixPtr &OUT, float n){
+  void SparseMatrix::leftXright(SparseMatrixPtr &N, fMatrix &OUT, float n){
     if(ncols() != N->nrows()){
       cout << "Cannot compute the product. Wrong number of rows or columns! (prod matrices)" << endl;
       exit(-1);
     }
    
-    OUT = SparseMatrixPtr(new SparseMatrix(nrows(), N->ncols()));
-    
-    vector< map<int,float> > M1, M2;
-    map<int,float>::const_iterator itn;
-    map<int,float>::const_iterator itr;
-    
-    M1 = matrix();
-    M2 = N->matrix();
+    map<int,float>::iterator it1;
+    map<int,float>::iterator it2;
     
     for(int i = 0; i < nrows(); i++){
-      for(itn = M1[i].begin(); itn != M1[i].end(); itn++){
-	for(itr = M2[itn->first].begin(); itr != M2[itn->first].end(); itr++){
-	  OUT->sum(i, itr->first, itn->second * itr->second * n);
+      for(it1 = M[i].begin(); it1 != M[i].end(); it1++){
+	for(it2 = N->lineBegin(it1->first); it2 != N->lineEnd(it1->first); it2++){
+	  OUT(i, it2->first) += it1->second * it2->second * n;
 	}
       }
     }
   }
 
-  void SparseMatrix::sum_trans_prod(SparseMatrixPtr N, SparseMatrixPtr R, float n){
-    if(N->nrows() != R->nrows()){
-      cout << "Cannot compute the product. Wrong number of rows or columns! (sum_trans_prod)" << endl;
-      exit(-1);
-    }
-    SparseMatrixPtr AUX = SparseMatrixPtr(new SparseMatrix(N->ncols(), N->nrows()));
-    vector< map<int,float> > A = N->matrix(); 
-    map<int,float>::iterator itm;
-    for(int i = 0; i < N->nrows(); i++){
-      for(itm = A[i].begin(); itm != A[i].end(); itm++){
-	AUX->addNoCutoff(itm->first,i,itm->second);
-      }
-    }
-    sum_prod(AUX,R,n);
-  }
-
-  void SparseMatrix::trans_prod(SparseMatrixPtr N, SparseMatrixPtr &OUT, float n){
+  void SparseMatrix::leftTransXright(SparseMatrixPtr &N, fMatrix &OUT, float n){
     if(nrows() != N->nrows()){
-      cout << "Cannot compute the product. Wrong number of rows or columns! (trans_prod)" << endl;
+      cout << "Cannot compute the product. Wrong number of rows or columns! (prod matrices)" << endl;
       exit(-1);
     }
-    SparseMatrixPtr AUX = SparseMatrixPtr(new SparseMatrix(ncols(), nrows()));
-    vector< map<int,float> > A = matrix(); 
-    map<int,float>::iterator itm;
+   
+    map<int,float>::iterator it1;
+    map<int,float>::iterator it2;
+    
     for(int i = 0; i < nrows(); i++){
-      for(itm = A[i].begin(); itm != A[i].end(); itm++){
-	AUX->addNoCutoff(itm->first,i,itm->second);
+      for(it1 = M[i].begin(); it1 != M[i].end(); it1++){
+	for(it2 = N->lineBegin(i); it2 != N->lineEnd(i); it2++){
+	  OUT(it1->first, it2->first) += it1->second * it2->second * n;
+	}
       }
     }
-    AUX->prod(N, OUT, n);
   }
 
-  void SparseMatrix::sum_prod_trans(SparseMatrixPtr N, SparseMatrixPtr R, float n){
-    if(N->ncols() != R->ncols()){
-      cout << "Cannot compute the product. Wrong number of rows or columns! (sum_prod_trans)" << endl;
+  void SparseMatrix::leftXright(SparseMatrixPtr &N, fMatrix &OUT){
+    if(ncols() != N->nrows()){
+      cout << "Cannot compute the product. Wrong number of rows or columns! (prod matrices)" << endl;
       exit(-1);
     }
-    SparseMatrixPtr AUX = SparseMatrixPtr(new SparseMatrix(R->ncols(), R->nrows()));
-    vector< map<int,float> > A = R->matrix(); 
-    map<int,float>::iterator it;
-    for(int i = 0; i < R->nrows(); i++){
-      for(it = A[i].begin(); it != A[i].end(); it++){
-	AUX->addNoCutoff(it->first,i,it->second);
-      }
-    }
-    sum_prod(N,AUX,n);
-  }	
-
-  void SparseMatrix::prod_trans(SparseMatrixPtr N, SparseMatrixPtr &OUT, float n){
-    if(ncols() != N->ncols()){
-      cout << "Cannot compute the product. Wrong number of rows or columns! (prod_trans)" << endl;
-      exit(-1);
-    }
-    SparseMatrixPtr AUX = SparseMatrixPtr(new SparseMatrix(N->ncols(), N->nrows()));
-    vector< map<int,float> > A = N->matrix(); 
-    map<int,float>::iterator it;
-    for(int i = 0; i < N->nrows(); i++){
-      for(it = A[i].begin(); it != A[i].end(); it++){
-	AUX->addNoCutoff(it->first,i,it->second);
-      }
-    }
-    prod(AUX, OUT, n);
-  }	
-
-  void SparseMatrix::addGaps(SparseMatrixPtr ppGap1, SparseMatrixPtr ppGap2){
-    vector<float> aux (_ncolumns, 0.0);
-    map<int,float>::iterator it;
-    resize(_nrows+1, _ncolumns+1);
-    vector< map<int,float> > A = ppGap1->matrix();
-    for(int i = 0; i < ppGap1->nrows(); i++){
-      for(it = A[i].begin(); it != A[i].end(); it++){
-	  aux[it->first] += it->second;
-      }
-    }
-    for(int i = 0; i < (int)aux.size(); i++)
-      add(_nrows-1,i,aux[i]);
+   
+    map<int,float>::iterator it1;
+    map<int,float>::iterator it2;
     
-    A = ppGap2->matrix();
-    for(int i = 0; i < ppGap2->nrows(); i++){
-      float sum = 0.0;
-      for(it = A[i].begin(); it != A[i].end(); it++){
-	  sum += it->second;
+    for(int i = 0; i < nrows(); i++){
+      for(it1 = M[i].begin(); it1 != M[i].end(); it1++){
+	for(it2 = N->lineBegin(it1->first); it2 != N->lineEnd(it1->first); it2++){
+	  OUT(i, it2->first) += it1->second * it2->second;
+	}
       }
-      add(i,_ncolumns-1, sum);
+    }
+  }
+
+  void SparseMatrix::leftTransXright(SparseMatrixPtr &N, fMatrix &OUT){
+    if(nrows() != N->nrows()){
+      cout << "Cannot compute the product. Wrong number of rows or columns! (prod matrices)" << endl;
+      exit(-1);
+    }
+   
+    map<int,float>::iterator it1;
+    map<int,float>::iterator it2;
+    
+    for(int i = 0; i < nrows(); i++){
+      for(it1 = M[i].begin(); it1 != M[i].end(); it1++){
+	for(it2 = N->lineBegin(i); it2 != N->lineEnd(i); it2++){
+	  OUT(it1->first, it2->first) += it1->second * it2->second;
+	}
+      }
+    }
+  }
+
+  void SparseMatrix::transposeOf(SparseMatrixPtr &A){
+    M.resize(A->ncols());
+    _ncolumns = A->nrows();
+    _nrows = A->ncols();
+    
+    map<int,float>::iterator it;
+    for(int i = 0; i < A->nrows(); i++){
+      for(it = A->lineBegin(i); it != A->lineEnd(i); it++){
+	M[it->first][i] = it->second;
+      }
     }
     nextr = 0;
     nextc = M[0].begin();
   }
 
-  void SparseMatrix::sum(SparseMatrixPtr N){
-    if(_ncolumns != N->ncols() || _nrows != N->nrows()){
-      cout << "Cannot compute the product. Wrong number of rows or columns!" << endl;
-      exit(-1);
-    }
-    map<int,float>::iterator itm;
-    map<int,float>::iterator itn;
-    vector< map<int,float> > A = N->matrix();
-    for(int i = 0; i < N->nrows(); i++){
-      for(itn = A[i].begin(); itn != A[i].end(); itn++){
-	sum(i,itn->first,itn->second);
-      }
-    }
-  }
-
-  void SparseMatrix::sum_times(SparseMatrixPtr N, float n){
-    if(_ncolumns != N->ncols() || _nrows != N->nrows()){
-      cout << "Cannot compute the product. Wrong number of rows or columns!" << endl;
-      exit(-1);
-    }
-    vector< map <int,float> > NM = N->matrix();
-    map<int,float>::iterator itm;
-    map<int,float>::iterator itn;
-    for(int i = 0; i < N->nrows(); i++){
-      for(itn = NM[i].begin(); itn != NM[i].end(); itn++){
-	sum(i,itn->first,n*itn->second);
-      }
-    }
-    clean();
-  }
-
-  void SparseMatrix::cutoff_sum_times(SparseMatrixPtr N, float n){
-    if(_ncolumns != N->ncols() || _nrows != N->nrows()){
-      cout << "Cannot compute the product. Wrong number of rows or columns!" << endl;
-      exit(-1);
-    }
-    vector< map <int,float> > NM = N->matrix();
-    vector< map <int,float> > MM;
-    MM.resize(_nrows);
-    map<int,float>::iterator itm;
-    map<int,float>::iterator itn;
-    for(int i = 0; i < N->nrows(); i++){
-      for(itn = NM[i].begin(); itn != NM[i].end(); itn++){
-	if(itn->second > cut_thresh)
-	  MM[i][itn->first] = n*M[i][itn->first] + (1-n)*itn->second;
-      }
-    }
-    matrix(MM);
-  }
-
-  void SparseMatrix::prod(float n, SparseMatrixPtr &OUT){
-    OUT = SparseMatrixPtr(new SparseMatrix(nrows(), ncols()));
-    if(n == 0)
-      return;
+  void SparseMatrix::addGaps(SparseMatrixPtr ppGap1, SparseMatrixPtr ppGap2){
+    vector<float> aux (_ncolumns, 0.0);
     map<int,float>::iterator it;
-    for(int i = 0; i < nrows(); i++){
-      for(it = M[i].begin(); it != M[i].end(); it++){
-	OUT->addNoCutoff(i,it->first,it->second*n);
+    resize(_nrows+1, _ncolumns+1);
+    for(int i = 0; i < ppGap1->nrows(); i++){
+      for(it = ppGap1->lineBegin(i); it != ppGap1->lineEnd(i); it++){
+	  aux[it->first] += it->second;
       }
     }
+    for(int i = 0; i < (int)aux.size(); i++)
+      M[_nrows-1][i] = aux[i];
+    
+    for(int i = 0; i < ppGap2->nrows(); i++){
+      float sum = 0.0;
+      for(it = ppGap2->lineBegin(i); it != ppGap2->lineEnd(i); it++){
+	  sum += it->second;
+      }
+      M[i][_ncolumns-1] = sum;
+    }
+    nextr = 0;
+    nextc = M[0].begin();
   }
 
-  void SparseMatrix::printFullMatrix(){
-    for(int i = 0; i < _nrows; i++){
-      for(int j = 0; j < _ncolumns; j++)
-	cout << get(i,j) << " ";
-      cout << endl;
-    }
-  }
-  
   void SparseMatrix::printMatrix(){
     for(int i = 0; i < _nrows; i++){
       map<int,float>::iterator it;
       for(it = M[i].begin(); it != M[i].end(); it++)
 	cout << i << "-" << it->first << "-" << it->second << " ";
-    }
-  }
-
-  void SparseMatrix::printMatrix(ostringstream &temp){
-    int sum = 0;
-    for(int i = 0; i < _nrows; i++){
-      map<int,float>::iterator it;
-      for(it = M[i].begin(); it != M[i].end(); it++){
-	sum++;
-      }
-    }
-    temp << sum << endl;
-    for(int i = 0; i < _nrows; i++){
-      map<int,float>::iterator it;
-      for(it = M[i].begin(); it != M[i].end(); it++){
-	temp << i << " " << it->first << " " << it->second << endl;
-      }
-    }
-  }
-
-  void SparseMatrix::readFromFile(ifstream fin){
-    while(fin.good()){
-      int line, col;
-      float prob;
-      fin >> line >> col >> prob;
-      add(line, col, prob);
     }
   }
 }

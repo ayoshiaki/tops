@@ -229,7 +229,7 @@ int GeneralizedHiddenMarkovModel::configureExplicitDurationState(std::string obs
   }
 
   float GeneralizedHiddenMarkovModel::MEAPred(const Sequence &s, Sequence &path){
-    SparseMatrixPtr probs;
+    fMatrix probs;
     int size = s.size();
     int nstates = _all_states.size();
     posteriorProbabilitiesNoClasses(s,probs);
@@ -238,7 +238,7 @@ int GeneralizedHiddenMarkovModel::configureExplicitDurationState(std::string obs
 
     //Initialization
     for(int k = 0; k < nstates; k++){
-      float prob = probs->get(0,k);
+      float prob = probs(0,k);
       ea(0,k) = prob;
     }
     
@@ -256,7 +256,7 @@ int GeneralizedHiddenMarkovModel::configureExplicitDurationState(std::string obs
 	    state = id;
 	  }
 	}
-	ea(i,k) = max + probs->get(i,k);
+	ea(i,k) = max + probs(i,k);
 	ptrs(i,k) = state;
       }
     }
@@ -279,7 +279,7 @@ int GeneralizedHiddenMarkovModel::configureExplicitDurationState(std::string obs
     return mea/size;
   }
   
-  void GeneralizedHiddenMarkovModel::posteriorProbabilitiesNoClasses (const Sequence &s, SparseMatrixPtr &probabilities) const{
+  void GeneralizedHiddenMarkovModel::posteriorProbabilitiesNoClasses (const Sequence &s, fMatrix &probabilities) const{
     int size = s.size();
     int nstates = _all_states.size();
     initialize_prefix_sum_arrays(s);
@@ -290,7 +290,6 @@ int GeneralizedHiddenMarkovModel::configureExplicitDurationState(std::string obs
     Matrix alpha (nstates, size);
 
     Matrix postProbs(nstates,size);
-    probabilities = SparseMatrixPtr(new SparseMatrix(size,nstates));
     
     std::vector< std::list<int> > valid_positions;
     valid_positions.resize(nstates);
@@ -326,10 +325,10 @@ int GeneralizedHiddenMarkovModel::configureExplicitDurationState(std::string obs
     
     for(int i = 0; i < size; i++){
       for(int c = 0; c < nstates; c++){
-	probabilities->add(i,c,exp(postProbs(c,i)));
+	probabilities(i,c) = exp(postProbs(i,c));
       }
     }
-
+    
     /*double sum = alpha(0, size-1) + _terminal_probabilities->log_probability_of(0);
     for(int k = 1; k < nstates; k++)
       sum = log_sum(sum, alpha(k, size-1) + _terminal_probabilities->log_probability_of(k));
@@ -348,8 +347,7 @@ int GeneralizedHiddenMarkovModel::configureExplicitDurationState(std::string obs
     Matrix alpha (nstates, size);
 
     Matrix postProbs(_nclasses,size);
-    probabilities->resize(size,_nclasses);
-    
+
     std::vector< std::list<int> > valid_positions;
     valid_positions.resize(nstates);
     std::list <int> e;
@@ -382,12 +380,9 @@ int GeneralizedHiddenMarkovModel::configureExplicitDurationState(std::string obs
 	_all_states[k]->posteriorSum(alpha, beta, postProbs, s, i, _all_states, valid_positions, prob, -1);
       }
     }
-    
-    for(int i = 0; i < size; i++){
-      for(int c = 0; c < _nclasses; c++){
-	probabilities->add(i,c,exp(postProbs(c,i)));
-      }
-    }
+
+    probabilities->buildPredMatrix(size,_nclasses,postProbs);
+
 
     /*double sum = alpha(0, size-1) + _terminal_probabilities->log_probability_of(0);
     for(int k = 1; k < nstates; k++)
@@ -1044,7 +1039,7 @@ Sequence & GeneralizedHiddenMarkovModel::chooseObservation(Sequence & h, int i,
     }
 
     setAlphabet(observation_symbols);
-    int nclasses = 0;
+    int nclasses = -1;
     for (int i = 0; i < (int) state_names.size(); i++) {
       trim_spaces(state_names[i]);
       int id;
@@ -1098,13 +1093,15 @@ Sequence & GeneralizedHiddenMarkovModel::chooseObservation(Sequence & h, int i,
 
         int iphase = -1;
         int ophase = -1;
-	std::vector<double> cl = classespar->getDoubleVector();
-	std::vector<int> classes;
-	classes.resize(cl.size());
-	for(int c = 0; c < (int)cl.size(); c++){
-	  classes[c] = (int)cl[c];
-	  if(classes[c] > nclasses)
-	    nclasses = classes[c];
+	if(classespar != NULL){
+	  std::vector<double> cl = classespar->getDoubleVector();
+	  std::vector<int> classes;
+	  classes.resize(cl.size());
+	  for(int c = 0; c < (int)cl.size(); c++){
+	    classes[c] = (int)cl[c];
+	    if(classes[c] > nclasses)
+	      nclasses = classes[c];
+	  }
 	}
         if(inputphasepar != NULL)
             iphase = inputphasepar->getInt();

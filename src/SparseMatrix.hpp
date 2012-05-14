@@ -17,7 +17,7 @@ namespace tops{
   
   private:
     static float postProbs_thresh;
-    static float cut_thresh;
+    static float log_postProbs_thresh;
     vector< map<int,float> > M;
     int _ncolumns;
     int _nrows;
@@ -26,6 +26,7 @@ namespace tops{
   
   public:
     typedef boost::shared_ptr<SparseMatrix> SparseMatrixPtr;
+
     SparseMatrix(){}
     SparseMatrix(int nrows, int ncols){
       M.resize(nrows);
@@ -50,44 +51,56 @@ namespace tops{
       nextc = M[0].begin();
     }
 
+    SparseMatrix(fMatrix postProbs, SparseMatrixPtr reference, float n){
+      M.resize(reference->nrows());
+      _nrows = reference->nrows();
+      _ncolumns = reference->ncols();
+      map<int,float>::iterator it;
+      for(int i = 0; i < _nrows; i++){
+	for(it = reference->lineBegin(i); it != reference->lineEnd(i); it++){
+	  if((postProbs(i,it->first)/n) >= postProbs_thresh){
+	    M[i][it->first] = postProbs(i,it->first)/n;
+	  }
+	}
+      }
+      nextr = 0;
+      nextc = M[0].begin();
+    }
+
+    SparseMatrix(SparseMatrixPtr reference){
+      M.resize(reference->nrows());
+      _nrows = reference->nrows();
+      _ncolumns = reference->ncols();
+      map<int,float>::iterator it;
+      for(int i = 0; i < _nrows; i++){
+	for(it = reference->lineBegin(i); it != reference->lineEnd(i); it++){
+	  M[i][it->first] = it->second;
+	}
+      }
+      nextr = 0;
+      nextc = M[0].begin();
+    }    
+
     static void setppthresh(float n){
       postProbs_thresh = n;
+      log_postProbs_thresh = log(n);
     }
-    static void setcutthresh(float n){
-      cut_thresh = n;
-    }
+
+    void buildPredMatrix(int nrows, int ncols, Matrix &postProbs);
+    void getfMatrixTimesX(fMatrix &fM, float x);
+    void leftXright(SparseMatrixPtr &N, fMatrix &OUT, float n);
+    void leftTransXright(SparseMatrixPtr &N, fMatrix &OUT, float n);
+    void leftXright(SparseMatrixPtr &N, fMatrix &OUT);
+    void leftTransXright(SparseMatrixPtr &N, fMatrix &OUT);
+    void transposeOf(SparseMatrixPtr &A);
     void resize(int nrows, int ncols);
     int nrows();
     int ncols();
-    void add(int i, int j, float value);
-    void addNoCutoff(int i, int j, float value);
-    void remove(int i, int j);
-    void sum(int i, int j, float value);
-    void sum_times(SparseMatrixPtr N, float n);
-    void cutoff_sum_times(SparseMatrixPtr N, float n);
-    float get(int i, int j);
     bool next(int *i, int *j, float *prob);
-    vector< map<int,float> > matrix();
-    void matrix(vector< map<int,float> > N);
-    //void prod(SparseMatrixPtr N, SparseMatrixPtr R);
-    void sum_prod(SparseMatrixPtr N, SparseMatrixPtr R, float n);
-    void sum_prod_trans(SparseMatrixPtr N, SparseMatrixPtr R, float n);
-    void sum_trans_prod(SparseMatrixPtr N, SparseMatrixPtr R, float n);
-    void prod(SparseMatrixPtr N, SparseMatrixPtr &OUT, float n);
-    void prod_trans(SparseMatrixPtr N, SparseMatrixPtr &OUT, float n);
-    void trans_prod(SparseMatrixPtr N, SparseMatrixPtr &OUT, float n);
-    void prod(float n, SparseMatrixPtr &OUT);
-    /*void trans_prod(SparseMatrixPtr N, SparseMatrixPtr R);
-    void prod_trans(SparseMatrixPtr N, SparseMatrixPtr R);*/
-    void sum(SparseMatrixPtr N);
-    void clear();
-    void clean();
-    void prodclean(float n);
-    void clean(SparseMatrixPtr R);
+    vector< map<int,float> > &matrix();
+    map<int,float>::iterator lineBegin(int i);
+    map<int,float>::iterator lineEnd(int i);
     void printMatrix();
-    void printMatrix(ostringstream &temp);
-    void printFullMatrix();
-    void readFromFile(ifstream fin);
     void removeLastLine();
     void removeLastColumn();
     void addGaps(SparseMatrixPtr ppGap1, SparseMatrixPtr ppGap2);

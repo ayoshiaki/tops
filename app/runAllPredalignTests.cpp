@@ -80,7 +80,6 @@ int main (int argc, char ** argv)
       if(vm.count("sparseMatrixCutoff"))
 	scutoff = vm["sparseMatrixCutoff"].as<float>();
       SparseMatrix::setppthresh(scutoff);
-      SparseMatrix::setcutthresh(scutoff);
       
       string outDir = vm["outputDirectory"].as<std::string>();
       

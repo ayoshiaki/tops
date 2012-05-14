@@ -40,28 +40,17 @@ namespace tops {
     fMatrix ppGap2(length1+1,length2+1);
     vector<Matrix> alpha; // forward
     vector<Matrix> beta;  // backward
-
+    
     double full = forward(seq1, seq2, alpha);
     backward(seq1, seq2, beta);
     for(int i = 0; i <= length1; i++){
-      //double teste = 0.0;
       for(int j = 0; j <= length2; j++){
 	ppMatch(i,j) = 0;
 	ppGap1(i,j) = 0;
 	ppGap2(i,j) = 0;
-	for(int k = 0; k < nstates; k++){
-	  if(_states[k]->eSeq1() == 1 && _states[k]->eSeq2() == 1)
-	    ppMatch(i,j) += exp(alpha[k](i,j) + beta[k](i,j) - full);
-	  else if(_states[k]->eSeq1() == 0 && _states[k]->eSeq2() == 1){
-	    ppGap1(i,j) += exp(alpha[k](i,j) + beta[k](i,j) - full);
-	  }
-	  else if(_states[k]->eSeq1() == 1 && _states[k]->eSeq2() == 0){
-	    ppGap2(i,j) += exp(alpha[k](i,j) + beta[k](i,j) - full);
-	  }
-        }
-	//teste += exp(p0) + exp(p1); essa soma da 1. probabilidade de alinhar a base com qualquer outra, mais a prob de alinhar com um gap.
+	for(int k = 0; k < nstates; k++)
+	  _states[k]->postProbSum(ppMatch,ppGap1,ppGap2,alpha[k],beta[k],full,i,j);
       }
-      //cout << "teste = " << teste << endl;
     }
     float ea = expectedAccuracy(length1+1,length2+1,ppMatch);
     sparsePPMatch = SparseMatrixPtr(new SparseMatrix(length1+1,length2+1,ppMatch));
@@ -71,7 +60,17 @@ namespace tops {
     return ea;
   }
 
-  float PairHiddenMarkovModel::expectedAccuracyWithGaps(SparseMatrixPtr postProbs, SparseMatrixPtr gap1Probs, SparseMatrixPtr gap2Probs){
+  void MatchState::postProbSum(fMatrix &ppMatch, fMatrix &ppGap1, fMatrix &ppGap2, Matrix &alpha, Matrix &beta, double full, int i, int j){
+    ppMatch(i,j) += exp(alpha(i,j) + beta(i,j) - full);
+  }
+  void Gap1State::postProbSum(fMatrix &ppMatch, fMatrix &ppGap1, fMatrix &ppGap2, Matrix &alpha, Matrix &beta, double full, int i, int j){
+    ppGap1(i,j) += exp(alpha(i,j) + beta(i,j) - full);
+  }
+  void Gap2State::postProbSum(fMatrix &ppMatch, fMatrix &ppGap1, fMatrix &ppGap2, Matrix &alpha, Matrix &beta, double full, int i, int j){
+    ppGap2(i,j) += exp(alpha(i,j) + beta(i,j) - full);
+  }
+  
+  /*float PairHiddenMarkovModel::expectedAccuracyWithGaps(SparseMatrixPtr postProbs, SparseMatrixPtr gap1Probs, SparseMatrixPtr gap2Probs){
     int size1 = postProbs->nrows();
     int size2 = postProbs->ncols();
     SparseMatrixPtr ea = SparseMatrixPtr(new SparseMatrix(size1,size2));
@@ -120,14 +119,14 @@ namespace tops {
     }
     float mea = ea->get(size1-1,size2-1)/allen;
     return mea;
-  }
-
+    }*/
+  
   float PairHiddenMarkovModel::expectedAccuracy(int size1, int size2, fMatrix &postProbs){
     int allen = size1;
     if(size2 < allen)
       allen = size2;
     fMatrix ea(size1,size2);
-
+    
     for(int i = 0; i < size1; i++)
       ea(i,0) = 0.0;
     for(int j = 1; j < size2; j++)
@@ -147,7 +146,7 @@ namespace tops {
     return ea(size1-1,size2-1)/allen;;
   } 
 
-  double PairHiddenMarkovModel::viterbi(const Sequence & seq1, const Sequence & seq2, Sequence & statePath, Sequence & alignment1, Sequence & alignment2, vector<Matrix> &a)
+  /*  double PairHiddenMarkovModel::viterbi(const Sequence & seq1, const Sequence & seq2, Sequence & statePath, Sequence & alignment1, Sequence & alignment2, vector<Matrix> &a)
   {
     int nstates = _states.size();
     int nsilentstates = _silent_states.size();
@@ -164,7 +163,7 @@ namespace tops {
       (alpha[i]).resize(length1+1,length2+1);
       (pathMatrix[i]).resize(length1+1,length2+1);
     }
-
+    
     //Initialization
     for(int k = 0; k < nstates; k++){
       if(k == (int)_begin_id){
@@ -174,7 +173,7 @@ namespace tops {
       else
         alpha[k](0,0) = -HUGE;
     }
-
+    
     //Recursion
     for (int i = 0; i <= length1; i++){
       for(int j = 0; j <= length2; j++){
@@ -191,13 +190,13 @@ namespace tops {
           int ne2 = _states[k]->eSeq2();
           if(ne1 == 0 && ne2 == 0)
             continue;
-
+	  
           alpha[k](i,j) = -HUGE;
           if(i - ne1 < 0 || j - ne2 < 0){
             pathMatrix[k](i,j) = -1;
             continue;
           }
-
+	  
           double aux = -HUGE;
           for(int l = 0; l < (int)(_states[k]->iTransitions()).size(); l++){
             int id = _states[k]->getITransId(l);
@@ -232,7 +231,7 @@ namespace tops {
         }
       }
     }
-
+    
     //Termination
     double score = -HUGE;
     int p;
@@ -244,7 +243,7 @@ namespace tops {
       }
     }
     a = alpha;
-
+    
     //Trace back
     path.push_back(_end_id);
     al1.push_back(_gap_id);
@@ -288,16 +287,77 @@ namespace tops {
     }
     for(unsigned int i = 0; i < path.size(); i++)
       statePath[i] = path[path.size() - i - 1];
-
+    
     return score;
+    }*/
+  
+  void MatchState::forwardSum(vector<PHMMStatePtr> &states, const Sequence &seq1, const Sequence &seq2, vector<Matrix> &a, int i, int j, int gap_id, int begin_id){
+    if(i == 1 && j == 1){
+      a[_id](i,j) = states[begin_id]->transitions()->log_probability_of(_id) + _emission->log_probability_of_pair(seq1[0],seq2[0]);
+      return;
+    }
+    
+    if(i == 0 || j == 0){
+      a[_id](i,j) = -HUGE;
+      return;
+    }
+    
+    vector<int>::iterator predStateNumIt = _incomingTransitions.begin();
+    a[_id](i,j) = a[*predStateNumIt](i-1,j-1) + states[*predStateNumIt]->transitions()->log_probability_of(_id);
+    for(predStateNumIt = _incomingTransitions.begin()+1; predStateNumIt != _incomingTransitions.end(); predStateNumIt++)
+      a[_id](i,j) = log_sum(a[_id](i,j), a[*predStateNumIt](i-1,j-1) + states[*predStateNumIt]->transitions()->log_probability_of(_id));
+    
+    a[_id](i,j) += _emission->log_probability_of_pair(seq1[i-1],seq2[j-1]);
+  }
+
+  void Gap1State::forwardSum(vector<PHMMStatePtr> &states, const Sequence &seq1, const Sequence &seq2, vector<Matrix> &a, int i, int j, int gap_id, int begin_id){
+    if(i == 0 && j == 1){
+      a[_id](i,j) = states[begin_id]->transitions()->log_probability_of(_id) + _emission->log_probability_of_pair(gap_id,seq2[0]);
+      return;
+    }
+    
+    if(j == 0){
+      a[_id](i,j) = -HUGE;
+      return;
+    }
+
+    vector<int>::iterator predStateNumIt = _incomingTransitions.begin();
+    a[_id](i,j) = a[*predStateNumIt](i,j-1) + states[*predStateNumIt]->transitions()->log_probability_of(_id);
+    for(predStateNumIt = _incomingTransitions.begin()+1; predStateNumIt != _incomingTransitions.end(); predStateNumIt++)
+      a[_id](i,j) = log_sum(a[_id](i,j), a[*predStateNumIt](i,j-1) + states[*predStateNumIt]->transitions()->log_probability_of(_id));
+    
+    a[_id](i,j) += _emission->log_probability_of_pair(gap_id,seq2[j-1]);
+  }
+  
+  void Gap2State::forwardSum(vector<PHMMStatePtr> &states, const Sequence &seq1, const Sequence &seq2, vector<Matrix> &a, int i, int j, int gap_id, int begin_id){
+    if(i == 1 && j == 0){
+      a[_id](i,j) = states[begin_id]->transitions()->log_probability_of(_id) + _emission->log_probability_of_pair(seq1[0],gap_id);
+      return;
+    }
+    
+    if(i == 0){
+      a[_id](i,j) = -HUGE;
+      return;
+    }
+
+    vector<int>::iterator predStateNumIt = _incomingTransitions.begin();
+    a[_id](i,j) = a[*predStateNumIt](i-1,j) + states[*predStateNumIt]->transitions()->log_probability_of(_id);
+    for(predStateNumIt = _incomingTransitions.begin()+1; predStateNumIt != _incomingTransitions.end(); predStateNumIt++)
+      a[_id](i,j) = log_sum(a[_id](i,j), a[*predStateNumIt](i-1,j) + states[*predStateNumIt]->transitions()->log_probability_of(_id));
+    
+    a[_id](i,j) += _emission->log_probability_of_pair(seq1[i-1],gap_id);
+  }
+  
+  void SilentState::forwardSum(vector<PHMMStatePtr> &states, const Sequence &seq1, const Sequence &seq2, vector<Matrix> &a, int i, int j, int gap_id, int begin_id){
+    return;
   }
 
   double PairHiddenMarkovModel::forward(const Sequence & seq1, const Sequence & seq2, vector<Matrix> &a)
   {
     int nstates = _states.size();
-    int nsilentstates = _silent_states.size();
     int length1 = seq1.size();
     int length2 = seq2.size();
+
     a.resize(nstates);
     for(int i = 0; i < nstates; i++){
       if(i != _begin_id && i != _end_id)
@@ -306,79 +366,55 @@ namespace tops {
 	(a[i]).resize(0,0);
     }
 
-    //Initialization
-    for(int k = 0; k < nstates; k++){
-      if(k != _begin_id && k != _end_id)
-        a[k](0,0) = -HUGE;
-    }
-
     //Recursion
+    vector<PHMMStatePtr>::iterator currState;
     for (int i = 0; i <= length1; i++){
       for(int j = 0; j <= length2; j++){
-        for(int k = 0; k < nstates; k++){
-          if(k == _begin_id || k == _end_id)
-            continue;
-          if(i == 0 && j == 0)
-            continue;
-          int ne1 = _states[k]->eSeq1();
-          int ne2 = _states[k]->eSeq2();
-          if(ne1 == 0 && ne2 == 0)
-            continue;
-          if(i - ne1 < 0 || j - ne2 < 0){
-            a[k](i,j) = -HUGE;
-            continue;
-          }
-
-          double aux = -HUGE;
-	  int numitrans = _states[k]->iTransSize();
-          for(int l = 0; l < numitrans; l++){
-            int id = _states[k]->getITransId(l);
-	    if(id == _begin_id){
-	      if(i-ne1 == 0 && j-ne2 == 0){
-		aux = log_sum(aux, _states[_begin_id]->transitions()->log_probability_of(k));
-		continue;
-	      }
-	      else
-		continue;
-	    }
-            aux = log_sum(aux, a[id](i-ne1,j-ne2) + _states[id]->transitions()->log_probability_of(k));
-          }
-          if(ne1 > 0 && ne2 > 0)
-            a[k](i,j) = aux + _states[k]->emission()->log_probability_of_pair(seq1[i-1],seq2[j-1]);
-          else if(ne1 > 0 && ne2 == 0)
-            a[k](i,j) = aux + _states[k]->emission()->log_probability_of_pair(seq1[i-1],_gap_id);
-          else
-            a[k](i,j) = aux + _states[k]->emission()->log_probability_of_pair(_gap_id,seq2[j-1]);
-        }
-
-        for(int k = 0; k < nsilentstates; k++){
-          if(i == 0 && j == 0)
-            continue;
-          int id1 = getSilentId(k);
-          if(id1 == _begin_id || id1 == _end_id)
-            continue;
-          a[id1](i,j) = -HUGE;
-          for(int l = 0; l < (int)(_states[id1]->iTransitions()).size(); l++){
-            int id2 = _states[id1]->getITransId(l);
-            a[id1](i,j) = log_sum(a[id1](i,j), a[id2](i,j) + _states[id2]->transitions()->log_probability_of(id1));
-          }
-        }
+        for(currState = _states.begin(); currState != _states.end(); currState++){
+	  (*currState)->forwardSum(_states,seq1,seq2,a,i,j,_gap_id,_begin_id);
+	}
       }
     }
 
     //Termination
     double sum = -HUGE;
-    for(int i = 0; i < nstates; i++){
-      if(i != _begin_id && i != _end_id)
-	sum = log_sum(sum, a[i](length1,length2) + _states[i]->transitions()->log_probability_of(_end_id));
+    for(currState = _states.begin(); currState != _states.end(); currState++){
+      if(!(*currState)->isSilent())
+	sum = log_sum(sum, a[(*currState)->getId()](length1,length2) + (*currState)->transitions()->log_probability_of(_end_id));
     }
     return sum;
+  }
+
+  void MatchState::backwardSum(vector<PHMMStatePtr> &states, const Sequence &seq1, const Sequence &seq2, vector<Matrix> &a, int i, int j, int gap_id, int currStateId, double *accumulator){
+    if(i == (int)seq1.size() || j == (int)seq2.size())
+      return;
+    (*accumulator) = log_sum((*accumulator),
+			     a[_id](i+1,j+1) +
+			     states[currStateId]->transitions()->log_probability_of(_id) +
+			     _emission->log_probability_of_pair(seq1[i],seq2[j]));
+  }
+
+  void Gap1State::backwardSum(vector<PHMMStatePtr> &states, const Sequence &seq1, const Sequence &seq2, vector<Matrix> &a, int i, int j, int gap_id, int currStateId, double *accumulator){
+    if(j == (int)seq2.size())
+      return;
+    (*accumulator) = log_sum((*accumulator),
+			     a[_id](i,j+1) +
+			     states[currStateId]->transitions()->log_probability_of(_id) +
+			     _emission->log_probability_of_pair(gap_id,seq2[j]));
+  }
+
+  void Gap2State::backwardSum(vector<PHMMStatePtr> &states, const Sequence &seq1, const Sequence &seq2, vector<Matrix> &a, int i, int j, int gap_id, int currStateId, double *accumulator){
+    if(i == (int)seq1.size())
+      return;
+    (*accumulator) = log_sum((*accumulator),
+			     a[_id](i+1,j) +
+			     states[currStateId]->transitions()->log_probability_of(_id) +
+			     _emission->log_probability_of_pair(seq1[i],gap_id));
   }
 
   double PairHiddenMarkovModel::backward(const Sequence & seq1, const Sequence & seq2, vector<Matrix> &a)
   {
     int nstates = _states.size();
-    int nsilentstates = _silent_states.size();
     int length1 = seq1.size();
     int length2 = seq2.size();
     a.resize(nstates);
@@ -397,77 +433,35 @@ namespace tops {
     }
 
     //Recursion
+    IntVector::iterator nextStateNumIt;
+    double accumulator;
     for (int i = length1; i >= 0; i--){
       for(int j = length2; j >= 0; j--){
-
-        //Silent states elements must be calculated first
-        for(int k = nsilentstates-1; k >= 0; k--){
-          int id1 = getSilentId(k);
-	  if(id1 == _begin_id || id1 == _end_id)
+	if(i == length1 && j == length2)
+	  continue;
+        for(int currStateId = 0; currStateId < nstates; currStateId++){
+	  if(_states[currStateId]->isSilent())
 	    continue;
-          if(i == length1 && j == length2)
-            continue;
-          a[id1](i,j) = backwardSum(id1,i,j,a,seq1,seq2);
-        }
-
-        //Non-silent states loop
-        for(int k = 0; k < nstates; k++){
-	  if(k == _begin_id || k == _end_id)
-	    continue;
-          if(i == length1 && j == length2)
-            continue;
-          if(_states[k]->eSeq1() == 0 && _states[k]->eSeq2() == 0)
-            continue;
-          a[k](i,j) = backwardSum(k,i,j,a,seq1,seq2);
+	  accumulator = -HUGE;
+	  for(nextStateNumIt = _states[currStateId]->outTransitions().begin(); nextStateNumIt != _states[currStateId]->outTransitions().end(); nextStateNumIt++)
+	    _states[*nextStateNumIt]->backwardSum(_states,seq1,seq2,a,i,j,_gap_id,currStateId,&accumulator);
+	  a[currStateId](i,j) = accumulator;
         }
       }
     }
 
     //Termination
-    return backwardSum(_begin_id,0,0,a,seq1,seq2);	
-  }
-
-  double PairHiddenMarkovModel::backwardSum(int k,int i,int j,vector<Matrix> &a,const Sequence &seq1, const Sequence &seq2){
-    int length1 = seq1.size();
-    int length2 = seq2.size();
-    int numotrans = _states[k]->oTransSize();
-    double sum = -HUGE;
-    for(int l = 0; l < numotrans; l++){
-      int id = _states[k]->getOTransId(l);
-      if(id == _end_id)
-	continue;
-      int ne1 = _states[id]->eSeq1();
-      int ne2 = _states[id]->eSeq2();
-      if(i + ne1 > length1 || j + ne2 > length2)
-	continue;
-      if(ne1 > 0 && ne2 > 0)
-	sum = log_sum(sum,
-		      a[id](i+ne1,j+ne2) +
-		      _states[k]->transitions()->log_probability_of(id) +
-		      _states[id]->emission()->log_probability_of_pair(seq1[i-1+ne1],seq2[j-1+ne2]));
-      else if(ne1 > 0 && ne2 == 0)
-	sum = log_sum(sum,
-		      a[id](i+ne1,j+ne2) +
-		      _states[k]->transitions()->log_probability_of(id) +
-		      _states[id]->emission()->log_probability_of_pair(seq1[i-1+ne1],_gap_id));
-      else if(ne1 == 0 && ne2 >0)
-	sum = log_sum(sum,
-		      a[id](i+ne1,j+ne2) +
-		      _states[k]->transitions()->log_probability_of(id) +
-		      _states[id]->emission()->log_probability_of_pair(_gap_id,seq2[j-1+ne2]));
-      else
-	sum = log_sum(sum,
-		      a[id](i+ne1,j+ne2) +
-		      _states[k]->transitions()->log_probability_of(id));
-    }
-    return sum;
+    accumulator = -HUGE;
+    for(nextStateNumIt = _states[_begin_id]->outTransitions().begin(); nextStateNumIt != _states[_begin_id]->outTransitions().end(); nextStateNumIt++)
+      _states[*nextStateNumIt]->backwardSum(_states,seq1,seq2,a,0,0,_gap_id,_begin_id,&accumulator);
+    return accumulator;    
   }
 
   ////////////////////////////////////////////////
   ////// Model training///////////////////////////
   ////////////////////////////////////////////////
 
-  void PairHiddenMarkovModel::trainBaumWelch(SequenceList & sample, int maxiterations, double diff_threshold)
+  /*  void PairHiddenMarkovModel::trainBaumWelch(SequenceList & sample, int maxiterations, double diff_threshold)
   {
     int nstates = _states.size();
     int alphabet_size = alphabet()->size();
@@ -618,7 +612,7 @@ namespace tops {
     }
     //cerr << "Stoped at iteration: " << iterations << endl;
     //cerr << "Diff: " << diff << endl;
-  }
+    }*/
       
   ////////////////////////////////////////////////
   ////// Model Initialization ////////////////////
@@ -789,9 +783,20 @@ namespace tops {
         otr = outgoing;
       }
 
-      PHMMStatePtr statePtr = PHMMStatePtr(new PHMMState(state_list.size(), state_name, e, t, itr, otr, numEmiss1, numEmiss2));
-      if(numEmiss1 == 0 && numEmiss2 == 0)
+      PHMMStatePtr statePtr;
+      if(numEmiss1 == 0 && numEmiss2 == 0){
+	statePtr = PHMMStatePtr(new SilentState(state_list.size(), state_name, e, t, itr, otr));
         silent_state_list.push_back(statePtr);
+      }
+      if(numEmiss1 == 1 && numEmiss2 == 1){
+	statePtr = PHMMStatePtr(new MatchState(state_list.size(), state_name, e, t, itr, otr));
+      }
+      if(numEmiss1 == 0 && numEmiss2 == 1){
+	statePtr = PHMMStatePtr(new Gap1State(state_list.size(), state_name, e, t, itr, otr));
+      }
+      if(numEmiss1 == 1 && numEmiss2 == 0){
+	statePtr = PHMMStatePtr(new Gap2State(state_list.size(), state_name, e, t, itr, otr));
+      }
       state_list.push_back(statePtr);
     }
     if(end != 1){
@@ -803,8 +808,8 @@ namespace tops {
       exit(-1);
     }
     setStates(state_list, states);
-    if(silent_state_list.size() > 1)
-      silentStatesSort(silent_state_list);
+    //if(silent_state_list.size() > 1)
+    //silentStatesSort(silent_state_list);
     setSilentStates(silent_state_list);
     setObservationSymbols(observations);
   }
@@ -813,7 +818,7 @@ namespace tops {
   ///////// Auxiliary and debug functions ////////////
   ////////////////////////////////////////////////////
 
-  void PairHiddenMarkovModel::silentStatesSort(vector<PHMMStatePtr> silStates){
+  /*  void PairHiddenMarkovModel::silentStatesSort(vector<PHMMStatePtr> silStates){
     int swap = 1;
     while(swap == 1){
       swap = 0;
@@ -829,10 +834,10 @@ namespace tops {
         }
       }
     }
-  }
+    }*/
 
 
-  std::string PairHiddenMarkovModel::str () const
+  /*  std::string PairHiddenMarkovModel::str () const
   {
     int nstates = _states.size();
     std::stringstream out;
@@ -890,9 +895,9 @@ namespace tops {
       out << ";\n\"" << getStateName(i) << "\" : \"" << _states[i]->eSeq1() << "," << _states[i]->eSeq2() << "\"";
     out << ";)" << endl;
     return out.str();
-  }  
+    }  */
 
-  void PairHiddenMarkovModel::generateSequence(Sequence &seq1, Sequence &seq2, Sequence &path){
+  /*  void PairHiddenMarkovModel::generateSequence(Sequence &seq1, Sequence &seq2, Sequence &path){
     Sequence s1, s2, p;
     int state_id = _begin_id;
     int obs1 = _gap_id;
@@ -917,7 +922,7 @@ namespace tops {
     seq1 = s1;
     seq2 = s2;
     path = p;
-  }
+    }*/
 }
 
 
