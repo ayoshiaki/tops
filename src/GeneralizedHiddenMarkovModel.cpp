@@ -1093,9 +1093,9 @@ Sequence & GeneralizedHiddenMarkovModel::chooseObservation(Sequence & h, int i,
 
         int iphase = -1;
         int ophase = -1;
+	std::vector<int> classes;
 	if(classespar != NULL){
 	  std::vector<double> cl = classespar->getDoubleVector();
-	  std::vector<int> classes;
 	  classes.resize(cl.size());
 	  for(int c = 0; c < (int)cl.size(); c++){
 	    classes[c] = (int)cl[c];
