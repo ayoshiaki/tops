@@ -86,8 +86,10 @@ namespace tops{
       log_postProbs_thresh = log(n);
     }
 
-    void buildPredMatrix(int nrows, int ncols, Matrix &postProbs);
+    void applyPrediction(SparseMatrixPtr predMatrix1, SparseMatrixPtr predMatrix2);
+    void buildPredMatrix(int nrows, int ncols, fMatrix &postProbs);
     void getfMatrixTimesX(fMatrix &fM, float x);
+    void getfMatrixPred(fMatrix &fM);
     void leftXright(SparseMatrixPtr &N, fMatrix &OUT, float n);
     void leftTransXright(SparseMatrixPtr &N, fMatrix &OUT, float n);
     void leftXright(SparseMatrixPtr &N, fMatrix &OUT);

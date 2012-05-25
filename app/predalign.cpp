@@ -23,14 +23,13 @@ int main (int argc, char ** argv)
     options_description desc("Allowed options");
     desc.add_options()
       ("help,?", "produce help message")
+      ("outputDirectory,o", value<string> (), "name of directory where output files will be written in")
       ("alignmentmodel,a", value<string> (), "model")
-      ("predictionmodel,p", value<string> (), "model") 
-      ("consistencyscheme,c", value<int> (), "consistency transformation to be used\n1 = gapped consistency and alignment construction\n2 = gapped consistency only\n3 = picxaa consistency\n4 = classic consistency")  
-      ("sequences,s", value<string> (), "sequence file")
+      ("predictionmodels,p", value<string> (), "file with a list of prediction models (one for each sequence file)") 
+      ("sequences,s", value<string> (), "file with a list of sequence files (one for each organism). Sequences that are to be aligned should be in the same position in the files")
       ("iterations,i", value<int> (), "number of consistency iterations")
-      ("getprobs,g", value<string> (), "train, calculate posterior probabilities and store them in given file")
-      ("readfromfile,r", value<string> (), "read posterior probabilities from file")
-      ("fasta,F",  "use fasta format");
+      ("fasta,F",  "use fasta format")
+      ("alternate",  "alternate between a round of alignment-prediction consistency, and a round of prediction-alignment consistency");
 
     try
     {
@@ -44,15 +43,30 @@ int main (int argc, char ** argv)
 	  return 1;
         }
       
-      string model_file = vm["predictionmodel"].as<std::string>();
-      ProbabilisticModelCreatorClient creator;
-      ProbabilisticModelPtr predmodel = creator.create(model_file);
-      if(predmodel == NULL) 
-	{
-	  exit(-1);
+      string models_file = vm["predictionmodels"].as<std::string>();
+      vector<ProbabilisticModelPtr> predmodels;
+      ifstream fin;
+      fin.open(models_file.c_str());
+      while(!fin.eof()){
+	ProbabilisticModelCreatorClient creator;
+	string model_file;
+	fin >> model_file;
+	if(model_file.compare("") == 0){
+	  continue;
 	}
+	cerr << model_file << endl;
+	ProbabilisticModelPtr predmodel = creator.create(model_file);
+	if(predmodel == NULL) 
+	  {
+	    cerr << "Could not create model from file " << model_file << endl;
+	    exit(-1);
+	  }
+	predmodels.push_back(predmodel);
+      }
+      fin.close();
       
-      model_file = vm["alignmentmodel"].as<std::string>();
+      string model_file = vm["alignmentmodel"].as<std::string>();
+      ProbabilisticModelCreatorClient creator;
       ProbabilisticModelPtr almodel = creator.create(model_file);
       if(almodel == NULL) 
 	{
@@ -61,73 +75,53 @@ int main (int argc, char ** argv)
       
       if(vm.count("fasta") ) 
 	SequenceFormatManager::instance()->setFormat(FastaSequenceFormatPtr(new FastaSequenceFormat()));	  
-
-      if(vm.count("getprobs")){
-	string outFile = vm["getprobs"].as<std::string>();
-	SequenceEntryList sample_set; 
-	AlphabetPtr alphabet = almodel->alphabet();
-	readSequencesFromFile(sample_set, alphabet, (vm["sequences"].as<std::string>()).c_str());
-	SequenceList seqs;
-	std::vector<std::string> names;
-	for(int i = 0; i < (int)sample_set.size(); i++){
-	  seqs.push_back(sample_set[i]->getSequence());
-	  names.push_back(sample_set[i]->getName());
-	}
-	SparseMatrix::setppthresh(0.01);
-	MultipleAlignmentPtr ma = MultipleAlignmentPtr(new MultipleAlignment());
-      	//ma->trainAndComputePPs(model_file, seqs, names, 0, outFile);
-	return 0;
-      }
-
-      if(vm.count("readfromfile")){
-	string inFile = vm["readfromfile"].as<std::string>();
-	int consScheme = 0;
-	consScheme = vm["consistencyscheme"].as<int>();
-	int numit = 1;
-	numit = vm["iterations"].as<int>();
-	SequenceEntryList sample_set; 
-	AlphabetPtr alphabet = almodel->alphabet();
-	readSequencesFromFile(sample_set, alphabet, (vm["sequences"].as<std::string>()).c_str());
-	SequenceList seqs;
-	std::vector<std::string> names;
-	for(int i = 0; i < (int)sample_set.size(); i++){
-	  seqs.push_back(sample_set[i]->getSequence());
-	  names.push_back(sample_set[i]->getName());
-	}
-	
-	map<string,ProbabilisticModelPtr> predmodels;
-	for(int i = 0; i < (int)names.size(); i++)
-	  predmodels[names[i]] = predmodel;
-	SparseMatrix::setppthresh(0.01);
-	MultipleAlignmentPtr ma = MultipleAlignmentPtr(new MultipleAlignment());
-	//ma->initializeFromFile(almodel,seqs,names,numit,consScheme,inFile);
-	return 0;
-      }	
       
-      int consScheme = 0;
-      consScheme = vm["consistencyscheme"].as<int>();
       int numit = 1;
-      numit = vm["iterations"].as<int>();
-     
-      SequenceEntryList sample_set; 
-      AlphabetPtr alphabet = almodel->alphabet();
-      readSequencesFromFile(sample_set, alphabet, (vm["sequences"].as<std::string>()).c_str());
-      SequenceList seqs;
-      std::vector<std::string> names;
-      for(int i = 0; i < (int)sample_set.size(); i++){
-	seqs.push_back(sample_set[i]->getSequence());
-	names.push_back(sample_set[i]->getName());
-      }
+      if(vm.count("iterations"))
+	numit = vm["iterations"].as<int>();
       
-      map<string,ProbabilisticModelPtr> predmodels;
-      for(int i = 0; i < (int)names.size(); i++)
-	predmodels[names[i]] = predmodel;
+      bool alternate = false;
+      if(vm.count("alternate"))
+	alternate = true;
 
       SparseMatrix::setppthresh(0.01);
+   
+      AlphabetPtr alphabet = almodel->alphabet();
+      string outDir = vm["outputDirectory"].as<std::string>();
 
-      MultipleAlignmentPtr ma = MultipleAlignmentPtr(new MultipleAlignment());
+      string seqsFile = vm["sequences"].as<std::string>();
+      vector<SequenceList> listOfSeqLists;
+      vector< vector<string> > listOfSeqNamesLists;
+      fin.open(seqsFile.c_str());
+      while(!fin.eof()){
+	string seqFileName;
+	fin >> seqFileName;
+	if(seqFileName.compare("") == 0 || seqFileName.compare("\n") == 0)
+	  continue;
+	cerr << seqFileName << endl;
+	SequenceEntryList sample_set; 
+	readSequencesFromFile(sample_set, alphabet, seqFileName.c_str());
+	SequenceList seqs;
+	std::vector<std::string> names;
+	for(int i = 0; i < (int)sample_set.size(); i++){
+	  seqs.push_back(sample_set[i]->getSequence());
+	  names.push_back(sample_set[i]->getName());
+	}
+	listOfSeqLists.push_back(seqs);
+	listOfSeqNamesLists.push_back(names);
+      }
+      fin.close();
       
-      ma->computeOneAlignment(almodel,predmodels,seqs,names,numit,consScheme);	
+      for(int i = 0; i < (int)listOfSeqLists[0].size(); i++){
+	SequenceList seqs;
+	std::vector<std::string> names;
+	for(int j = 0; j < (int)listOfSeqLists.size(); j++){
+	  seqs.push_back(listOfSeqLists[j][i]);
+	  names.push_back(listOfSeqNamesLists[j][i]);
+	}	
+	MultipleAlignmentPtr ma = MultipleAlignmentPtr(new MultipleAlignment());
+	ma->computePredictionsAndAlignment(almodel,predmodels,seqs,names,numit,alternate,outDir);
+      }	
     }
     catch (boost::program_options::invalid_command_line_syntax &e)
     {

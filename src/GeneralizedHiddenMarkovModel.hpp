@@ -82,8 +82,12 @@ namespace tops {
     virtual void posteriorProbabilitiesWithClasses (const Sequence &s, SparseMatrixPtr probabilities) const;
 
     virtual void posteriorProbabilitiesNoClasses (const Sequence &s, fMatrix &probabilities) const;
+    void posteriorProbabilities(const Sequence &s, fMatrix &postProbs) const;
+
 
     float MEAPred(const Sequence &s, Sequence &path);
+    float MEAPred(const Sequence &s, Sequence &path, SparseMatrixPtr ppPred);
+
 
     virtual void setNumClasses(int nclasses);
 

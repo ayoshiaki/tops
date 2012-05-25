@@ -44,13 +44,15 @@ namespace tops{
     map<string,map<string,SparseMatrixPtr > > _ppAlign;
     map<string,map<string,SparseMatrixPtr > > _ppGap1;
     map<string,map<string,SparseMatrixPtr > > _ppGap2;
+    map<string, SparseMatrixPtr > _ppPred;
     map<string,map<string,float> > _eas;
 
 
   public:
     MultipleAlignment(){}
-    void computeOneAlignment(ProbabilisticModelPtr almodel, map<string,ProbabilisticModelPtr> predmodels, SequenceList seqs, vector<string> names, int numit, int consScheme);
+    void computeOneAlignment(ProbabilisticModelPtr almodel, SequenceList seqs, vector<string> names, int numit, int consScheme);
     void computeAllAlignments(ProbabilisticModelPtr almodel, SequenceList seqs, vector<string> names, int numit, string alFileName, string outDir);
+    void computePredictionsAndAlignment(ProbabilisticModelPtr almodel, vector<ProbabilisticModelPtr> &predmodels, SequenceList seqs, vector<string> names, int numit, bool alternateConsistencies, string outDir);
     //void initializeFromFile(ProbabilisticModelPtr almodel, SequenceList seqs, vector<string> names, int numit, int consScheme, string inputFileName);
     //void trainAndComputePPs(string initialModelFile, SequenceList seqs, vector<string> names, int maxTainIter, string outFile);
     float postProbAlign(ProbabilisticModelPtr model, map<string, map< string, SparseMatrixPtr > > &ppAlign, map<string, map< string, SparseMatrixPtr > > &ppGap1, map<string, map< string, SparseMatrixPtr > > &ppGap2, map<string, map<string, float> > &eas);
@@ -58,8 +60,9 @@ namespace tops{
     void classicAlConsistency(map< string, map< string, SparseMatrixPtr > > &ppAlign, int numit);
     void predalignAlConsistencyWithEas(map< string, map< string, SparseMatrixPtr > > &ppAlign, map< string, map< string, SparseMatrixPtr > > &ppGap1,map< string, map< string, SparseMatrixPtr > > &ppGap2, int numit, map<string, map<string, float> > eas);
     void predalignAlConsistencyNoEas(map< string, map< string, SparseMatrixPtr > > &ppAlign, map< string, map< string, SparseMatrixPtr > > &ppGap1,map< string, map< string, SparseMatrixPtr > > &ppGap2, int numit);
-    //void predalConsistencies(map<string,ProbabilisticModelPtr> predmodels, map< string, map< string, vector<SparseMatrixPtr> > > &ppAlign);
-    void postProbPred(map<string,ProbabilisticModelPtr> predmodels, map<string, SparseMatrixPtr > &ppPred);
+    void makeAlignmentConsistentWithPrediction(map<string, SparseMatrixPtr > &ppPred, map< string, map< string, SparseMatrixPtr > > &ppAlign, int numit);
+    void makePredictionConsistentWithAlignment(map<string, SparseMatrixPtr > &ppPred, map< string, map< string, SparseMatrixPtr > > &ppAlign, int numit);
+    void postProbPred(vector<ProbabilisticModelPtr> &predmodels, map<string, SparseMatrixPtr > &ppPred);
     void initializePostProbsList(map< string, map< string, SparseMatrixPtr > > &ppAlign);
     void addList(postProb p);
     void printPPList();

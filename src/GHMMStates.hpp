@@ -26,6 +26,7 @@
 #define GHMM_STATES_HPP
 
 #include "crossplatform.hpp"
+#include "util.hpp"
 
 #include <vector>
 #include <boost/shared_ptr.hpp>
@@ -100,11 +101,11 @@ namespace tops {
     virtual void findBestPredecessor (Matrix & gamma, Matrix &psi, Matrix &psilen, const Sequence & s, int base, const GHMMStates & all_states, std::map < int, std::list<int> >  & valid_positions );
     virtual void forwardSum (Matrix & alpha, const Sequence & s, int base, const GHMMStates & all_states, std::vector< std::list<int> > &valid_positions);
     virtual double backwardSum(Matrix &beta, const Sequence &s, int base, std::vector< std::list<int> > &valid_positions);
-    virtual void posteriorSum (Matrix & alpha, Matrix &beta, Matrix &postProbs, const Sequence & s, int base, const GHMMStates & all_states, std::vector< std::list<int> > &valid_positions, double prob, int stateNumber);
+    virtual void posteriorSum (Matrix & alpha, Matrix &beta, fMatrix &postProbs, const Sequence & s, int base, const GHMMStates & all_states, std::vector< std::list<int> > &valid_positions, double prob, int stateNumber);
     
     virtual void choosePredecessor (Matrix & alpha, int base, int & state, int & position , const GHMMStates & all_states);
       
-  private:
+  protected:
     ProbabilisticModelPtr _observation;
     MultinomialDistributionPtr _transition;
     SymbolPtr _name;
@@ -140,7 +141,7 @@ namespace tops {
       virtual void findBestPredecessor (Matrix & gamma, Matrix &psi, Matrix &psilen, const Sequence & s, int base, const GHMMStates & all_states, std::map < int, std::list<int> >  & valid_positions );
       virtual void forwardSum (Matrix & alpha, const Sequence & s, int base, const GHMMStates & all_states, std::vector< std::list<int> > &valid_positions);
     virtual double backwardSum(Matrix &beta, const Sequence &s, int base, std::vector< std::list<int> > &valid_positions);
-    virtual void posteriorSum (Matrix & alpha, Matrix &beta, Matrix &postProbs, const Sequence & s, int base, const GHMMStates & all_states, std::vector< std::list<int> > &valid_positions, double prob, int stateNumber);
+    virtual void posteriorSum (Matrix & alpha, Matrix &beta, fMatrix &postProbs, const Sequence & s, int base, const GHMMStates & all_states, std::vector< std::list<int> > &valid_positions, double prob, int stateNumber);
 
       virtual void choosePredecessor (Matrix & alpha, int base, int & state, int & position, const GHMMStates & all_states);
 
@@ -162,7 +163,7 @@ namespace tops {
       virtual void findBestPredecessor (Matrix & gamma, Matrix &psi, Matrix &psilen, const Sequence & s, int base, const GHMMStates & all_states, std::map < int, std::list<int> >  & valid_positions );
       virtual void forwardSum (Matrix & alpha, const Sequence & s, int base, const GHMMStates & all_states, std::vector< std::list<int> > &valid_positions);
     virtual double backwardSum(Matrix &beta, const Sequence &s, int base, std::vector< std::list<int> > &valid_positions);
-    virtual void posteriorSum (Matrix & alpha, Matrix &beta, Matrix &postProbs, const Sequence & s, int base, const GHMMStates & all_states, std::vector< std::list<int> > &valid_positions, double prob, int stateNumber);
+    virtual void posteriorSum (Matrix & alpha, Matrix &beta, fMatrix &postProbs, const Sequence & s, int base, const GHMMStates & all_states, std::vector< std::list<int> > &valid_positions, double prob, int stateNumber);
 
       virtual void choosePredecessor (Matrix & alpha, int base, int & state, int & position, const GHMMStates & all_states);
 

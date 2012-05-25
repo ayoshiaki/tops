@@ -22,18 +22,47 @@ namespace tops{
     return _ncolumns;
   }
 
-  void SparseMatrix::buildPredMatrix(int nrows, int ncols, Matrix &postProbs){
+  void SparseMatrix::buildPredMatrix(int nrows, int ncols, fMatrix &postProbs){
     _nrows = nrows+1;
-    _ncolumns = ncols+1;
+    _ncolumns = ncols;
     M.resize(_nrows);
     for(int i = 0; i < nrows; i++){
       for(int j = 0; j < ncols; j++){
-	if(postProbs(i,j) >= log_postProbs_thresh)
-	  M[i+1][j+1] = exp(postProbs(i,j));
+	if(postProbs(i,j) >= postProbs_thresh)
+	  M[i+1][j] = postProbs(i,j);
       }
     }
     nextr = 0;
     nextc = M[0].begin();
+  }
+
+  void SparseMatrix::applyPrediction(SparseMatrixPtr predMatrix1, SparseMatrixPtr predMatrix2){
+    if(_nrows != predMatrix1->nrows() || _ncolumns != predMatrix2->nrows()){
+      cerr << "Tried to apply prediction to alignment matrix with wrong sized matrices!" << endl;
+      exit(-1);
+    }
+
+    map<int,float>::iterator it1, it2, it3;
+    
+    for(int i = 0; i < _nrows; i++){
+      for(it1 = lineBegin(i); it1 != lineEnd(i); it1++){
+	it2 = predMatrix1->lineBegin(i);
+	it3 = predMatrix2->lineBegin(it1->first);
+	float sum = 0.0;
+	while(it2 != predMatrix1->lineEnd(i) && it3 != predMatrix2->lineEnd(it1->first)){
+	  if(it2->first == it3->first){
+	    sum += it2->second * it3->second;
+	    it2++;
+	    it3++;
+	  }
+	  else if(it2->first > it3->first)
+	    it3++;
+	  else
+	    it2++;
+	}
+	it1->second *= sum;
+      }
+    }
   }
 
   bool SparseMatrix::next(int *i, int *j, float *prob){
@@ -84,6 +113,21 @@ namespace tops{
       }
     }
   }
+
+  void SparseMatrix::getfMatrixPred(fMatrix &fM){
+    fM.resize(_nrows-1,_ncolumns);
+    for(int i = 1; i < _nrows; i++){
+      for(int j = 0; j < _ncolumns; j++){
+	fM(i-1,j) = 0;
+      }
+    }
+    for(int i = 1; i < _nrows; i++){
+      for(map<int,float>::iterator it = M[i].begin(); it != M[i].end(); it++){
+	fM(i-1,it->first) = it->second;
+      }
+    }
+  }
+
 
   void SparseMatrix::removeLastLine(){
     M.pop_back();

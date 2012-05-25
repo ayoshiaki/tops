@@ -301,7 +301,7 @@ namespace tops{
     cerr << "Done! (" << t.elapsed() << "s)" << endl << endl;
   }
 
-  void MultipleAlignment::computeOneAlignment(ProbabilisticModelPtr almodel, map<string,ProbabilisticModelPtr> predmodels, SequenceList seqs, vector<string> names, int numit, int consScheme){
+  void MultipleAlignment::computeOneAlignment(ProbabilisticModelPtr almodel, SequenceList seqs, vector<string> names, int numit, int consScheme){
     _seqs = seqs;
     _names = names;
 
@@ -329,6 +329,66 @@ namespace tops{
     /*if(_alpha != -1)
     predalConsistencies(predmodels,ppAlign);*/
 
+    initializePostProbsList(_ppAlign);  
+    cerr << "Number of stored posterior probabilities: " << _postProbs.size() << endl;
+    generateGraph();
+    generateAlignment(almodel);
+    for(int i = 0; i < (int)_seqs.size(); i++){
+      cout << _alignment[i];
+    }
+    cout << endl;
+  }
+
+  void MultipleAlignment::computePredictionsAndAlignment(ProbabilisticModelPtr almodel, vector<ProbabilisticModelPtr> &predmodels, SequenceList seqs, vector<string> names, int numit, bool alternateConsistencies, string outDir){
+    _seqs = seqs;
+    _names = names;
+
+    postProbAlign(almodel,_ppAlign,_ppGap1,_ppGap2,_eas);
+    cerr << "Passou do postProbAlign" << endl;
+    postProbPred(predmodels, _ppPred);
+    cerr << "Passou do postProbPred" << endl;
+
+    if(alternateConsistencies){
+      for(int r = 0; r < numit; r++){
+	makeAlignmentConsistentWithPrediction(_ppPred,_ppAlign,1);
+	makePredictionConsistentWithAlignment(_ppPred,_ppAlign,1);
+      }
+    }
+    else{
+      map<string, SparseMatrixPtr> consistentPPpred;
+      for(int i = 0; i < (int)_names.size(); i++){
+	consistentPPpred[_names[i]] = SparseMatrixPtr(new SparseMatrix(_ppPred[_names[i]]));
+      }
+      makePredictionConsistentWithAlignment(consistentPPpred,_ppAlign,numit);
+      makeAlignmentConsistentWithPrediction(_ppPred,_ppAlign,numit);
+      for(int i = 0; i < (int)_names.size(); i++){
+	_ppPred[_names[i]].reset();
+	_ppPred[_names[i]] = consistentPPpred[_names[i]];
+      }
+    }
+
+    for(int i = 0; i < (int)_names.size(); i++){
+      SequenceFormatManager::instance()->setFormat(SequenceFormatPtr(new SequenceFormat()));
+      SequenceEntry output(predmodels[i]->decodable()->getStateNames());
+      Sequence states;
+      clock_t begin = clock();
+      float ea = predmodels[i]->decodable()->MEAPred(_seqs[i], states, _ppPred[_names[i]]);
+      clock_t end = clock();
+      std::cerr << "TIME: " << (double)(end - begin)/CLOCKS_PER_SEC << std::endl;
+      stringstream new_name;
+      new_name << _names[i] <<  ": " << ea;
+      output.setName(new_name.str());
+      output.setSequence(states);
+      string outFile = "";
+      outFile.append(outDir);
+      outFile.append(_names[i]);
+      outFile.append(".pred");
+      ofstream fout;
+      fout.open(outFile.c_str());
+      fout << output;
+      fout.close();
+    }
+      
     initializePostProbsList(_ppAlign);  
     cerr << "Number of stored posterior probabilities: " << _postProbs.size() << endl;
     generateGraph();
@@ -477,19 +537,13 @@ namespace tops{
     return sum;
   }
 
-  void MultipleAlignment::postProbPred(map<string,ProbabilisticModelPtr> predmodels, map<string, SparseMatrixPtr > &ppPred)
+  void MultipleAlignment::postProbPred(vector<ProbabilisticModelPtr> &predmodels, map<string, SparseMatrixPtr > &ppPred)
   {  
-    ppPred[_names[0]] = SparseMatrixPtr(new SparseMatrix());
-    predmodels[_names[0]]->decodable()->posteriorProbabilities(_seqs[0],ppPred[_names[0]]);
-    int nclasses = ppPred[_names[0]]->ncols();
-    for(int i = 1; i < (int)_seqs.size(); i++){
+    for(int i = 0; i < (int)_seqs.size(); i++){
+      fMatrix postPred;
+      predmodels[i]->decodable()->posteriorProbabilities(_seqs[i],postPred);
       ppPred[_names[i]] = SparseMatrixPtr(new SparseMatrix());
-      predmodels[_names[i]]->decodable()->posteriorProbabilities(_seqs[i],ppPred[_names[i]]);
-      if(ppPred[_names[i]]->ncols() != nclasses){
-	cerr << "ERROR: The number of classes must be the same for all the predicition models." << endl
-	     << "Note: Make sure the classes represent the same structures in each model, or the consistency transformations will deteriorate the alignment.\n" << endl;
-	exit(-1);
-      }
+      ppPred[_names[i]]->buildPredMatrix(postPred.size1(),postPred.size2(),postPred);
     }
   }
 
@@ -712,20 +766,39 @@ namespace tops{
     }
   }
 
-  /*  void MultipleAlignment::predalConsistencies(map<string,ProbabilisticModelPtr> predmodels, map< string, map< string, vector<SparseMatrixPtr> > > &ppAlign){
-    map<string, SparseMatrixPtr > ppPred;
-    postProbPred(predmodels,ppPred);
+  void MultipleAlignment::makeAlignmentConsistentWithPrediction(map<string, SparseMatrixPtr > &ppPred, map< string, map< string, SparseMatrixPtr > > &ppAlign, int numit){
     for(int i = 0; i < (int)_names.size(); i++){
       for(int j = i+1; j < (int)_names.size(); j++){
-	SparseMatrixPtr sameClassProbs = SparseMatrixPtr(new SparseMatrix(ppAlign[_names[i]][_names[j]][0]->nrows(),ppAlign[_names[i]][_names[j]][0]->ncols()));
-	//sameClassProbs->sum_prod_trans(ppPred[_names[i]],ppPred[_names[j]],_alpha);
-	sameClassProbs->sum_prod_trans(ppPred[_names[i]],ppPred[_names[j]],1.0);
-	sameClassProbs->cutoff_sum_times(ppAlign[_names[i]][_names[j]][0],1.0);
-	//ppAlign[_names[i]][_names[j]][0]->prod(_beta);
-	ppAlign[_names[i]][_names[j]][0]->cutoff_sum_times(sameClassProbs,1.0);
+	ppAlign[_names[i]][_names[j]]->applyPrediction(ppPred[_names[i]], ppPred[_names[j]]);
       }
     }
-    }*/
+    classicAlConsistency(ppAlign,numit);
+  }
+
+  void MultipleAlignment::makePredictionConsistentWithAlignment(map<string, SparseMatrixPtr > &ppPred, map< string, map<string, SparseMatrixPtr> > &ppAlign, int numit){
+    for(int r = 0; r < numit; r++){
+      map< string, SparseMatrixPtr > consistentPPpred;
+      for(int i = 0; i < (int)_names.size(); i++){
+	fMatrix postPred;
+	ppPred[_names[i]]->getfMatrixTimesX(postPred, 1.0);
+	for(int m = 0; m < (int)_names.size(); m++){
+	  if(m == i)
+	    continue;
+	  else if(m < i){
+	    ppAlign[_names[m]][_names[i]]->leftTransXright(ppPred[_names[m]], postPred);
+	  }
+	  else{
+	    ppAlign[_names[i]][_names[m]]->leftXright(ppPred[_names[m]], postPred);
+	  }
+	}
+	consistentPPpred[_names[i]] = SparseMatrixPtr(new SparseMatrix(postPred,ppPred[_names[i]], (float)_names.size()));
+      }	
+      for(int i = 0; i < (int)_names.size(); i++){
+	ppPred[_names[i]].reset();
+	ppPred[_names[i]] = consistentPPpred[_names[i]];
+      }
+    }
+  }     
 
 
   ///////////////////////////////////////////////////
