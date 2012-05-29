@@ -199,8 +199,8 @@ namespace tops {
             ProbabilisticModelParameters fddpar ;
             fddpar.add("probabilities", DoubleVectorParameterValuePtr(new DoubleVectorParameterValue(p)));
             fddpar.add("alphabet", alphabet->getParameterValue());
-            MultinomialDistributionPtr distr =
-              MultinomialDistributionPtr(new MultinomialDistribution());
+            DiscreteIIDModelPtr distr =
+              DiscreteIIDModelPtr(new DiscreteIIDModel());
             distr->initialize(fddpar);
             root->setDistribution(distr);
           }
@@ -226,8 +226,8 @@ namespace tops {
                         ProbabilisticModelParameters fddpar ;
                         fddpar.add("probabilities", DoubleVectorParameterValuePtr(new DoubleVectorParameterValue(p)));
                         fddpar.add("alphabet", alphabet->getParameterValue());
-                        MultinomialDistributionPtr distr =
-                          MultinomialDistributionPtr(new MultinomialDistribution());
+                        DiscreteIIDModelPtr distr =
+                          DiscreteIIDModelPtr(new DiscreteIIDModel());
                         distr->initialize(fddpar);
                         node2->setDistribution(distr);
                       }
@@ -239,8 +239,8 @@ namespace tops {
                         ProbabilisticModelParameters fddpar ;
                         fddpar.add("probabilities", DoubleVectorParameterValuePtr(new DoubleVectorParameterValue(probs2)));
                         fddpar.add("alphabet", alphabet->getParameterValue());
-                        MultinomialDistributionPtr distr =
-                          MultinomialDistributionPtr(new MultinomialDistribution());
+                        DiscreteIIDModelPtr distr =
+                          DiscreteIIDModelPtr(new DiscreteIIDModel());
                         distr->initialize(fddpar);
                         node2->setDistribution(distr);
                       }
@@ -273,7 +273,7 @@ namespace tops {
         DoubleVector prob;
         for(int i = 0; i < n->alphabet_size(); i++)
           prob.push_back(exp(c ->getDistribution()->log_probability_of(i)));
-        MultinomialDistributionPtr distr = MultinomialDistributionPtr(new MultinomialDistribution(prob));
+        DiscreteIIDModelPtr distr = DiscreteIIDModelPtr(new DiscreteIIDModel(prob));
         n->setDistribution(distr);
         c->setChild(n, l);
       }

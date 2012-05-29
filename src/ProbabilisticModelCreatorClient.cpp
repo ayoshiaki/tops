@@ -26,7 +26,7 @@
 #include "StoreLoadedModel.hpp"
 
 #include "ProbabilisticModelCreator.hpp"
-#include "MultinomialDistributionCreator.hpp"
+#include "DiscreteIIDModelCreator.hpp"
 #include "BernoulliModelCreator.hpp"
 #include "ConfigurationReader.hpp"
 #include "VariableLengthMarkovChainCreator.hpp"
@@ -47,7 +47,7 @@
 
 #include "TrainHMMBaumWelch.hpp"
 #include "TrainVariableLengthMarkovChain.hpp"
-#include "TrainMultinomialDistribution.hpp"
+#include "TrainDiscreteIIDModel.hpp"
 #include "TrainFixedLengthMarkovChain.hpp"
 #include "TrainWeightArrayModel.hpp"
 #include "BayesianInformationCriteria.hpp"
@@ -271,12 +271,15 @@ namespace tops
     _trainingCommand["SmoothedHistogramKernelDensity"] = SmoothedHistogramKernelDensityPtr(new SmoothedHistogramKernelDensity());
     _trainingCommand["SmoothedHistogramStanke"] = SmoothedHistogramStankePtr(new SmoothedHistogramStanke());
     _trainingCommand["SmoothedHistogramBurge"] = SmoothedHistogramBurgePtr(new SmoothedHistogramBurge());
-    _trainingCommand["MultinomialDistribution"] = TrainMultinomialDistributionPtr(new TrainMultinomialDistribution());
+    _trainingCommand["DiscreteIIDModel"] = TrainDiscreteIIDModelPtr(new TrainDiscreteIIDModel());
+    _trainingCommand["MultinomialDistribution"] = TrainDiscreteIIDModelPtr(new TrainDiscreteIIDModel());
     _modelSelectionCommand["BIC"] = BayesianInformationCriteriaPtr(new BayesianInformationCriteria());
     _modelSelectionCommand["AIC"] = AkaikeInformationCriteriaPtr(new AkaikeInformationCriteria());
     _decoratorCommand["RemoveSequence"] = RemoveSequenceFromModelPtr(new RemoveSequenceFromModel());
+    _createModelCommand["DiscreteIIDModel"] =
+      DiscreteIIDModelCreatorPtr(new DiscreteIIDModelCreator());
     _createModelCommand["MultinomialDistribution"] =
-      MultinomialDistributionCreatorPtr(new MultinomialDistributionCreator());
+      DiscreteIIDModelCreatorPtr(new DiscreteIIDModelCreator());
     _createModelCommand["VariableLengthMarkovChain"] =
       VariableLengthMarkovChainCreatorPtr(new VariableLengthMarkovChainCreator());
     _createModelCommand["InhomogeneousMarkovChain"] =

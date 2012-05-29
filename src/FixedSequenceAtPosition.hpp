@@ -28,21 +28,21 @@
 #include "crossplatform.hpp"
 
 #include "ProbabilisticModelDecorator.hpp"
-#include "MultinomialDistribution.hpp"
+#include "DiscreteIIDModel.hpp"
 namespace tops {
   //! A decorator that forces the emission of the same sequence at a fixed position of the sequence.
   class DLLEXPORT FixedSequenceAtPosition : public ProbabilisticModelDecorator {
   private:
     int _position;
     Sequence _sequence;
-    MultinomialDistributionPtr _probabilities;
+    DiscreteIIDModelPtr _probabilities;
     std::vector<bool> _matchSeq;
     void initializeMatchedPositions(const Sequence & s) ;
     void addSequence(Sequence & h) const;
   public:
     FixedSequenceAtPosition(ProbabilisticModelPtr m) : ProbabilisticModelDecorator(m) {};
     virtual ~FixedSequenceAtPosition(){};
-    virtual void initialize(int position,Sequence sequence, MultinomialDistributionPtr distr);
+    virtual void initialize(int position,Sequence sequence, DiscreteIIDModelPtr distr);
     virtual double evaluate(const Sequence & s, unsigned int begin, unsigned int end) const;
     virtual Sequence & choose(Sequence & h, int size) const ;
     virtual Sequence & choose(Sequence &h, int initial_phase, int size) const;

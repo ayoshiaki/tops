@@ -25,7 +25,7 @@
 #include "VariableLengthMarkovChain.hpp"
 #include "VariableLengthMarkovChainCreator.hpp"
 #include "ConfigurationReader.hpp"
-#include "MultinomialDistribution.hpp"
+#include "DiscreteIIDModel.hpp"
 #include "Symbol.hpp"
 #include "Alphabet.hpp"
 #include <boost/algorithm/string.hpp>

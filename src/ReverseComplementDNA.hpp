@@ -28,7 +28,7 @@
 #include "crossplatform.hpp"
 
 #include "ProbabilisticModelDecorator.hpp"
-#include "MultinomialDistribution.hpp"
+#include "DiscreteIIDModel.hpp"
 #include "Symbol.hpp"
 namespace tops {
 

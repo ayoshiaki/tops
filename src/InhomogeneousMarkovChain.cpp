@@ -37,7 +37,7 @@ namespace tops{
     if(context == NULL) {
         return -HUGE;
     }
-    MultinomialDistributionPtr distr = context->getDistribution();
+    DiscreteIIDModelPtr distr = context->getDistribution();
     if(distr == NULL)
         return -HUGE;
     return  distr->evaluatePosition(s,i);
@@ -143,7 +143,7 @@ namespace tops{
         DoubleVector prob;
         for(int i = 0; i < n->alphabet_size(); i++)
           prob.push_back(exp(c ->getDistribution()->log_probability_of(i)));
-        MultinomialDistributionPtr distr = MultinomialDistributionPtr(new MultinomialDistribution(prob));
+        DiscreteIIDModelPtr distr = DiscreteIIDModelPtr(new DiscreteIIDModel(prob));
         n->setDistribution(distr);
         c->setChild(n, l);
       }
@@ -163,10 +163,10 @@ namespace tops{
         {
             if(symbol != s[s.size()-1]) {
                 double x = exp(current->getDistribution()->log_probability_of(symbol));
-		current->getDistribution()->log_probability_of(symbol, log(x/sum));
-		if(close(x, 0, 1e-10))
-		  current->getDistribution()->log_probability_of(symbol, -HUGE);
-		
+    current->getDistribution()->log_probability_of(symbol, log(x/sum));
+    if(close(x, 0, 1e-10))
+      current->getDistribution()->log_probability_of(symbol, -HUGE);
+
             }
         }
 
@@ -198,8 +198,8 @@ namespace tops{
             if(symbol != s[s.size()-1]) {
                 double x = exp(current->getDistribution()->log_probability_of(symbol));
                 current->getDistribution()->log_probability_of(symbol, log(x/sum));
-		if(close(x, 0, 1e-10))
-		  current->getDistribution()->log_probability_of(symbol, -HUGE);
+    if(close(x, 0, 1e-10))
+      current->getDistribution()->log_probability_of(symbol, -HUGE);
 
             }
         }

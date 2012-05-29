@@ -28,15 +28,15 @@ namespace tops{
   public:
     GPHMMState(){}
 
-    GPHMMState(int id, 
-	       SymbolPtr name, 
-	       ProbabilisticModelPtr emission,  
-	       MultinomialDistributionPtr transitions, 
-	       ProbabilisticModelPtr duration,
-	       IntVector iTransitions, 
-	       IntVector oTransitions, 
-	       int maxSeq1, int minSeq1, 
-	       int maxSeq2, int minSeq2)
+    GPHMMState(int id,
+         SymbolPtr name,
+         ProbabilisticModelPtr emission,
+         DiscreteIIDModelPtr transitions,
+         ProbabilisticModelPtr duration,
+         IntVector iTransitions,
+         IntVector oTransitions,
+         int maxSeq1, int minSeq1,
+         int maxSeq2, int minSeq2)
     {
       _id = id;
       _name = name;
@@ -58,7 +58,7 @@ namespace tops{
     int minSeq1(){
       return _minEmissionSeq1;
     }
-   
+
     int maxSeq2(){
       return _maxEmissionSeq2;
     }
@@ -72,11 +72,11 @@ namespace tops{
 
     /*double emission(Sequence &s1, Sequence &s2, int i, int j, int ne1, int ne2, int gap_id){
       if(maxEmissionSeq1 == 1 && maxEmissionSeq2 == 1)
-	return log_probability_of_pair(s1[i-1], s2[j-1]);
+  return log_probability_of_pair(s1[i-1], s2[j-1]);
       if(maxEmissionSeq1 == 1 && maxEmissionSeq2 == 0)
-	return log_probability_of_pair(s1[i-1], gap_id);
+  return log_probability_of_pair(s1[i-1], gap_id);
       if(maxEmissionSeq1 == 1 && maxEmissionSeq2 == 1)
-	return log_probability_of_pair(gap_id, s2[j-1]);
+  return log_probability_of_pair(gap_id, s2[j-1]);
       vector<Matrix> f;
       return _emission->pairDecodable()->forward(sub_seq(s1, i-ne1-1, i-1),sub_seq(s1, i-ne1-1, i-1),f);
       }*/
@@ -84,17 +84,17 @@ namespace tops{
   };
 
   typedef boost::shared_ptr <GPHMMState> GPHMMStatePtr;
-  
+
   class GeneralizedPairHiddenMarkovModel : public PairDecodableModel{
-    
+
   private:
-    MultinomialDistributionPtr _initialProbabilities;
+    DiscreteIIDModelPtr _initialProbabilities;
     int _end_id, _gap_id;
 
   public:
-    
+
     GeneralizedPairHiddenMarkovModel() {};
-    
+
     virtual void initialize(const ProbabilisticModelParameters & par) ;
 
     virtual std::string model_name() const {
@@ -105,11 +105,11 @@ namespace tops{
       return this;
     }
 
-    void setInitialProbabilities(MultinomialDistributionPtr init){
+    void setInitialProbabilities(DiscreteIIDModelPtr init){
       _initialProbabilities = init;
     }
 
-    MultinomialDistributionPtr initialProbabilities(){
+    DiscreteIIDModelPtr initialProbabilities(){
       return _initialProbabilities;
     }
 

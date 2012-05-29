@@ -24,7 +24,7 @@
 
 #include "TargetModel.hpp"
 //#include "TargetModelCreator.hpp"
-#include "TrainMultinomialDistribution.hpp"
+#include "TrainDiscreteIIDModel.hpp"
 
 #include <iostream>
 #include <cmath>
@@ -61,7 +61,7 @@ namespace tops {
     SequenceEntryPtr entry = SequenceEntryPtr(new SequenceEntry(alphabet()));
     entry->setSequence(subseq);
     samples.push_back(entry);
-    TrainMultinomialDistributionPtr trainingAlgorithm = TrainMultinomialDistributionPtr(new TrainMultinomialDistribution());
+    TrainDiscreteIIDModelPtr trainingAlgorithm = TrainDiscreteIIDModelPtr(new TrainDiscreteIIDModel());
     ProbabilisticModelPtr m = trainingAlgorithm->train(samples, alphabet());
     return m->evaluate(s, begin, end);
   }

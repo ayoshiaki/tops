@@ -29,7 +29,7 @@
 
 #include <set>
 
-#include "MultinomialDistribution.hpp"
+#include "DiscreteIIDModel.hpp"
 #include "ProbabilisticModel.hpp"
 #include "Sequence.hpp"
 #include "Alphabet.hpp"
@@ -46,10 +46,10 @@ namespace tops {
   private:
       Matrix _alpha;
       Sequence _last;
-      MultinomialDistributionPtr _last_state_probabilities;
-      MultinomialDistributionPtr _duration_state_probabilities;
-    MultinomialDistributionPtr _initial_probabilities;
-    MultinomialDistributionPtr _terminal_probabilities;
+      DiscreteIIDModelPtr _last_state_probabilities;
+      DiscreteIIDModelPtr _duration_state_probabilities;
+    DiscreteIIDModelPtr _initial_probabilities;
+    DiscreteIIDModelPtr _terminal_probabilities;
     GHMMStates _all_states;
     AlphabetPtr _state_names;
     int _nclasses;
@@ -57,7 +57,7 @@ namespace tops {
     GHMMSignalStates _signal_states;
     GHMMExplicitDurationStates _explicit_duration_states;
     void initialize_prefix_sum_arrays(const Sequence & s) const;
-    void buildDoubleParameterValue(MultinomialDistributionPtr distr, ProbabilisticModelParameters & answer, const char *) const;
+    void buildDoubleParameterValue(DiscreteIIDModelPtr distr, ProbabilisticModelParameters & answer, const char *) const;
     void restore_model(std::string & model_name, const ProbabilisticModelParameters & parameters);
     std::map<std::string, ProbabilisticModelPtr> _models;
   public:
@@ -115,7 +115,7 @@ namespace tops {
     virtual int chooseFirstState() const;
 
     //! Choose the initial state
-    virtual MultinomialDistributionPtr getInitialProbabilities() const {
+    virtual DiscreteIIDModelPtr getInitialProbabilities() const {
       return _initial_probabilities;
     }
 
@@ -134,18 +134,18 @@ namespace tops {
     virtual DecodableModel * decodable() {
       return this;
     }
-    int configureExplicitDurationState(std::string observation_model_name, MultinomialDistributionPtr transition_distr,
-				       std::string duration_model_name, std::string state_name, int iphase, int ophase, std::vector<int> classes);
-    
+    int configureExplicitDurationState(std::string observation_model_name, DiscreteIIDModelPtr transition_distr,
+               std::string duration_model_name, std::string state_name, int iphase, int ophase, std::vector<int> classes);
+
     int configureSignalState(std::string observation_model_name,
-			     MultinomialDistributionPtr transition_distr,
-			     int size, std::string state_name, int iphase, int ophase, std::vector<int> classes);
+           DiscreteIIDModelPtr transition_distr,
+           int size, std::string state_name, int iphase, int ophase, std::vector<int> classes);
 
     int configureGeometricDurationState(std::string observation_model_name,
-                                         MultinomialDistributionPtr transition_distr,
-					std::string state_name, int iphase, int ophase, std::vector<int> classes);
-    void setInitialProbability(MultinomialDistributionPtr init);
-    void setTerminalProbability(MultinomialDistributionPtr term);
+                                         DiscreteIIDModelPtr transition_distr,
+          std::string state_name, int iphase, int ophase, std::vector<int> classes);
+    void setInitialProbability(DiscreteIIDModelPtr init);
+    void setTerminalProbability(DiscreteIIDModelPtr term);
     void setObservationSymbols(AlphabetPtr obs) {
       setAlphabet(obs);
     }

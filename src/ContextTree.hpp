@@ -27,7 +27,7 @@
 
 #include "crossplatform.hpp"
 
-#include "MultinomialDistribution.hpp"
+#include "DiscreteIIDModel.hpp"
 #include "ProbabilisticModelParameter.hpp"
 #include <boost/shared_ptr.hpp>
 #include <set>
@@ -40,7 +40,7 @@ namespace tops {
   //! This is a context tree node
   class DLLEXPORT ContextTreeNode {
   private:
-    MultinomialDistributionPtr _distribution;
+    DiscreteIIDModelPtr _distribution;
     ContextTreeNodeVector _child;
     int _alphabet_size;
     int _symbol;
@@ -95,13 +95,13 @@ namespace tops {
 
 
     //! set the distribution of this context
-    void setDistribution(MultinomialDistributionPtr distribution);
+    void setDistribution(DiscreteIIDModelPtr distribution);
 
     //! get the child of a symbol
     ContextTreeNodePtr getChild(int symbol);
 
     //! get the distribution of this context
-    MultinomialDistributionPtr getDistribution();
+    DiscreteIIDModelPtr getDistribution();
 
     //! deletes the children of this contex
       void deleteChildren() ;

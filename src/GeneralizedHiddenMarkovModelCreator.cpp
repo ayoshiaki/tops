@@ -23,8 +23,8 @@
  */
 
 #include "GeneralizedHiddenMarkovModelCreator.hpp"
-#include "MultinomialDistributionCreator.hpp"
-#include "MultinomialDistribution.hpp"
+#include "DiscreteIIDModelCreator.hpp"
+#include "DiscreteIIDModel.hpp"
 #include "ConfigurationReader.hpp"
 #include "GeneralizedHiddenMarkovModel.hpp"
 #include "ProbabilisticModelCreatorClient.hpp"

@@ -63,7 +63,7 @@ namespace tops {
       }
     FixedSequenceAtPositionPtr decorator = FixedSequenceAtPositionPtr(new FixedSequenceAtPosition(m));
 
-    MultinomialDistributionPtr distr = MultinomialDistributionPtr(new MultinomialDistribution(probs));
+    DiscreteIIDModelPtr distr = DiscreteIIDModelPtr(new DiscreteIIDModel(probs));
     AlphabetPtr alpha = m->alphabet();
     SequenceFactory factory(alpha);
     Sequence sequence = factory.createSequence(seqstr);

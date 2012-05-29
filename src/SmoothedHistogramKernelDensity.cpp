@@ -23,7 +23,7 @@
  */
 
 #include "SmoothedHistogramKernelDensity.hpp"
-#include "MultinomialDistribution.hpp"
+#include "DiscreteIIDModel.hpp"
 #include "util.hpp"
 
 namespace tops {
@@ -88,8 +88,8 @@ namespace tops {
     ProbabilisticModelParameters pars;
     pars.add("probabilities", ProbabilisticModelParameterValuePtr (new DoubleVectorParameterValue(prob)));
     pars.add("alphabet", alpha->getParameterValue());
-    MultinomialDistributionPtr result =
-      MultinomialDistributionPtr(new MultinomialDistribution());
+    DiscreteIIDModelPtr result =
+      DiscreteIIDModelPtr(new DiscreteIIDModel());
     result->initialize(pars);
 
     return result;

@@ -23,7 +23,7 @@
  */
 
 #include "MultipleSequentialModel.hpp"
-#include "TrainMultinomialDistribution.hpp"
+#include "TrainDiscreteIIDModel.hpp"
 #include "ProbabilisticModelCreatorClient.hpp"
 #include "Symbol.hpp"
 #include <iostream>

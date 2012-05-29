@@ -27,17 +27,17 @@
 
 #include "crossplatform.hpp"
 
-#include "MultinomialDistribution.hpp"
+#include "DiscreteIIDModel.hpp"
 
 namespace tops {
   //! A probabilistic model that emits a constant integer value.
-  class DLLEXPORT DegenerateDistribution : public MultinomialDistribution
+  class DLLEXPORT DegenerateDistribution : public DiscreteIIDModel
   {
     friend class boost::serialization::access;
     template <class Archive>
     void serialize (Archive & ar, const unsigned int )
     {
-      ar & boost::serialization::base_object<MultinomialDistribution> (*this);
+      ar & boost::serialization::base_object<DiscreteIIDModel> (*this);
       ar & _constant;
     }
   private:
@@ -50,7 +50,7 @@ namespace tops {
       _huge_ = -HUGE;
       _zero = 0.0;
     }
-    DegenerateDistribution(int c) : MultinomialDistribution("DegenerateDistribution")
+    DegenerateDistribution(int c) : DiscreteIIDModel("DegenerateDistribution")
     {
       _huge_ = -HUGE;
       _zero = 0.0;
