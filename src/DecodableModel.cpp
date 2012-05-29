@@ -75,6 +75,24 @@ namespace tops {
   }
 
   //! Posterior Probabilities: P(yi=k|x)
+  void DecodableModel::posteriorProbabilities (const Sequence &sequence, SparseMatrixPtr probabilities) const{
+    return;
+  }
+
+  void DecodableModel::posteriorProbabilities (const Sequence &sequence, fMatrix &probabilities) const{
+    return;
+  }
+    
+  float DecodableModel::MEAPred(const Sequence &s, Sequence &path){
+    cerr << "This model does not implement MEAPred" << endl;
+    exit(-1);
+  }
+
+  float DecodableModel::MEAPred(const Sequence &s, Sequence &path, SparseMatrixPtr postProbs){
+    cerr << "This model does not implement MEAPred" << endl;
+    exit(-1);
+  }
+
   void DecodableModel::posteriorProbabilities (const Sequence &sequence, Matrix & probabilities) const
   {
     int nstates = (int)getStateNames()->size();
@@ -93,6 +111,7 @@ namespace tops {
 
     probabilities = p;
   }
+
 
   //! Posterior Decoding: ^yi = argmax_k P(yi=k|x)
   void DecodableModel::posteriorDecoding (const Sequence &sequence, Sequence &path, Matrix & probabilities) const{

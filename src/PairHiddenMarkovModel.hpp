@@ -29,74 +29,163 @@
 #include "crossplatform.hpp"
 
 #include "HiddenMarkovModel.hpp"
-#include "PairHiddenMarkovModel.hpp"
 #include "ProbabilisticModel.hpp"
 #include "DecodableModel.hpp"
 #include "Sequence.hpp"
 #include "Alphabet.hpp"
 #include "ContextTree.hpp"
 #include "Symbol.hpp"
-
+#include "SparseMatrix.hpp"
 #include "PairHiddenMarkovModelCreator.hpp"
 #include "util.hpp"
+#include "ProbabilisticModelParameter.hpp"
+#include "Symbol.hpp"
 #include <cstdarg>
 #include <vector>
+#include <iostream>
+#include <cmath>
+#include <sstream>
+#include <vector>
+#include <iterator>
+#include <stdio.h>
+#include <algorithm>
+#include <boost/timer.hpp>
 
 namespace tops{
   class DLLEXPORT PHMMState: public HMMState {
 
-  private:
-    int _emissionSeq1, _emissionSeq2;
-    IntVector _incomingTransitions, _outgoingTransitions;
+  protected:
+    IntVector _outgoingTransitions;
+    IntVector _incomingTransitions;
 
   public:
+    typedef boost::shared_ptr <PHMMState> PHMMStatePtr;
+ 
     PHMMState(){}
 
-    PHMMState(int id, SymbolPtr name, MultinomialDistributionPtr emission,  MultinomialDistributionPtr transitions, IntVector iTransitions, IntVector oTransitions, int eSeq1, int eSeq2){
+    PHMMState(int id, SymbolPtr name, MultinomialDistributionPtr emission,  MultinomialDistributionPtr transitions, IntVector iTransitions, IntVector oTransitions){
+      _id = id;
+      _name = name;
+      _emission = emission;
+      _transitions = transitions;
+      _outgoingTransitions = oTransitions;
+      _incomingTransitions = iTransitions;
+    }
+
+    virtual void forwardSum(vector<PHMMStatePtr> &states, const Sequence &seq1, const Sequence &seq2, vector<Matrix> &a, int i, int j, int gap_id, int begin_id){
+      cerr << "Sub-class responsability: forwardSum()" << endl;
+      exit(-1);
+    }
+
+    virtual void backwardSum(vector<PHMMStatePtr> &states, const Sequence &seq1, const Sequence &seq2, vector<Matrix> &a, int i, int j, int gap_id, int currStateId, double *accumulator){
+      cerr << "Sub-class responsability: backwardSum()" << endl;
+      exit(-1);
+    }
+
+    virtual void postProbSum(fMatrix &ppMatch, fMatrix &ppGap1, fMatrix &ppGap2, Matrix &alpha, Matrix &beta, double full, int i, int j){
+      return;
+    }
+    
+    virtual bool isSilent(){
+      return false;
+    }
+    
+    IntVector &outTransitions(){
+      return _outgoingTransitions;
+    }
+
+    void removeEndId(int end_id){
+      for(IntVector::iterator it = _outgoingTransitions.begin(); it != _outgoingTransitions.end(); it++){
+	if((*it) == end_id){
+	  _outgoingTransitions.erase(it);
+	  break;
+	}
+      }
+    }
+
+    void removeBeginId(int begin_id){
+      for(IntVector::iterator it = _incomingTransitions.begin(); it != _incomingTransitions.end(); it++){
+	if((*it) == begin_id){
+	  _incomingTransitions.erase(it);
+	  break;
+	}
+      }
+    }
+  };
+
+  typedef boost::shared_ptr <PHMMState> PHMMStatePtr;
+
+  class DLLEXPORT MatchState: public PHMMState {
+  public:
+    MatchState(int id, SymbolPtr name, MultinomialDistributionPtr emission,  MultinomialDistributionPtr transitions, IntVector iTransitions, IntVector oTransitions){
+      _id = id;
+      _name = name;
+      _emission = emission;
+      _transitions = transitions;
+      _outgoingTransitions = oTransitions;
+      _incomingTransitions = iTransitions;
+    }
+    
+    void forwardSum(vector<PHMMStatePtr> &states, const Sequence &seq1,const Sequence &seq2, vector<Matrix> &a, int i, int j, int gap_id, int begin_id);
+    
+    void backwardSum(vector<PHMMStatePtr> &states, const Sequence &seq1, const Sequence &seq2, vector<Matrix> &a, int i, int j, int gap_id, int currStateId, double *accumulator);
+   
+    void postProbSum(fMatrix &ppMatch, fMatrix &ppGap1, fMatrix &ppGap2, Matrix &alpha, Matrix &beta, double full, int i, int j);
+  };
+    
+  class DLLEXPORT Gap1State: public PHMMState {
+  public:
+    Gap1State(int id, SymbolPtr name, MultinomialDistributionPtr emission,  MultinomialDistributionPtr transitions, IntVector iTransitions, IntVector oTransitions){
       _id = id;
       _name = name;
       _emission = emission;
       _transitions = transitions;
       _incomingTransitions = iTransitions;
       _outgoingTransitions = oTransitions;
-      _emissionSeq1 = eSeq1;
-      _emissionSeq2 = eSeq2;
     }
 
-    int eSeq1(){
-      return _emissionSeq1;
-    }
+    void forwardSum(vector<PHMMStatePtr> &states, const Sequence &seq1, const Sequence &seq2, vector<Matrix> &a, int i, int j, int gap_id, int begin_id);
 
-    int eSeq2(){
-      return _emissionSeq2;
-    }
+    void backwardSum(vector<PHMMStatePtr> &states, const Sequence &seq1, const Sequence &seq2, vector<Matrix> &a, int i, int j, int gap_id, int currStateId, double *accumulator);
 
-    void setNumEmissionSeq1(int i){
-      _emissionSeq1 = i;
-    }
-
-    void setNumemissionSeq2(int i){
-      _emissionSeq2 = i;
-    }
-
-    vector<int> iTransitions() const{
-      return _incomingTransitions;
-    }
-
-    int getITransId(int i){
-      return _incomingTransitions[i];
-    }
-
-    vector<int> oTransitions(){
-      return _outgoingTransitions;
-    }
-
-    int getOTransId(int i){
-      return _outgoingTransitions[i];
-    }
+    void postProbSum(fMatrix &ppMatch, fMatrix &ppGap1, fMatrix &ppGap2, Matrix &alpha, Matrix &beta, double full, int i, int j);
   };
 
-  typedef boost::shared_ptr <PHMMState> PHMMStatePtr;
+  class DLLEXPORT Gap2State: public PHMMState {
+  public:
+    Gap2State(int id, SymbolPtr name, MultinomialDistributionPtr emission,  MultinomialDistributionPtr transitions, IntVector iTransitions, IntVector oTransitions){
+      _id = id;
+      _name = name;
+      _emission = emission;
+      _transitions = transitions;
+      _incomingTransitions = iTransitions;
+      _outgoingTransitions = oTransitions;
+    }
+
+    void forwardSum(vector<PHMMStatePtr> &states, const Sequence &seq1, const Sequence &seq2, vector<Matrix> &a, int i, int j, int gap_id, int begin_id);
+
+    void backwardSum(vector<PHMMStatePtr> &states, const Sequence &seq1, const Sequence &seq2, vector<Matrix> &a, int i, int j, int gap_id, int currStateId, double *accumulator);
+
+    void postProbSum(fMatrix &ppMatch, fMatrix &ppGap1, fMatrix &ppGap2, Matrix &alpha, Matrix &beta, double full, int i, int j);
+  };
+
+  class DLLEXPORT SilentState: public PHMMState {
+  public:
+    SilentState(int id, SymbolPtr name, MultinomialDistributionPtr emission,  MultinomialDistributionPtr transitions, IntVector iTransitions, IntVector oTransitions){
+      _id = id;
+      _name = name;
+      _emission = emission;
+      _transitions = transitions;
+      _incomingTransitions = iTransitions;
+      _outgoingTransitions = oTransitions;
+    }
+
+    void forwardSum(vector<PHMMStatePtr> &states, const Sequence &seq1, const Sequence &seq2, vector<Matrix> &a, int i, int j, int gap_id, int begin_id);
+
+    bool isSilent(){
+      return true;
+    }
+  };
 
   class DLLEXPORT PairHiddenMarkovModel : public ProbabilisticModel{
   private:
@@ -118,6 +207,10 @@ namespace tops{
       tops::ProbabilisticModel::setAlphabet(observation_symbols);
     }
 
+    int getGapId(){
+      return _gap_id;
+    }
+
     virtual ~PairHiddenMarkovModel(){}
 
     //Forward, Backward and Viterbi algorithms. We assume there are no cycles of silent states.
@@ -125,13 +218,21 @@ namespace tops{
 
     virtual double backward(const Sequence & seq1, const Sequence & seq2, vector<Matrix> &a);
 
-    virtual double viterbi(const Sequence & seq1, const Sequence & seq2, Sequence & path, Sequence & al1, Sequence & al2, vector<Matrix> &a);
+    //virtual double backwardSum(int k,int i,int j,vector<Matrix> &a,const Sequence &seq1, const Sequence &seq2);
 
-    virtual void posteriorProbabilities (const Sequence &seq1, const Sequence &seq2, vector<Matrix> & probabilities);
+    virtual double viterbi(const Sequence & seq1, const Sequence & seq2, Sequence & path, Sequence & al1, Sequence & al2, vector<Matrix> &a){
+      return 0.0;
+    };
 
-    virtual void generateSequence(Sequence &seq1, Sequence &seq2, Sequence &path);
+    virtual float posteriorProbabilities (const Sequence &seq1, const Sequence &seq2, SparseMatrixPtr &ppMatch,SparseMatrixPtr &ppGap1, SparseMatrixPtr &ppGap2);
 
-    virtual void trainBaumWelch(SequenceList & sample1, SequenceList & sample2, int maxiterations, double diff_threshold);
+    virtual float expectedAccuracy(int size1, int size2, fMatrix &postProbs);
+
+    //virtual float expectedAccuracyWithGaps(SparseMatrixPtr postProbs, SparseMatrixPtr postProbsGap1, SparseMatrixPtr postProbsGap2);
+
+    virtual void generateSequence(Sequence &seq1, Sequence &seq2, Sequence &path){};
+
+    //virtual void trainBaumWelch(SequenceList & sample, int maxiterations, double diff_threshold);
 
     virtual std::string model_name() const {
       return "PairHiddenMarkovModel";
@@ -145,6 +246,10 @@ namespace tops{
 
     void setStates(std::vector<PHMMStatePtr> states, AlphabetPtr state_names){
       _states = states;
+      for(vector<PHMMStatePtr>::iterator it = _states.begin(); it != _states.end(); it++){
+	(*it)->removeEndId(_end_id);
+	(*it)->removeBeginId(_begin_id);
+      }
       _state_names = state_names;
     }
 
@@ -172,14 +277,14 @@ namespace tops{
       return _state_names->getSymbol(state)->name();
     }
 
-    std::string str () const;
+    //std::string str () const;
 
-    void silentStatesSort(vector<PHMMStatePtr> silStates);
+    //void silentStatesSort(vector<PHMMStatePtr> silStates);
 
     virtual PairHiddenMarkovModel * pairDecodable() {
       return this;
     }
-
+    
   };
 
   typedef boost::shared_ptr<PairHiddenMarkovModel> PairHiddenMarkovModelPtr;

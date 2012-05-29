@@ -30,6 +30,7 @@
 #include "ProbabilisticModel.hpp"
 #include "Sequence.hpp"
 #include "util.hpp"
+#include "SparseMatrix.hpp"
 #include <boost/shared_ptr.hpp>
 
 namespace tops {
@@ -62,6 +63,11 @@ namespace tops {
 
     //! Posterior Probabilities: P(yi=k|x)
     virtual void posteriorProbabilities (const Sequence &s, Matrix & probabilities) const;
+    virtual void posteriorProbabilities (const Sequence &s, SparseMatrixPtr probabilities) const;
+    virtual void posteriorProbabilities (const Sequence &s, fMatrix &probabilities) const;
+
+    virtual float MEAPred(const Sequence &s, Sequence &path);
+    virtual float MEAPred(const Sequence &s, Sequence &path, SparseMatrixPtr postProbs);
 
     //! Posterior Decoding: ^yi = argmax_k P(yi=k|x)
     virtual void posteriorDecoding (const Sequence &s, Sequence &path, Matrix & probabilities) const;

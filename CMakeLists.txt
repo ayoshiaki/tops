@@ -8,7 +8,7 @@ find_package(Boost 1.35 COMPONENTS program_options)
 # find_package(PerlLibs)
 # ADD_DEFINITIONS("-Wall -g")
 
-ADD_DEFINITIONS("-Wall -O3 -finline-functions -funroll-loops -ftree-vectorize -ffast-math  -g")
+ADD_DEFINITIONS("-Wall -O3 -finline-functions -funroll-loops -ftree-vectorize -ffast-math  -g -O3")
 
 
 IF(UNIX)
