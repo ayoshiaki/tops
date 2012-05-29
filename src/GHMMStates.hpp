@@ -26,6 +26,7 @@
 #define GHMM_STATES_HPP
 
 #include "crossplatform.hpp"
+#include "util.hpp"
 
 #include <vector>
 #include <boost/shared_ptr.hpp>
@@ -69,6 +70,8 @@ namespace tops {
       _predecessors.clear();
     }
     virtual std::vector<int> & successors() ;
+    virtual std::vector<int> & classes() ;
+    virtual void setClasses(std::vector<int> &classes);
     virtual double duration_probability(int l) const ;
     virtual bool isGeometricDuration() const ;
     virtual std::string str() const ;
@@ -76,34 +79,39 @@ namespace tops {
     virtual void setInputPhase(int _inputPhase) ;
     virtual int getOutputPhase() const ;
     virtual void setOutputPhase(int _outputPhase) ;
-
+    
     virtual int getStart() const ;
     virtual void setStart(int start) ;
     virtual int getStop() const ;
     virtual void setStop(int stop) ;
-
+    
     virtual void isLeftJoinable(int joinable);
     virtual int isLeftJoinable() const;
-
+    
     virtual void isRightJoinable(int joinable);
     virtual int isRightJoinable() const;
-
-
+    
+    
     virtual void observationModelName(std::string name) ;
     virtual void durationModelName(std::string name) ;
     virtual std::string observationModelName() const;
     virtual std::string durationModelName() const;
     virtual void fixTransitionDistribution () const {} ;
     virtual ProbabilisticModelParameters parameters() const;
-      virtual void findBestPredecessor (Matrix & gamma, Matrix &psi, Matrix &psilen, const Sequence & s, int base, const GHMMStates & all_states, std::map < int, std::list<int> >  & valid_positions );
-    virtual void forwardSum (Matrix & alpha, const Sequence & s, int base, const GHMMStates & all_states);
-      virtual void choosePredecessor (Matrix & alpha, int base, int & state, int & position , const GHMMStates & all_states);
-  private:
+    virtual void findBestPredecessor (Matrix & gamma, Matrix &psi, Matrix &psilen, const Sequence & s, int base, const GHMMStates & all_states, std::map < int, std::list<int> >  & valid_positions );
+    virtual void forwardSum (Matrix & alpha, const Sequence & s, int base, const GHMMStates & all_states, std::vector< std::list<int> > &valid_positions);
+    virtual double backwardSum(Matrix &beta, const Sequence &s, int base, std::vector< std::list<int> > &valid_positions);
+    virtual void posteriorSum (Matrix & alpha, Matrix &beta, fMatrix &postProbs, const Sequence & s, int base, const GHMMStates & all_states, std::vector< std::list<int> > &valid_positions, double prob, int stateNumber);
+    
+    virtual void choosePredecessor (Matrix & alpha, int base, int & state, int & position , const GHMMStates & all_states);
+      
+  protected:
     ProbabilisticModelPtr _observation;
     MultinomialDistributionPtr _transition;
     SymbolPtr _name;
     std::vector<int> _predecessors;
     std::vector<int> _successors;
+    std::vector<int> _classes;
     int _inputPhase;
     int _outputPhase;
     int _start;
@@ -131,7 +139,10 @@ namespace tops {
     virtual ProbabilisticModelParameters parameters() const;
     virtual void fixTransitionDistribution () const ;
       virtual void findBestPredecessor (Matrix & gamma, Matrix &psi, Matrix &psilen, const Sequence & s, int base, const GHMMStates & all_states, std::map < int, std::list<int> >  & valid_positions );
-    virtual void forwardSum (Matrix & alpha, const Sequence & s, int base, const GHMMStates & all_states);
+      virtual void forwardSum (Matrix & alpha, const Sequence & s, int base, const GHMMStates & all_states, std::vector< std::list<int> > &valid_positions);
+    virtual double backwardSum(Matrix &beta, const Sequence &s, int base, std::vector< std::list<int> > &valid_positions);
+    virtual void posteriorSum (Matrix & alpha, Matrix &beta, fMatrix &postProbs, const Sequence & s, int base, const GHMMStates & all_states, std::vector< std::list<int> > &valid_positions, double prob, int stateNumber);
+
       virtual void choosePredecessor (Matrix & alpha, int base, int & state, int & position, const GHMMStates & all_states);
 
   private:
@@ -150,7 +161,10 @@ namespace tops {
                               MultinomialDistributionPtr transition, SymbolPtr name) :
       GHMMState(observation, transition, name) {};
       virtual void findBestPredecessor (Matrix & gamma, Matrix &psi, Matrix &psilen, const Sequence & s, int base, const GHMMStates & all_states, std::map < int, std::list<int> >  & valid_positions );
-virtual void forwardSum (Matrix & alpha, const Sequence & s, int base, const GHMMStates & all_states);
+      virtual void forwardSum (Matrix & alpha, const Sequence & s, int base, const GHMMStates & all_states, std::vector< std::list<int> > &valid_positions);
+    virtual double backwardSum(Matrix &beta, const Sequence &s, int base, std::vector< std::list<int> > &valid_positions);
+    virtual void posteriorSum (Matrix & alpha, Matrix &beta, fMatrix &postProbs, const Sequence & s, int base, const GHMMStates & all_states, std::vector< std::list<int> > &valid_positions, double prob, int stateNumber);
+
       virtual void choosePredecessor (Matrix & alpha, int base, int & state, int & position, const GHMMStates & all_states);
 
 

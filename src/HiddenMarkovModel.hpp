@@ -60,10 +60,10 @@ namespace tops {
     {
       _transitions = t;
     }
-    MultinomialDistributionPtr emission() {
+    MultinomialDistributionPtr &emission() {
       return _emission;
     }
-    MultinomialDistributionPtr transitions() {
+    MultinomialDistributionPtr &transitions() {
       return _transitions;
     }
     bool isSilent() {
