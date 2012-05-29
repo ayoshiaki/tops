@@ -104,7 +104,7 @@ namespace tops {
         _all_states.resize(alphabet->size());
   }
   void GeneralizedHiddenMarkovModel::setInitialProbability(
-                 MultinomialDistributionPtr init) {
+                 DiscreteIIDModelPtr init) {
     _initial_probabilities = init;
   }
 
@@ -117,12 +117,12 @@ namespace tops {
   }
 
   void GeneralizedHiddenMarkovModel::setTerminalProbability(
-                  MultinomialDistributionPtr term) {
+                  DiscreteIIDModelPtr term) {
         _terminal_probabilities = term;
   }
 
 int GeneralizedHiddenMarkovModel::configureSignalState(std::string observation_model_name,
-                                                        MultinomialDistributionPtr transition_distr,
+                                                        DiscreteIIDModelPtr transition_distr,
                    int size, std::string state_name, int iphase, int ophase, vector<int> classes){
   SymbolPtr symbol = _state_names->getSymbol(state_name);
   ProbabilisticModelPtr model = _models[observation_model_name];
@@ -138,7 +138,7 @@ int GeneralizedHiddenMarkovModel::configureSignalState(std::string observation_m
 }
 
 int GeneralizedHiddenMarkovModel::configureGeometricDurationState(std::string model_name,
-                  MultinomialDistributionPtr transition_distr, std::string state_name, int iphase, int ophase, vector<int> classes) {
+                  DiscreteIIDModelPtr transition_distr, std::string state_name, int iphase, int ophase, vector<int> classes) {
   ProbabilisticModelPtr model = _models[model_name];
   SymbolPtr symbol = _state_names->getSymbol(state_name);
   GHMMStatePtr state = GHMMStatePtr(new GHMMState(model, transition_distr,
@@ -153,7 +153,7 @@ int GeneralizedHiddenMarkovModel::configureGeometricDurationState(std::string mo
 }
 
 
-int GeneralizedHiddenMarkovModel::configureExplicitDurationState(std::string observation_model_name, MultinomialDistributionPtr transition_distr,
+int GeneralizedHiddenMarkovModel::configureExplicitDurationState(std::string observation_model_name, DiscreteIIDModelPtr transition_distr,
                  std::string duration_model_name, std::string state_name, int iphase, int ophase, vector<int> classes)
 {
 
@@ -208,7 +208,7 @@ int GeneralizedHiddenMarkovModel::configureExplicitDurationState(std::string obs
       {
   lastStateProbability[k] = exp(_alpha(k, L) - sum);
       }
-    MultinomialDistributionPtr m = MultinomialDistributionPtr(new MultinomialDistribution(lastStateProbability));
+    DiscreteIIDModelPtr m = DiscreteIIDModelPtr(new DiscreteIIDModel(lastStateProbability));
 
     int q = m->choose();
     int position = L;
@@ -957,7 +957,7 @@ Sequence & GeneralizedHiddenMarkovModel::chooseObservation(Sequence & h, int i,
     return out.str();
   }
 
-    void GeneralizedHiddenMarkovModel::buildDoubleParameterValue(MultinomialDistributionPtr distr, ProbabilisticModelParameters & answer, const char * name) const
+    void GeneralizedHiddenMarkovModel::buildDoubleParameterValue(DiscreteIIDModelPtr distr, ProbabilisticModelParameters & answer, const char * name) const
     {
         int nstates = getStateNames()->size();
         double sum = 0.0;
@@ -1045,11 +1045,11 @@ Sequence & GeneralizedHiddenMarkovModel::chooseObservation(Sequence & h, int i,
     AlphabetPtr observation_symbols = AlphabetPtr(new Alphabet());
     observation_symbols->initializeFromVector(observation_symbols_par->getStringVector());
 
-    MultinomialDistributionPtr pi = MultinomialDistributionPtr(new MultinomialDistribution());
+    DiscreteIIDModelPtr pi = DiscreteIIDModelPtr(new DiscreteIIDModel());
     pi->initializeFromMap(initial_probabilities_par->getDoubleMap(), states);
 
     if(terminal_probabilities_par != NULL){
-        MultinomialDistributionPtr terminalprob = MultinomialDistributionPtr(new MultinomialDistribution());
+        DiscreteIIDModelPtr terminalprob = DiscreteIIDModelPtr(new DiscreteIIDModel());
         terminalprob->initializeFromMap(terminal_probabilities_par->getDoubleMap(), states);
         setTerminalProbability(terminalprob);
     }
@@ -1139,9 +1139,9 @@ Sequence & GeneralizedHiddenMarkovModel::chooseObservation(Sequence & h, int i,
         std::string model_name = observationpar->getString();
         restore_model(model_name, parameters);
 
-        MultinomialDistributionPtr transition =
-          MultinomialDistributionPtr(
-                                        new MultinomialDistribution(
+        DiscreteIIDModelPtr transition =
+          DiscreteIIDModelPtr(
+                                        new DiscreteIIDModel(
                                                                        trans[state_names[i]]));
 
         int iphase = -1;

@@ -28,7 +28,7 @@
 #include "crossplatform.hpp"
 
 #include "ProbabilisticModelDecorator.hpp"
-#include "MultinomialDistribution.hpp"
+#include "DiscreteIIDModel.hpp"
 namespace tops {
   //! Provides mechanisms to control the phase of a probabilistic model
   class DLLEXPORT PhasedRunLengthDistribution : public ProbabilisticModelDecorator {

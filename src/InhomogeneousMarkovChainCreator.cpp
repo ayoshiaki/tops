@@ -25,7 +25,6 @@
 #include "InhomogeneousMarkovChainCreator.hpp"
 #include "VariableLengthMarkovChainCreator.hpp"
 #include "ConfigurationReader.hpp"
-#include "MultinomialDistribution.hpp"
 #include "InhomogeneousMarkovChain.hpp"
 #include "Alphabet.hpp"
 #include <boost/algorithm/string.hpp>

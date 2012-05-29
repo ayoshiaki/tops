@@ -60,10 +60,10 @@ namespace tops{
 
   public:
     typedef boost::shared_ptr <PHMMState> PHMMStatePtr;
- 
+
     PHMMState(){}
 
-    PHMMState(int id, SymbolPtr name, MultinomialDistributionPtr emission,  MultinomialDistributionPtr transitions, IntVector iTransitions, IntVector oTransitions){
+    PHMMState(int id, SymbolPtr name, DiscreteIIDModelPtr emission,  DiscreteIIDModelPtr transitions, IntVector iTransitions, IntVector oTransitions){
       _id = id;
       _name = name;
       _emission = emission;
@@ -85,30 +85,30 @@ namespace tops{
     virtual void postProbSum(fMatrix &ppMatch, fMatrix &ppGap1, fMatrix &ppGap2, Matrix &alpha, Matrix &beta, double full, int i, int j){
       return;
     }
-    
+
     virtual bool isSilent(){
       return false;
     }
-    
+
     IntVector &outTransitions(){
       return _outgoingTransitions;
     }
 
     void removeEndId(int end_id){
       for(IntVector::iterator it = _outgoingTransitions.begin(); it != _outgoingTransitions.end(); it++){
-	if((*it) == end_id){
-	  _outgoingTransitions.erase(it);
-	  break;
-	}
+  if((*it) == end_id){
+    _outgoingTransitions.erase(it);
+    break;
+  }
       }
     }
 
     void removeBeginId(int begin_id){
       for(IntVector::iterator it = _incomingTransitions.begin(); it != _incomingTransitions.end(); it++){
-	if((*it) == begin_id){
-	  _incomingTransitions.erase(it);
-	  break;
-	}
+  if((*it) == begin_id){
+    _incomingTransitions.erase(it);
+    break;
+  }
       }
     }
   };
@@ -117,7 +117,7 @@ namespace tops{
 
   class DLLEXPORT MatchState: public PHMMState {
   public:
-    MatchState(int id, SymbolPtr name, MultinomialDistributionPtr emission,  MultinomialDistributionPtr transitions, IntVector iTransitions, IntVector oTransitions){
+    MatchState(int id, SymbolPtr name, DiscreteIIDModelPtr emission,  DiscreteIIDModelPtr transitions, IntVector iTransitions, IntVector oTransitions){
       _id = id;
       _name = name;
       _emission = emission;
@@ -125,17 +125,17 @@ namespace tops{
       _outgoingTransitions = oTransitions;
       _incomingTransitions = iTransitions;
     }
-    
+
     void forwardSum(vector<PHMMStatePtr> &states, const Sequence &seq1,const Sequence &seq2, vector<Matrix> &a, int i, int j, int gap_id, int begin_id);
-    
+
     void backwardSum(vector<PHMMStatePtr> &states, const Sequence &seq1, const Sequence &seq2, vector<Matrix> &a, int i, int j, int gap_id, int currStateId, double *accumulator);
-   
+
     void postProbSum(fMatrix &ppMatch, fMatrix &ppGap1, fMatrix &ppGap2, Matrix &alpha, Matrix &beta, double full, int i, int j);
   };
-    
+
   class DLLEXPORT Gap1State: public PHMMState {
   public:
-    Gap1State(int id, SymbolPtr name, MultinomialDistributionPtr emission,  MultinomialDistributionPtr transitions, IntVector iTransitions, IntVector oTransitions){
+    Gap1State(int id, SymbolPtr name, DiscreteIIDModelPtr emission,  DiscreteIIDModelPtr transitions, IntVector iTransitions, IntVector oTransitions){
       _id = id;
       _name = name;
       _emission = emission;
@@ -153,7 +153,7 @@ namespace tops{
 
   class DLLEXPORT Gap2State: public PHMMState {
   public:
-    Gap2State(int id, SymbolPtr name, MultinomialDistributionPtr emission,  MultinomialDistributionPtr transitions, IntVector iTransitions, IntVector oTransitions){
+    Gap2State(int id, SymbolPtr name, DiscreteIIDModelPtr emission,  DiscreteIIDModelPtr transitions, IntVector iTransitions, IntVector oTransitions){
       _id = id;
       _name = name;
       _emission = emission;
@@ -171,7 +171,7 @@ namespace tops{
 
   class DLLEXPORT SilentState: public PHMMState {
   public:
-    SilentState(int id, SymbolPtr name, MultinomialDistributionPtr emission,  MultinomialDistributionPtr transitions, IntVector iTransitions, IntVector oTransitions){
+    SilentState(int id, SymbolPtr name, DiscreteIIDModelPtr emission,  DiscreteIIDModelPtr transitions, IntVector iTransitions, IntVector oTransitions){
       _id = id;
       _name = name;
       _emission = emission;
@@ -247,8 +247,8 @@ namespace tops{
     void setStates(std::vector<PHMMStatePtr> states, AlphabetPtr state_names){
       _states = states;
       for(vector<PHMMStatePtr>::iterator it = _states.begin(); it != _states.end(); it++){
-	(*it)->removeEndId(_end_id);
-	(*it)->removeBeginId(_begin_id);
+  (*it)->removeEndId(_end_id);
+  (*it)->removeBeginId(_begin_id);
       }
       _state_names = state_names;
     }
@@ -284,7 +284,7 @@ namespace tops{
     virtual PairHiddenMarkovModel * pairDecodable() {
       return this;
     }
-    
+
   };
 
   typedef boost::shared_ptr<PairHiddenMarkovModel> PairHiddenMarkovModelPtr;

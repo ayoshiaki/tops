@@ -24,7 +24,7 @@
 
 #include "BernoulliModelCreator.hpp"
 #include "ConfigurationReader.hpp"
-#include "MultinomialDistribution.hpp"
+#include "DiscreteIIDModel.hpp"
 #include "Alphabet.hpp"
 
 namespace tops {
@@ -38,7 +38,7 @@ namespace tops {
     DoubleVector distr;
     distr.push_back(probs->getDouble());
     distr.push_back(1.0 - probs->getDouble());
-    ProbabilisticModelPtr model = MultinomialDistributionPtr(new MultinomialDistribution(distr));
+    ProbabilisticModelPtr model = DiscreteIIDModelPtr(new DiscreteIIDModel(distr));
     return model;
   }
 }

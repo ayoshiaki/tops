@@ -24,7 +24,7 @@
 
 #include "GHMMStates.hpp"
 #include "ProbabilisticModel.hpp"
-#include "MultinomialDistribution.hpp"
+#include "DiscreteIIDModel.hpp"
 #include "InhomogeneousFactorableModel.hpp"
 #include "Symbol.hpp"
 #include <list>
@@ -117,10 +117,10 @@ namespace tops{
   ProbabilisticModelPtr GHMMState::observation() const {
     return _observation;
   }
-  void GHMMState::setTransition(MultinomialDistributionPtr trans) {
+  void GHMMState::setTransition(DiscreteIIDModelPtr trans) {
     _transition = trans;
   }
-  MultinomialDistributionPtr GHMMState::transition() const {
+  DiscreteIIDModelPtr GHMMState::transition() const {
     return _transition;
   }
   int GHMMState::chooseDuration() const {
@@ -386,7 +386,7 @@ namespace tops{
 
 
   void GHMMSignalState::fixTransitionDistribution () const {
-    MultinomialDistributionPtr trans = transition();
+    DiscreteIIDModelPtr trans = transition();
     DoubleVector probabilities = (trans->parameters()).getMandatoryParameterValue("probabilities")->getDoubleVector();
     int j = id();
     if(probabilities.size() <= 0) {
@@ -493,20 +493,20 @@ namespace tops{
                 continue;
             }
 
-	    // check if it can emmit the current state given the boundaries
-	    int nphase = getInputPhase();
-	    if(observation()->inhomogeneous() != NULL)
-	      nphase = observation()->inhomogeneous()->maximumTimeValue() + 1;
-	    if(getStart() > 0 && getStop() > 0) {
-	      if((d-getStart() >= 0) && (base + getStop () < s.size())) {
-		double joinable = observation()->prefix_sum_array_compute(d-getStart(),base+getStop(), mod(getInputPhase()-getStart(), nphase));
-		//std::cerr << all_states[id()]->name() << " " << base << " " << d-getStart() << " " << base + getStop() << " " << getInputPhase() << " " << mod(getInputPhase() - getStart(), nphase) << " " << nphase << std::endl;
-		if(joinable <= -HUGE) {
-		  it++;
-		  continue;
-		}
-	      }
-	    }
+      // check if it can emmit the current state given the boundaries
+      int nphase = getInputPhase();
+      if(observation()->inhomogeneous() != NULL)
+        nphase = observation()->inhomogeneous()->maximumTimeValue() + 1;
+      if(getStart() > 0 && getStop() > 0) {
+        if((d-getStart() >= 0) && (base + getStop () < s.size())) {
+    double joinable = observation()->prefix_sum_array_compute(d-getStart(),base+getStop(), mod(getInputPhase()-getStart(), nphase));
+    //std::cerr << all_states[id()]->name() << " " << base << " " << d-getStart() << " " << base + getStop() << " " << getInputPhase() << " " << mod(getInputPhase() - getStart(), nphase) << " " << nphase << std::endl;
+    if(joinable <= -HUGE) {
+      it++;
+      continue;
+    }
+        }
+      }
             double gmax = gamma(from, d-1) + all_states[from]->transition()->log_probability_of(id());
             int pmax = from;
             for (int p = 1; p < (int)predecessors().size();p++){
@@ -540,10 +540,10 @@ namespace tops{
     if(base+d >= (int)s.size())
       return -HUGE;
     int phase = getInputPhase();
-    double result = _observation->prefix_sum_array_compute(base+1,base+d,phase) + beta(id(),base+d); 
+    double result = _observation->prefix_sum_array_compute(base+1,base+d,phase) + beta(id(),base+d);
     return result;
   }
-  
+
   double GHMMExplicitDurationState::backwardSum(Matrix &beta, const Sequence &s, int base, std::vector< std::list<int> > &valid_positions){
     int diff = 0;
     if(_number_of_phases  > 1)
@@ -562,35 +562,35 @@ namespace tops{
     double sum = -HUGE;
     while(it != valid_positions[id()].end()){
       if((*it) > maxbase){
-	it = valid_positions[id()].erase(it);
-	continue;
+  it = valid_positions[id()].erase(it);
+  continue;
       }
       if((*it) < base + diff){
-	it++;
-	continue;
+  it++;
+  continue;
       }
       double duration = duration_probability((*it)-base);
       if(duration <= -2e20){
-	it++;
-	continue;
+  it++;
+  continue;
       }
       if(_observation->inhomogeneous() != NULL)
-	phase = _observation->inhomogeneous()->maximumTimeValue() + 1;
+  phase = _observation->inhomogeneous()->maximumTimeValue() + 1;
       if(getStart() > 0 && getStop() > 0) {
-	if((base+1-getStart() >= 0) && ((*it) + getStop() < s.size())) {
-	  double joinable = _observation->prefix_sum_array_compute(base+1-getStart(),(*it)+getStop(), mod(getInputPhase()-getStart(), phase));
-	  if(joinable <= -2e20) {
-	    it = valid_positions[id()].erase(it);
-	    continue;
-	  }
-	}
+  if((base+1-getStart() >= 0) && ((*it) + getStop() < s.size())) {
+    double joinable = _observation->prefix_sum_array_compute(base+1-getStart(),(*it)+getStop(), mod(getInputPhase()-getStart(), phase));
+    if(joinable <= -2e20) {
+      it = valid_positions[id()].erase(it);
+      continue;
+    }
+  }
       }
       sum = log_sum(sum, _observation->prefix_sum_array_compute(base+1,(*it),getInputPhase()) + duration + beta(id(),(*it)));
       it++;
     }
     return sum;
   }
-    
+
   void GHMMState::forwardSum (Matrix & alpha, const Sequence & s, int base, const GHMMStates & all_states, std::vector< std::list<int> > &valid_positions){
     alpha(id(), base) = -HUGE;
     if(predecessors().size() <= 0)
@@ -601,40 +601,40 @@ namespace tops{
     alpha(id(), base) =  alpha(from, base-1) + all_states[from]->transition()->log_probability_of(id()) + emission;
     for (int k = 1; k < (int)predecessors().size(); k++)
       {
-	from = predecessors()[k];
-	alpha(id(), base) =  log_sum(alpha(from, base - 1) + all_states[from]->transition()->log_probability_of(id()) +  emission, alpha(id(), base));
+  from = predecessors()[k];
+  alpha(id(), base) =  log_sum(alpha(from, base - 1) + all_states[from]->transition()->log_probability_of(id()) +  emission, alpha(id(), base));
       }
   }
-    
-  void GHMMSignalState::forwardSum (Matrix & alpha, const Sequence & s, int base, const GHMMStates & all_states, std::vector< std::list<int> > &valid_positions){    
+
+  void GHMMSignalState::forwardSum (Matrix & alpha, const Sequence & s, int base, const GHMMStates & all_states, std::vector< std::list<int> > &valid_positions){
     alpha(id(), base)  = -HUGE;
     int d = size();
     if(predecessors().size() <= 0)
       return;
-    
+
     int from = predecessors()[0];
     if((base - d ) < 0)
       return;
     int phase = getInputPhase();
     double emission = observation()->prefix_sum_array_compute(base - d+ 1, base, phase);
-    
+
     alpha(id(), base) =  alpha(from, base-d) + all_states[from]->transition()->log_probability_of(id())  + emission;
     for (int k = 1; k < (int)predecessors().size(); k++)
       {
-	from = predecessors()[k];
-	alpha(id(), base) =  log_sum(alpha(from, base -d) + all_states[from]->transition()->log_probability_of(id()) + emission, alpha(id(), base));
+  from = predecessors()[k];
+  alpha(id(), base) =  log_sum(alpha(from, base -d) + all_states[from]->transition()->log_probability_of(id()) + emission, alpha(id(), base));
       }
     if(alpha(id(),base) > -HUGE){
       std::vector<int> succ = successors();
       for(int p = 0; p < (int)succ.size(); p++){
-	int id = succ[p];
-	if(!all_states[id]->isGeometricDuration())
-	  valid_positions[id].push_front(base);
+  int id = succ[p];
+  if(!all_states[id]->isGeometricDuration())
+    valid_positions[id].push_front(base);
       }
     }
   }
-  
-			      
+
+
   void GHMMExplicitDurationState::forwardSum (Matrix & alpha, const Sequence & s, int base, const GHMMStates & all_states, std::vector< std::list<int> > &valid_positions){
     alpha(id(), base) = -HUGE;
     if(predecessors().size() <= 0)
@@ -644,51 +644,51 @@ namespace tops{
       diff = mod(getOutputPhase() - getInputPhase(),_number_of_phases);
     if(_number_of_phases <= 0)
       _number_of_phases = 1;
-    int offset = duration()->size();    
+    int offset = duration()->size();
     if(offset > 15000)
       offset = 15000;
     int minbase = (base - diff - offset) ;
     if(minbase < 0) minbase = 0;
     int phase = getInputPhase();
-	
+
     std::list<int>::iterator it;
     it = valid_positions[id()].begin();
     while(it != valid_positions[id()].end()){
       if((*it) < minbase){
-	it = valid_positions[id()].erase(it);
-	continue;
+  it = valid_positions[id()].erase(it);
+  continue;
       }
       if((*it) > base - diff){
-	it++;
-	continue;
+  it++;
+  continue;
       }
       double duration = duration_probability(base-(*it));
       if(duration <= -HUGE){
-	it++;
-	continue;
+  it++;
+  continue;
       }
       if(observation()->inhomogeneous() != NULL)
-	phase = observation()->inhomogeneous()->maximumTimeValue() + 1;
+  phase = observation()->inhomogeneous()->maximumTimeValue() + 1;
       if(getStart() > 0 && getStop() > 0) {
-	if(((*it)+1-getStart() >= 0) && (base + getStop() < (int)s.size())) {
-	  double joinable = observation()->prefix_sum_array_compute((*it)+1-getStart(),base+getStop(), mod(getInputPhase()-getStart(), phase));
-	  if(joinable <= -HUGE) {
-	    it = valid_positions[id()].erase(it);
-	    continue;
-	  }
-	}
+  if(((*it)+1-getStart() >= 0) && (base + getStop() < (int)s.size())) {
+    double joinable = observation()->prefix_sum_array_compute((*it)+1-getStart(),base+getStop(), mod(getInputPhase()-getStart(), phase));
+    if(joinable <= -HUGE) {
+      it = valid_positions[id()].erase(it);
+      continue;
+    }
+  }
       }
       int from = predecessors()[0];
       double emission = observation()->prefix_sum_array_compute((*it)+1, base, getInputPhase());
       alpha(id(), base) = log_sum(alpha(from, (*it)) + all_states[from]->transition()->log_probability_of(id()) + duration + emission, alpha(id(), base));
       for (int k = 1; k < (int)predecessors().size(); k++){
-	  from = predecessors()[k];
-	  alpha(id(), base) =  log_sum(alpha(from, (*it)) + all_states[from]->transition()->log_probability_of(id()) + duration + emission, alpha(id(), base));
+    from = predecessors()[k];
+    alpha(id(), base) =  log_sum(alpha(from, (*it)) + all_states[from]->transition()->log_probability_of(id()) + duration + emission, alpha(id(), base));
       }
       it++;
     }
   }
-  
+
   void GHMMState::posteriorSum (Matrix & alpha, Matrix & beta, fMatrix &postProbs, const Sequence & s, int base, const GHMMStates & all_states, std::vector< std::list<int> > &valid_positions, double prob, int stateNumber){
     alpha(id(), base) = -HUGE;
     if(predecessors().size() <= 0)
@@ -697,59 +697,59 @@ namespace tops{
     double emission = _observation->prefix_sum_array_compute(base, base, phase);
     for (int k = 0; k < (int)predecessors().size(); k++)
       {
-	int from = predecessors()[k];
-	alpha(id(), base) =  log_sum(alpha(from, base - 1) + all_states[from]->transition()->log_probability_of(id()) +  emission, alpha(id(), base));
+  int from = predecessors()[k];
+  alpha(id(), base) =  log_sum(alpha(from, base - 1) + all_states[from]->transition()->log_probability_of(id()) +  emission, alpha(id(), base));
       }
     if(stateNumber == -1){
       for(int c = 0; c < (int)classes().size(); c++){
-	postProbs(base,classes()[c]) += exp(alpha(id(),base) + beta(id(),base) - prob);
+  postProbs(base,classes()[c]) += exp(alpha(id(),base) + beta(id(),base) - prob);
       }
     }
     else if(stateNumber != -1)
       postProbs(base,id()) = exp(alpha(id(),base) + beta(id(),base) - prob);
   }
 
-  void GHMMSignalState::posteriorSum (Matrix & alpha, Matrix & beta, fMatrix &postProbs, const Sequence & s, int base, const GHMMStates & all_states, std::vector< std::list<int> > &valid_positions, double prob, int stateNumber){    
+  void GHMMSignalState::posteriorSum (Matrix & alpha, Matrix & beta, fMatrix &postProbs, const Sequence & s, int base, const GHMMStates & all_states, std::vector< std::list<int> > &valid_positions, double prob, int stateNumber){
     alpha(id(), base)  = -HUGE;
     int d = size();
     if(predecessors().size() <= 0)
       return;
-    
+
     if((base - d ) < 0)
       return;
     int phase = getInputPhase();
     double emission = _observation->prefix_sum_array_compute(base - d+ 1, base, phase);
     if(emission <= -HUGE)
       return;
-    
+
     for (int k = 0; k < (int)predecessors().size(); k++)
       {
-	int from = predecessors()[k];
-	double w = alpha(from, base -d) + all_states[from]->transition()->log_probability_of(id()) + emission;
-	alpha(id(), base) =  log_sum(w, alpha(id(), base));
-	if(w > -HUGE && stateNumber == -1){
-	  int c = 0;
-	  float pp = exp(w + beta(id(),base) - prob);
-	  for(int i = base-d+1; i <= base; i++){
-	    postProbs(i,classes()[c]) += pp;
-	    c++;
-	    if(c == (int)classes().size())
-	      c = 0;
-	  }	  
-	}
-	else if(w > -HUGE && stateNumber != -1){
-	  float pp = exp(w + beta(id(),base) - prob);
-	  for(int i = base-d+1; i <= base; i++){
-	    postProbs(i,id()) += pp;
-	  }
-	}
+  int from = predecessors()[k];
+  double w = alpha(from, base -d) + all_states[from]->transition()->log_probability_of(id()) + emission;
+  alpha(id(), base) =  log_sum(w, alpha(id(), base));
+  if(w > -HUGE && stateNumber == -1){
+    int c = 0;
+    float pp = exp(w + beta(id(),base) - prob);
+    for(int i = base-d+1; i <= base; i++){
+      postProbs(i,classes()[c]) += pp;
+      c++;
+      if(c == (int)classes().size())
+        c = 0;
+    }
+  }
+  else if(w > -HUGE && stateNumber != -1){
+    float pp = exp(w + beta(id(),base) - prob);
+    for(int i = base-d+1; i <= base; i++){
+      postProbs(i,id()) += pp;
+    }
+  }
       }
     if(alpha(id(),base) > -HUGE){
       std::vector<int> succ = successors();
       for(int p = 0; p < (int)succ.size(); p++){
-	int id = succ[p];
-	if(!all_states[id]->isGeometricDuration())
-	  valid_positions[id].push_front(base);
+  int id = succ[p];
+  if(!all_states[id]->isGeometricDuration())
+    valid_positions[id].push_front(base);
       }
     }
   }
@@ -763,68 +763,68 @@ namespace tops{
       diff = mod(getOutputPhase() - getInputPhase(),_number_of_phases);
     if(_number_of_phases <= 0)
       _number_of_phases = 1;
-    int offset = duration()->size();    
+    int offset = duration()->size();
     if(offset > 15000)
       offset = 15000;
     int minbase = (base - diff - offset) ;
     if(minbase < 0) minbase = 0;
     int phase = getInputPhase();
-	
+
     std::list<int>::iterator it;
     it = valid_positions[id()].begin();
     while(it != valid_positions[id()].end()){
       if((*it) < minbase){
-	it = valid_positions[id()].erase(it);
-	continue;
+  it = valid_positions[id()].erase(it);
+  continue;
       }
       if((*it) > base - diff){
-	it++;
-	continue;
+  it++;
+  continue;
       }
       double duration = duration_probability(base-(*it));
       if(duration <= -HUGE){
-	it++;
-	continue;
+  it++;
+  continue;
       }
       if(observation()->inhomogeneous() != NULL)
-	phase = observation()->inhomogeneous()->maximumTimeValue() + 1;
+  phase = observation()->inhomogeneous()->maximumTimeValue() + 1;
       if(getStart() > 0 && getStop() > 0) {
-	if(((*it)+1-getStart() >= 0) && (base + getStop() < (int)s.size())) {
-	  double joinable = observation()->prefix_sum_array_compute((*it)+1-getStart(),base+getStop(), mod(getInputPhase()-getStart(), phase));
-	  if(joinable <= -HUGE) {
-	    it = valid_positions[id()].erase(it);
-	    continue;
-	  }
-	}
+  if(((*it)+1-getStart() >= 0) && (base + getStop() < (int)s.size())) {
+    double joinable = observation()->prefix_sum_array_compute((*it)+1-getStart(),base+getStop(), mod(getInputPhase()-getStart(), phase));
+    if(joinable <= -HUGE) {
+      it = valid_positions[id()].erase(it);
+      continue;
+    }
+  }
       }
       double emission = observation()->prefix_sum_array_compute((*it)+1, base, getInputPhase());
       for (int k = 0; k < (int)predecessors().size(); k++){
-	int from = predecessors()[k];
-	double w = alpha(from, (*it)) + all_states[from]->transition()->log_probability_of(id()) + duration + emission;
-	alpha(id(), base) = log_sum(w, alpha(id(), base));
-	if(w > -HUGE && stateNumber == -1){
-	  int c = 0;
-	  float pp = exp(w + beta(id(),base) - prob);
-	  for(int i = (*it)+1; i <= base; i++){
-	    postProbs(i,classes()[c]) += pp;
-	    c++;
-	    if(c == (int)classes().size())
-	      c = 0;
-	  }	 
-	}
-	else if(w > -HUGE && stateNumber != -1){
-	  float pp = exp(w + beta(id(),base) - prob);
-	  for(int i = (*it)+1; i <= base; i++){
-	    postProbs(i,id()) += pp;
-	  }
-	}
+  int from = predecessors()[k];
+  double w = alpha(from, (*it)) + all_states[from]->transition()->log_probability_of(id()) + duration + emission;
+  alpha(id(), base) = log_sum(w, alpha(id(), base));
+  if(w > -HUGE && stateNumber == -1){
+    int c = 0;
+    float pp = exp(w + beta(id(),base) - prob);
+    for(int i = (*it)+1; i <= base; i++){
+      postProbs(i,classes()[c]) += pp;
+      c++;
+      if(c == (int)classes().size())
+        c = 0;
+    }
+  }
+  else if(w > -HUGE && stateNumber != -1){
+    float pp = exp(w + beta(id(),base) - prob);
+    for(int i = (*it)+1; i <= base; i++){
+      postProbs(i,id()) += pp;
+    }
+  }
       }
       it++;
     }
   }
 
   void GHMMExplicitDurationState::fixTransitionDistribution () const {
-    MultinomialDistributionPtr trans = transition();
+    DiscreteIIDModelPtr trans = transition();
     DoubleVector probabilities = (trans->parameters()).getMandatoryParameterValue("probabilities")->getDoubleVector();
     int j = id();
     if(probabilities.size() <= 0) {

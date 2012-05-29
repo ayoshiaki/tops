@@ -9,19 +9,19 @@
 #include <boost/shared_ptr.hpp>
 
 namespace tops {
-  
+
   class PairDecodableState {
-    
+
   protected:
-    
+
     int _id;
     SymbolPtr _name;
     IntVector _incomingTransitions, _outgoingTransitions;
-    MultinomialDistributionPtr _transitions;
+    DiscreteIIDModelPtr _transitions;
     ProbabilisticModelPtr _emission;
-    
+
   public:
-    
+
     void not_implemented(std::string method){
       cerr << "The state type " << state_type() << " does not implement the method: " << method << endl;
       exit(-1);
@@ -35,36 +35,36 @@ namespace tops {
       not_implemented("int eSeq1()");
       return 0;
     }
-    
+
     virtual int eSeq2(){
       not_implemented("int eSeq2()");
       return 0;
     }
-    
+
     virtual int maxSeq1(){
       not_implemented("int maxSeq1()");
       return 0;
     }
-    
+
     virtual int minSeq1(){
       not_implemented("int minSeq1()");
       return 0;
     }
-    
+
     virtual int maxSeq2(){
       not_implemented("int maxSeq2()");
       return 0;
     }
-    
+
     virtual int minSeq2(){
       not_implemented("int minSeq2()");
       return 0;
     }
-    
+
     vector<int> iTransitions() const{
       return _incomingTransitions;
     }
-    
+
     int getITransId(int i){
       return _incomingTransitions[i];
     }
@@ -72,12 +72,12 @@ namespace tops {
     vector<int> oTransitions(){
       return _outgoingTransitions;
     }
-    
+
     int getOTransId(int i){
       return _outgoingTransitions[i];
     }
-    
-    MultinomialDistributionPtr transitions() {
+
+    DiscreteIIDModelPtr transitions() {
       return _transitions;
     }
 
@@ -94,17 +94,17 @@ namespace tops {
     SymbolPtr getName() const {
       return _name;
     }
-    
+
     int getId() {
       return _id;
     }
   };
-  
+
   typedef boost::shared_ptr <PairDecodableState> PairDecodableStatePtr;
 
 //! Interface defining probabilistic model with the viterbi, forward and backward algorithm for pairs of sequences
   class PairDecodableModel : public ProbabilisticModel  {
-  
+
   protected:
     std::vector<PairDecodableStatePtr> _states;
     AlphabetPtr _state_names;
@@ -158,7 +158,7 @@ namespace tops {
     virtual void silentStatesSort(vector<PairDecodableStatePtr> silStates){
       not_implemented("void silentStatesSort(vector<PairDecodableStatePtr> silStates)");
     }
-    
+
     /////////////////////////////////////////////////////////////////////
     //All the methods below should be pure virtual methods in this class.
     virtual void initialize(const ProbabilisticModelParameters & par) = 0;
@@ -202,7 +202,7 @@ namespace tops {
     }
 
   };
-    
+
   typedef boost::shared_ptr <PairDecodableModel> PairDecodableModelPtr;
 }
 #endif

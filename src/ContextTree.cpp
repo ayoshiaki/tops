@@ -138,7 +138,7 @@ namespace tops
     _symbol = symbol;
   }
 
-  void ContextTreeNode::setDistribution(MultinomialDistributionPtr distribution){
+  void ContextTreeNode::setDistribution(DiscreteIIDModelPtr distribution){
     _distribution = distribution;
   }
   ContextTreeNodePtr ContextTreeNode::getChild(int symbol){
@@ -150,7 +150,7 @@ namespace tops
       }
     return _child[symbol] ;
   }
-  MultinomialDistributionPtr ContextTreeNode::getDistribution(){
+  DiscreteIIDModelPtr ContextTreeNode::getDistribution(){
     return _distribution;
   }
   void ContextTreeNode::deleteChildren() {
@@ -315,7 +315,7 @@ namespace tops
         for(int l = 0; l < (int)_alphabet->size(); l++){
           probs[l] = (double)((_all_context[i]->getCounter())[l])/total;
         }
-        MultinomialDistributionPtr distr = MultinomialDistributionPtr(new MultinomialDistribution(probs));
+        DiscreteIIDModelPtr distr = DiscreteIIDModelPtr(new DiscreteIIDModel(probs));
         distr->setAlphabet(_alphabet);
         _all_context[i]->setDistribution(distr);
       }
@@ -360,7 +360,7 @@ namespace tops
             probs[l] = (double)((_all_context[i]->getCounter())[l] + pseudocount*prob)/(total + pseudocount);
         }
 
-        MultinomialDistributionPtr distr = MultinomialDistributionPtr(new MultinomialDistribution(probs));
+        DiscreteIIDModelPtr distr = DiscreteIIDModelPtr(new DiscreteIIDModel(probs));
         distr->setAlphabet(_alphabet);
         _all_context[i]->setDistribution(distr);
       }

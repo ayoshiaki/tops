@@ -24,7 +24,7 @@
 
 #include "SimilarityBasedSequenceWeighting.hpp"
 //#include "SimilarityBasedSequenceWeightingCreator.hpp"
-#include "TrainMultinomialDistribution.hpp"
+#include "TrainDiscreteIIDModel.hpp"
 #include "Symbol.hpp"
 #include <iostream>
 #include <cmath>

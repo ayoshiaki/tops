@@ -39,8 +39,8 @@ namespace tops {
 
   class DLLEXPORT ProbabilisticModel;
   typedef boost::shared_ptr <ProbabilisticModel> ProbabilisticModelPtr;
-  class DLLEXPORT MultinomialDistribution;
-  typedef boost::shared_ptr <MultinomialDistribution> MultinomialDistributionPtr;
+  class DLLEXPORT DiscreteIIDModel;
+  typedef boost::shared_ptr <DiscreteIIDModel> DiscreteIIDModelPtr;
   class DLLEXPORT Symbol;
   typedef boost::shared_ptr<Symbol> SymbolPtr;
 
@@ -52,13 +52,13 @@ namespace tops {
   public:
     GHMMState();
     GHMMState(ProbabilisticModelPtr observation,
-              MultinomialDistributionPtr transition, SymbolPtr name) :
+              DiscreteIIDModelPtr transition, SymbolPtr name) :
       _observation(observation), _transition(transition), _name(name){};
     virtual ~GHMMState();
     virtual void setObservation(ProbabilisticModelPtr obs) ;
     virtual ProbabilisticModelPtr observation() const ;
-    virtual void setTransition(MultinomialDistributionPtr trans) ;
-    virtual MultinomialDistributionPtr transition() const ;
+    virtual void setTransition(DiscreteIIDModelPtr trans) ;
+    virtual DiscreteIIDModelPtr transition() const ;
     virtual int chooseDuration() const ;
     virtual std::string name() const ;
     virtual int id() const ;
@@ -79,19 +79,19 @@ namespace tops {
     virtual void setInputPhase(int _inputPhase) ;
     virtual int getOutputPhase() const ;
     virtual void setOutputPhase(int _outputPhase) ;
-    
+
     virtual int getStart() const ;
     virtual void setStart(int start) ;
     virtual int getStop() const ;
     virtual void setStop(int stop) ;
-    
+
     virtual void isLeftJoinable(int joinable);
     virtual int isLeftJoinable() const;
-    
+
     virtual void isRightJoinable(int joinable);
     virtual int isRightJoinable() const;
-    
-    
+
+
     virtual void observationModelName(std::string name) ;
     virtual void durationModelName(std::string name) ;
     virtual std::string observationModelName() const;
@@ -102,12 +102,12 @@ namespace tops {
     virtual void forwardSum (Matrix & alpha, const Sequence & s, int base, const GHMMStates & all_states, std::vector< std::list<int> > &valid_positions);
     virtual double backwardSum(Matrix &beta, const Sequence &s, int base, std::vector< std::list<int> > &valid_positions);
     virtual void posteriorSum (Matrix & alpha, Matrix &beta, fMatrix &postProbs, const Sequence & s, int base, const GHMMStates & all_states, std::vector< std::list<int> > &valid_positions, double prob, int stateNumber);
-    
+
     virtual void choosePredecessor (Matrix & alpha, int base, int & state, int & position , const GHMMStates & all_states);
-      
+
   protected:
     ProbabilisticModelPtr _observation;
-    MultinomialDistributionPtr _transition;
+    DiscreteIIDModelPtr _transition;
     SymbolPtr _name;
     std::vector<int> _predecessors;
     std::vector<int> _successors;
@@ -125,7 +125,7 @@ namespace tops {
   public:
     GHMMSignalState() ;
     GHMMSignalState(ProbabilisticModelPtr observation,
-                    MultinomialDistributionPtr transition, SymbolPtr name) :
+                    DiscreteIIDModelPtr transition, SymbolPtr name) :
       GHMMState(observation, transition, name) {};
 
     virtual int size() const ;
@@ -158,7 +158,7 @@ namespace tops {
     GHMMExplicitDurationState() ;
 
     GHMMExplicitDurationState(ProbabilisticModelPtr observation,
-                              MultinomialDistributionPtr transition, SymbolPtr name) :
+                              DiscreteIIDModelPtr transition, SymbolPtr name) :
       GHMMState(observation, transition, name) {};
       virtual void findBestPredecessor (Matrix & gamma, Matrix &psi, Matrix &psilen, const Sequence & s, int base, const GHMMStates & all_states, std::map < int, std::list<int> >  & valid_positions );
       virtual void forwardSum (Matrix & alpha, const Sequence & s, int base, const GHMMStates & all_states, std::vector< std::list<int> > &valid_positions);
