@@ -3,7 +3,7 @@
  *
  *      Copyright 2011  Vitor Onuchic <vitoronuchic@gmail.com>
  *                      Andre Yoshiaki Kashiwabara <akashiwabara@usp.br>
- *                      Ígor Bonádio <ibonadio@ime.usp.br>
+ *                      ï¿½gor Bonï¿½dio <ibonadio@ime.usp.br>
  *                      Alan Mitchell Durham <aland@usp.br>
  *                      Felipe Amado <amadofelipe@gmail.com>
  *
@@ -30,6 +30,7 @@
 #include "Symbol.hpp"
 #include <iostream>
 #include <cmath>
+#include <cfloat>
 #include <sstream>
 #include <vector>
 #include <iterator>
@@ -43,7 +44,119 @@ namespace tops {
 
   double ProfileHiddenMarkovModel::forward(const Sequence & s, Matrix &alpha) const
   {
-    return 0.0;
+    int st;
+    int n_states = _states.size();
+    int n_match_states = (n_states + 3)/3;
+    for (st = 0; st < n_states && !getState(st)->emission();++st);
+    if (st == n_states) {
+      cout << "ERROR: There is only silent states." << endl;
+      exit(-1);
+    }
+    int emiss_size = getState(st)->emission()->size() + 1;
+    int seq_len = s.size() + 1;
+
+    Matrix mat(n_states,seq_len);
+    Matrix ins(n_states,seq_len);
+    Matrix del(n_states,seq_len);
+
+    mat.clear();
+    ins.clear();
+    del.clear();
+
+    for (int j = 0; j == 0 && j < n_match_states; j++) {
+      for (int i = 1; i < seq_len; ++i) {
+          ins(j,i) = _states[getStateIndex('I',j)]->emission()->log_probability_of(s[i-1])
+                      + log(emiss_size)
+                      + log_sum(
+                          _states[getStateIndex('M',j)]->transitions()->log_probability_of(getStateIndex('I',j))
+                          + mat(j,i-1),
+                          _states[getStateIndex('I',j)]->transitions()->log_probability_of(getStateIndex('I',j))
+                          + ins(j,i-1));
+      }
+    }
+
+    for (int j = 1; j == 1 && j < n_match_states; j++) {
+        for (int i = 1; i < seq_len; ++i) {
+
+            mat(j,i) = _states[getStateIndex('M',j)]->emission()->log_probability_of(s[i-1])
+                        + log(emiss_size)
+                        + log_sum(
+                              _states[getStateIndex('M',j-1)]->transitions()->log_probability_of(getStateIndex('M',j))
+                              + mat(j-1,i-1),
+                              _states[getStateIndex('I',j-1)]->transitions()->log_probability_of(getStateIndex('M',j))
+                              + ins(j-1,i-1));
+
+            ins(j,i) = _states[getStateIndex('I',j)]->emission()->log_probability_of(s[i-1])
+                        + log(emiss_size)
+                        + log_sum(
+                            log_sum(
+                              _states[getStateIndex('M',j)]->transitions()->log_probability_of(getStateIndex('I',j))
+                              + mat(j,i-1),
+                              _states[getStateIndex('I',j)]->transitions()->log_probability_of(getStateIndex('I',j))
+                              + ins(j,i-1)),
+                              _states[getStateIndex('D',j)]->transitions()->log_probability_of(getStateIndex('I',j))
+                              + del(j,i-1));
+
+            del(j,i) = log_sum(
+                          _states[getStateIndex('M',j - 1)]->transitions()->log_probability_of(getStateIndex('D',j))
+                          + mat(j-1,i),
+                          _states[getStateIndex('I',j - 1)]->transitions()->log_probability_of(getStateIndex('D',j))
+                          + ins(j-1,i));
+        }
+    }
+
+    for (int j = 2; j < n_match_states - 1; j++) {
+        for (int i = 1; i < seq_len; ++i) {
+
+            mat(j,i) = _states[getStateIndex('M',j)]->emission()->log_probability_of(s[i-1])
+                        + log(emiss_size)
+                        + log_sum(
+                            log_sum(
+                              _states[getStateIndex('M',j-1)]->transitions()->log_probability_of(getStateIndex('M',j))
+                              + mat(j-1,i-1),
+                              _states[getStateIndex('I',j-1)]->transitions()->log_probability_of(getStateIndex('M',j))
+                              + ins(j-1,i-1)),
+                              _states[getStateIndex('D',j-1)]->transitions()->log_probability_of(getStateIndex('M',j))
+                              + del(j-1,i-1));
+
+
+            ins(j,i) = _states[getStateIndex('I',j)]->emission()->log_probability_of(s[i-1])
+                            + log(emiss_size)
+                            + log_sum(
+                                log_sum(
+                                  _states[getStateIndex('M',j)]->transitions()->log_probability_of(getStateIndex('I',j))
+                                  + mat(j,i-1),
+                                  _states[getStateIndex('I',j)]->transitions()->log_probability_of(getStateIndex('I',j))
+                                  + ins(j,i-1)),
+                                  _states[getStateIndex('D',j)]->transitions()->log_probability_of(getStateIndex('I',j))
+                                  + del(j,i-1));
+
+            del(j,i) = log_sum(
+                          log_sum(
+                            _states[getStateIndex('M',j - 1)]->transitions()->log_probability_of(getStateIndex('D',j))
+                            + mat(j-1,i),
+                            _states[getStateIndex('I',j - 1)]->transitions()->log_probability_of(getStateIndex('D',j))
+                            + ins(j-1,i)),
+                            _states[getStateIndex('D',j - 1)]->transitions()->log_probability_of(getStateIndex('D',j))
+                            + del(j-1,i));
+
+        }
+    }
+
+    for (int j = n_match_states - 1; j == n_match_states - 1 && j < n_match_states; j++) {
+      for (int i = 1; i < seq_len; ++i) {
+        mat(j,i) = log_sum(
+                      log_sum(
+                        _states[getStateIndex('M',j-1)]->transitions()->log_probability_of(getStateIndex('M',j))
+                        + mat(j-1,i-1),
+                        _states[getStateIndex('I',j-1)]->transitions()->log_probability_of(getStateIndex('M',j))
+                        + ins(j-1,i-1)),
+                        _states[getStateIndex('D',j-1)]->transitions()->log_probability_of(getStateIndex('M',j))
+                        + del(j-1,i-1));
+      }
+    }
+
+    return mat(getStateIndex('M', n_match_states - 1),seq_len - 1);
   }
 
   double ProfileHiddenMarkovModel::backward(const Sequence & s, Matrix &beta) const
@@ -61,8 +174,148 @@ namespace tops {
   ////// Model training///////////////////////////
   ////////////////////////////////////////////////
 
-  void ProfileHiddenMarkovModel::trainMaxLikelihood(SequenceList & observedEmissions, SequenceList & observedStates, int pseudocout)
+  void ProfileHiddenMarkovModel::trainMaxLikelihood(SequenceList & observedStates, SequenceList & observedEmissions, int pseudocouts)
   {
+    int s;
+    int n_states = _states.size();
+    for (s = 0; s < n_states && !getState(s)->emission();++s);
+    if (s == n_states) {
+      cout << "ERROR: There is only silent states." << endl;
+      exit(-1);
+    }
+    int emiss_size = getState(s)->emission()->size() + 1;
+
+    Matrix emiss(n_states, emiss_size);
+    Matrix trans(n_states, n_states);
+
+    emiss.clear();
+    trans.clear();
+
+    // Counting emissions
+    for (int seq = 0; seq < observedStates.size();++seq) {
+      int pos = 0;
+      for (int i = 0; i < observedStates[seq].size();++i) {
+        if (getState(observedStates[seq][i])->emission()) {
+          emiss(observedStates[seq][i], observedEmissions[seq][pos++])++;
+        }
+      }
+    }
+
+    // Counting transitions
+    for (int seq = 0; seq < observedStates.size(); ++seq) {
+      for (int i = 0; i < observedStates[seq].size() - 1; ++i) {
+          trans(observedStates[seq][i], observedStates[seq][i + 1])++;
+      }
+    }
+    trans(*(observedStates[0].end() - 1), *(observedStates[0].end() - 1))++;
+
+    //DEBUG:Print emiss matrix
+    cout << "Emissions matrix:" << endl;
+    for (int i = 0; i < emiss.size1(); ++i) {
+      for (int j = 0; j < emiss.size2(); ++j)
+          cout << emiss(i,j) << " ";
+      cout << endl;
+    }
+    cout << endl;
+
+    //DEBUG:Print trans matrix
+    cout << "Transitions matrix:" << endl;
+    for (int i = 0; i < trans.size1(); ++i) {
+      for (int j = 0; j < trans.size2(); ++j)
+          cout << trans(i,j) << " ";
+      cout << endl;
+    }
+    cout << endl;
+
+    // Emission Pseudocounts
+    for (int i = 0; i < n_states; ++i) {
+      if (getState(i)->emission())
+        {
+        for (int symbol = 0; symbol < getState(i)->emission()->size(); ++symbol)
+          emiss(i, symbol) += pseudocouts;
+      }
+    }
+
+    //Transitions Pseudocounts
+    int n_match_states = (n_states + 3)/3;
+    for (int i = 0; i < n_match_states - 1; ++i) {
+      trans (getStateIndex('M', i), getStateIndex('M', i + 1)) += pseudocouts;
+      trans (getStateIndex('M', i), getStateIndex('I', i)) += pseudocouts;
+      trans (getStateIndex('I', i), getStateIndex('M', i + 1)) += pseudocouts;
+      trans (getStateIndex('I', i), getStateIndex('I', i)) += pseudocouts;
+
+      if (i != 0) {
+        trans (getStateIndex('D', i), getStateIndex('M', i + 1)) += pseudocouts;
+        trans (getStateIndex('D', i), getStateIndex('I', i)) += pseudocouts;
+        if (i != n_match_states - 2) {
+            trans (getStateIndex('D', i), getStateIndex('D', i + 1)) += pseudocouts;
+        }
+      }
+      if (i != n_match_states - 2) {
+          trans (getStateIndex('M', i), getStateIndex('D', i + 1)) += pseudocouts;
+          trans (getStateIndex('I', i), getStateIndex('D', i + 1)) += pseudocouts;
+      }
+    }
+
+    //Emission probabilities
+    for (int i = 0; i < n_states; ++i) {
+      int sum = 0;
+      for (int symbol = 0; symbol < emiss_size; ++symbol)
+        sum += emiss (i, symbol);
+      if (sum == 0)
+        continue;
+      for (int symbol = 0; symbol < emiss_size; ++symbol)
+        emiss (i, symbol) /= sum;
+    }
+
+    //Transition probabilities
+    for (int i = 0; i < n_states; ++i) {
+      int sum = 0;
+      for (int j = 0; j < n_states; ++j)
+        sum += trans (i, j);
+      if (sum == 0)
+        continue;
+      for (int j = 0; j < n_states; ++j)
+        trans (i, j) /= sum;
+    }
+
+    //DEBUG:Print emiss matrix
+    cout << "Emissions matrix:" << endl;
+    for (int i = 0; i < emiss.size1(); ++i) {
+      for (int j = 0; j < emiss.size2(); ++j)
+          cout << emiss(i,j) << " ";
+      cout << endl;
+    }
+    cout << endl;
+
+    //DEBUG:Print trans matrix
+    cout << "Transitions matrix:" << endl;
+    for (int i = 0; i < trans.size1(); ++i) {
+      for (int j = 0; j < trans.size2(); ++j)
+          cout << trans(i,j) << " ";
+      cout << endl;
+    }
+    cout << endl;
+
+    // Puts the emission matrix info inside HMMStates
+    for (int i = 0; i < n_states; ++i) {
+      for (int j = 0; j < emiss_size; ++j) {
+        if (getState(i)->emission() && emiss(i,j))
+            getState(i)->emission()->log_probability_of(j, log(emiss(i,j)));
+        else if (getState(i)->emission())
+            getState(i)->emission()->log_probability_of(j, -DBL_MAX);
+      }
+    }
+
+    // Puts the transition matrix info inside HMMStates
+    for (int i = 0; i < n_states; ++i) {
+      for (int j = 0; j < n_states; ++j) {
+        if (trans(i,j))
+            getState(i)->transitions()->log_probability_of(j, log(trans(i,j)));
+        else
+            getState(i)->transitions()->log_probability_of(j, -DBL_MAX);
+      }
+    }
   }
 
   void ProfileHiddenMarkovModel::trainBaumWelch (SequenceList & training_set, int maxiterations, double diff)
@@ -83,6 +336,7 @@ namespace tops {
 	    std::vector<HMMStatePtr> state_list;
 	    AlphabetPtr states = AlphabetPtr(new Alphabet());
 	    AlphabetPtr observations = AlphabetPtr(new Alphabet());
+
 	    states->initializeFromVector(state_names->getStringVector());
 	    observations->initializeFromVector(observation_symbols->getStringVector());
 
@@ -130,7 +384,7 @@ namespace tops {
 
 	    for(it = transpar.begin(); it != transpar.end(); it++)
 	      {
-	        std::vector<std::string> splited;
+                std::vector<std::string> splited;
 	        boost::regex separator("\\|");
 	        split_regex(it->first, splited, separator);
 	        if(splited.size() == 1)
@@ -138,6 +392,7 @@ namespace tops {
 
 	        std::string to(splited[0]);
 	        std::string from(splited[1]);
+
 	        if(trans.find(from) == trans.end())
 	          {
 	            int id = states->getSymbol(to)->id();
@@ -173,14 +428,98 @@ namespace tops {
 	        state_list.push_back(statePtr);
 	      }
 
-	 //   setStates(state_list, states);
-	 //   setInitialProbability(pi);
-	 //   setObservationSymbols(observations);
+	    setStates(state_list, states);
+	    setInitialProbability(pi);
+	    setObservationSymbols(observations);
   }
 
   ////////////////////////////////////////////////////
   ///////// Auxiliary and debug functions ////////////
   ////////////////////////////////////////////////////
+
+  std::string ProfileHiddenMarkovModel::str () const
+    {
+      int nstates = _states.size();
+      std::stringstream out;
+      out << "model_name = \"" << model_name() << "\"" << std::endl;
+      out << "state_names = (" ;
+
+      out << "\"" << getStateName(0) << "\"";
+      for(int i = 1; i < (int)getStateNames()->size(); i++)
+        out << ",\"" << getStateName(i) << "\"";
+      out << ")" << std::endl;
+
+      out << "observation_symbols = (" ;
+      out << "\"" << alphabet()->getSymbol(0)->name() << "\"";
+      for(int i = 1; i < (int)alphabet()->size(); i++)
+        out << ",\"" << alphabet()->getSymbol(i)->name() << "\"";
+      out << ")" << std::endl;
+
+      out << "transitions = (" ;
+      int first = 1;
+      for(int i = 0; i < nstates; i++) {
+        for(int j = 0; j < nstates; j++) {
+          double prob = exp(getState(i)->transitions()->log_probability_of(j));
+          if (prob) {
+              if (first) {
+                  first = 0;
+                  out << "\"";
+              }
+              else out << ";\n \"";
+            out << getStateName(j) << "\" | \"" << getStateName(i) << "\": " << prob;
+          }
+        }
+      }
+      out << ")" << std::endl;
+
+
+      out << "emission_probabilities = (" ;
+      first = 1;
+      for(int i = 0; i < nstates; i++)
+        for(int j = 0; j < (int)alphabet()->size(); j++)
+          if(getState(i)->emission()) {
+              double prob = exp(getState(i)->emission()->log_probability_of(j));
+              if (prob) {
+                if (first) {
+                  first = 0;
+                  out << "\"";
+                }
+                else out << ";\n \"";
+                out << alphabet()->getSymbol(j)->name() << "\" | \"" <<  getStateName(i) << "\": " << exp(getState(i)->emission()->log_probability_of(j));
+              }
+          }
+      out << ")" << std::endl;
+
+      double sum = 0;
+      std::vector <double> probs;
+      probs.resize(nstates);
+      for(int i = 0; i < nstates; i++){
+        probs[i] = exp(_initial_probability->log_probability_of(i));
+        sum += probs[i];
+      }
+
+      out << "initial_probabilities = (";
+      first = 1;
+      for(int i = 0; i < nstates; i++) {
+          int prob = probs[i]/sum;
+          if (prob) {
+            if (first) {
+              first = 0;
+              out << "\"";
+            }
+            else out << ";\n \"";
+            out << getStateName(i) << "\": " << probs[i]/sum;
+          }
+      }
+      out << ")" << std::endl;
+      return out.str();
+    }
+
+  int ProfileHiddenMarkovModel::getStateIndex(char type, int index) const {
+    stringstream name;
+    name << type << index;
+    return _state_names->getSymbol(name.str())->id();
+  }
 
   std::string ProfileHiddenMarkovModel::getStateName(int state) const {
     return getState(state)->getName()->name();
@@ -201,112 +540,112 @@ namespace tops {
     return _initial_probability->choose();
   }
 
+  Sequence & ProfileHiddenMarkovModel::choose(Sequence & h, Sequence & path,  int i, int size) const
+    {
+      assert(path.size() == h.size());
+      int n_match_states = (_states.size() + 3)/3;
+      int last_state = getStateIndex('M', n_match_states - 1);
+      int state = chooseFirstState();
+      int states_c = 0;
+      int emiss_c = 0;
 
-  /*  void ProfileHiddenMarkovModel::silentStatesSort(vector<PHMMStatePtr> silStates){
-    int swap = 1;
-    while(swap == 1){
-      swap = 0;
-      for(int i = 0; i < (int)silStates.size() - 1; i++){
-        IntVector v = silStates[i]->iTransitions();
-        std::vector<int>::iterator it;
-        it = find(v.begin(), v.end(), silStates[i+1]->getId());
-        if(it != v.end()){
-          PHMMStatePtr aux = silStates[i];
-          silStates[i] = silStates[i+1];
-          silStates[i+1] = aux;
-          swap = 1;
+      if (((i - 1) < (int) path.size()) && (i - 1) >= 0)
+        state = path[i - 1];
+
+      if (path.size() > 0)
+        path[0] = state;
+      else
+        path.push_back(state);
+      states_c++;
+
+      while ((int) h.size() < (i + size)) {
+        if (getState(state)->emission()) {
+          chooseObservation(h, i + emiss_c, state);
+          emiss_c++;
         }
+
+        state = chooseState(state); // next state
+
+        if (states_c < (int) path.size())
+          path[states_c] = state;
+        else
+          path.push_back(state);
+        states_c++;
+
+        if (state == last_state)
+          break;
       }
+      //h.resize(size); This is a possible bug in DecodableModel, I believe these lines should not be there..
+      //path.resize(size);
+      return h;
     }
-    }*/
+
+  ProbabilisticModelParameters ProfileHiddenMarkovModel::parameters() const {
+     ProbabilisticModelParameters answer;
+     int nstates = _states.size();
+     answer.add("model_name", StringParameterValuePtr(new StringParameterValue(model_name().c_str())));
+     answer.add("state_names", _state_names->getParameterValue());
+     answer.add("observation_symbols", alphabet()->getParameterValue());
+     std::map <std::string, double> trans;
+     std::stringstream out;
+     out << getStateName(0) << "|" << getStateName(0) ;
+     trans[out.str()] =  exp(getState(0)->transitions()->log_probability_of(0)) ;
+     for(int i = 0; i < nstates; i++)
+       for(int j = 0; j < nstates; j++)
+         if((i != 0) || (j != 0)) {
+           std::stringstream out2;
+           out2 << getStateName(j) << "|" << getStateName(i) ;
+           trans[out2.str()] = exp(getState(i)->transitions()->log_probability_of(j));
+         }
+     answer.add("transitions", DoubleMapParameterValuePtr(new DoubleMapParameterValue(trans)));
+
+     std::map <std::string, double> emission;
+     std::stringstream out3;
+     out3 <<   alphabet()->getSymbol(0)->name() << "|" << getStateName(0) ;
+     if(getState(0)->emission())
+       emission[out3.str()] =  exp(getState(0)->emission()->log_probability_of(0));
+     for(int i = 0; i < nstates; i++)
+       for(int j = 0; j < (int)alphabet()->size(); j++)
+         if(((i != 0) || (j != 0)) && getState(i)->emission()){
+           std::stringstream out4;
+           out4 <<alphabet()->getSymbol(j)->name() << "|" <<  getStateName(i) ;
+           emission[out4.str()] =  exp(getState(i)->emission()->log_probability_of(j));
+         }
+     answer.add("emission_probabilities", DoubleMapParameterValuePtr(new DoubleMapParameterValue(emission)));
+     double sum = 0;
+     std::vector <double> probs;
+     probs.resize(nstates);
+     for(int i = 0; i < nstates; i++){
+       probs[i] = exp(_initial_probability->log_probability_of(i));
+       sum += probs[i];
+     }
+     std::map <std::string, double> initial;
+     std::stringstream out5;
+     out5 <<  getStateName(0);
+     initial[out5.str()] =  probs[0]/sum;
+     for(int i = 0; i < nstates; i++)
+       for(int j = 0; j < (int)alphabet()->size(); j++)
+         if((i != 0) || (j != 0)){
+           std::stringstream out6;
+           out6 << getStateName(i);
+           initial[out6.str()] = probs[i]/sum;
+         }
+     answer.add("initial_probabilities", DoubleMapParameterValuePtr(new DoubleMapParameterValue(initial)));
+     return answer;
+
+   }
 
 
-  /*  std::string ProfileHiddenMarkovModel::str () const
-  {
-    int nstates = _states.size();
-    std::stringstream out;
-    out << "model_name = \"ProfileHiddenMarkovModel\"" << std::endl;
-    out << "state_names = (" ;
-    out << "\"" << getStateName(0) << "\"";
-    for(int i = 1; i < (int)getStateNames()->size(); i++)
-      out << ",\"" << getStateName(i) << "\"";
-    out << ")" << std::endl;
-
-    out << "observation_symbols = (" ;
-    out << "\"" << alphabet()->getSymbol(0)->name() << "\"";
-    for(int i = 1; i < (int)alphabet()->size(); i++)
-      out << ",\"" << alphabet()->getSymbol(i)->name() << "\"";
-    out << ")" << std::endl;
-
-    out << "transitions = (" ;
-    int it = 0;
-    for(int i = 0; i < nstates; i++){
-      for(int j = 0; j < nstates; j++){
-          if(close(exp(_states[i]->transitions()->log_probability_of(j)), 0.0, 1e-10))
-            continue;
-          if(it == 0){
-            out << "\"" << getStateName(i) << "\" | \"" << getStateName(i) << "\": " << exp(_states[i]->transitions()->log_probability_of(j)) ;
-            it++;
-          }
-          else
-            out << ";\n \"" << getStateName(j) << "\" | \"" << getStateName(i) << "\": " << exp(_states[i]->transitions()->log_probability_of(j));
-      }
-    }
-    out << ";)" << std::endl;
-
-
-    out << "emission_probabilities = (" ;
-    it = 0;
-    for(int i = 0; i < nstates; i++){
-      for(int k = 0; k < (int)alphabet()->size(); k++){
-        for(int j = 0; j < (int)alphabet()->size(); j++){
-          if(close(exp(_states[i]->emission()->log_probability_of_Profile(k,j)), 0.0, 1e-10))
-            continue;
-          if(it == 0){
-            out << "\"" <<  alphabet()->getSymbol(k)->name() << alphabet()->getSymbol(j)->name() << "\" | \"" << getStateName(i) << "\": " << exp(_states[i]->emission()->log_probability_of_Profile(k,j)) ;
-            it++;
-          }
-          else
-            out << ";\n \"" << alphabet()->getSymbol(k)->name() << alphabet()->getSymbol(j)->name() << "\" | \"" <<  getStateName(i) << "\": " << exp(_states[i]->emission()->log_probability_of_Profile(k,j));
-        }
-      }
-    }
-    out << ";)" << std::endl;
-
-    out << "number_of_emissions = (";
-    out << "\"" << getStateName(0) << "\" : \"" << _states[0]->eSeq1() << "," << _states[0]->eSeq2() << "\"";
-    for(int i = 1; i < nstates; i++)
-      out << ";\n\"" << getStateName(i) << "\" : \"" << _states[i]->eSeq1() << "," << _states[i]->eSeq2() << "\"";
-    out << ";)" << endl;
-    return out.str();
-    }  */
-
-  /*  void ProfileHiddenMarkovModel::generateSequence(Sequence &seq1, Sequence &seq2, Sequence &path){
-    Sequence s1, s2, p;
-    int state_id = _begin_id;
-    int obs1 = _gap_id;
-    int obs2 = _gap_id;
-    p.push_back(state_id);
-    s1.push_back(obs1);
-    s2.push_back(obs2);
-
-    while(state_id != _end_id){
-      state_id = getPHMMState(state_id)->transitions()->choose();
-      if(_states[state_id]->eSeq1() == 0 && _states[state_id]->eSeq2() == 0){
-        p.push_back(state_id);
-        s1.push_back(_gap_id);
-        s2.push_back(_gap_id);
-        continue;
-      }
-      _states[state_id]->emission()->chooseProfile(&obs1,&obs2);
-      p.push_back(state_id);
-      s1.push_back(obs1);
-      s2.push_back(obs2);
-    }
-    seq1 = s1;
-    seq2 = s2;
-    path = p;
-    }*/
+   void ProfileHiddenMarkovModel::setInitialProbability(DiscreteIIDModelPtr initial) {
+     _initial_probability = initial;
+   }
+   void ProfileHiddenMarkovModel::setObservationSymbols(AlphabetPtr obs) {
+     tops::ProbabilisticModel::setAlphabet(obs);
+   }
+   void ProfileHiddenMarkovModel::setStates(std::vector<HMMStatePtr> states, AlphabetPtr state_names) {
+     _states = states;
+     _state_names = state_names;
+   }
 }
 
 

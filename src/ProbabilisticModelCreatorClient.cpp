@@ -2,7 +2,7 @@
  *       ProbabilisticModelCreatorClient.cpp
  *
  *       Copyright 2011 Andre Yoshiaki Kashiwabara <akashiwabara@usp.br>
- *                      Ígor Bonádio <ibonadio@ime.usp.br>
+ *                      ï¿½gor Bonï¿½dio <ibonadio@ime.usp.br>
  *                      Vitor Onuchic <vitoronuchic@gmail.com>
  *                      Alan Mitchell Durham <aland@usp.br>
  *
@@ -33,6 +33,7 @@
 #include "InhomogeneousMarkovChainCreator.hpp"
 #include "HiddenMarkovModelCreator.hpp"
 #include "PairHiddenMarkovModelCreator.hpp"
+#include "ProfileHiddenMarkovModelCreator.hpp"
 #include "GeneralizedHiddenMarkovModelCreator.hpp"
 #include "TargetModelCreator.hpp"
 #include "SmoothedHistogramKernelDensity.hpp"
@@ -46,6 +47,7 @@
 
 
 #include "TrainHMMBaumWelch.hpp"
+#include "TrainProfileHMMMaxLikelihood.hpp"
 #include "TrainVariableLengthMarkovChain.hpp"
 #include "TrainDiscreteIIDModel.hpp"
 #include "TrainFixedLengthMarkovChain.hpp"
@@ -262,6 +264,7 @@ namespace tops
     _trainingCommand["ContextAlgorithm"] = TrainVariableLengthMarkovChainPtr(new TrainVariableLengthMarkovChain());
     _trainingCommand["FixedLengthMarkovChain"]= TrainFixedLengthMarkovChainPtr(new TrainFixedLengthMarkovChain());
     _trainingCommand["BaumWelch"] = TrainHMMBaumWelchPtr(new TrainHMMBaumWelch());
+    _trainingCommand["ProfileHMMMaxLikelihood"] = TrainProfileHMMMaxLikelihoodPtr(new TrainProfileHMMMaxLikelihood());
     _trainingCommand["WeightArrayModel"] = TrainWeightArrayModelPtr(new TrainWeightArrayModel());
     _trainingCommand["VariableLengthInhomogeneousMarkovChain"]
       = TrainVariableLengthInhomogeneousMarkovChainPtr(new TrainVariableLengthInhomogeneousMarkovChain());
@@ -288,6 +291,8 @@ namespace tops
       HiddenMarkovModelCreatorPtr(new HiddenMarkovModelCreator());
     _createModelCommand["PairHiddenMarkovModel"] =
       PairHiddenMarkovModelCreatorPtr(new PairHiddenMarkovModelCreator());
+    _createModelCommand["ProfileHiddenMarkovModel"] =
+      ProfileHiddenMarkovModelCreatorPtr(new ProfileHiddenMarkovModelCreator());
     _createModelCommand["GeneralizedHiddenMarkovModel"] =
       GeneralizedHiddenMarkovModelCreatorPtr(new GeneralizedHiddenMarkovModelCreator());
     _createModelCommand["Bernoulli"] =

@@ -2,7 +2,7 @@
  *       SequenceFormat.cpp
  *
  *       Copyright 2011 Andre Yoshiaki Kashiwabara <akashiwabara@usp.br>
- *                      Ígor Bonádio <ibonadio@ime.usp.br>
+ *                      ï¿½gor Bonï¿½dio <ibonadio@ime.usp.br>
  *                      Vitor Onuchic <vitoronuchic@gmail.com>
  *                      Alan Mitchell Durham <aland@usp.br>
  *
@@ -78,8 +78,8 @@ namespace tops {
       split_regex(line, seq_entry, separator);
       if(seq_entry.size() < 2)
         {
-          std::cerr << "Invalid sequence format !" << std::endl;
-          exit(-1);
+          std::cerr << "Warning: Invalid or empty sequence !" << std::endl;
+          //exit(-1);
         }
       std::string seqname = "";
       int last = seq_entry.size()-1;

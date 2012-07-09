@@ -2,7 +2,7 @@
  *       DecodableModel.cpp
  *
  *       Copyright 2011 Andre Yoshiaki Kashiwabara <akashiwabara@usp.br>
- *                      Ígor Bonádio <ibonadio@ime.usp.br>
+ *                      ï¿½gor Bonï¿½dio <ibonadio@ime.usp.br>
  *                      Vitor Onuchic <vitoronuchic@gmail.com>
  *                      Alan Mitchell Durham <aland@usp.br>
  *

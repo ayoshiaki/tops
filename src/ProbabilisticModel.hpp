@@ -2,7 +2,7 @@
  *       ProbabilisticModel.hpp
  *
  *       Copyright 2011 Andre Yoshiaki Kashiwabara <akashiwabara@usp.br>
- *                      Ígor Bonádio <ibonadio@ime.usp.br>
+ *                      ï¿½gor Bonï¿½dio <ibonadio@ime.usp.br>
  *                      Vitor Onuchic <vitoronuchic@gmail.com>
  *                      Alan Mitchell Durham <aland@usp.br>
  *
@@ -43,6 +43,7 @@
 namespace tops {
   class DLLEXPORT DecodableModel;
   class DLLEXPORT PairHiddenMarkovModel;
+  class DLLEXPORT ProfileHiddenMarkovModel;
   class DLLEXPORT FactorableModel;
   class DLLEXPORT InhomogeneousFactorableModel;
   class DLLEXPORT ProbabilisticModelCreator;
@@ -229,6 +230,11 @@ namespace tops {
 
     virtual PairHiddenMarkovModel* pairDecodable() {
       not_implemented("pairDecodable()");
+      return NULL;
+    }
+
+    virtual ProfileHiddenMarkovModel* profileDecodable() {
+      not_implemented("profileDecodable()");
       return NULL;
     }
 

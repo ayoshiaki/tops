@@ -2,8 +2,8 @@
  *       ProfileProfileHiddenMarkovModel.hpp
  *
  *       Copyright 2011 Vitor Onuchic <vitoronuchic@gmail.com>
- *                      André Yoshiaki Kashiwabara <akashiwabara@usp.br>
- *                      Ígor Bonádio <ibonadio@ime.usp.br>
+ *                      Andrï¿½ Yoshiaki Kashiwabara <akashiwabara@usp.br>
+ *                      ï¿½gor Bonï¿½dio <ibonadio@ime.usp.br>
  *                      Vitor Onuchic <vitoronuchic@gmail.com>
  *                      Alan Mitchell Durham <aland@usp.br>
  *                      Felipe Amado <amadofelipe@gmail.com>
@@ -66,12 +66,17 @@ namespace tops{
       virtual int chooseState(int state ) const ;
       //! Choose first state
       virtual int chooseFirstState() const ;
+
+
+      virtual Sequence & choose(Sequence & h, Sequence & path,  int i, int size) const;
+
+
       virtual AlphabetPtr getStateNames() const {
         return _state_names;
       }
       virtual std::string getStateName(int state) const;
 
-      //virtual std::string str () const ;
+      virtual std::string str () const ;
 
       virtual void setState (int id, HMMStatePtr state)
       {
@@ -85,6 +90,10 @@ namespace tops{
       {
         return _states[id];
       }
+
+
+      virtual int getStateIndex(char type, int index) const;
+
       //! Forward algorithm
       virtual double forward(const Sequence & s, Matrix &alpha) const;
 
@@ -97,24 +106,30 @@ namespace tops{
       virtual std::string model_name() const {
         return "ProfileHiddenMarkovModel";
       }
-     /* virtual ProbabilisticModelCreatorPtr getFactory() const {
+/*
+      virtual ProbabilisticModelCreatorPtr getFactory() const {
         return ProfileHiddenMarkovModelCreatorPtr(new ProfileHiddenMarkovModelCreator());
       }
+      */
+
       virtual DecodableModel * decodable()  {
         return this;
-      }*/
+      }
 
-      virtual void trainMaxLikelihood(SequenceList & observedEmissions, SequenceList & observedStates, int pseudocout);
+      virtual void trainMaxLikelihood(SequenceList & observedStates, SequenceList & observedEmissions, int pseudocouts);
       virtual void trainBaumWelch (SequenceList & training_set, int maxiterations, double diff) ;
 
       virtual void initialize(const ProbabilisticModelParameters & par) ;
 
-     // virtual ProbabilisticModelParameters parameters() const ;
+      virtual ProbabilisticModelParameters parameters() const ;
 
-     // void setInitialProbability(DiscreteIIDModelPtr initial) ;
-     // void setObservationSymbols(AlphabetPtr obs) ;
-     // void setStates(std::vector<HMMStatePtr> states, AlphabetPtr state_names) ;
+      void setInitialProbability(DiscreteIIDModelPtr initial) ;
+      void setObservationSymbols(AlphabetPtr obs) ;
+      void setStates(std::vector<HMMStatePtr> states, AlphabetPtr state_names) ;
 
+      virtual ProfileHiddenMarkovModel * profileDecodable() {
+        return this;
+      }
 
 
     private:
