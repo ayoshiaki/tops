@@ -83,7 +83,7 @@ namespace tops {
   };
   typedef boost::shared_ptr <HMMState> HMMStatePtr;
 
-  //! This is represents a hidden markov model
+  //! This class represents a hidden markov model
   class DLLEXPORT HiddenMarkovModel :   public DecodableModel
   {
   public:

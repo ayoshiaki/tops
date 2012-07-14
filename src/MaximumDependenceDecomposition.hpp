@@ -34,7 +34,7 @@
 namespace tops {
   
   
-  //! Inhomogeneous Markov chain
+  //! Maximum Dependence Decomposition: not implemented yet 
   class DLLEXPORT MaximumDependenceDecomposition : public ProbabilisticModel
   {
   public:

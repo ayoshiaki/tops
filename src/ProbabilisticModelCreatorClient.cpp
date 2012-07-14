@@ -2,7 +2,7 @@
  *       ProbabilisticModelCreatorClient.cpp
  *
  *       Copyright 2011 Andre Yoshiaki Kashiwabara <akashiwabara@usp.br>
- *                      Ígor Bonádio <ibonadio@ime.usp.br>
+ *                      ?gor Bon?dio <ibonadio@ime.usp.br>
  *                      Vitor Onuchic <vitoronuchic@gmail.com>
  *                      Alan Mitchell Durham <aland@usp.br>
  *
@@ -46,6 +46,7 @@
 
 
 #include "TrainHMMBaumWelch.hpp"
+#include "TrainHMMMaximumLikelihood.hpp"
 #include "TrainVariableLengthMarkovChain.hpp"
 #include "TrainDiscreteIIDModel.hpp"
 #include "TrainFixedLengthMarkovChain.hpp"
@@ -262,6 +263,7 @@ namespace tops
     _trainingCommand["ContextAlgorithm"] = TrainVariableLengthMarkovChainPtr(new TrainVariableLengthMarkovChain());
     _trainingCommand["FixedLengthMarkovChain"]= TrainFixedLengthMarkovChainPtr(new TrainFixedLengthMarkovChain());
     _trainingCommand["BaumWelch"] = TrainHMMBaumWelchPtr(new TrainHMMBaumWelch());
+    _trainingCommand["MaximumLikelihoodHMM"] = TrainHMMMaximumLikelihoodPtr(new TrainHMMMaximumLikelihood());
     _trainingCommand["WeightArrayModel"] = TrainWeightArrayModelPtr(new TrainWeightArrayModel());
     _trainingCommand["VariableLengthInhomogeneousMarkovChain"]
       = TrainVariableLengthInhomogeneousMarkovChainPtr(new TrainVariableLengthInhomogeneousMarkovChain());

@@ -2,7 +2,7 @@
  *       ProbabilisticModelCreatorClient.hpp
  *
  *       Copyright 2011 Andre Yoshiaki Kashiwabara <akashiwabara@usp.br>
- *                      Ígor Bonádio <ibonadio@ime.usp.br>
+ *                      ?gor Bon?dio <ibonadio@ime.usp.br>
  *                      Vitor Onuchic <vitoronuchic@gmail.com>
  *                      Alan Mitchell Durham <aland@usp.br>
  *
@@ -40,6 +40,7 @@ namespace tops {
     ProbabilisticModelPtr create(const std::string & input_file_name);
     ProbabilisticModelPtr train (ProbabilisticModelParameters & parameters);
     ProbabilisticModelPtr train (const std::string & input_file_name);
+    ProbabilisticModelParameters & readConfigurationFromFile(const std::string  & filename);
 
     void registry_new_creator(std::string name, ProbabilisticModelCreatorPtr creator);
     void registry_new_training(std::string name, ProbabilisticModelCreatorPtr creator);
@@ -51,7 +52,6 @@ namespace tops {
     std::map<std::string, ProbabilisticModelCreatorPtr> _trainingCommand;
     std::map<std::string, ProbabilisticModelCreatorPtr> _modelSelectionCommand;
     std::map<std::string, ProbabilisticModelCreatorPtr> _decoratorCommand;
-    ProbabilisticModelParameters & readConfigurationFromFile(const std::string  & filename);
     ProbabilisticModelParameters _p;
   };
 }

@@ -65,6 +65,36 @@ void generate_sequence(std::string & model_file, int nseq, int length, ostream &
     }
 }
 
+void generate_sequence_one_file(std::string & model_file, int nseq, int length, ostream &output)
+{
+  ProbabilisticModelCreatorClient creator;
+  ProbabilisticModelPtr model = creator.create(model_file);
+  if(model == NULL)
+    {
+      exit(-1);
+    }
+
+  for(int i = 0; i < nseq; i++)
+    {
+      Sequence o;
+      Sequence y;
+      o = model->choose(o, y, length);
+      std::stringstream aux;
+      aux << model_file << "_" << i ;
+      SequenceEntry out(model->alphabet());
+      out.setName(aux.str());
+      out.setSequence(o);
+      output << out;
+
+      SequenceEntry hiddenState(model->decodable()->getStateNames());
+      hiddenState.setName(aux.str());
+      hiddenState.setSequence(y);
+      output << hiddenState;
+    }
+}
+
+
+
 void generate_sequence(std::string & model_file, int nseq, int length, ostream & observation_output, ostream &states_output)
 {
   ProbabilisticModelCreatorClient creator;
@@ -106,7 +136,7 @@ int main (int argc, char ** argv)
       ("length,l", value<int> (), "length of the sequences")
       ("numseq,n", value<int> (), "number of sequences")
       ("output,o", value<string>(), "file to store  the sequences")
-      ("hidden_states,h", value<string>(), "file to store hidden state sequence")
+      ("hidden_states,h", "outputs the hidden state sequences")
       ("fasta,F",  "use fasta format");
 
     try
@@ -132,23 +162,16 @@ int main (int argc, char ** argv)
 
         if(vm.count("output")) {
           string output = vm["output"].as<string>();
-          ofstream obs_output(output.c_str());
+          ofstream outputs(output.c_str());
           if(vm.count("hidden_states")) {
-            string hidden = vm["hidden_states"].as<string>();
-            ofstream hidden_output (hidden.c_str());
-            generate_sequence(model, nseq, length, obs_output, hidden_output);
-            hidden_output.close();
-
+            generate_sequence_one_file(model, nseq, length, outputs);
           }else {
-            generate_sequence(model,  nseq,  length, obs_output);
+            generate_sequence(model,  nseq,  length, outputs);
           }
-          obs_output.close();
+          outputs.close();
         } else {
           if(vm.count("hidden_states")) {
-            string hidden = vm["hidden_states"].as<string>();
-            ofstream hidden_output (hidden.c_str());
-            generate_sequence(model, nseq, length, std::cout, hidden_output);
-            hidden_output.close();
+            generate_sequence_one_file(model, nseq, length, std::cout);
           }else
             generate_sequence(model,  nseq,  length, std::cout);
         }

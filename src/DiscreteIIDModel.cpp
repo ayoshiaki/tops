@@ -47,6 +47,7 @@ namespace tops {
         _log_probabilities[i] = -HUGE;
       else
         _log_probabilities[i] = log(probabilities[i]/sum);
+     _geometric_tail = false;
   }
 
   DiscreteIIDModel::DiscreteIIDModel(const Matrix & probabilities){
