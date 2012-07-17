@@ -2,13 +2,15 @@
 
 ToPS is an objected-oriented framework implemented using C++ that facilitates the integration of probabilistic models for sequences over a user defined alphabet. ToPS contains the implementation of five distinct models to analyze discrete sequences:
 
-1. multinomial distribution
+1. independent identically distributed model
 2. Variable-Length Markov Chain (VLMC)
 3. Inhomogeneous Markov Chain
 4. Hidden Markov Model
 5. Generalized Hidden Markov Model (GHMM)
 
 The user can implement models either by manual description of the probability values in a configuration file, or by using training algorithms provided by the system. The ToPS framework also includes a set of programs that implement bayesian classifiers, sequence samplers, and sequence decoders. Finally, ToPS is an extensible and portable system that facilitates the implementation of other probabilistic models, and the development of new programs.
+
+Example of usage is in "example" folder.
 
 Please feel free to contact me if you have any question: André Yoshiaki Kashiwabara <akashiwabara@usp.br>
 
@@ -33,13 +35,13 @@ ToPS was written in C++. It was compiled using the g++ version 4.2.1 and it requ
 
    1. Gunzip and untar the package
 
-       gzip -dc tops_v1.tar.gz | tar xvf -
+      git clone git://tops.git.sourceforge.net/gitroot/tops/tops 
 
-      This will create a directory named tops_v1
+      This will create a directory named tops
 
    2. Go to the tops_v1 directory:
 
-       cd tops_v1
+       cd tops
 
    3. Run the configuration script:
 
