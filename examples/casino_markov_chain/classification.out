@@ -1,0 +1,3 @@
+sequence_name;loglike(honest);posterior(honest);loglike(loaded);posterior(loaded);class
+casino1;-60.9198;0.0101883;-54.1463;0.989812;loaded
+casino2;-60.9198;1;-75.069;7.95866e-08;honest

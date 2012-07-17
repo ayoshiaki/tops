@@ -1,0 +1,8 @@
+model_name="InhomogeneousMarkovChain"
+p1 = ("0"|"" : 0.9; "1"|"": 0.1)
+p2 = ("0"|"" : 0.5; "1"|"": 0.5)
+p3 = ("0"|"" : 0.1; "1"|"": 0.9)
+position_specific_distribution = ("p1", "p2", "p3")
+phased =0
+alphabet=("0", "1")
+vicinity_length=0

@@ -1,0 +1,8 @@
+training_algorithm="ContextAlgorithm" 
+alphabet=("0", "1")
+training_set="sequence_from_vlmc.txt" 
+model_selection_criteria="BIC"
+begin=("cut": 0.0)
+end = ("cut": 3.0)
+step=("cut": 0.1)
+

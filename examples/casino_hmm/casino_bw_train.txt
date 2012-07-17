@@ -1,0 +1,3 @@
+training_algorithm="BaumWelch"
+training_set="sequences_from_casino_real.txt"
+initial_model="casino.txt"

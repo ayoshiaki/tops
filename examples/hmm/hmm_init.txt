@@ -1,0 +1,15 @@
+model_name="HiddenMarkovModel"
+state_names= ("1", "2" )
+observation_symbols= ("0", "1" )
+# transition probabilities
+transitions = ("1" | "1": 0.5;
+                      "2" | "1": 0.5;
+                      "1" | "2": 0.5;
+                      "2" | "2": 0.5)
+# emission probabilities
+emission_probabilities = (
+                         "0" | "1" : 0.7; 
+                         "1" | "1" : 0.3;            
+                         "0" | "2" : 0.9; 
+                         "1" | "2" : 0.1)
+initial_probabilities= ("1": 0.5; "2": 0.5)

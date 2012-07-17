@@ -1,0 +1,2 @@
+classes=("honest": "honest_dice_markov_chain.txt"; "loaded": "loaded_dice_markov_chain.txt")
+model_probabilities=("loaded": 0.1; "honest": 0.9)

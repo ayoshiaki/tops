@@ -1,0 +1,4 @@
+model_name = "DiscreteIIDModel"
+probabilities = (nan,nan,nan,nan)
+alphabet = ("A", "C", "G", "T")
+

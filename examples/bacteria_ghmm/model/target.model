@@ -1,0 +1,2 @@
+model_name="TargetModel"
+alphabet= ("A", "C", "G","T")
