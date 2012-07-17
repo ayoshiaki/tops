@@ -379,7 +379,7 @@ namespace tops {
     for(it = emisspar.begin(); it != emisspar.end(); it++)
       {
         std::vector<std::string> splited;
-        boost::regex separator("\\|");
+        boost::regex separator("\\s*\\|\\s*");
         split_regex(it->first, splited, separator);
         if(splited.size() == 1)
           splited.push_back("");

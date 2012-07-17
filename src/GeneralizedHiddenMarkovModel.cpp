@@ -1058,7 +1058,7 @@ Sequence & GeneralizedHiddenMarkovModel::chooseObservation(Sequence & h, int i,
     std::map<std::string, double> transpar = transitions_par->getDoubleMap();
     std::map<std::string, DoubleVector> trans;
     std::map<std::string, double>::const_iterator it;
-    boost::regex separator("\\|");
+    boost::regex separator("\\s*\\|\\s*");
 
     for (it = transpar.begin(); it != transpar.end(); it++) {
       std::vector<std::string> splited;
@@ -1069,11 +1069,11 @@ Sequence & GeneralizedHiddenMarkovModel::chooseObservation(Sequence & h, int i,
       std::string from (splited[1]);
       std::string to ( splited[0]);
       if(!states->has(from) ) {
-         std::cerr << "ERROR: The state " << from << " is not in state list !\n" << std::endl;
+         std::cerr << "ERROR: The state '" << from << "' is not in state list !\n" << std::endl;
          exit(-1);
       }
       if(!states->has(to) ) {
-         std::cerr << "ERROR: The state " << to << " is not in state list !\n" << std::endl;
+         std::cerr << "ERROR: The state '" << to << "' is not in state list !\n" << std::endl;
          exit(-1);
       }
 
@@ -1124,10 +1124,10 @@ Sequence & GeneralizedHiddenMarkovModel::chooseObservation(Sequence & h, int i,
         ProbabilisticModelParameterValuePtr inputphasepar =
           statepars->getOptionalParameterValue("input_phase");
 
-  ProbabilisticModelParameterValuePtr extendEmissionpar =
+	ProbabilisticModelParameterValuePtr extendEmissionpar =
           statepars->getOptionalParameterValue("extend_emission");
-  ProbabilisticModelParameterValuePtr classespar =
-    statepars->getOptionalParameterValue("classes");
+	ProbabilisticModelParameterValuePtr classespar =
+	  statepars->getOptionalParameterValue("classes");
 
 
         if (observationpar == NULL) {
@@ -1181,7 +1181,10 @@ Sequence & GeneralizedHiddenMarkovModel::chooseObservation(Sequence & h, int i,
                 int endEmissionOffset = (int)(extendEmissionpar->getDoubleVector())[1];
                 _all_states[id]->setStart(startEmissionOffset);
                 _all_states[id]->setStop(endEmissionOffset);
-            }
+            } else {
+                _all_states[id]->setStart(0);
+                _all_states[id]->setStop(0);
+	    }
         }
       }
     }
