@@ -25,128 +25,113 @@ hmm, which contains an example of a HMM, and a comparison with R's package Hidde
 vlmc, which contains an example of VLMC
 wam, which contains an example of InhomogeneousMarkovChain
  
+
+HOW TO USE THE EXAMPLES (we show the tasks and the command lines to be executed)
+
+Note1: we recommend that you look at the configuration files specified in the commands under the -c option.
+Note2: All examples assume you uncompressed the files and are in command line in the directory that contains all the data.
+
 ==============================================================================
-1. Hidden Markov Model                                           *hmm*
-
-1. Go to the casino_hmm folder
- 
-cd casino_hmm
-
-2. Run the train program. 
-
-train -c casino_bw_train.txt > casino_reestimated_bw.txt
-
-3. See the results
-
-more casino_reestimated_bw.txt
-
-
-** Simulating  HMM
-
+           Hidden Markov Model                                           *hmm*
+==============================================================================
+A. TRAINING HMMs USING BAUM-WELSH
+---------------------------------
 1. Go to the casino_hmm folder:
+    cd casino_hmm
+2. Run the train program put the result in file 'casino_reestimated_bw.txt:
+   train -c casino_bw_train.txt > casino_reestimated_bw.txt
+3. See the results (using the 'more' command)
+   more casino_reestimated_bw.txt
 
-cd casino_hmm
+B. SIMULATING   HMMs
+--------------------
+1. Go to the casino_hmm folder:
+   cd casino_hmm
+2. Run the simulate program (output will be in the terminal):
+   simulate -m casino.txt -n 1 -l 100 -h
 
-2. Run the simulate program:
-
-simulate -m casino.txt -n 1 -l 100 -h
-
-** Decoding a HMM using viterbi                            
-
+C. DECODING HMMs (VITERBI ALGORITHM)                             
+------------------------------------
 1. Go the casino_hmm folder:
-
-cd casino_hmm
-
-2. Run the viterbi_decoding program
-
-viterbi_decoding -m casino.txt < input.txt 
+   cd casino_hmm
+2. Run the viterbi_decoding program:
+   viterbi_decoding -m casino.txt < input.txt 
 
 ==============================================================================
 2. Independent Identically Distributed Model                        *iid*
+==============================================================================
 
+A. TRAINING IIDs
+----------------
 1. Go to the discreteiid folder
-
-cd discreteiid
-
+   cd discreteiid
 2. Run the train program
-
-train -c train.txt
+   train -c train.txt
 
 ==============================================================================
 5. Inhomogeneous Markov Chain                          *wam*
-
+==============================================================================
+A. TRAINING INHOMOGENEUS MARKOV CHAINS
+--------------------------------------
 1. Go to the wam folder
-
-cd wam
-
-2. Execute the train program
-
-train -c train.txt > trained_wam.txt
-
+   cd wam
+2. Execute the train program storing results in file 'trained_wam.txt'
+   train -c train.txt > trained_wam.txt
 3. See the results
-
-more trained_wam.txt
+   more trained_wam.txt
 
 ==============================================================================
 6. Variable Length Markov Chain                        *vlmc*
-
+==============================================================================
+A. TRAINING VLMCs
+-----------------
 1. Go to the vlmc folder
-
-cd vlmc
-
-2. execute the train program
-
-train -c train_vlmc.txt > trained_vlmc.txt
-
+   cd vlmc
+2. execute the train program storing results in file trained_vlmc.txt
+   train -c train_vlmc.txt > trained_vlmc.txt
 3. see the results
+   more trained_vlmc.txt
 
-more trained_vlmc.txt
-
-4. simulating
-
-simulate -m trained_vlmc.txt -l 100 -n 5
+B. SIMULATING A VLMC
+--------------------
+4. execute the simulate command (output will show in the terminal)
+   simulate -m trained_vlmc.txt -l 100 -n 5
 
 ==============================================================================
 7. Bayesian Classifiers                                            *bayes*
+==============================================================================
 
-Example of Bayesian Classifier configuration file:
-
+A. Example of Bayesian Classifier configuration file:
+-----------------------------------------------------
 classes=("honest": "honest_dice_markov_chain.txt";  
          "loaded": "loaded_dice_markov_chain.txt")
 model_probabilities=("loaded": 0.1;  
                      "honest": 0.9)
 
-Executing bayesian classifier: 
-
+B. Executing bayesian classifier: 
+---------------------------------
 1. Go the casino_markov_chain folder
-
-cd casino_markov_chain 
-
-2. Run the bayes_classifier program
-
-
-bayes_classifier -c bayes_classifier.txt  < sequences.in 
+   cd casino_markov_chain 
+2. Run the bayes_classifier program (output will show in the terminal)
+   bayes_classifier -c bayes_classifier.txt  < sequences.in 
  
 ==============================================================================
 8. Generalized Hidden Markov Model                     *ghmm*
+==============================================================================
 
+A. TRAINING GHMMs
+-----------------
 1. Go the bacteria_ghmm directory
-
-cd bacteria_ghmm
-
-2.  Run the train program
-
-train -c cfg/train_transitions.cfg > ghmm_estimated.txt 
-
+   cd bacteria_ghmm
+2. Run the train program storing results in file 'ghmm-estimated.txt' 
+   train -c cfg/train_transitions.cfg > ghmm_estimated.txt 
 3. See the results
+   more ghmm_estimated.txt
 
-more ghmm_estimated.txt
-
-4. Run the viterbi
-
-viterbi_decoding -m ghmm_estimated.txt < test_set/seq > output.txt
-
-5. Check the accuracy
-
-./scripts/accuracy.pl  test_set/path output.txt
+B. DECODING SEQUENCES USING GHMMs
+---------------------------------
+1. Run the viterbi alrogithm storing output in file 'output.txt'
+   viterbi_decoding -m ghmm_estimated.txt < test_set/seq > output.txt
+2. Check the accuracy
+   perl scripts/accuracy.pl  test_set/path output.txt
 
