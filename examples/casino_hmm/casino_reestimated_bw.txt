@@ -1,22 +1,22 @@
 model_name = "HiddenMarkovModel"
 state_names = ("Fair","Loaded")
 observation_symbols = ("1","2","3","4","5","6")
-transitions = ("Fair" | "Fair": 0.358854;
- "Loaded" | "Fair": 0.64113;
- "Fair" | "Loaded": 0.450843;
- "Loaded" | "Loaded": 0.549182)
-emission_probabilities = ("1" | "Fair": 0.208386;
- "2" | "Fair": 0.218932;
- "3" | "Fair": 0.163194;
- "4" | "Fair": 0.162133;
- "5" | "Fair": 0.110931;
- "6" | "Fair": 0.136434;
- "1" | "Loaded": 0.204244;
- "2" | "Loaded": 0.188766;
- "3" | "Loaded": 0.228767;
- "4" | "Loaded": 0.145851;
- "5" | "Loaded": 0.120672;
- "6" | "Loaded": 0.111695)
-initial_probabilities = ("Fair":  4.30684e-108;
+transitions = ("Fair" | "Fair": 0.91032;
+ "Loaded" | "Fair": 0.0896796;
+ "Fair" | "Loaded": 0.0945463;
+ "Loaded" | "Loaded": 0.905454)
+emission_probabilities = ("1" | "Fair": 0.18281;
+ "2" | "Fair": 0.165696;
+ "3" | "Fair": 0.156174;
+ "4" | "Fair": 0.168828;
+ "5" | "Fair": 0.159022;
+ "6" | "Fair": 0.16747;
+ "1" | "Loaded": 0.393386;
+ "2" | "Loaded": 0.201625;
+ "3" | "Loaded": 0.213085;
+ "4" | "Loaded": 0.0991873;
+ "5" | "Loaded": 0.046084;
+ "6" | "Loaded": 0.0466334)
+initial_probabilities = ("Fair":  1.19013e-172;
  "Loaded": 1)
 

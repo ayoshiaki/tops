@@ -11,7 +11,7 @@
 5. Bayesian Classifiers                                |bayes| 
 6. Generalized Hidden Markov Model                     |ghmm|
 
-Note: We are assuming that the user is using Linux or MacOSX.
+Note: We are assuming that ToPS was installed in a UNIX operating system.
 
 The examples are in the following folders:
  
@@ -144,7 +144,7 @@ more ghmm_estimated.txt
 
 4. Run the viterbi
 
-viterbi -m ghmm_estimated < test_set/seq > output.txt
+viterbi_decoding -m ghmm_estimated.txt < test_set/seq > output.txt
 
 5. Check the accuracy
 
