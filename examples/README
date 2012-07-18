@@ -13,13 +13,15 @@
 
 Note: We are assuming that the user is using Linux or MacOSX.
 
-Each example is in a folder:
-
-casino_hmm, which contains example of HMM
+The examples are in the following folders:
+ 
+hmm_cpg, which contains an example of a HMM for the CpG island problem
+bayes_cpg, which contains an example of a Bayesian classifier for the CpG island problem
+casino_hmm, which contains an example of HMM for the casino problem
 bacteria_ghmm, which cotains an example of GHMM
-casino_markov_chain, which contains  a Bayesian classifier
+casino_markov_chain, which contains  a Bayesian classifier for the casino problem
 discreteiid, which contains an example of DiscreteIIDModel
-hmm, which contains an example of HMM, and a comparison with R's package HiddenMarkov.
+hmm, which contains an example of a HMM, and a comparison with R's package HiddenMarkov.
 vlmc, which contains an example of VLMC
 wam, which contains an example of InhomogeneousMarkovChain
  
