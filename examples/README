@@ -5,10 +5,12 @@
 
 
 1. Hidden Markov Model                                 |hmm|
+1.1 CpG island HMM                                     |cpg_island_hmm|
 2. Independent Identically Distributed Model           |iid|
 3. Inhomogeneous Markov Model                          |wam|
 4. Variable Length Markov Chain                        |vlmc|
 5. Bayesian Classifiers                                |bayes| 
+5.1 CpG island classifier                              |cpg_island_bayes| 
 6. Generalized Hidden Markov Model                     |ghmm|
 
 Note: We are assuming that ToPS was installed in a UNIX operating system.
@@ -32,7 +34,7 @@ Note1: we recommend that you look at the configuration files specified in the co
 Note2: All examples assume you uncompressed the files and are in command line in the directory that contains all the data.
 
 ==============================================================================
-           Hidden Markov Model                                           *hmm*
+1.         Hidden Markov Model                                           *hmm*
 ==============================================================================
 A. TRAINING HMMs USING BAUM-WELSH
 ---------------------------------
@@ -56,6 +58,34 @@ C. DECODING HMMs (VITERBI ALGORITHM)
    cd casino_hmm
 2. Run the viterbi_decoding program:
    viterbi_decoding -m casino.txt < input.txt 
+
+==============================================================================
+1.1 CpG island HMM                                           *cpg_island_hmm*
+==============================================================================
+A. TRAINING HMMs USING BAUM-WELSH
+---------------------------------
+1. Go to the hmm_cpg folder:
+   cd hmm_cpg
+2. Run the train program put the result in file 'cpg_island_bw_trained.txt':
+   train -c  cpg_island_bw_train.txt > cpg_island_bw_trained.txt
+3. See the results (using the 'more' command)
+   more cpg_island_bw_trained.txt
+
+B. SIMULATING   HMMs
+--------------------
+1. Go to the hmm_cpg folder:
+   cd hmm_cpg
+2. Run the simulate program (output will be in the terminal):
+   simulate -m cpg_island.txt -n 1 -l 100 -h
+
+C. DECODING HMMs (VITERBI ALGORITHM)                             
+------------------------------------
+1. Go the casino_hmm folder:
+   cd hmm_cpg
+2. Run the viterbi_decoding program:
+   viterbi_decoding -m cpg_island.txt < in.txt 
+
+
 
 ==============================================================================
 2. Independent Identically Distributed Model                        *iid*
@@ -114,9 +144,20 @@ B. Executing bayesian classifier:
    cd casino_markov_chain 
 2. Run the bayes_classifier program (output will show in the terminal)
    bayes_classifier -c bayes_classifier.txt  < sequences.in 
- 
+
 ==============================================================================
-8. Generalized Hidden Markov Model                     *ghmm*
+5.1 CpG island classifier                              *cpg_island_bayes* 
+==============================================================================
+ 
+Executing bayesian classifier: 
+---------------------------------
+1. Go the bayes_cpg folder
+   cd bayes_cpg
+2. Run the bayes_classifier program (output will show in the terminal)
+   bayes_classifier -c bayes_classifier.txt  < sequences.in 
+
+==============================================================================
+6. Generalized Hidden Markov Model                     *ghmm*
 ==============================================================================
 
 A. TRAINING GHMMs
