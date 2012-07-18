@@ -1,0 +1,8 @@
+model_name="VariableLengthMarkovChain"
+alphabet= ("A", "C", "G", "T")
+probabilities = 
+  ( "A" | "": 0.25; 
+    "C" | "": 0.25; 
+    "G" | "": 0.25; 
+    "T" | "": 0.25 )
+
