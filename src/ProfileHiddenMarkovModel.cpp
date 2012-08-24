@@ -159,15 +159,98 @@ namespace tops {
     return mat(getStateIndex('M', n_match_states - 1),seq_len - 1);
   }
 
+  //TODO
   double ProfileHiddenMarkovModel::backward(const Sequence & s, Matrix &beta) const
   {
+    cerr << "ERROR: Backward not implemented for ProfileHMM." << endl;
+    exit(-1);
     return 0.0;
   }
 
+
   double ProfileHiddenMarkovModel::viterbi (const Sequence &s, Sequence &path, Matrix & gamma) const
   {
-    return 0.0;
+     int st;
+     int n_states = _states.size();
+     int n_match_states = (n_states + 3)/3;
+     for (st = 0; st < n_states && !getState(st)->emission();++st);
+     if (st == n_states) {
+       cout << "ERROR: There is only silent states." << endl;
+       exit(-1);
+     }
+     int emiss_size = getState(st)->emission()->size() + 1;
+     int seq_len = s.size() + 1;
+
+
+     Matrix mat(n_states,seq_len);
+     Matrix ins(n_states,seq_len);
+     Matrix del(n_states,seq_len);
+
+     mat.clear();
+     ins.clear();
+     del.clear();
+
+     for (int j = 0; j == 0 && j < n_match_states; j++) {
+       for (int i = 1; i < seq_len; ++i) {
+           ins(j,i) = _states[getStateIndex('I',j)]->emission()->log_probability_of(s[i-1])
+                       + log(emiss_size)
+                       + max(_states[getStateIndex('M',j)]->transitions()->log_probability_of(getStateIndex('I',j)) + mat(j,i-1),
+                             _states[getStateIndex('I',j)]->transitions()->log_probability_of(getStateIndex('I',j)) + ins(j,i-1));
+       }
+     }
+
+     for (int j = 1; j == 1 && j < n_match_states; j++) {
+         for (int i = 1; i < seq_len; ++i) {
+
+             mat(j,i) = _states[getStateIndex('M',j)]->emission()->log_probability_of(s[i-1])
+                         + log(emiss_size)
+                         + max(_states[getStateIndex('M',j-1)]->transitions()->log_probability_of(getStateIndex('M',j)) + mat(j-1,i-1),
+                               _states[getStateIndex('I',j-1)]->transitions()->log_probability_of(getStateIndex('M',j)) + ins(j-1,i-1));
+
+             ins(j,i) = _states[getStateIndex('I',j)]->emission()->log_probability_of(s[i-1])
+                         + log(emiss_size)
+                         + max(_states[getStateIndex('M',j)]->transitions()->log_probability_of(getStateIndex('I',j)) + mat(j,i-1),
+                               _states[getStateIndex('I',j)]->transitions()->log_probability_of(getStateIndex('I',j)) + ins(j,i-1),
+                               _states[getStateIndex('D',j)]->transitions()->log_probability_of(getStateIndex('I',j)) + del(j,i-1));
+
+             del(j,i) = max(_states[getStateIndex('M',j - 1)]->transitions()->log_probability_of(getStateIndex('D',j)) + mat(j-1,i),
+                            _states[getStateIndex('I',j - 1)]->transitions()->log_probability_of(getStateIndex('D',j)) + ins(j-1,i));
+         }
+     }
+
+     for (int j = 2; j < n_match_states - 1; j++) {
+         for (int i = 1; i < seq_len; ++i) {
+
+             mat(j,i) = _states[getStateIndex('M',j)]->emission()->log_probability_of(s[i-1])
+                         + log(emiss_size)
+                         + max(_states[getStateIndex('M',j-1)]->transitions()->log_probability_of(getStateIndex('M',j)) + mat(j-1,i-1),
+                               _states[getStateIndex('I',j-1)]->transitions()->log_probability_of(getStateIndex('M',j)) + ins(j-1,i-1),
+                               _states[getStateIndex('D',j-1)]->transitions()->log_probability_of(getStateIndex('M',j)) + del(j-1,i-1));
+
+             ins(j,i) = _states[getStateIndex('I',j)]->emission()->log_probability_of(s[i-1])
+                             + log(emiss_size)
+                             + max(_states[getStateIndex('M',j)]->transitions()->log_probability_of(getStateIndex('I',j)) + mat(j,i-1),
+                                   _states[getStateIndex('I',j)]->transitions()->log_probability_of(getStateIndex('I',j)) + ins(j,i-1),
+                                   _states[getStateIndex('D',j)]->transitions()->log_probability_of(getStateIndex('I',j)) + del(j,i-1));
+
+             del(j,i) = max(_states[getStateIndex('M',j - 1)]->transitions()->log_probability_of(getStateIndex('D',j)) + mat(j-1,i),
+                            _states[getStateIndex('I',j - 1)]->transitions()->log_probability_of(getStateIndex('D',j)) + ins(j-1,i),
+                            _states[getStateIndex('D',j - 1)]->transitions()->log_probability_of(getStateIndex('D',j)) + del(j-1,i));
+
+         }
+     }
+
+     for (int j = n_match_states - 1; j == n_match_states - 1 && j < n_match_states; j++) {
+       for (int i = 1; i < seq_len; ++i) {
+         mat(j,i) = max(_states[getStateIndex('M',j-1)]->transitions()->log_probability_of(getStateIndex('M',j)) + mat(j-1,i-1),
+                        _states[getStateIndex('I',j-1)]->transitions()->log_probability_of(getStateIndex('M',j)) + ins(j-1,i-1),
+                        _states[getStateIndex('D',j-1)]->transitions()->log_probability_of(getStateIndex('M',j)) + del(j-1,i-1));
+       }
+     }
+
+     return mat(getStateIndex('M', n_match_states - 1),seq_len - 1);
   }
+
 
 
   ////////////////////////////////////////////////
@@ -191,11 +274,35 @@ namespace tops {
     emiss.clear();
     trans.clear();
 
+    if (observedStates.size() == 0)
+      return;
+
     // Counting emissions
     for (int seq = 0; seq < observedStates.size();++seq) {
       int pos = 0;
+
+     // cout << observedStates.size() << endl;
+     // cout << observedEmissions.size() << endl;
+
+
+      /*
       for (int i = 0; i < observedStates[seq].size();++i) {
+          cout << " " << getState(observedStates[seq][i])->getName()->name();
+      }
+      cout << endl;
+
+      for (int i = 0; i < observedEmissions[seq].size();++i) {
+          cout << " " << observedEmissions[seq][i];
+      }
+      cout << endl;
+*/
+
+
+      for (int i = 0; i < observedStates[seq].size();++i) {
+      //  cout << " pos = " << pos << endl;
         if (getState(observedStates[seq][i])->emission()) {
+       //     cout << "observedStates[seq][i] = " << observedStates[seq][i] << " observedEmissions[seq][pos++] = " << observedEmissions[seq][pos] << endl;
+        //    cout << "emiss_size = " << emiss_size;
           emiss(observedStates[seq][i], observedEmissions[seq][pos++])++;
         }
       }
@@ -210,31 +317,32 @@ namespace tops {
     trans(*(observedStates[0].end() - 1), *(observedStates[0].end() - 1))++;
 
     //DEBUG:Print emiss matrix
-    cout << "Emissions matrix:" << endl;
+    /*cout << "Emissions matrix:" << endl;
     for (int i = 0; i < emiss.size1(); ++i) {
       for (int j = 0; j < emiss.size2(); ++j)
           cout << emiss(i,j) << " ";
       cout << endl;
     }
-    cout << endl;
+    cout << endl;*/
 
     //DEBUG:Print trans matrix
-    cout << "Transitions matrix:" << endl;
+   /* cout << "Transitions matrix:" << endl;
     for (int i = 0; i < trans.size1(); ++i) {
       for (int j = 0; j < trans.size2(); ++j)
           cout << trans(i,j) << " ";
       cout << endl;
     }
-    cout << endl;
+    cout << endl;*/
+
 
     // Emission Pseudocounts
     for (int i = 0; i < n_states; ++i) {
-      if (getState(i)->emission())
-        {
+      if (getState(i)->emission()) {
         for (int symbol = 0; symbol < getState(i)->emission()->size(); ++symbol)
           emiss(i, symbol) += pseudocouts;
       }
     }
+
 
     //Transitions Pseudocounts
     int n_match_states = (n_states + 3)/3;
@@ -280,22 +388,22 @@ namespace tops {
     }
 
     //DEBUG:Print emiss matrix
-    cout << "Emissions matrix:" << endl;
+    /*cout << "Emissions matrix:" << endl;
     for (int i = 0; i < emiss.size1(); ++i) {
       for (int j = 0; j < emiss.size2(); ++j)
           cout << emiss(i,j) << " ";
       cout << endl;
     }
-    cout << endl;
+    cout << endl;*/
 
     //DEBUG:Print trans matrix
-    cout << "Transitions matrix:" << endl;
+    /*cout << "Transitions matrix:" << endl;
     for (int i = 0; i < trans.size1(); ++i) {
       for (int j = 0; j < trans.size2(); ++j)
           cout << trans(i,j) << " ";
       cout << endl;
     }
-    cout << endl;
+    cout << endl;*/
 
     // Puts the emission matrix info inside HMMStates
     for (int i = 0; i < n_states; ++i) {
@@ -437,6 +545,19 @@ namespace tops {
   ///////// Auxiliary and debug functions ////////////
   ////////////////////////////////////////////////////
 
+
+  double ProfileHiddenMarkovModel::max(double a, double b, double c) const {
+     if (a > b && a > c)
+       return a;
+     if (b > c)
+       return b;
+     return c;
+   }
+
+  double ProfileHiddenMarkovModel::max(double a, double b) const {
+     return (a > b)? a:b;
+   }
+
   std::string ProfileHiddenMarkovModel::str () const
     {
       int nstates = _states.size();
@@ -558,7 +679,7 @@ namespace tops {
         path.push_back(state);
       states_c++;
 
-      while ((int) h.size() < (i + size)) {
+      while (state != last_state) {
         if (getState(state)->emission()) {
           chooseObservation(h, i + emiss_c, state);
           emiss_c++;
@@ -571,9 +692,6 @@ namespace tops {
         else
           path.push_back(state);
         states_c++;
-
-        if (state == last_state)
-          break;
       }
       //h.resize(size); This is a possible bug in DecodableModel, I believe these lines should not be there..
       //path.resize(size);

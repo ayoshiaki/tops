@@ -116,6 +116,7 @@ namespace tops{
         return this;
       }
 
+
       virtual void trainMaxLikelihood(SequenceList & observedStates, SequenceList & observedEmissions, int pseudocouts);
       virtual void trainBaumWelch (SequenceList & training_set, int maxiterations, double diff) ;
 
@@ -138,6 +139,8 @@ namespace tops{
       std::vector<double> _ctFactors;
       AlphabetPtr _state_names;
       //void scale(std::vector<double> & in, int t);
+      double max(double a, double b, double c) const;
+      double max(double a, double b) const;
       //std::vector<double> iterate(Sequence & obs);
     };
 

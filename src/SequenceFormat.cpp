@@ -73,28 +73,39 @@ namespace tops {
       }
       trim_spaces(line);
 
+      size_t found = line.find(":");
+      if (found == std::string::npos) {
+        std::cerr << "ERROR: Invalid sequence !" << std::endl;
+        exit(-1);
+      }
       std::vector<std::string> seq_entry;
       boost::regex separator(":");
       split_regex(line, seq_entry, separator);
-      if(seq_entry.size() < 2)
-        {
-          std::cerr << "Warning: Invalid or empty sequence !" << std::endl;
-          //exit(-1);
-        }
       std::string seqname = "";
       int last = seq_entry.size()-1;
-      if(seq_entry.size() >= 2)
-          {
-              seqname = seq_entry[0];
-          }
+     // if(seq_entry.size() >= 2)
+      //    {
+      seqname = seq_entry[0];
+      //    }
 
       boost::regex sep(" ");
-      in.setName( seqname);
-      std::string description;
-      trim_spaces(seq_entry[last]);
-      std::vector<int> invalid;
-      in.setSequence(factory.createSequence(seq_entry[last], invalid));
-      in.setInvalidPositions(invalid);
+      in.setName(seqname);
+
+      if(seq_entry.size() >= 2)
+        {
+          std::string description;
+          trim_spaces(seq_entry[last]);
+          std::vector<int> invalid;
+          in.setSequence(factory.createSequence(seq_entry[last], invalid));
+          in.setInvalidPositions(invalid);
+        }
+      else
+        {
+          std::vector<int> invalid;
+          std::vector<std::string> empty;
+          in.setSequence(factory.createSequence(empty, invalid));
+          //in.setInvalidPositions(invalid);
+        }
       return stream;
     }
     return stream;
