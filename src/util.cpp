@@ -261,7 +261,7 @@ namespace tops {
   }
 
 
-  /*  double log_sum( double log_a, double log_b)
+  double log_sum_2( double log_a, double log_b)
   {
     double min = log_a;
     double diff;
@@ -270,18 +270,16 @@ namespace tops {
         diff = log_b - log_a;
         if(diff != diff)
           return log_a;
-	return log_a + lookup(diff);
-        //return log_a + log(1 + exp(diff));
+        return log_a + log(1 + exp(diff));
       }
     else
       {
         diff = log_a - log_b;
         if(diff != diff)
           return log_b;
-	return log_b + lookup(diff);
-	  //return log_b + log(1 + exp(diff));
+	return log_b + log(1 + exp(diff));
       }
-      }*/
+   }
 
 
   double safe_division(double a, double b)

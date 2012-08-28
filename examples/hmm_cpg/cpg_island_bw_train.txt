@@ -1,0 +1,4 @@
+training_algorithm = "BaumWelchHMM"
+training_set = "trainhmm_bw.sequences"
+initial_specification = "cpg_island.txt"
+maxiter = 500

@@ -1,0 +1,178 @@
+*README*	For ToPS version 1.0  Last change: 2012 Jul 16
+
+
+                       EXAMPLE OF ToPS USAGE
+
+
+1. Hidden Markov Model                                 |hmm|
+1.1 CpG island HMM                                     |cpg_island_hmm|
+2. Independent Identically Distributed Model           |iid|
+3. Inhomogeneous Markov Model                          |wam|
+4. Variable Length Markov Chain                        |vlmc|
+5. Bayesian Classifiers                                |bayes| 
+5.1 CpG island classifier                              |cpg_island_bayes| 
+6. Generalized Hidden Markov Model                     |ghmm|
+
+Note: We are assuming that ToPS was installed in a UNIX operating system.
+
+The examples are in the following folders:
+ 
+hmm_cpg, which contains an example of a HMM for the CpG island problem
+bayes_cpg, which contains an example of a Bayesian classifier for the CpG island problem
+casino_hmm, which contains an example of HMM for the casino problem
+bacteria_ghmm, which cotains an example of GHMM
+casino_markov_chain, which contains  a Bayesian classifier for the casino problem
+discreteiid, which contains an example of DiscreteIIDModel
+hmm, which contains an example of a HMM, and a comparison with R's package HiddenMarkov.
+vlmc, which contains an example of VLMC
+wam, which contains an example of InhomogeneousMarkovChain
+ 
+
+HOW TO USE THE EXAMPLES (we show the tasks and the command lines to be executed)
+
+Note1: we recommend that you look at the configuration files specified in the commands under the -c option.
+Note2: All examples assume you uncompressed the files and are in command line in the directory that contains all the data.
+
+==============================================================================
+1.         Hidden Markov Model                                           *hmm*
+==============================================================================
+A. TRAINING HMMs USING BAUM-WELSH
+---------------------------------
+1. Go to the casino_hmm folder:
+    cd casino_hmm
+2. Run the train program put the result in file 'casino_reestimated_bw.txt:
+   train -c casino_bw_train.txt > casino_reestimated_bw.txt
+3. See the results (using the 'more' command)
+   more casino_reestimated_bw.txt
+
+B. SIMULATING   HMMs
+--------------------
+1. Go to the casino_hmm folder:
+   cd casino_hmm
+2. Run the simulate program (output will be in the terminal):
+   simulate -m casino.txt -n 1 -l 100 -h
+
+C. DECODING HMMs (VITERBI ALGORITHM)                             
+------------------------------------
+1. Go the casino_hmm folder:
+   cd casino_hmm
+2. Run the viterbi_decoding program:
+   viterbi_decoding -m casino.txt < input.txt 
+
+==============================================================================
+1.1 CpG island HMM                                           *cpg_island_hmm*
+==============================================================================
+A. TRAINING HMMs USING BAUM-WELSH
+---------------------------------
+1. Go to the hmm_cpg folder:
+   cd hmm_cpg
+2. Run the train program put the result in file 'cpg_island_bw_trained.txt':
+   train -c  cpg_island_bw_train.txt > cpg_island_bw_trained.txt
+3. See the results (using the 'more' command)
+   more cpg_island_bw_trained.txt
+
+B. SIMULATING   HMMs
+--------------------
+1. Go to the hmm_cpg folder:
+   cd hmm_cpg
+2. Run the simulate program (output will be in the terminal):
+   simulate -m cpg_island.txt -n 1 -l 100 -h
+
+C. DECODING HMMs (VITERBI ALGORITHM)                             
+------------------------------------
+1. Go the casino_hmm folder:
+   cd hmm_cpg
+2. Run the viterbi_decoding program:
+   viterbi_decoding -m cpg_island.txt < in.txt 
+
+
+
+==============================================================================
+2. Independent Identically Distributed Model                        *iid*
+==============================================================================
+
+A. TRAINING IIDs
+----------------
+1. Go to the discreteiid folder
+   cd discreteiid
+2. Run the train program
+   train -c train.txt
+
+==============================================================================
+5. Inhomogeneous Markov Chain                          *wam*
+==============================================================================
+A. TRAINING INHOMOGENEUS MARKOV CHAINS
+--------------------------------------
+1. Go to the wam folder
+   cd wam
+2. Execute the train program storing results in file 'trained_wam.txt'
+   train -c train.txt > trained_wam.txt
+3. See the results
+   more trained_wam.txt
+
+==============================================================================
+6. Variable Length Markov Chain                        *vlmc*
+==============================================================================
+A. TRAINING VLMCs
+-----------------
+1. Go to the vlmc folder
+   cd vlmc
+2. execute the train program storing results in file trained_vlmc.txt
+   train -c train_vlmc.txt > trained_vlmc.txt
+3. see the results
+   more trained_vlmc.txt
+
+B. SIMULATING A VLMC
+--------------------
+4. execute the simulate command (output will show in the terminal)
+   simulate -m trained_vlmc.txt -l 100 -n 5
+
+==============================================================================
+7. Bayesian Classifiers                                            *bayes*
+==============================================================================
+
+A. Example of Bayesian Classifier configuration file:
+-----------------------------------------------------
+classes=("honest": "honest_dice_markov_chain.txt";  
+         "loaded": "loaded_dice_markov_chain.txt")
+model_probabilities=("loaded": 0.1;  
+                     "honest": 0.9)
+
+B. Executing bayesian classifier: 
+---------------------------------
+1. Go the casino_markov_chain folder
+   cd casino_markov_chain 
+2. Run the bayes_classifier program (output will show in the terminal)
+   bayes_classifier -c bayes_classifier.txt  < sequences.in 
+
+==============================================================================
+5.1 CpG island classifier                              *cpg_island_bayes* 
+==============================================================================
+ 
+Executing bayesian classifier: 
+---------------------------------
+1. Go the bayes_cpg folder
+   cd bayes_cpg
+2. Run the bayes_classifier program (output will show in the terminal)
+   bayes_classifier -c bayes_classifier.txt  < sequences.in 
+
+==============================================================================
+6. Generalized Hidden Markov Model                     *ghmm*
+==============================================================================
+
+A. TRAINING GHMMs
+-----------------
+1. Go the bacteria_ghmm directory
+   cd bacteria_ghmm
+2. Run the train program storing results in file 'ghmm-estimated.txt' 
+   train -c cfg/train_transitions.cfg > ghmm_estimated.txt 
+3. See the results
+   more ghmm_estimated.txt
+
+B. DECODING SEQUENCES USING GHMMs
+---------------------------------
+1. Run the viterbi alrogithm storing output in file 'output.txt'
+   viterbi_decoding -m ghmm_estimated.txt < test_set/seq > output.txt
+2. Check the accuracy
+   perl scripts/accuracy.pl  test_set/path output.txt
+

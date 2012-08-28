@@ -1,0 +1,3 @@
+training_algorithm="DiscreteIIDModel"
+alphabet = ("A", "C", "G", "T")
+training_set="sequence_from_discreteiid.txt"

@@ -1,0 +1,3 @@
+classes = ( "CPG": "cpg_island_markov_chain.txt";
+            "NONCPG": "uniform_markov_chain.txt" )
+model_probabilities = ("CPG": 0.5; "NONCPG": 0.5)

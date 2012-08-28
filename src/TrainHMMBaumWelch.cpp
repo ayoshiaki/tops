@@ -32,10 +32,18 @@ namespace tops {
 
   ProbabilisticModelPtr TrainHMMBaumWelch::create( ProbabilisticModelParameters & parameters) const
   {
-    ProbabilisticModelParameterValuePtr initmodelpar = parameters.getMandatoryParameterValue("initial_model");
+    ProbabilisticModelParameterValuePtr initmodelpar = parameters.getOptionalParameterValue("initial_model");
+    ProbabilisticModelParameterValuePtr initspecificationpar = parameters.getOptionalParameterValue("initial_specification");
+
     ProbabilisticModelParameterValuePtr trainpar = parameters.getMandatoryParameterValue("training_set");
     ProbabilisticModelParameterValuePtr thrpar = parameters.getOptionalParameterValue("threshold");
     ProbabilisticModelParameterValuePtr maxiterpar = parameters.getOptionalParameterValue("maxiter");
+
+    if(initspecificationpar != NULL) 
+	    initmodelpar = initspecificationpar;
+    if((initspecificationpar == NULL) && (initmodelpar == NULL)) 
+	    std::cerr << "ERROR: initial_specification is a mandatory paramenter\n" << std::endl;
+
     double threshold = 1e-5;
     if(thrpar != NULL)
       threshold = thrpar->getDouble();

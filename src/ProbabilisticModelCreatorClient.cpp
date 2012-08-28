@@ -3,6 +3,7 @@
  *
  *       Copyright 2011 Andre Yoshiaki Kashiwabara <akashiwabara@usp.br>
  *                      �gor Bon�dio <ibonadio@ime.usp.br>
+ *                      Igor Bonadio <ibonadio@ime.usp.br>
  *                      Vitor Onuchic <vitoronuchic@gmail.com>
  *                      Alan Mitchell Durham <aland@usp.br>
  *
@@ -45,9 +46,10 @@
 #include "MultipleSequentialModelCreator.hpp"
 #include "util.hpp"
 
-
+#include "TrainVariableLengthMarkovChain.hpp"
 #include "TrainHMMBaumWelch.hpp"
 #include "TrainProfileHMMMaxLikelihood.hpp"
+#include "TrainHMMMaximumLikelihood.hpp"
 #include "TrainVariableLengthMarkovChain.hpp"
 #include "TrainDiscreteIIDModel.hpp"
 #include "TrainFixedLengthMarkovChain.hpp"
@@ -265,6 +267,7 @@ namespace tops
     _trainingCommand["FixedLengthMarkovChain"]= TrainFixedLengthMarkovChainPtr(new TrainFixedLengthMarkovChain());
     _trainingCommand["BaumWelch"] = TrainHMMBaumWelchPtr(new TrainHMMBaumWelch());
     _trainingCommand["ProfileHMMMaxLikelihood"] = TrainProfileHMMMaxLikelihoodPtr(new TrainProfileHMMMaxLikelihood());
+    _trainingCommand["MaximumLikelihoodHMM"] = TrainHMMMaximumLikelihoodPtr(new TrainHMMMaximumLikelihood());
     _trainingCommand["WeightArrayModel"] = TrainWeightArrayModelPtr(new TrainWeightArrayModel());
     _trainingCommand["VariableLengthInhomogeneousMarkovChain"]
       = TrainVariableLengthInhomogeneousMarkovChainPtr(new TrainVariableLengthInhomogeneousMarkovChain());

@@ -1,0 +1,39 @@
+model_name = "GeneralizedHiddenMarkovModel"
+state_names = ("NonCoding", "Coding", "Start", "Stop")
+observation_symbols = ("A", "C", "G", "T")
+initial_probabilities = ("NonCoding": 1.0)
+
+# Configuring transitions
+# geometric duration state has runlength distributions specified with a self transition.
+transitions = 
+ ( "NonCoding" | "NonCoding": 0.999;
+       "Start" | "NonCoding": 0.001;
+      "Coding" | "Start": 1.0;
+        "Stop" | "Coding": 1.0;
+   "NonCoding" | "Stop": 1.0 )
+
+# Configuring models
+noncoding_model = 
+ [ model_name="MultinomialDistribution" 
+   alphabet = ("A", "C", "G", "T")
+   probabilities = (0.25, 0.25, 0.25, 0.25) ]
+coding_model = "model/coding.txt"
+start_model = "model/start.txt"
+stop_model = "model/stop.txt"
+single_exon_length = "model/coding_duration.txt"
+coding_duration_model = 
+[ model_name="PhasedRunLengthDistribution"
+  input_phase = 0
+  output_phase = 2
+  number_of_phases = 3
+  delta = 27
+  model = single_exon_length ]
+
+NonCoding = [ observation = noncoding_model ]
+Start = [ observation = start_model 
+          sequence_length = 27 ]
+Stop = [ observation = stop_model 
+          sequence_length = 27 ]
+Coding = [ observation =  coding_model 
+           duration = coding_duration_model ]
+

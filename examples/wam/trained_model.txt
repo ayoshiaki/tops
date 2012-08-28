@@ -1,0 +1,15 @@
+# Model BIC: -13390.8
+model_name = "InhomogeneousMarkovChain"
+p0 = ("0" | "" : 0.903; # leaf
+"1" | "" : 0.097; # leaf
+)
+p1 = ("0" | "" : 0.4974; # leaf
+"1" | "" : 0.5026; # leaf
+)
+p2 = ("0" | "" : 0.1004; # leaf
+"1" | "" : 0.8996; # leaf
+)
+position_specific_distribution = ("p0","p1","p2")
+phased =0
+alphabet = ("0", "1")
+

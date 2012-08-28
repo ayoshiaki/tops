@@ -1,0 +1,4 @@
+model_name = "MultinomialDistribution"
+probabilities = (0.1001,0.197,0.3039,0.399)
+alphabet = ("A", "C", "G", "T")
+

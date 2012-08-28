@@ -1,0 +1,8 @@
+training_algorithm = "WeightArrayModel"
+training_set="sequences_from_wam.txt"
+length=3
+alphabet=("0", "1")
+model_selection_criteria="BIC"
+begin = ("order": 0)
+end = ("order": 3)
+step = ("order": 1)

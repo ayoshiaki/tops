@@ -1,0 +1,5 @@
+training_algorithm="BaumWelchHMM"
+training_set="sequence_from_hmm.txt"
+initial_model="hmm_init.txt"
+maxiter=500
+# threshold=1e-5

@@ -1,0 +1,22 @@
+
+model_name="HiddenMarkovModel"
+state_names =
+   ("CPG", "NONCPG" )
+observation_symbols =
+   ("A", "C", "G", "T")
+transitions =
+   ("NONCPG" | "CPG": 0.002;
+       "CPG" | "CPG": 0.998;
+       "CPG" | "NONCPG": 0.002;
+    "NONCPG" | "NONCPG": 0.998)
+emission_probabilities =
+   ("A" | "CPG": 0.156;
+    "C" | "CPG": 0.344;
+    "G" | "CPG": 0.344;
+    "T" | "CPG": 0.155;
+    "A" | "NONCPG": 0.25;
+    "C" | "NONCPG": 0.25;
+    "G" | "NONCPG": 0.25;
+    "T" | "NONCPG": 0.25)
+ initial_probabilities =
+  ("CPG": 0.5; "NONCPG": 0.5)

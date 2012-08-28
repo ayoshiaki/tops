@@ -1,0 +1,22 @@
+model_name = "HiddenMarkovModel"
+state_names = ("Fair","Loaded")
+observation_symbols = ("1","2","3","4","5","6")
+transitions = ("Fair" | "Fair": 0.98;
+ "Loaded" | "Fair": 0.02;
+ "Fair" | "Loaded": 0.0142857;
+ "Loaded" | "Loaded": 0.985714)
+emission_probabilities = ("1" | "Fair": 0.233333;
+ "2" | "Fair": 0.0333333;
+ "3" | "Fair": 0.0333333;
+ "4" | "Fair": 0.0333333;
+ "5" | "Fair": 0.233333;
+ "6" | "Fair": 0.433333;
+ "1" | "Loaded": 0.357143;
+ "2" | "Loaded": 0.157143;
+ "3" | "Loaded": 0.157143;
+ "4" | "Loaded": 0.157143;
+ "5" | "Loaded": 0.0142857;
+ "6" | "Loaded": 0.157143)
+initial_probabilities = ("Fair":  0.409091;
+ "Loaded": 0.590909)
+

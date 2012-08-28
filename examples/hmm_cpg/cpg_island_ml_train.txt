@@ -1,0 +1,3 @@
+training_algorithm = "MaximumLikelihoodHMM"
+training_set = "trainhmm_ml.sequences"
+initial_specification = "cpg_island.txt"
