@@ -1,0 +1,5 @@
+first_emiss: A A C G T A A G 
+second_emiss: A A A C A T C A A T 
+third_emiss: A C C G A T C A G 
+forth_emiss: A A C G T A G T 
+fifth_emiss: A C G A T C A G 

@@ -1,0 +1,5 @@
+training_algorithm="ProfileHMMMaxLikelihood"
+states_training_set="states_seq.txt"
+emissions_training_set="emissions_seq.txt"
+initial_model="profile_init.model"
+pseudocounts=1
