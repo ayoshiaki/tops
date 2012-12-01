@@ -58,7 +58,7 @@ namespace tops {
     virtual Sequence & choose(Sequence & h, Sequence & path,  int i, int size) const;
     virtual Sequence & chooseWithHistory(Sequence & h, int i,  int size) const;
     virtual Sequence & chooseWithHistory(Sequence & h, int i,  int phase, int size) const;
-#endif;
+#endif
     virtual std::string str() const;
     std::string model_name () const;
   };
