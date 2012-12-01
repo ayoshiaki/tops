@@ -41,10 +41,10 @@ using namespace boost::program_options;
 
 int main(int argc, char ** argv) {
   AlphabetPtr alphabet = AlphabetPtr(new Alphabet());
-  alphabet->createSymbol("A");
-  alphabet->createSymbol("C");
-  alphabet->createSymbol("G");
-  alphabet->createSymbol("T");
+  alphabet->createSymbol(string("A"));
+  alphabet->createSymbol(string("C"));
+  alphabet->createSymbol(string("G"));
+  alphabet->createSymbol(string("T"));
   SequenceFormatManager::instance()->setFormat(SequenceFormatPtr(new FastaSequenceFormat()));
   while(!cin.eof())
     {
