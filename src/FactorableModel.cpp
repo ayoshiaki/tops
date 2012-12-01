@@ -30,8 +30,6 @@ namespace tops {
         double result = 0.0;
         if (end >= s.size())
             return -HUGE;
-        if(begin < 0)
-            return -HUGE;
         for(unsigned int i = begin; i <= end; i++)
             {
                 result += evaluatePosition(s, i);
