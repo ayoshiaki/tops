@@ -203,7 +203,6 @@ namespace tops {
             Matrix beta(nstates, sample[s].size());
 
             double P = forward(sample[s], alpha);
-            double P1 = backward(sample[s], beta);
 
             double sum = alpha(0, 0) + beta(0, 0);
             for(int i = 1; i < nstates; i++)
