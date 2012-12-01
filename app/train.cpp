@@ -225,7 +225,6 @@ int main(int argc, char ** argv) {
 
 
                                 }
-                                struct timeval start, stop;
                                 clock_t begin = clock();
                                 ProbabilisticModelPtr model = creator->create( *(readConfig.parameters()));
                                 clock_t end = clock();
