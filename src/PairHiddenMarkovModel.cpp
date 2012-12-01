@@ -638,7 +638,7 @@ namespace tops {
     if(observations->has("-"))
       _gap_id = observations->getSymbol("-")->id();
     else{
-      observations->createSymbol("-");
+      observations->createSymbol(string("-"));
       _gap_id = observations->getSymbol("-")->id();
     }
 
