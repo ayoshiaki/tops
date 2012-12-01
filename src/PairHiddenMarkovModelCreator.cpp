@@ -2,7 +2,7 @@
  *       PairHiddenMarkovModelCreator.cpp
  *
  *       Copyright 2011 Vitor Onuchic <vitoronuchic@gmail.com>
- *                      Ígor Bonádio <ibonadio@ime.usp.br>
+ *                      Ígor Bonadio <ibonadio@ime.usp.br>
  *                      Andre Yoshiaki Kashiwabara <akashiwabara@usp.br>
  *                      Alan Mitchell Durham <aland@usp.br>
  *

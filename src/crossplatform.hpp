@@ -1,7 +1,7 @@
 /*
  *       crossplatform.hpp
  *
- *       Copyright 2011 Ígor Bonádio <ibonadio@ime.usp.br>
+ *       Copyright 2011 Ígor Bonadio <ibonadio@ime.usp.br>
  *                      Andre Yoshiaki Kashiwabara <akashiwabara@usp.br>
  *                      Vitor Onuchic <vitoronuchic@gmail.com>
  *                      Alan Mitchell Durham <aland@usp.br>

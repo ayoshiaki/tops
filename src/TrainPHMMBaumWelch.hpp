@@ -3,7 +3,7 @@
  *
  *       Copyright 2011 Vitor Onuchic <vitoronuchic@gmail.com>
  *                      Andre Yoshiaki Kashiwabara <akashiwabara@usp.br>
- *                      Ígor Bonádio <ibonadio@ime.usp.br>
+ *                      Ígor Bonadio <ibonadio@ime.usp.br>
  *                      Alan Mitchell Durham <aland@usp.br>
  *
  *       This program is free software; you can redistribute it and/or modify
