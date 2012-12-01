@@ -81,7 +81,6 @@ namespace tops {
       }
     }
     std::map<long,double> sum;
-    double total = 0.0;
     std::map<long,double> d;
     std::map<long,int> counter;
     DoubleVector prob;
