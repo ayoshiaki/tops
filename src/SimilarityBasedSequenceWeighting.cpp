@@ -93,8 +93,6 @@ namespace tops {
   double SimilarityBasedSequenceWeighting::evaluate(const Sequence & s, unsigned int begin, unsigned int end) const {
     if (end >= s.size())
       return -HUGE;
-    if(begin < 0)
-      return -HUGE;
     int length =     (_counter.begin()->first).size();
     std::stringstream qstream;
     for(int i = begin ; (i <= (int)end) && (i < (int) (begin + length)) ; i++){
