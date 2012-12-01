@@ -450,7 +450,6 @@ namespace tops
 
         for(int m = 0; m < (int)_alphabet->size(); m++)
           total += (parentNode->getCounter())[m];
-        bool foundSmall = false;
         for (int l = 0; l < (int)_alphabet->size(); l++)
           {
             ContextTreeNodePtr childNode = parentNode->getChild(l);
