@@ -160,8 +160,6 @@ namespace tops {
     }
 
     double MultipleSequentialModel::evaluate(const Sequence & s, unsigned int begin, unsigned int end, int phase) const {
-        if(begin < 0)
-            return -HUGE;
         if(begin > end)
             return -HUGE;
         double sum = 0;
