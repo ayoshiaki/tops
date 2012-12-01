@@ -101,10 +101,10 @@ int main (int argc, char ** argv)
       std::string negative_set = vm["negative"].as<string> ();
       int length = vm["length"].as<int>();
       AlphabetPtr alphabet = AlphabetPtr(new Alphabet());
-      alphabet->createSymbol("A");
-      alphabet->createSymbol("C");
-      alphabet->createSymbol("G");
-      alphabet->createSymbol("T");
+      alphabet->createSymbol(string("A"));
+      alphabet->createSymbol(string("C"));
+      alphabet->createSymbol(string("G"));
+      alphabet->createSymbol(string("T"));
       ProbabilisticModelParameterValuePtr alphabetpar = alphabet->getParameterValue();
       ProbabilisticModelParameterValuePtr trainingsetpar = StringParameterValuePtr(new StringParameterValue(positive_set));
       ProbabilisticModelParameterValuePtr trainingsetpar2 = StringParameterValuePtr(new StringParameterValue(negative_set));
