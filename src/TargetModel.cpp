@@ -49,8 +49,6 @@ namespace tops {
   double TargetModel::evaluate(const Sequence & s, unsigned int begin, unsigned int end) const {
     if (end >= s.size())
       return -HUGE;
-    if(begin < 0)
-      return -HUGE;
     Sequence subseq(end - begin + 1);
     int k = 0;
     for(int i = begin ; i <= (int)end; i++){
