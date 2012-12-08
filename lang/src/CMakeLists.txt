@@ -5,8 +5,10 @@ ADD_LIBRARY(tops-lang SHARED ASTNode PropertyNode KeyNode
                              ConditionalProbabilityMapNode 
                              ConditionNode ProbabilityMapNode
                              ProbabilityNode parser tokens
-                             lang)
-                             
+                             lang ToPSLangVisitor)
+
+INCLUDE_DIRECTORIES( ../../src )
+
 TARGET_LINK_LIBRARIES(tops-lang tops)
 
 install(TARGETS tops-lang

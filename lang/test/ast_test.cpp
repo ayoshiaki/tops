@@ -126,26 +126,26 @@ TEST(AST, Configuration) {
 }
 
 TEST(AST, ListOfIntegers) {
-  std::vector<PIntegerNode> integers;
+  std::vector<PValueNode> integers;
   integers.push_back(PIntegerNode(new IntegerNode("123")));
   integers.push_back(PIntegerNode(new IntegerNode("345")));
-  PListOfIntegersNode list = PListOfIntegersNode(new ListNode<PIntegerNode>(integers));
+  PListNode list = PListNode(new ListNode(integers));
   EXPECT_EQ("(ListNode (IntegerNode 123) (IntegerNode 345))", list->str());
 }
 
 TEST(AST, ListOfFloats) {
-  std::vector<PFloatNode> floats;
+  std::vector<PValueNode> floats;
   floats.push_back(PFloatNode(new FloatNode("1.23")));
   floats.push_back(PFloatNode(new FloatNode("34.5")));
-  PListOfFloatsNode list = PListOfFloatsNode(new ListNode<PFloatNode>(floats));
+  PListNode list = PListNode(new ListNode(floats));
   EXPECT_EQ("(ListNode (FloatNode 1.23) (FloatNode 34.5))", list->str());
 }
 
 TEST(AST, ListOfString) {
-  std::vector<PStringNode> strings;
+  std::vector<PValueNode> strings;
   strings.push_back(PStringNode(new StringNode("str1")));
   strings.push_back(PStringNode(new StringNode("str2")));
-  PListOfStringsNode list = PListOfStringsNode(new ListNode<PStringNode>(strings));
+  PListNode list = PListNode(new ListNode(strings));
   EXPECT_EQ("(ListNode (StringNode str1) (StringNode str2))", list->str());
 }
 
@@ -153,7 +153,7 @@ TEST(AST, List) {
   std::vector<PValueNode> values;
   values.push_back(PValueNode(new StringNode("str1")));
   values.push_back(PValueNode(new IntegerNode("222")));
-  PListNode list = PListNode(new ListNode<PValueNode>(values));
+  PListNode list = PListNode(new ListNode(values));
   EXPECT_EQ("(ListNode (StringNode str1) (IntegerNode 222))", list->str());
 }
 

@@ -1,4 +1,4 @@
-include_directories(../src)
+include_directories(../src ../../src)
 
 enable_testing()
 

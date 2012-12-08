@@ -7,8 +7,10 @@
 
 namespace tops {
   namespace lang {
+    class ToPSLangVisitor;
     class ASTNode {
     public:
+      virtual void accept(ToPSLangVisitor& visitor);
       virtual std::string str();
     };
     

@@ -13,32 +13,17 @@
 
 namespace tops {
   namespace lang {
-    template<typename T>
     class ListNode: public ValueNode {
     public:
-      ListNode(std::vector<T> v):_v(v) {}
+      ListNode(std::vector<PValueNode> v):_v(v) {}
 
-      void addElement(T e) {
-        _v.push_back(e);
-      }
+      void addElement(PValueNode e);
 
-      virtual std::string str() {
-        std::string str = "(ListNode";
-        typename std::vector<T>::iterator it;
-        for (it = _v.begin() ; it != _v.end(); ++it) {
-          str += " " + (*it)->str();
-        }
-        str += ")";
-        return str;
-      }
+      virtual std::string str();
     private:
-      std::vector<T> _v;
+      std::vector<PValueNode> _v;
     };
-    
-    typedef boost::shared_ptr<ListNode<PIntegerNode> > PListOfIntegersNode;
-    typedef boost::shared_ptr<ListNode<PStringNode> > PListOfStringsNode;
-    typedef boost::shared_ptr<ListNode<PFloatNode> > PListOfFloatsNode;
-    typedef boost::shared_ptr<ListNode<PValueNode> > PListNode;
+    typedef boost::shared_ptr<ListNode> PListNode;
   }
 }
 
