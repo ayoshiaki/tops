@@ -11,11 +11,14 @@
 
 namespace tops {
   namespace lang {
+    class ToPSLangVisitor;
+    
     class ConfigurationNode: public ValueNode {
     public:
       ConfigurationNode(std::vector<PPropertyNode> properties):_properties(properties) {}
 
       void addProperty(PPropertyNode property);
+      virtual void accept(ToPSLangVisitor& visitor);
 
       virtual std::string str();
     private:

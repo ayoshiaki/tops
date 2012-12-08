@@ -11,10 +11,13 @@
 
 namespace tops {
   namespace lang {
+    class ToPSLangVisitor;
+    
     class ConditionalProbabilityMapNode: public ValueNode {
     public:
       ConditionalProbabilityMapNode(std::vector<PConditionalProbabilityNode> conds):_conds(conds) {}
       void addConditionalProbability(PConditionalProbabilityNode cond);
+      virtual void accept(ToPSLangVisitor& visitor);
       virtual std::string str();
     private:
       std::vector<PConditionalProbabilityNode> _conds;

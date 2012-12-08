@@ -13,11 +13,14 @@
 
 namespace tops {
   namespace lang {
+    class ToPSLangVisitor;
+    
     class ListNode: public ValueNode {
     public:
       ListNode(std::vector<PValueNode> v):_v(v) {}
 
       void addElement(PValueNode e);
+      virtual void accept(ToPSLangVisitor& visitor);
 
       virtual std::string str();
     private:

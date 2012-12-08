@@ -11,9 +11,12 @@
 
 namespace tops {
   namespace lang {
+    class ToPSLangVisitor;
+    
     class ConditionalProbabilityNode: public ASTNode {
     public:
       ConditionalProbabilityNode(PConditionNode cond, PFloatNode value):_cond(cond), _value(value) {}
+      virtual void accept(ToPSLangVisitor& visitor);
       virtual std::string str();
     private:
       PConditionNode _cond;

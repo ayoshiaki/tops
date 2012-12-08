@@ -10,9 +10,12 @@
 
 namespace tops {
   namespace lang {
+    class ToPSLangVisitor;
+    
     class ConditionNode: public ASTNode {
     public:
       ConditionNode(PStringNode str1, PStringNode str2):_str1(str1), _str2(str2) {}
+      virtual void accept(ToPSLangVisitor& visitor);
       virtual std::string str();
     private:
       PStringNode _str1;

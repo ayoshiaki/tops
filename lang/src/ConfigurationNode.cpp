@@ -1,7 +1,13 @@
 #include "ConfigurationNode.hpp"
 
+#include "ToPSLangVisitor.hpp"
+
 namespace tops {
   namespace lang {
+    
+    void ConfigurationNode::accept(ToPSLangVisitor& visitor) {
+      visitor.visitConfigurationNode(this);
+    }
 
     void ConfigurationNode::addProperty(PPropertyNode property) {
       _properties.push_back(property);

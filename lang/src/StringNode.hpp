@@ -9,9 +9,12 @@
 
 namespace tops {
   namespace lang {
+    class ToPSLangVisitor;
+    
     class StringNode: public ValueNode {
     public:
       StringNode(std::string value):_value(value) {}
+      virtual void accept(ToPSLangVisitor& visitor);
       virtual std::string str();
     private:
       std::string _value;
