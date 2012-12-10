@@ -48,7 +48,6 @@
 #include "TrainInterpolatedMarkovChain.hpp"
 #include "TrainSimilarityBasedSequenceWeighting.hpp"
 #include "TrainPhasedMarkovChainContextAlgorithm.hpp"
-#include "TrainHMMMaximumLikelihood.hpp"
 #include "RemoveSequenceFromModel.hpp"
 #include "SequenceFormat.hpp"
 #include "version.hpp"
@@ -79,11 +78,8 @@ int main(int argc, char ** argv) {
                         new TrainGHMMTransitionsCreator());
         createModelCommand["FixedLengthMarkovChain"]
                         = TrainFixedLengthMarkovChainPtr(new TrainFixedLengthMarkovChain());
-        createModelCommand["BaumWelchHMM"] = TrainHMMBaumWelchPtr(
+        createModelCommand["BaumWelch"] = TrainHMMBaumWelchPtr(
                         new TrainHMMBaumWelch());
-        createModelCommand["MaximumLikelihoodHMM"] = TrainHMMMaximumLikelihoodPtr(
-			new TrainHMMMaximumLikelihood());
-
         createModelCommand["PHMMBaumWelch"] = TrainPHMMBaumWelchPtr(
                         new TrainPHMMBaumWelch());
         createModelCommand["ProfileHMMMaxLikelihood"] = TrainProfileHMMMaxLikelihoodPtr(

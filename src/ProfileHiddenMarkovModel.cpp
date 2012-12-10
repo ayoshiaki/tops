@@ -257,7 +257,7 @@ namespace tops {
   ////// Model training///////////////////////////
   ////////////////////////////////////////////////
 
-  void ProfileHiddenMarkovModel::trainMaxLikelihood(SequenceList & observedStates, SequenceList & observedEmissions, int pseudocounts)
+  void ProfileHiddenMarkovModel::trainMaxLikelihood(SequenceList & observedStates, SequenceList & observedEmissions, int pseudocouts)
   {
     int s;
     int n_states = _states.size();
@@ -339,7 +339,7 @@ namespace tops {
     for (int i = 0; i < n_states; ++i) {
       if (getState(i)->emission()) {
         for (int symbol = 0; symbol < getState(i)->emission()->size(); ++symbol)
-          emiss(i, symbol) += pseudocounts;
+          emiss(i, symbol) += pseudocouts;
       }
     }
 
@@ -347,21 +347,21 @@ namespace tops {
     //Transitions Pseudocounts
     int n_match_states = (n_states + 3)/3;
     for (int i = 0; i < n_match_states - 1; ++i) {
-      trans (getStateIndex('M', i), getStateIndex('M', i + 1)) += pseudocounts;
-      trans (getStateIndex('M', i), getStateIndex('I', i)) += pseudocounts;
-      trans (getStateIndex('I', i), getStateIndex('M', i + 1)) += pseudocounts;
-      trans (getStateIndex('I', i), getStateIndex('I', i)) += pseudocounts;
+      trans (getStateIndex('M', i), getStateIndex('M', i + 1)) += pseudocouts;
+      trans (getStateIndex('M', i), getStateIndex('I', i)) += pseudocouts;
+      trans (getStateIndex('I', i), getStateIndex('M', i + 1)) += pseudocouts;
+      trans (getStateIndex('I', i), getStateIndex('I', i)) += pseudocouts;
 
       if (i != 0) {
-        trans (getStateIndex('D', i), getStateIndex('M', i + 1)) += pseudocounts;
-        trans (getStateIndex('D', i), getStateIndex('I', i)) += pseudocounts;
+        trans (getStateIndex('D', i), getStateIndex('M', i + 1)) += pseudocouts;
+        trans (getStateIndex('D', i), getStateIndex('I', i)) += pseudocouts;
         if (i != n_match_states - 2) {
-            trans (getStateIndex('D', i), getStateIndex('D', i + 1)) += pseudocounts;
+            trans (getStateIndex('D', i), getStateIndex('D', i + 1)) += pseudocouts;
         }
       }
       if (i != n_match_states - 2) {
-          trans (getStateIndex('M', i), getStateIndex('D', i + 1)) += pseudocounts;
-          trans (getStateIndex('I', i), getStateIndex('D', i + 1)) += pseudocounts;
+          trans (getStateIndex('M', i), getStateIndex('D', i + 1)) += pseudocouts;
+          trans (getStateIndex('I', i), getStateIndex('D', i + 1)) += pseudocouts;
       }
     }
 

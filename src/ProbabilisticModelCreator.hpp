@@ -38,7 +38,7 @@ namespace tops {
   public:
     ProbabilisticModelCreator () {}
     virtual ~ProbabilisticModelCreator () {};
-    //! Creates a probabilistic model
+    //! Creates a probability model
     /*! \param parameters is a set of parameters that is utilized to build the model */
     virtual ProbabilisticModelPtr create( ProbabilisticModelParameters & parameters) const {
       ProbabilisticModelPtr n;
@@ -65,7 +65,7 @@ namespace tops {
     }
 
 
-    //! This method returns a help message
+    //! Provides a help
     virtual std::string help() const {
       std::string s;
       not_implemented( "help()");

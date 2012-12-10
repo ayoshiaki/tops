@@ -72,7 +72,6 @@ namespace tops {
 
   //! Calculates the value of log(exp(log_a) + exp(log_b))
   DLLEXPORT double log_sum( double log_a, double log_b);
-  DLLEXPORT double log_sum_2( double log_a, double log_b);
 
   double lookup (double x);
 

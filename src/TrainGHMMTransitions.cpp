@@ -62,23 +62,8 @@ namespace tops {
     TrainFixedLengthMarkovChainPtr markovChainTraining = TrainFixedLengthMarkovChainPtr(new TrainFixedLengthMarkovChain());
     ProbabilisticModelPtr markovChain  = markovChainTraining->create(trainFixedMarkovChain);
     ProbabilisticModelParameters markovChainParameters = markovChain->parameters();
-    AlphabetPtr states = AlphabetPtr(new Alphabet());
-    states->initializeFromVector( (ghmmParameters.getOptionalParameterValue("state_names"))->getStringVector() );
-    std::map<std::string,double> probs;
-    probs = (markovChainParameters.getOptionalParameterValue("probabilities"))->getDoubleMap();
-    std::map<std::string,double> trans;
 
-
-    for(int from = 0; from < states->size(); from++)
-      for(int to = 0; to < states->size(); to++){
-	stringstream aux;
-	aux << states->getSymbol(to)->name() << "|" << states->getSymbol(from)->name();
-	if(!close(0, probs[aux.str()], 1e-10)) 
-	  trans[aux.str()] = probs[aux.str()];
-      }
-
-	
-    ProbabilisticModelParameterValuePtr probabilities_par = ProbabilisticModelParameterValuePtr(new DoubleMapParameterValue(trans)); 
+    ProbabilisticModelParameterValuePtr probabilities_par = markovChainParameters.getMandatoryParameterValue("probabilities");
 
     ghmmParameters.set("transitions", probabilities_par);
 

@@ -44,7 +44,7 @@ namespace tops {
   typedef boost::shared_ptr<ProbabilisticModelParameterValue> ProbabilisticModelParameterValuePtr;
   typedef boost::shared_ptr<ProbabilisticModelParameters> ProbabilisticModelParametersPtr;
 
-  //! This class  reads a configuration file
+  //! This class is reads a configuration file
   class DLLEXPORT ConfigurationReader {
   public:
 

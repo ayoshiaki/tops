@@ -1,5 +1,5 @@
 /*
- *       TrainHMMBaumWelch.cpp
+ *       TrainProfileHMMMaxLikelihood.cpp
  *
  *       Copyright 2011 Andre Yoshiaki Kashiwabara <akashiwabara@usp.br>
  *                      Ígor Bonádio <ibonadio@ime.usp.br>
@@ -25,34 +25,39 @@
 #include "ProbabilisticModel.hpp"
 #include "ProbabilisticModelCreator.hpp"
 #include "ConfigurationReader.hpp"
-#include "TrainHMMBaumWelch.hpp"
+#include "TrainProfileHMMMaxLikelihood.hpp"
+#include "ProfileHiddenMarkovModel.hpp"
 #include "util.hpp"
 #include "ProbabilisticModelCreatorClient.hpp"
 namespace tops {
 
-  ProbabilisticModelPtr TrainHMMBaumWelch::create( ProbabilisticModelParameters & parameters) const
+  ProbabilisticModelPtr TrainProfileHMMMaxLikelihood::create( ProbabilisticModelParameters & parameters) const
   {
     ProbabilisticModelParameterValuePtr initmodelpar = parameters.getMandatoryParameterValue("initial_model");
-    ProbabilisticModelParameterValuePtr trainpar = parameters.getMandatoryParameterValue("training_set");
-    ProbabilisticModelParameterValuePtr thrpar = parameters.getOptionalParameterValue("threshold");
-    ProbabilisticModelParameterValuePtr maxiterpar = parameters.getOptionalParameterValue("maxiter");
-    double threshold = 1e-5;
-    if(thrpar != NULL)
-      threshold = thrpar->getDouble();
-    int maxiter = 500;
-    if(maxiterpar != NULL)
-      maxiter = maxiterpar->getInt();
+    ProbabilisticModelParameterValuePtr statespar = parameters.getMandatoryParameterValue("states_training_set");
+    ProbabilisticModelParameterValuePtr emisspar = parameters.getMandatoryParameterValue("emissions_training_set");
+    ProbabilisticModelParameterValuePtr pseudopar = parameters.getOptionalParameterValue("pseudocounts");
+
+    int pseudocounts = 1;
+    if(pseudopar != NULL)
+      pseudocounts = pseudopar->getInt();
 
     ProbabilisticModelCreatorClient creator;
     std::string name = initmodelpar->getString();
     ProbabilisticModelPtr m = creator.create(name);
-    SequenceEntryList sample_set;
-    AlphabetPtr alphabet = m->alphabet();
-    readSequencesFromFile(sample_set, alphabet, trainpar->getString());
-    SequenceList seqs;
-    for(int i = 0; i < (int)sample_set.size(); i++)
-      seqs.push_back(sample_set[i]->getSequence());
-    m->trainBaumWelch(seqs, maxiter, threshold);
+    SequenceEntryList states_sample_set, emiss_sample_set;
+    AlphabetPtr emiss_alphabet = m->alphabet();
+    AlphabetPtr states_alphabet = m->getStateNames();
+    readSequencesFromFile(states_sample_set, states_alphabet, statespar->getString());
+    readSequencesFromFile(emiss_sample_set, emiss_alphabet, emisspar->getString());
+
+
+    SequenceList seqs1, seqs2;
+    for(int i = 0; i < (int)states_sample_set.size(); i++)
+      seqs1.push_back(states_sample_set[i]->getSequence());
+    for(int i = 0; i < (int)emiss_sample_set.size(); i++)
+      seqs2.push_back(emiss_sample_set[i]->getSequence());
+    m->profileDecodable()->trainMaxLikelihood(seqs1, seqs2, pseudocounts);
     return m;
   }
 };

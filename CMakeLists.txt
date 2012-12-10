@@ -6,7 +6,8 @@ find_package(Boost 1.35 COMPONENTS regex)
 find_package(Boost 1.35 COMPONENTS program_options)
 
 # find_package(PerlLibs)
-# ADD_DEFINITIONS("-O0 -Wall -gdwarf-2")
+# ADD_DEFINITIONS("-Wall -g")
+
 ADD_DEFINITIONS("-Wall -O3 -finline-functions -funroll-loops -ftree-vectorize -ffast-math  -g -O3")
 
 
