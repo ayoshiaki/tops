@@ -30,7 +30,7 @@ TEST(AST, Property) {
   
   property = PPropertyNode(new PropertyNode(
     PKeyNode(new KeyNode("KeyName")), 
-    PStringNode(new StringNode("StringValue"))));
+    PStringNode(new StringNode("\"StringValue\""))));
   EXPECT_EQ("(PropertyNode (KeyNode KeyName) (StringNode StringValue))", property->str());
   
   property = PPropertyNode(new PropertyNode(
@@ -46,10 +46,10 @@ TEST(AST, Property) {
   std::vector<PPropertyNode> props;
   props.push_back(PPropertyNode(new PropertyNode(
     PKeyNode(new KeyNode("KeyName1")), 
-    PStringNode(new StringNode("StringValue1")))));
+    PStringNode(new StringNode("\"StringValue1\"")))));
   props.push_back(PPropertyNode(new PropertyNode(
     PKeyNode(new KeyNode("KeyName2")), 
-    PStringNode(new StringNode("StringValue2")))));
+    PStringNode(new StringNode("\"StringValue2\"")))));
   PConfigurationNode config = PConfigurationNode(new ConfigurationNode(props));
   property = PPropertyNode(new PropertyNode(
     PKeyNode(new KeyNode("KeyName")),
@@ -58,7 +58,7 @@ TEST(AST, Property) {
 }
 
 TEST(AST, String) {
-  PStringNode str = PStringNode(new StringNode("StringValue"));
+  PStringNode str = PStringNode(new StringNode("\"StringValue\""));
   EXPECT_EQ("(StringNode StringValue)", str->str());
 }
 
@@ -74,15 +74,15 @@ TEST(AST, Float) {
 
 TEST(AST, Condition) {
   PConditionNode cond = PConditionNode(new ConditionNode(
-    PStringNode(new StringNode("StringValue1")), 
-    PStringNode(new StringNode("StringValue2"))));
+    PStringNode(new StringNode("\"StringValue1\"")), 
+    PStringNode(new StringNode("\"StringValue2\""))));
   EXPECT_EQ("(ConditionNode (StringNode StringValue1) (StringNode StringValue2))", cond->str());
 }
 
 TEST(AST, ConditionalProbability) {
   PConditionNode cond = PConditionNode(new ConditionNode(
-    PStringNode(new StringNode("StringValue1")), 
-    PStringNode(new StringNode("StringValue2"))));
+    PStringNode(new StringNode("\"StringValue1\"")), 
+    PStringNode(new StringNode("\"StringValue2\""))));
   PFloatNode floatnumber = PFloatNode(new FloatNode("1.23"));
   PConditionalProbabilityNode condprob = PConditionalProbabilityNode(
     new ConditionalProbabilityNode(cond, floatnumber));
@@ -91,15 +91,15 @@ TEST(AST, ConditionalProbability) {
 
 TEST(AST, ConditionalProbabilityMap) {
   PConditionNode cond = PConditionNode(new ConditionNode(
-    PStringNode(new StringNode("StringValue1")), 
-    PStringNode(new StringNode("StringValue2"))));
+    PStringNode(new StringNode("\"StringValue1\"")), 
+    PStringNode(new StringNode("\"StringValue2\""))));
   PFloatNode floatnumber = PFloatNode(new FloatNode("1.23"));
   PConditionalProbabilityNode condprob = PConditionalProbabilityNode(
     new ConditionalProbabilityNode(cond, floatnumber));
     
   PConditionNode cond2 = PConditionNode(new ConditionNode(
-    PStringNode(new StringNode("StringValue1")), 
-    PStringNode(new StringNode("StringValue2"))));
+    PStringNode(new StringNode("\"StringValue1\"")), 
+    PStringNode(new StringNode("\"StringValue2\""))));
   PFloatNode floatnumber2 = PFloatNode(new FloatNode("1.23"));
   PConditionalProbabilityNode condprob2 = PConditionalProbabilityNode(
     new ConditionalProbabilityNode(cond2, floatnumber2));
@@ -117,10 +117,10 @@ TEST(AST, Configuration) {
   std::vector<PPropertyNode> props;
   props.push_back(PPropertyNode(new PropertyNode(
     PKeyNode(new KeyNode("KeyName1")), 
-    PStringNode(new StringNode("StringValue1")))));
+    PStringNode(new StringNode("\"StringValue1\"")))));
   props.push_back(PPropertyNode(new PropertyNode(
     PKeyNode(new KeyNode("KeyName2")), 
-    PStringNode(new StringNode("StringValue2")))));
+    PStringNode(new StringNode("\"StringValue2\"")))));
   PConfigurationNode config = PConfigurationNode(new ConfigurationNode(props));
   EXPECT_EQ("(ConfigurationNode (PropertyNode (KeyNode KeyName1) (StringNode StringValue1)) (PropertyNode (KeyNode KeyName2) (StringNode StringValue2)))", config->str());
 }
@@ -143,15 +143,15 @@ TEST(AST, ListOfFloats) {
 
 TEST(AST, ListOfString) {
   std::vector<PValueNode> strings;
-  strings.push_back(PStringNode(new StringNode("str1")));
-  strings.push_back(PStringNode(new StringNode("str2")));
+  strings.push_back(PStringNode(new StringNode("\"str1\"")));
+  strings.push_back(PStringNode(new StringNode("\"str2\"")));
   PListNode list = PListNode(new ListNode(strings));
   EXPECT_EQ("(ListNode (StringNode str1) (StringNode str2))", list->str());
 }
 
 TEST(AST, List) {
   std::vector<PValueNode> values;
-  values.push_back(PValueNode(new StringNode("str1")));
+  values.push_back(PValueNode(new StringNode("\"str1\"")));
   values.push_back(PValueNode(new IntegerNode("222")));
   PListNode list = PListNode(new ListNode(values));
   EXPECT_EQ("(ListNode (StringNode str1) (IntegerNode 222))", list->str());
@@ -159,7 +159,7 @@ TEST(AST, List) {
 
 TEST(AST, Probability) {
   PProbabilityNode prob = PProbabilityNode(new ProbabilityNode(
-    PStringNode(new StringNode("a")), 
+    PStringNode(new StringNode("\"a\"")), 
     PFloatNode(new FloatNode("1.2"))));
   EXPECT_EQ("(ProbabilityNode (StringNode a) (FloatNode 1.2))", prob->str());
 }
@@ -167,10 +167,10 @@ TEST(AST, Probability) {
 TEST(AST, ProbabilityMap) {
   std::vector<PProbabilityNode> probs;
   probs.push_back(PProbabilityNode(new ProbabilityNode(
-    PStringNode(new StringNode("a")), 
+    PStringNode(new StringNode("\"a\"")), 
     PFloatNode(new FloatNode("1.2")))));
   probs.push_back(PProbabilityNode(new ProbabilityNode(
-    PStringNode(new StringNode("b")), 
+    PStringNode(new StringNode("\"b\"")), 
     PFloatNode(new FloatNode("2.3")))));
   PProbabilityMapNode probmap = PProbabilityMapNode(new ProbabilityMapNode(probs));
   EXPECT_EQ("(ProbabilityMapNode (ProbabilityNode (StringNode a) (FloatNode 1.2)) (ProbabilityNode (StringNode b) (FloatNode 2.3)))", probmap->str());

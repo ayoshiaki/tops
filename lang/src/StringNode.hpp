@@ -13,7 +13,7 @@ namespace tops {
     
     class StringNode: public ValueNode {
     public:
-      StringNode(std::string value):_value(value) {}
+      StringNode(std::string value);
       
       std::string value();
       
