@@ -3,12 +3,9 @@
 
 #include "ConfigurationNode.hpp"
 
-#include "ConfigurationReader.hpp"
-
 namespace tops {
   namespace lang {
     PConfigurationNode parse(std::string model);
-    ProbabilisticModelParametersPtr parse_model(std::string model);
   }
 }
 

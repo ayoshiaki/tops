@@ -74,10 +74,6 @@ namespace tops {
       parse_lang(model);
       return configurationNode;
     }
-    
-    ProbabilisticModelParametersPtr parse_model(std::string model) {
-      
-    }
   }
 }
 

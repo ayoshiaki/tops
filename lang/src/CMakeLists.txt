@@ -9,7 +9,7 @@ ADD_LIBRARY(tops-lang SHARED ASTNode PropertyNode KeyNode
 
 INCLUDE_DIRECTORIES( ../../src )
 
-TARGET_LINK_LIBRARIES(tops-lang tops)
+TARGET_LINK_LIBRARIES(tops-lang ToPS)
 
 install(TARGETS tops-lang
         RUNTIME DESTINATION bin
