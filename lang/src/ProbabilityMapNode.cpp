@@ -6,6 +6,10 @@ namespace tops {
   namespace lang {
     
     void ProbabilityMapNode::accept(ToPSLangVisitor& visitor) {
+      std::vector<PProbabilityNode>::iterator it;
+      for (it = _probs.begin() ; it != _probs.end(); ++it) {
+        (*it)->accept(visitor);
+      }
       visitor.visitProbabilityMapNode(this);
     }
 

@@ -8,6 +8,10 @@ namespace tops {
       visitor.visitKeyNode(this);
     }
     
+    std::string KeyNode::name() {
+      return _name;
+    }
+    
     std::string KeyNode::str() {
       return std::string("(KeyNode " + _name + ")");
     }

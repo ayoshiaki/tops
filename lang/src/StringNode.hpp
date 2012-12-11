@@ -14,6 +14,9 @@ namespace tops {
     class StringNode: public ValueNode {
     public:
       StringNode(std::string value):_value(value) {}
+      
+      std::string value();
+      
       virtual void accept(ToPSLangVisitor& visitor);
       virtual std::string str();
     private:

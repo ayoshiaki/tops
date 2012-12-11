@@ -5,6 +5,8 @@
 namespace tops {
   namespace lang {
     void ConditionNode::accept(ToPSLangVisitor& visitor) {
+      _str1->accept(visitor);
+      _str2->accept(visitor);
       visitor.visitConditionNode(this);
     }
     

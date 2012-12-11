@@ -5,6 +5,8 @@
 namespace tops {
   namespace lang {
     void ProbabilityNode::accept(ToPSLangVisitor& visitor) {
+      _cond->accept(visitor);
+      _value->accept(visitor);
       visitor.visitProbabilityNode(this);
     }
     

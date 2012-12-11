@@ -380,7 +380,7 @@ union yyalloc
 /* YYFINAL -- State number of the termination state.  */
 #define YYFINAL  6
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   47
+#define YYLAST   43
 
 /* YYNTOKENS -- Number of terminals.  */
 #define YYNTOKENS  16
@@ -451,7 +451,7 @@ static const yytype_int8 yyrhs[] =
       12,    22,    13,    -1,    23,    -1,    22,    11,    23,    -1,
        4,    -1,     5,    -1,     6,    -1,    12,    25,    13,    -1,
       26,    -1,    26,    10,    -1,    27,    -1,    26,    10,    27,
-      -1,     4,     9,    22,    -1,    12,    29,    13,    -1,    30,
+      -1,     4,     9,    23,    -1,    12,    29,    13,    -1,    30,
       -1,    30,    10,    -1,    31,    -1,    30,    10,    31,    -1,
       32,     9,    33,    -1,     4,     8,     4,    -1,     5,    -1,
        6,    -1,    14,    18,    15,    -1
@@ -534,22 +534,22 @@ static const yytype_int8 yydefgoto[] =
 
 /* YYPACT[STATE-NUM] -- Index in YYTABLE of the portion describing
    STATE-NUM.  */
-#define YYPACT_NINF -4
+#define YYPACT_NINF -11
 static const yytype_int8 yypact[] =
 {
-      -1,    12,    23,    -1,    -4,     0,    -4,    -4,    -4,    -4,
-      -4,    -4,     3,    -1,    -4,    -4,    -4,    -4,    -4,     2,
-      -4,    -4,     7,    -4,    13,    14,    -4,    17,    15,    -4,
-      18,    -2,    25,    11,    11,    -4,    -4,    27,    -4,    28,
-      16,    -4,    -4,    -4,    22,    -4,    26,    -4,    29,    -4,
-      -4,    -4,    -4
+      -1,    12,    25,    -1,   -11,     0,   -11,   -11,   -11,   -11,
+     -11,   -11,     3,    -1,   -11,   -11,   -11,   -11,   -11,     2,
+     -11,   -11,     7,   -11,    13,    17,   -11,    18,    19,   -11,
+      21,    -2,    28,    11,    11,   -11,   -11,    29,   -11,    30,
+      16,   -11,   -11,   -11,   -11,   -11,    26,   -11,    31,   -11,
+     -11,   -11,   -11
 };
 
 /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-      -4,    -4,    21,    -3,    -4,    -4,     5,     6,    -4,    -4,
-      -4,     4,    -4,    -4,    -4,     8,    -4,    -4,    -4
+     -11,   -11,    23,    -3,   -11,   -11,   -11,   -10,   -11,   -11,
+     -11,     1,   -11,   -11,   -11,     4,   -11,   -11,   -11
 };
 
 /* YYTABLE[YYPACT[STATE-NUM]].  What to do in state STATE-NUM.  If
@@ -561,18 +561,18 @@ static const yytype_uint8 yytable[] =
 {
        7,     1,     1,     8,     9,    10,    11,    19,    20,    21,
       32,    33,    12,    41,    13,    43,    20,    21,    34,     5,
-      35,    50,    51,     6,    37,    39,    36,    40,     7,    42,
-      38,    46,    48,    34,    31,    33,     0,    32,    44,     0,
-      45,    47,     0,     0,     0,     0,     0,    49
+      35,    50,    51,    44,    45,     6,    36,    37,     7,    39,
+      40,    38,    42,    46,    48,    33,    31,     0,    47,    32,
+       0,     0,     0,    49
 };
 
 static const yytype_int8 yycheck[] =
 {
        3,     3,     3,     3,     4,     5,     6,     4,     5,     6,
        8,     9,    12,    15,    14,     4,     5,     6,    11,     7,
-      13,     5,     6,     0,    10,    10,    13,     9,    31,     4,
-      13,     4,     4,    11,    13,     9,    -1,     8,    33,    -1,
-      34,    37,    -1,    -1,    -1,    -1,    -1,    39
+      13,     5,     6,    33,    34,     0,    13,    10,    31,    10,
+       9,    13,     4,     4,     4,     9,    13,    -1,    37,     8,
+      -1,    -1,    -1,    39
 };
 
 /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
@@ -583,7 +583,7 @@ static const yytype_uint8 yystos[] =
        5,     6,    12,    14,    20,    21,    24,    28,    34,     4,
        5,     6,    22,    23,    25,    26,    27,    29,    30,    31,
       32,    18,     8,     9,    11,    13,    13,    10,    13,    10,
-       9,    15,     4,     4,    22,    23,     4,    27,     4,    31,
+       9,    15,     4,     4,    23,    23,     4,    27,     4,    31,
        5,     6,    33
 };
 
@@ -1567,7 +1567,7 @@ yyreduce:
   case 25:
 #line 144 "parser.y"
     {
-                (yyval.probability) = new PProbabilityNode(new ProbabilityNode(PStringNode(new StringNode(*(yyvsp[(1) - (3)].string))), *(yyvsp[(3) - (3)].list)));
+                (yyval.probability) = new PProbabilityNode(new ProbabilityNode(PStringNode(new StringNode(*(yyvsp[(1) - (3)].string))), *(yyvsp[(3) - (3)].value)));
               ;}
     break;
 

@@ -8,6 +8,10 @@ namespace tops {
       visitor.visitStringNode(this);
     }
     
+    std::string StringNode::value() {
+      return _value;
+    }
+    
     std::string StringNode::str() {
       return std::string("(StringNode " + _value + ")");
     }

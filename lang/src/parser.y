@@ -141,7 +141,7 @@ probabilities : probability {
                 }
               ;
 
-probability : TSTRING TCOLON list_elements {
+probability : TSTRING TCOLON list_element {
                 $$ = new PProbabilityNode(new ProbabilityNode(PStringNode(new StringNode(*$1)), *$3));
               }
             ;

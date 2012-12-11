@@ -14,6 +14,9 @@ namespace tops {
     class FloatNode: public ValueNode {
     public:
       FloatNode(std::string str_value):_str_value(str_value) {}
+      
+      double value();
+      
       virtual void accept(ToPSLangVisitor& visitor);
       virtual std::string str();
     private:

@@ -10,6 +10,10 @@ namespace tops {
     }
     
     void ConditionalProbabilityMapNode::accept(ToPSLangVisitor& visitor) {
+      std::vector<PConditionalProbabilityNode>::iterator it;
+      for (it = _conds.begin() ; it != _conds.end(); ++it) {
+        (*it)->accept(visitor);
+      }
       visitor.visitConditionalProbabilityMapNode(this);
     }
 

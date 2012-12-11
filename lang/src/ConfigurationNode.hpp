@@ -19,8 +19,8 @@ namespace tops {
 
       void addProperty(PPropertyNode property);
       virtual void accept(ToPSLangVisitor& visitor);
-
       virtual std::string str();
+      
     private:
       std::vector<PPropertyNode> _properties;
     };

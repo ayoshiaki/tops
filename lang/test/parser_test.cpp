@@ -14,7 +14,7 @@ TEST(AST, Parser) {
   EXPECT_EQ("(ConfigurationNode (PropertyNode (KeyNode order) (IntegerNode 4)))", 
             parse("order=4")->str());
   
-  EXPECT_EQ("(ConfigurationNode (PropertyNode (KeyNode begin) (ProbabilityMapNode (ProbabilityNode (StringNode \"order\") (ListNode (IntegerNode 0))))))", 
+  EXPECT_EQ("(ConfigurationNode (PropertyNode (KeyNode begin) (ProbabilityMapNode (ProbabilityNode (StringNode \"order\") (IntegerNode 0)))))", 
             parse("begin=(\"order\":0)")->str());
   
   EXPECT_EQ("(ConfigurationNode (PropertyNode (KeyNode p0) (ConditionalProbabilityMapNode (ConditionalProbabilityNode (ConditionNode (StringNode \"A\") (StringNode \"\")) (FloatNode 0.2)) (ConditionalProbabilityNode (ConditionNode (StringNode \"C\") (StringNode \"\")) (FloatNode 0.2)) (ConditionalProbabilityNode (ConditionNode (StringNode \"G\") (StringNode \"\")) (FloatNode 0.2)) (ConditionalProbabilityNode (ConditionNode (StringNode \"T\") (StringNode \"\")) (FloatNode 0.4)))))", 
@@ -35,6 +35,6 @@ TEST(AST, Parser) {
   EXPECT_EQ("(ConfigurationNode (PropertyNode (KeyNode p0) (ConditionalProbabilityMapNode (ConditionalProbabilityNode (ConditionNode (StringNode \"A\") (StringNode \"\")) (FloatNode 0)) (ConditionalProbabilityNode (ConditionNode (StringNode \"C\") (StringNode \"\")) (FloatNode 0.181818)) (ConditionalProbabilityNode (ConditionNode (StringNode \"G\") (StringNode \"\")) (FloatNode 0.636364)) (ConditionalProbabilityNode (ConditionNode (StringNode \"T\") (StringNode \"\")) (FloatNode 0.181818)))))", 
            parse("p0 = (\"A\" | \"\" : 0; # leaf \n \"C\" | \"\" : 0.181818; # leaf \n \"G\" | \"\" : 0.636364; # leaf \n \"T\" | \"\" : 0.181818; # leaf \n )")->str());
   
-  EXPECT_EQ("(ConfigurationNode (PropertyNode (KeyNode model_probabilities) (ProbabilityMapNode (ProbabilityNode (StringNode \"CPG\") (ListNode (FloatNode 0.5))) (ProbabilityNode (StringNode \"NONCPG\") (ListNode (FloatNode 0.5))))))", 
+  EXPECT_EQ("(ConfigurationNode (PropertyNode (KeyNode model_probabilities) (ProbabilityMapNode (ProbabilityNode (StringNode \"CPG\") (FloatNode 0.5)) (ProbabilityNode (StringNode \"NONCPG\") (FloatNode 0.5)))))", 
             parse("model_probabilities = (\"CPG\": 0.5; \"NONCPG\": 0.5)")->str());
 }

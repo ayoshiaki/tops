@@ -6,6 +6,10 @@ namespace tops {
   namespace lang {
     
     void ListNode::accept(ToPSLangVisitor& visitor) {
+      std::vector<PValueNode>::iterator it;
+      for (it = _v.begin() ; it != _v.end(); ++it) {
+        (*it)->accept(visitor);
+      }
       visitor.visitListNode(this);
     }
     
