@@ -63,6 +63,7 @@
 #include "RemoveSequenceFromModel.hpp"
 #include "SequenceFormat.hpp"
 
+#include "ToPSLang.hpp"
 
 namespace tops
 {
@@ -150,6 +151,7 @@ namespace tops
         conf.append(line);
       }
     input.close();
+    tops::lang::parse(conf);
     if(readConfig.load(conf)){
       _p = *(readConfig.parameters());
       return _p;
