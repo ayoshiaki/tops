@@ -21,6 +21,7 @@ namespace tops {
   class ProbabilisticModelParameterValue2 {
   public:
     virtual std::string parameterType();
+    virtual std::string str();
 
     virtual StringParameterValue2* toStringParameter();
     virtual IntegerParameterValue2* toIntegerParameter();
@@ -40,7 +41,7 @@ namespace tops {
     std::string value();
 
     virtual std::string parameterType();
-
+    virtual std::string str();
     virtual StringParameterValue2* toStringParameter();
   private:
     std::string _value;
@@ -52,7 +53,9 @@ namespace tops {
 
     int value();
 
-   virtual std::string parameterType();
+    virtual IntegerParameterValue2* toIntegerParameter();
+    virtual std::string parameterType();
+    virtual std::string str();
   private:
     int _value;
   };
@@ -63,7 +66,9 @@ namespace tops {
 
     double value();
 
-   virtual std::string parameterType();
+    virtual DoubleParameterValue2* toDoubleParameter();
+    virtual std::string parameterType();
+    virtual std::string str();
   private:
     double _value;
   };
@@ -74,7 +79,8 @@ namespace tops {
 
     std::vector<int> value();
 
-   virtual std::string parameterType();
+    virtual std::string parameterType();
+    virtual std::string str();
   private:
     std::vector<int> _value;
   };
@@ -85,7 +91,8 @@ namespace tops {
 
     std::vector<double> value();
 
-   virtual std::string parameterType();
+    virtual std::string parameterType();
+    virtual std::string str();
   private:
     std::vector<double> _value;
   };
@@ -96,7 +103,8 @@ namespace tops {
 
     std::vector<std::string> value();
 
-   virtual std::string parameterType();
+    virtual std::string parameterType();
+    virtual std::string str();
   private:
     std::vector<std::string> _value;
   };
@@ -107,7 +115,7 @@ namespace tops {
 
     std::map<std::string, double> value();
 
-   virtual std::string parameterType();
+    virtual std::string parameterType();
   private:
     std::map<std::string, double> _value;
   };
@@ -118,7 +126,7 @@ namespace tops {
 
     std::string value();
 
-   virtual std::string parameterType();
+    virtual std::string parameterType();
   private:
     std::string _value;
   };

@@ -12,5 +12,9 @@ int main() {
     model += input + "\n";
   }
   std::cout << parse(model)->str() << std::endl;
+
+  ToPSLangVisitor visitor;
+  parse(model)->accept(visitor);
+
   return 0;
 }

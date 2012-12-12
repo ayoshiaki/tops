@@ -5,6 +5,8 @@
 #include <string>
 #include <sstream>
 
+#include "ProbabilisticModelConfiguration.hpp"
+
 namespace tops {
   namespace lang {
     
@@ -37,6 +39,13 @@ namespace tops {
       void visitProbabilityNode(ProbabilityNode* node);
       void visitPropertyNode(PropertyNode* node);
       void visitStringNode(StringNode* node);
+    private:
+      void add_parameter(std::string key, ProbabilisticModelParameterValue2Ptr value);
+
+      ProbabilisticModelConfigurationPtr _configuration;
+      std::vector<std::string> _keys;
+      std::vector<ProbabilisticModelParameterValue2Ptr> _values;
+      std::vector<ProbabilisticModelParameterMap> _parameters;
     };
   }
 }

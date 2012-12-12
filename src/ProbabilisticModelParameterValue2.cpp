@@ -2,9 +2,14 @@
 
 #include <iostream>
 
+#include <boost/lexical_cast.hpp>
+
 namespace tops {
 
   // ProbabilisticModelParameterValue2
+  std::string ProbabilisticModelParameterValue2::str() {
+    return "ProbabilisticModelParameterValue2";
+  }
   std::string ProbabilisticModelParameterValue2::parameterType() {
     return "ProbabilisticModelParameterValue2";
   }
@@ -58,6 +63,10 @@ namespace tops {
     return "StringParameterValue2";
   }
 
+  std::string StringParameterValue2::str() {
+    return _value;
+  }
+
   std::string StringParameterValue2::value() {
     return _value;
   }
@@ -71,8 +80,16 @@ namespace tops {
     return "IntegerParameterValue2";
   }
 
+  std::string IntegerParameterValue2::str() {
+    return boost::lexical_cast<std::string>(_value);
+  }
+
   int IntegerParameterValue2::value() {
     return _value;
+  }
+
+  IntegerParameterValue2* IntegerParameterValue2::toIntegerParameter() {
+    return this;
   }
 
   // DoubleParameterValue2
@@ -84,9 +101,27 @@ namespace tops {
     return _value;
   }
 
+  std::string DoubleParameterValue2::str() {
+    return boost::lexical_cast<std::string>(_value);
+  }
+
+  DoubleParameterValue2* DoubleParameterValue2::toDoubleParameter() {
+    return this;
+  }
+
   // IntegerListParameterValue2
   std::string IntegerListParameterValue2::parameterType() {
     return "IntegerListParameterValue2";
+  }
+
+  std::string IntegerListParameterValue2::str() {
+    std::string str = "(";
+    std::vector<int>::iterator it;
+    for (it = _value.begin(); it != _value.end(); it++) {
+      str += boost::lexical_cast<std::string>(*it) + ", ";
+    }
+    str += ")";
+    return str;
   }
 
   std::vector<int> IntegerListParameterValue2::value() {
@@ -102,6 +137,16 @@ namespace tops {
     return _value;
   }
 
+  std::string DoubleListParameterValue2::str() {
+    std::string str = "(";
+    std::vector<double>::iterator it;
+    for (it = _value.begin(); it != _value.end(); it++) {
+      str += boost::lexical_cast<std::string>(*it) + ", ";
+    }
+    str += ")";
+    return str;
+  }
+
   // StringListParameterValue2
   std::string StringListParameterValue2::parameterType() {
     return "StringListParameterValue2";
@@ -109,6 +154,16 @@ namespace tops {
 
   std::vector<std::string> StringListParameterValue2::value() {
     return _value;
+  }
+
+  std::string StringListParameterValue2::str() {
+    std::string str = "(";
+    std::vector<std::string>::iterator it;
+    for (it = _value.begin(); it != _value.end(); it++) {
+      str += (*it) + ", ";
+    }
+    str += ")";
+    return str;
   }
 
   // ProbabilityParameterValue2
