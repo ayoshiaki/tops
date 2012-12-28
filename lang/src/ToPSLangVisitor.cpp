@@ -43,6 +43,7 @@ namespace tops {
       std::cout << "  * " << (*(_values.end()-2))->str() << ": " << _values.back()->str() << std::endl;
     }
     
+    // TODO: invalid parameter
     void ToPSLangVisitor::visitConditionNode(ConditionNode* node) {
       std::cout << "visitConditionNode" << std::endl;
       std::string c1 = _values.back()->toStringParameter()->value();
@@ -77,6 +78,7 @@ namespace tops {
     }
     
     // TODO: verificar se a lista é uniforme
+    //       invalid parameter
     void ToPSLangVisitor::visitListNode(ListNode* node) {
       std::cout << "visitListNode" << std::endl;
 
