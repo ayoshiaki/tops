@@ -101,11 +101,12 @@ namespace tops {
         probMap[key] = value;
       }
       _values.push_back(ProbabilityParameterValue2Ptr(new ProbabilityParameterValue2(probMap)));
+      std::cout << "  * " << _values.back()->str() << std::endl;
     }
 
-    // TODO
     void ToPSLangVisitor::visitProbabilityNode(ProbabilityNode* node) {
       std::cout << "visitProbabilityNode" << std::endl;
+      std::cout << "  * " << (*(_values.end()-2))->str() << ": " << _values.back()->str() << std::endl;
     }
     
     void ToPSLangVisitor::visitPropertyNode(PropertyNode* node) {
