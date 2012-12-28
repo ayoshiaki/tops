@@ -116,6 +116,7 @@ namespace tops {
     std::map<std::string, double> value();
 
     virtual std::string parameterType();
+    virtual std::string str();
   private:
     std::map<std::string, double> _value;
   };

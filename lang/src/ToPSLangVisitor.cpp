@@ -86,9 +86,21 @@ namespace tops {
       std::cout << "  * " << _values.back()->str() << std::endl;
     }
     
-    // TODO
+    // TODO invalid parameter
     void ToPSLangVisitor::visitProbabilityMapNode(ProbabilityMapNode* node) {
       std::cout << "visitProbabilityMapNode" << std::endl;
+      std::map<std::string, double> probMap;
+      for (int i = 0; i < _values.size(); i += 2) {
+        double value;
+        if (_values[i+1]->parameterType() == "IntegerParameterValue2") {
+          value = _values[i+1]->toIntegerParameter()->value();
+        } else if (_values[i+1]->parameterType() == "DoubleParameterValue2") {
+          value = _values[i+1]->toDoubleParameter()->value();
+        }
+        std::string key = _values[i]->toStringParameter()->value();
+        probMap[key] = value;
+      }
+      _values.push_back(ProbabilityParameterValue2Ptr(new ProbabilityParameterValue2(probMap)));
     }
 
     // TODO

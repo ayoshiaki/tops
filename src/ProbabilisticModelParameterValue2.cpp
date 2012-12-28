@@ -174,6 +174,16 @@ namespace tops {
   std::map<std::string, double> ProbabilityParameterValue2::value() {
     return _value;
   }
+  
+  std::string ProbabilityParameterValue2::str() {
+    std::string str = "(";
+    std::map<std::string, double>::iterator it;
+    for (it = _value.begin(); it != _value.end(); it++) {
+      str += it->first + ": " + boost::lexical_cast<std::string>(it->second) + ", ";
+    }
+    str += ")";
+    return str;
+  }
 
   // IdentifierParameterValue2
   std::string IdentifierParameterValue2::parameterType() {
