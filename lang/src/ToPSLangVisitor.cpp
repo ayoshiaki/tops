@@ -20,19 +20,37 @@
 namespace tops {
   namespace lang {
     
-    // TODO
+    // TODO invalid parameter
     void ToPSLangVisitor::visitConditionalProbabilityMapNode(ConditionalProbabilityMapNode* node) {
       std::cout << "visitConditionalProbabilityMapNode" << std::endl;
+      std::map<std::string, double> probMap;
+      for (int i = 0; i < _values.size(); i += 2) {
+        double value;
+        if (_values[i+1]->parameterType() == "IntegerParameterValue2") {
+          value = _values[i+1]->toIntegerParameter()->value();
+        } else if (_values[i+1]->parameterType() == "DoubleParameterValue2") {
+          value = _values[i+1]->toDoubleParameter()->value();
+        }
+        std::string key = _values[i]->toStringParameter()->value();
+        probMap[key] = value;
+      }
+      _values.push_back(ProbabilityParameterValue2Ptr(new ProbabilityParameterValue2(probMap)));
+      std::cout << "  * " << _values.back()->str() << std::endl;
     }
     
-    // TODO
     void ToPSLangVisitor::visitConditionalProbabilityNode(ConditionalProbabilityNode* node) {
       std::cout << "visitConditionalProbabilityNode" << std::endl;
+      std::cout << "  * " << (*(_values.end()-2))->str() << ": " << _values.back()->str() << std::endl;
     }
     
-    // TODO
     void ToPSLangVisitor::visitConditionNode(ConditionNode* node) {
       std::cout << "visitConditionNode" << std::endl;
+      std::string c1 = _values.back()->toStringParameter()->value();
+      _values.pop_back();
+      std::string c2 = _values.back()->toStringParameter()->value();
+      _values.pop_back();
+      _values.push_back(StringParameterValue2Ptr(new StringParameterValue2(c2 + "|" + c1)));
+      std::cout << "  * " << _values.back()->str() << std::endl;
     }
     
     // TODO
