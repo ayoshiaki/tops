@@ -6,7 +6,7 @@ Users can define probabilistic models by a manual description, and this document
 
 ### Tokens
 
-The language defines the followings basic tokens:
+The language defines the followings tokens:
 
 IDENTIFIER         : [a-zA-Z_][a-zA-Z0-9_]*
 STRING             : L?\"(\\.|[^\\"])*\"
