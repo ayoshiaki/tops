@@ -2,12 +2,14 @@ project(ToPS)
 cmake_minimum_required(VERSION 2.6)
 set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR})
 
-find_package(Boost 1.35 COMPONENTS regex)
-find_package(Boost 1.35 COMPONENTS program_options)
+find_package(Boost 1.52 COMPONENTS regex REQUIRED)
+find_package(Boost 1.52 COMPONENTS program_options REQUIRED)
+find_package(Boost 1.52 COMPONENTS  system REQUIRED)
+find_package(Boost 1.52 COMPONENTS filesystem REQUIRED)
 
 # find_package(PerlLibs)
 # ADD_DEFINITIONS("-O0 -Wall -gdwarf-2")
-ADD_DEFINITIONS("-Wall -O3 -finline-functions -funroll-loops -ftree-vectorize -ffast-math  -g -O3")
+ADD_DEFINITIONS("-Wall -O3 -finline-functions -funroll-loops -ffast-math  -g -O3")
 
 
 IF(UNIX)
@@ -23,4 +25,4 @@ add_subdirectory(src)
 add_subdirectory(app)
 add_subdirectory(lang)
 
-enable_testing()
+# enable_testing()

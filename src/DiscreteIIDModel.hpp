@@ -49,6 +49,7 @@ namespace tops {
     bool _geometric_tail;
     double _mean;
   public:
+    using FactorableModel::choose;
 
     DiscreteIIDModel()  {
       _geometric_tail = false;

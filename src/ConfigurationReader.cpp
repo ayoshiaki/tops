@@ -24,10 +24,10 @@
 
 #include "ConfigurationReader.hpp"
 #include "ProbabilisticModelParameter.hpp"
-#include  <boost/spirit/core.hpp>
+#include <boost/spirit/include/classic_core.hpp>
 #include <fstream>
 #include "util.hpp"
-using namespace boost::spirit;
+using namespace boost::spirit::classic;
 namespace tops {
 
   struct store_parameter
