@@ -40,6 +40,7 @@ namespace tops {
     void initializeMatchedPositions(const Sequence & s) ;
     void addSequence(Sequence & h) const;
   public:
+    using ProbabilisticModel::initialize;
     FixedSequenceAtPosition(ProbabilisticModelPtr m) : ProbabilisticModelDecorator(m) {};
     virtual ~FixedSequenceAtPosition(){};
     virtual void initialize(int position,Sequence sequence, DiscreteIIDModelPtr distr);
