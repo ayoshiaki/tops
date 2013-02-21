@@ -26,6 +26,10 @@
 #define TRAIN_MAX_LIKELIHOOD_HPP
 
 #include "crossplatform.hpp"
+#include "boost/date_time/posix_time/posix_time.hpp"
+#include <boost/regex.hpp>
+#include <boost/algorithm/string.hpp>
+#include <set>
 
 #include "ProbabilisticModel.hpp"
 #include "ProbabilisticModelCreator.hpp"
@@ -42,6 +46,13 @@ namespace tops {
     //! Creates a probability model
     /*! \param parameters is a set of parameters that is utilized to build the model */
     virtual ProbabilisticModelPtr create( ProbabilisticModelParameters & parameters) const ;
+    virtual void infer_model(string fastafile, int pseudocounts, double residuefraction, string datetime, const vector<string>& symbols) const;
+    virtual bool match_expression(string input, string er) const;
+
+    virtual void model_file_creator(int n_match_states,const vector<string>& symbols, string model_filename) const;
+    virtual void config_file_creator(string states_filename, string emiss_filename, string model_filename, string config_filename, int pseudocounts) const;
+    virtual void emiss_states_file_creator(const vector<string>& seq, int index[], bool match[], const vector<string>& seq_names, string emiss_filename, string states_filename) const;
+
 
     //! Provides a help
     virtual std::string help() const {

@@ -48,6 +48,7 @@
 
 #include "TrainHMMBaumWelch.hpp"
 #include "TrainProfileHMMMaxLikelihood.hpp"
+#include "TrainProfileHMMBaumWelch.hpp"
 #include "TrainVariableLengthMarkovChain.hpp"
 #include "TrainDiscreteIIDModel.hpp"
 #include "TrainFixedLengthMarkovChain.hpp"
@@ -265,6 +266,7 @@ namespace tops
     _trainingCommand["FixedLengthMarkovChain"]= TrainFixedLengthMarkovChainPtr(new TrainFixedLengthMarkovChain());
     _trainingCommand["BaumWelch"] = TrainHMMBaumWelchPtr(new TrainHMMBaumWelch());
     _trainingCommand["ProfileHMMMaxLikelihood"] = TrainProfileHMMMaxLikelihoodPtr(new TrainProfileHMMMaxLikelihood());
+    _trainingCommand["ProfileHMMBaumWelch"] = TrainProfileHMMBaumWelchPtr(new TrainProfileHMMBaumWelch());
     _trainingCommand["WeightArrayModel"] = TrainWeightArrayModelPtr(new TrainWeightArrayModel());
     _trainingCommand["VariableLengthInhomogeneousMarkovChain"]
       = TrainVariableLengthInhomogeneousMarkovChainPtr(new TrainVariableLengthInhomogeneousMarkovChain());

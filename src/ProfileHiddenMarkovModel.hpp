@@ -27,9 +27,7 @@
 #ifndef Profile_ProfileHidden_MARKOV_MODEL
 #define Profile_ProfileHidden_MARKOV_MODEL
 
-
 #include "crossplatform.hpp"
-
 #include "ProbabilisticModel.hpp"
 #include "DecodableModel.hpp"
 #include "Sequence.hpp"
@@ -40,116 +38,126 @@
 #include "util.hpp"
 #include <cstdarg>
 #include <vector>
+#include <cmath>
 
-namespace tops{
+struct traceback {
+	int matriz; // 1 -> match; 2-> insertion; 3->deletion
+	int i, j;
+};
 
-  class DLLEXPORT ProfileHiddenMarkovModel : public DecodableModel
-    {
-    public:
+namespace tops {
 
-      ProfileHiddenMarkovModel() {
-      };
+class DLLEXPORT ProfileHiddenMarkovModel: public DecodableModel {
+public:
 
-      ProfileHiddenMarkovModel( std::vector <HMMStatePtr> states, DiscreteIIDModelPtr initial_probability, AlphabetPtr state_names, AlphabetPtr observation_symbols) :    _states(states) , _initial_probability(initial_probability), _state_names (state_names) {
-        tops::ProbabilisticModel::setAlphabet(observation_symbols);
-      }
+	ProfileHiddenMarkovModel() {
+	}
+	;
 
-      void setStates(std::vector<HMMStatePtr> states) {
-        _states = states;
-      }
+	ProfileHiddenMarkovModel(std::vector<HMMStatePtr> states, DiscreteIIDModelPtr initial_probability, AlphabetPtr state_names, AlphabetPtr observation_symbols) :
+			_states(states), _initial_probability(initial_probability), _state_names(state_names) {
+		tops::ProbabilisticModel::setAlphabet(observation_symbols);
+	}
 
-      virtual ~ProfileHiddenMarkovModel(){}
+	void setStates(std::vector<HMMStatePtr> states) {
+		_states = states;
+	}
 
-      //! Choose the observation given a state
-      virtual Sequence &  chooseObservation ( Sequence & h,int i,  int state) const ;
-      //! Choose a state
-      virtual int chooseState(int state ) const ;
-      //! Choose first state
-      virtual int chooseFirstState() const ;
+	virtual ~ProfileHiddenMarkovModel() {
+	}
 
+	//! Choose the observation given a state
+	virtual Sequence & chooseObservation(Sequence & h, int i, int state) const;
+	//! Choose a state
+	virtual int chooseState(int state) const;
+	//! Choose first state
+	virtual int chooseFirstState() const;
 
-      virtual Sequence & choose(Sequence & h, Sequence & path,  int i, int size) const;
+	virtual Sequence & choose(Sequence & h, Sequence & path, int i, int size) const;
 
+	virtual AlphabetPtr getStateNames() const {
+		return _state_names;
+	}
+	virtual std::string getStateName(int state) const;
 
-      virtual AlphabetPtr getStateNames() const {
-        return _state_names;
-      }
-      virtual std::string getStateName(int state) const;
+	virtual std::string str() const;
 
-      virtual std::string str () const ;
+	virtual void setState(int id, HMMStatePtr state) {
+		if (_states.size() < _state_names->size())
+			_states.resize(_state_names->size());
+		_states[id] = state;
+		state->setId(id);
+	}
 
-      virtual void setState (int id, HMMStatePtr state)
-      {
-        if(_states.size() < _state_names->size())
-          _states.resize(_state_names->size());
-        _states[id] = state;
-        state->setId(id);
-      }
+	virtual HMMStatePtr getState(int id) const {
+		return _states[id];
+	}
 
-      virtual HMMStatePtr getState(int id) const
-      {
-        return _states[id];
-      }
+	virtual int getStateIndex(char type, int index) const;
 
+	virtual int getObservationIndex(char type) const;
 
-      virtual int getStateIndex(char type, int index) const;
+	//! Forward algorithm
+	virtual double forward(const Sequence & s, Matrix &alpha) const;
 
-      //! Forward algorithm
-      virtual double forward(const Sequence & s, Matrix &alpha) const;
+	//! Forward algorithm
+	double forward(const Sequence & s, Matrix &alpha, Matrix &beta, Matrix &gamma) const;
 
-      //! Backward algorithm
-      virtual double backward(const Sequence & s, Matrix &beta) const;
+	//! Backward algorithm
+	virtual double backward(const Sequence & s, Matrix &beta) const;
 
-      //! Viterbi algorithm
-      virtual double viterbi (const Sequence &s, Sequence &path, Matrix & gamma) const ;
+	//! Backward algorithm
+	double backward(const Sequence & s, Matrix &alpha, Matrix &beta, Matrix &gamma) const;
 
-      virtual std::string model_name() const {
-        return "ProfileHiddenMarkovModel";
-      }
-/*
-      virtual ProbabilisticModelCreatorPtr getFactory() const {
-        return ProfileHiddenMarkovModelCreatorPtr(new ProfileHiddenMarkovModelCreator());
-      }
-      */
+	//! Viterbi algorithm
+	virtual double viterbi(const Sequence &s, Sequence &path, Matrix & gamma) const;
 
-      virtual DecodableModel * decodable()  {
-        return this;
-      }
+	virtual std::string model_name() const {
+		return "ProfileHiddenMarkovModel";
+	}
+	/*
+	 virtual ProbabilisticModelCreatorPtr getFactory() const {
+	 return ProfileHiddenMarkovModelCreatorPtr(new ProfileHiddenMarkovModelCreator());
+	 }
+	 */
 
+	virtual DecodableModel * decodable() {
+		return this;
+	}
 
-      virtual void trainMaxLikelihood(SequenceList & observedStates, SequenceList & observedEmissions, int pseudocouts);
-      virtual void trainBaumWelch (SequenceList & training_set, int maxiterations, double diff) ;
+	virtual void trainMaxLikelihood(SequenceList & observedStates, SequenceList & observedEmissions, int pseudocouts);
+	virtual void trainBaumWelch(SequenceList & training_set, int maxiterations, double diff, int pseudocount);
 
-      virtual void initialize(const ProbabilisticModelParameters & par) ;
+	virtual void initialize(const ProbabilisticModelParameters & par);
 
-      virtual ProbabilisticModelParameters parameters() const ;
+	virtual ProbabilisticModelParameters parameters() const;
 
-      void setInitialProbability(DiscreteIIDModelPtr initial) ;
-      void setObservationSymbols(AlphabetPtr obs) ;
-      void setStates(std::vector<HMMStatePtr> states, AlphabetPtr state_names) ;
+	void setInitialProbability(DiscreteIIDModelPtr initial);
+	void setObservationSymbols(AlphabetPtr obs);
+	void setStates(std::vector<HMMStatePtr> states, AlphabetPtr state_names);
 
-      virtual ProfileHiddenMarkovModel * profileDecodable() {
-        return this;
-      }
+	virtual ProfileHiddenMarkovModel * profileDecodable() {
+		return this;
+	}
 
+private:
+	std::vector<HMMStatePtr> _states;
+	DiscreteIIDModelPtr _initial_probability;
+	std::vector<double> _ctFactors;
+	AlphabetPtr _state_names;
+	//void scale(std::vector<double> & in, int t);
+	double max(double a, double b, double c) const;
 
-    private:
-      std::vector <HMMStatePtr> _states;
-      DiscreteIIDModelPtr _initial_probability;
-      std::vector<double> _ctFactors;
-      AlphabetPtr _state_names;
-      //void scale(std::vector<double> & in, int t);
-      double max(double a, double b, double c) const;
-      double max(double a, double b) const;
-      //std::vector<double> iterate(Sequence & obs);
-    };
+	double max(double a, double b) const;
+	//std::vector<double> iterate(Sequence & obs);
 
-    typedef boost::shared_ptr<ProfileHiddenMarkovModel> ProfileHiddenMarkovModelPtr;
+	int maxIndex(double a, double b, double c) const;
+	int maxIndex(double a, double b) const;
+};
+
+typedef boost::shared_ptr<ProfileHiddenMarkovModel> ProfileHiddenMarkovModelPtr;
 
 }
-
-
-
 
 #endif
 

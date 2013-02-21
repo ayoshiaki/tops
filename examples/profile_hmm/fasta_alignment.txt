@@ -1,0 +1,11 @@
+>SEQ1
+GACCA-
+>SEQ2
+AG---C
+>SEQ3
+AGAG-C
+>SEQ4
+--AAAC
+>SEQ5
+AG---C
+
