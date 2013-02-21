@@ -1,0 +1,1 @@
+/usr/bin/c++       CMakeFiles/testeGPHMM.dir/testeGPHMM.cpp.o  -o testeGPHMM -rdynamic ../src/libToPS.so -lboost_regex-mt -lboost_program_options-mt -Wl,-rpath,/home/rafael/Mestrado/Bioinformatica/Trabalho/antigo_tops/tops/src: 

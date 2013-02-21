@@ -1,0 +1,1 @@
+/usr/bin/c++       CMakeFiles/test_read_seq.dir/test_read_seq.cpp.o  -o test_read_seq -rdynamic ../src/libToPS.so -lboost_regex-mt -lboost_program_options-mt -Wl,-rpath,/home/rafael/Mestrado/Bioinformatica/Trabalho/antigo_tops/tops/src 

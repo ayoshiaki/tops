@@ -1,0 +1,1 @@
+/usr/bin/c++       CMakeFiles/posterior_decoding.dir/posterior_decoding.cpp.o  -o posterior_decoding -rdynamic ../src/libToPS.so -lboost_regex-mt -lboost_program_options-mt ../src/libToPS.so -lboost_regex-mt -lboost_program_options-mt -lboost_regex-mt -Wl,-rpath,/home/rafael/Mestrado/Bioinformatica/Trabalho/antigo_tops/tops/src: 

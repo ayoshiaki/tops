@@ -1,0 +1,5 @@
+SEQ1_emiss: G A C C A 
+SEQ2_emiss: A G C 
+SEQ3_emiss: A G A G C 
+SEQ4_emiss: A A A C 
+SEQ5_emiss: A G C 

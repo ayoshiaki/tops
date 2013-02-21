@@ -1,0 +1,1 @@
+/usr/bin/c++       CMakeFiles/kullback_positional.dir/kullback_positional.cpp.o  -o kullback_positional -rdynamic ../src/libToPS.so -lboost_regex-mt -lboost_program_options-mt -Wl,-rpath,/home/rafael/Mestrado/Bioinformatica/Trabalho/antigo_tops/tops/src: 
