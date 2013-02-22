@@ -1,0 +1,4 @@
+training_algorithm="PHMMBaumWelch"
+training_set="BB11007.tfa"
+initial_model="proteinPairHMM5S.txt"
+maxiter=20

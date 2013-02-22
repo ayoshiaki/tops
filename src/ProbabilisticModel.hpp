@@ -43,6 +43,7 @@
 namespace tops {
   class DLLEXPORT DecodableModel;
   class DLLEXPORT PairHiddenMarkovModel;
+  class DLLEXPORT ProfileHiddenMarkovModel;
   class DLLEXPORT FactorableModel;
   class DLLEXPORT InhomogeneousFactorableModel;
   class DLLEXPORT ProbabilisticModelCreator;
@@ -229,6 +230,11 @@ namespace tops {
 
     virtual PairHiddenMarkovModel* pairDecodable() {
       not_implemented("pairDecodable()");
+      return NULL;
+    }
+
+    virtual ProfileHiddenMarkovModel* profileDecodable() {
+      not_implemented("profileDecodable()");
       return NULL;
     }
 

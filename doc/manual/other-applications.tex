@@ -1,0 +1,83 @@
+\chapter{Other Applications}
+
+Here we describe other functionalities of ToPS. 
+% ----------------------------------------------------------------- %
+\section{Aligning Using Pair HMM}
+
+% ----------------------------------------------------------------- %
+\section{Bayesing Classifier}
+
+
+When we have a set of pre-defined sequence families each specified by a different probabilistic model, we can use a Bayesian classifier to decide to which family a given sequence belongs.  For each sequence, the Bayesian classifier selects the family that corresponds to the model with the highest posterior probability. In ToPS, the program \textit{bayes\_classifier} implements the Bayesian classifier. Based on a configuration file containing a list of specified probabilistic models and the {\it a priori} probabilities,  this program reads sequences from the standard input and returns, for each sequence, the posterior probabilities of each model. In box \textit{bayes\_classifier.txt}, we show an example of such a configuration file. Using our CpG island example we can model it with two Markov chains~\cite{Durbin1998}, one to characterize CpG islands and another to characterize general genomic sequences. Then we can build a Bayesian classifier using the two models, and apply this classifier to candidate sequences. We will need then first to describe two Markov models, train each one, and with the trained files, build a classifier:
+
+\vspace{1em}
+\begin{Verbatim}[frame=single,  label={bayes\_classifier.txt}]
+classes =
+ ( "CPG": "cpg_island_markov_chain.txt";
+   "NONCPG": "uniform_markov_chain.txt")
+model_probabilities =
+ ( "CPG": 0.5;
+   "NONCPG": 0.5)
+\end{Verbatim}
+
+\vspace{1em}
+
+The program reads from standard input and prints to standard output, so a sample would be:
+
+\begin{Verbatim}[frame=single, label={Command line}]
+bayes_classifier -c bayes_classifier.txt \
+ < sequences.in
+\end{Verbatim}
+
+The program output is a table in CSV (comma separated values) format, which is compatible with most spreadsheet programs. The rows are showing, from left to right the name of each sequence, the log-likelihood of the sequence given each model, the \textit{a posteriori} probabilities of each model, and the predicted classification of the sequence. An example of result produced by the command above is at Table~\ref{tab:bayes}.
+
+\begin{table}
+  \begin{tabular*}{\textwidth}[t!]{@{\extracolsep{\fill}}lccccc}\toprule
+   sequence name & $log P(S|CPG)$ & $P(CPG|S)$ &  $log P(S|NONCPG)$ & $P(NONCPG|S)$ & classification \\ \hline
+   seq1&-141.029&0.0831703&-138.629&0.916827&NONCPG \\
+   seq2&-132.381&0.9981&-138.629&0.00192936&CPG \\ \bottomrule
+ \end{tabular*}
+ \caption{An example of \textit{ bayesian\_classifier}'s output.}
+ \label{tab:bayes}
+\end{table}
+
+
+
+% ----------------------------------------------------------------- %
+\section{Sliding Window}
+
+
+% ----------------------------------------------------------------- %
+\section{Viterbi Decoding and Posterior Decoding}
+
+With probabilistic models for which the states do not correspond to individual symbols, decoding is an essential part of the recognition problem. In ToPS, decoding uses the Viterbi algorithm~\cite{Rabiner1989}, implemented by the program \textit{viterbi\_decoding}. In this case, the input model is an HMM or a GHMM. With the command line below, the program \textit{viterbi\_decoding} reads the file \textit{in.txt} and, using the model specified in the file \textit{cpg\_island} generates the sequence of states visited in the most probable path of the model for each sequence. The result is presented in standard output.
+
+\begin{Verbatim}[frame=single, label={Command line}]
+viterbi_decoding -m cpg_island.txt < in.txt
+\end{Verbatim}
+
+
+The command line parameter for the \textit{viterbi\_decoding} program is:
+\begin{itemize}
+\item -m specifies the file containing the  model.
+\end{itemize}
+
+
+ToPS also implements the posterior decoding algorithm that provides the more probable state for each position of the sequence.
+
+
+\begin{Verbatim}[frame=single, label={Command line}]
+posterior_decoding -m cpg_island.txt < in.txt
+\end{Verbatim}
+
+The command line parameter for the \textit{posterior\_decoding} program is:
+\begin{itemize}
+\item -m specifies the file containing the  model.
+\end{itemize}
+
+
+
+
+
+
+

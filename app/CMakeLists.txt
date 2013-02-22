@@ -35,6 +35,7 @@ ADD_EXECUTABLE(testeGPHMM testeGPHMM.cpp)
 ADD_EXECUTABLE(predalign predalign.cpp)
 ADD_EXECUTABLE(runAllPredalignTests runAllPredalignTests.cpp)
 ADD_EXECUTABLE(print_graph_from_model print_graph_from_model.cpp)
+ADD_EXECUTABLE(profileHMMtests profileHMMtests.cpp)
 
 TARGET_LINK_LIBRARIES(evaluate ${APP_DEP} )
 TARGET_LINK_LIBRARIES(train ${APP_DEP} )
@@ -58,8 +59,9 @@ TARGET_LINK_LIBRARIES(predalign ${APP_DEP} )
 TARGET_LINK_LIBRARIES(runAllPredalignTests ${APP_DEP} )
 TARGET_LINK_LIBRARIES(posterior_decoding ${APP_DEP} )
 TARGET_LINK_LIBRARIES(print_graph_from_model ${APP_DEP} )
+TARGET_LINK_LIBRARIES(profileHMMtests ${APP_DEP} )
 
-install(TARGETS train viterbi_decoding mea_decoding simulate testeFBGHMM testeGPHMM simulateAlignment align predalign runAllPredalignTests bayes_classifier one_file_model sliding_window evaluate kullback_positional posterior_probabilities posterior_decoding print_graph_from_model
+install(TARGETS train viterbi_decoding mea_decoding simulate testeFBGHMM testeGPHMM simulateAlignment align predalign runAllPredalignTests bayes_classifier one_file_model sliding_window evaluate kullback_positional posterior_probabilities posterior_decoding print_graph_from_model profileHMMtests
        RUNTIME DESTINATION bin
        LIBRARY DESTINATION lib
        ARCHIVE DESTINATION lib/static)

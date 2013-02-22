@@ -1,0 +1,275 @@
+\chapter{Training Probabilistic Models}
+
+To train a probabilistic model using ToPS, you need to create a file that will contain the parameters of the training procedure. 
+ In this file you have to specify the mandatory parameter "training\_algorithm"  that indicates the algorithm to be used to estimate the parameters of the model. Currently, the following "training\_algorithm"  values are available:
+
+\begin{itemize}
+\item \texttt{ContextAlgorithm}
+\item \texttt{DiscreteIID}
+\item \texttt{WeightArrayModel}
+\item \texttt{GHMMTransition}
+\item \texttt{FixedLengthMarkovChain}
+\item \texttt{BaumWelchHMM}
+\item \texttt{MaximumLikelihoodHMM}
+\item \texttt{PHMMBaumWelch}
+\item \texttt{ProfileHMMMaxLikelihood}
+\item \texttt{ProfileHMMBaumWelch}
+\item \texttt{PhasedMarkovChain}
+\item \texttt{InterpolatedMarkovChain}
+\item \texttt{SmoothedHistogramKernelDensity}
+\item \texttt{SmoothedHistogramKernelStanke}
+\item \texttt{SmoothedHistogramKernelBurge}
+\end{itemize}
+
+In this chapter we describe how the user can use each training algorithm.
+
+\section{The \textit{train} program}
+
+
+ToPS provides a program, called "train", that receives a file with the parameters of a training procedure and returns the model description to the standard output. The command line below is an example of how you can run the program.
+
+\vspace{1em}
+
+\begin{Verbatim}[frame=single, label={Command line}]
+train -c  training_specification.txt > model.txt
+\end{Verbatim}
+
+The command line parameter of the \textit{train} program is:
+
+\begin{itemize}
+\item -c specifies the name of the file containing the training parameters
+\end{itemize}
+
+% ----------------------------------------------------------------- %
+\section{Discrete IID Model}
+
+To train discrete i.i.d. model, you need to specify the training set and an alphabet. The \textit{DiscreteIID} algorithm estimates the probability of each symbol using maximum likelihood method and it returns the \textit{DiscreteIIDModel} specification.
+
+\vspace{1em}
+\begin{minipage}{\textwidth}
+\begin{Verbatim}[frame=single,  label={trainiid.txt}]
+training_algorithm="DiscreteIIDModel"
+alphabet = ("A", "C", "G", "T")
+training_set="sequence_from_discreteiid.txt"
+\end{Verbatim}
+\end{minipage}
+\vspace{1em}
+
+% ----------------------------------------------------------------- %
+\section{Context Algorithm}
+
+To train variable length Markov chains, you can use the algorithm Context~\cite{Rissanen1983,Galves2008}. It receives a training set, the alphabet, and the parameter \textit{cut}. The \textit{cut} specifies a threshold for the pruning of the probabilistic suffix tree. The greater the value of the \textit{cut}, the smaller will be the tree, because more nodes will be considered indistinguishable with their descendents.   The output of this algorithm is a "VariableLengthMarkovChain" description.
+
+\vspace{1em}
+\begin{minipage}{\textwidth}
+\begin{Verbatim}[frame=single,  label={bic.txt}]
+training_algorithm = "ContextAlgorithm"
+training_set = "sequences.txt"
+cut = 0.1
+alphabet = ("0", "1")
+\end{Verbatim}
+\end{minipage}
+\vspace{1em}
+
+
+
+% ----------------------------------------------------------------- %
+\section{Fixed Length-Markov Chain}
+
+To train a fixed order Markov chain, you can use the algorithm \texttt{FixedLengthMarkovChain}. It receives a training set, the alphabet, and the parameter "order". The output of this algorithm is a "VariableLengthMarkovChain" specification where the contexts have length equals to the value specified using the \textit{order} parameter. The file  \textit{fdd.txt} is describing the training of a Markov chain of order 1.
+ 
+\vspace{1em}
+\begin{minipage}{\textwidth}
+\begin{Verbatim}[frame=single,  label={fdd.txt}]
+training_algorithm = "FixedLengthMarkovChain"
+training_set = "sequences.txt"
+order = 1
+alphabet = ("0", "1")
+\end{Verbatim}
+\end{minipage}
+\vspace{1em}
+
+% ----------------------------------------------------------------- %
+\section{Training the GHMM transition probabilities}
+
+To estimate the transition probabilities of a GHMM using maximum likelihood method, you can use the algorithm \texttt{GHMMTransition}. It receives a training set containing the a set of sequences of states and an initial ghmm model. It returns a new GHMM with the estimated transition probabilities.
+
+\begin{Verbatim}[frame=single, label=train\_transitions.txt]
+training_algorithm="GHMMTransitions"
+training_set="train.txt"
+ghmm_model="ghmm.txt"
+\end{Verbatim}
+
+
+% ----------------------------------------------------------------- %
+\section{Training HMM using algorithm Baum-Welch}
+
+To estimate the parameter of a HMM, given an initial HMM, you can use the algorithm \textit{BaumWelchHMM}. It receives a training set, an initial HMM model, and the maximum number of iteration. It returns a new \textit{HiddenMarkovModel} with the estimated parameters.
+
+\begin{Verbatim}[frame=single, label=train.txt]
+training_algorithm = "BaumWelchHMM"
+training_set = "trainhmm_bw.sequences"
+initial_specification = "initial_hmm.txt"
+maxiter=300
+\end{Verbatim}
+
+
+
+% ----------------------------------------------------------------- %
+\section{Interpolated Markov Chain}
+
+To train the parameters of an interpolated Markov chain~\cite{Salzberg1998}, you can use the \textit{InterpolatedMarkovChain} training algorithm. It receiveis a training set, the order of the Markov chain, and it will return a \textit{VariableMarkovChain} specification with the estimated parameters.
+
+\begin{Verbatim}[frame=single,label=train.txt]
+training_algorithm="InterpolatedMarkovChain"
+training_set="intergenic.fasta"
+alphabet=( "A", "C", "G", "T" )
+pseudo_counts=1
+order=4
+\end{Verbatim}
+
+
+
+% ----------------------------------------------------------------- %
+\section{Profile HMM Maximum Likelihood}
+To estimate the parameters of a Profile HMM, you can use de \textit{ProfileHMMMaxLikelihood} algorithm. It receives an alignment in the fasta format file, the alphabet of the model, the residue fraction which is used to decide what multiple alignment columns assign as match, insert and delete states, and the pseudocounts value. It returns a \textit{Profile HMM} with the estimated parameters.
+
+\begin{Verbatim}[frame=single,label=train.txt]
+training_algorithm="ProfileHMMMaxLikelihood"
+fasta_file="fasta_alignment.txt"
+alphabet="A,C,G,T"
+residue_fraction=0.7
+pseudocounts=1
+\end{Verbatim}
+
+
+
+% ----------------------------------------------------------------- %
+\section{Profile HMM Baum-Welch}
+
+You can also use de \textit{ProfileHMMBaumWelch} algorithm to estimate the parameters of a profile. It receives an initial Profile HMM model, the training set that should be formated in the ToPS sequence format file, the threshold, the maximum number of iterations, and the pseudocounts value.
+It returns a new \textit{Profile HMM} with the estimated parameters.
+
+\begin{Verbatim}[frame=single,label=train.txt]
+training_algorithm="ProfileHMMBaumWelch"
+initial_model="profile.txt"
+training_set="training_sequences.txt"
+threshold = 0.03
+maxiter= 500
+pseudocounts = 1
+\end{Verbatim}
+
+
+% ----------------------------------------------------------------- %
+\section{Weight Array Model}
+
+Weight array models~\cite{Burge1997,Zhang1993} are inhomogeneous Markov models that represent fixed-length sequences. It is useful to model biological signal, such as splicing sites,  branch points sites, and stop codons. To train a WAM, you can use the \textit{WeightArrayModel} algorithm, it receives a set of sequences with length specified using the \textit{length} parameter. This training algorithm returns a \textit{InhomogeneousMarkovChain} description with the estimated parameters.
+
+\begin{Verbatim}[frame=single,label=train.txt]
+training_algorithm = "WeightArrayModel"
+training_set="sequences.txt"
+length=3
+alphabet=("0", "1")
+order=1
+\end{Verbatim}
+
+% ----------------------------------------------------------------- %
+\section{Phased Markov Model}
+
+Phased Markov Model is an Inhomogeneous Markov Model for which the positional distributions are periodically reused to generate the sequences. 
+Three-periodic Markov Model~\cite{Borodovsky1993}  is an example of this model and it is useful to represent protein-coding regions of the gene. 
+
+\begin{Verbatim}[frame=single, label=train.txt]
+training_algorithm="PhasedMarkovChain"
+training_set="sequence.fasta"
+alphabet=("A", "C", "G", "T")
+order=4
+pseudo_counts = 0
+number_of_phases=3
+phased = 1
+\end{Verbatim}
+
+% ----------------------------------------------------------------- %
+\section{Smoothed Histogram (Burge)}
+
+To create a smoothed histogram of positive integers, you can use the \textit{SmoothedHistogramBurge}~\cite{Burge1997}. It receives a training set containing a sequence of positive integers and it returns a \textit{DiscreteIIDModel} with the estimated probabilities of for each number.
+
+\begin{Verbatim}[frame=single, label=train.txt]
+training_algorithm = "SmoothedHistogramBurge"
+training_set = "lengths.txt"
+C=1.0
+\end{Verbatim}
+
+% ----------------------------------------------------------------- %
+\section{Smoothed Histogram (Stanke)}
+
+
+To create a smoothed histogram of positive integers, you can use the \textit{SmoothedHistogramStanke}~\cite{Stanke2003b}. It receives a training set containing a sequence of positive integers and it returns a \textit{DiscreteIIDModel} with the estimated probabilities of for each number.
+
+\begin{Verbatim}[frame=single, label=train.txt]
+training_algorithm = "SmoothedHistogramStanke"
+training_set = "lengths.txt"
+\end{Verbatim}
+
+
+% ----------------------------------------------------------------- %
+\section{Smoothe Histogram (Kernel Density Estimation)}
+
+To create a smoothed histogram of positive integers, you can use the \textit{SmoothedHistogramKernelDensity}~\cite{Sheather2004}. It receives a training set containing a sequence of positive integers and it returns a \textit{DiscreteIIDModel} with the estimated probabilities of for each number.
+
+\begin{Verbatim}[frame=single, label=train.txt]
+training_algorithm = "SmoothedHistogramKernelDensity"
+training_set = "lengths.txt"
+\end{Verbatim}
+
+
+% ----------------------------------------------------------------- %
+\section{Using model selection when training a probabilistic model}
+
+
+Many models would have different dimensionality which are defined by the user during the training procedure. Typical example includes Markov chain models in which the user has to choose the value of the order. To help find the best set of such parameters. ToPS contains two model selection criteria that the user can use with a training algorithm.
+
+\vspace{1em}
+\begin{minipage}{\textwidth}
+\begin{itemize}
+\item  Bayesian Information Criteria (BIC)~\cite{Schwarz1978}: \textit{This criteria selects the model with the largest value for the formula below:}
+\begin{align*}
+\log (Maximum~Likelihood) - \frac{1}{2} (number~of~independently~adjusted~parameters) \\ \times \log (sample~size)
+\end{align*}
+\vspace{1em}
+
+\item Akaike Information Criteria (AIC) ~\cite{Akaike1974}: \textit{This criteria selects the model with the smallest value for the formula:}
+\begin{align*}
+(-2) \log (Maximum~Likelihood) + 2  (number~of~independently~adjusted~parameters)
+\end{align*}
+\end{itemize}
+\end{minipage}
+\vspace{1em}
+
+To run a model selection procedure the user have to specify four arguments:
+
+\begin{itemize}
+\item \textit{model\_selection\_criteria} specifies the model selection criteria: BIC, or AIC.
+\item \textit{begin} specifies the set of parameters to be tested and their initial values.
+\item \textit{end} specifies  the final values for the parameters specified above
+\item \textit{step} specifies the increment on the values of each of the parameters being tested.
+\end{itemize}
+
+
+For example, the file \texttt{bic.txt} specifies that ToPS will use BIC selection criteria. The training procedure will calculate the BIC values for the estimated VLMC for each  cut in the set $\{0.0,...,1.0\}$, and it will return the model with the preferred BIC value.
+
+
+\vspace{1em}
+\begin{minipage}{\textwidth}
+\begin{Verbatim}[frame=single,  label={bic.txt}]
+training_algorithm = "ContextAlgorithm"
+training_set = "sequences.txt"
+model_selection_criteria = "BIC"
+begin = ("cut": 0.0)
+end = ("cut": 1.0)
+step = ("cut": 0.1)
+alphabet = ("0", "1")
+\end{Verbatim}
+\end{minipage}
+\vspace{1em}
+

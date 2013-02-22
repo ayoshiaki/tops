@@ -1,0 +1,59 @@
+\chapter{Build and Installation}
+
+This chapter provides a complete guide to building and installing ToPS.
+
+% ----------------------------------------------------------------- %
+\section{Requirements}
+
+ToPS was designed to run on Unix/Linux operating systems, but it should work on Windows too. Tested platforms include: MacOS X and Ubuntu linux.
+
+This framework was written in C++ and its requirements are listed below:
+
+\begin{list}{*}{}
+  \item \emph{G++ v4.2.1} - \url{http://gcc.gnu.org/}
+  \item \emph{Boost C++ v1.52} - \url{http://www.boost.org/}
+  \item \emph{CMake v2.8.8} - \url{http://www.cmake.org/}
+  \item \emph{Git v1.7.9} - \url{http://git-scm.com/}
+  \item \emph{GoogleTest v1.5.0} - \url{http://code.google.com/p/googletest/}
+\end{list}
+
+% ----------------------------------------------------------------- %
+\section{Building from Source}
+
+\begin{enumerate}
+\item Download the last version of ToPS using Git
+
+\begin{Verbatim}[commandchars=\\\{\}]
+ git clone git://tops.git.sourceforge.net/gitroot/tops/tops 
+\end{Verbatim}
+
+ This will create a directory named tops
+
+\item Install the google test framework submodule.
+
+\begin{Verbatim}[commandchars=\\\{\}]
+ git submodule update --init 
+\end{Verbatim}
+
+
+\item Go to the tops directory:
+
+\begin{Verbatim}[commandchars=\\\{\}]
+ \PY{n+nb}{cd }tops 
+\end{Verbatim}
+
+\item Run the configuration script:
+
+\begin{Verbatim}[commandchars=\\\{\}]
+cmake .
+\end{Verbatim}
+
+\item Run make and make install
+
+\begin{Verbatim}[commandchars=\\\{\}]
+ make 
+ sudo make install 
+\end{Verbatim}
+
+\end{enumerate}
+

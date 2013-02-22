@@ -1,0 +1,43 @@
+\chapter{Introduction}
+
+Probabilistic models for sequence data play an important role in many dicipline  such as natural language processing \cite{Manning1999}, computational music \cite{Klapuri2006}, and Bioinformatics \cite{Durbin1998}.  Examples of such models include hidden Markov models \cite{Rabiner1989}, hidden semi-Markov model~\cite{Guedon2003} also know as Generalized Hidden Markov Model \cite{Kulp1996,Burge1997}, and variable-length Markov chain \cite{Rissanen1983}. 
+
+This document describes the usage of ToPS (Toolkit of Probabilistic Model of Sequence) that combines in a single environment the mechanisms to manipulate different probabilistic models. Currently, ToPS contains the implementation of the following models:
+
+\begin{enumerate}
+\item Independent and identically distributed model
+\item Variable-Length Markov Chain (VLMC)
+\item Inhomogeneous Markov Chain
+\item Hidden Markov Model
+\item Pair Hidden Markov Model
+\item Profile Hidden Markov Model
+\item Generalized Hidden Markov Model (GHMM)
+\end{enumerate}
+
+The user can implement models either by manual description of the probability values in a configuration file, or by using training algorithms provided by the system. The ToPS framework also includes a set of programs that implement bayesian classifiers, sequence samplers, and sequence decoders. Finally, ToPS is an extensible and portable system that facilitates the implementation of other probabilistic models, and the development of new programs.
+
+
+\section{Supported Features}
+
+\begin{enumerate}
+\item ToPS contains a simple language near to the mathematical notation that can be used to describe the parameters of different type of models. 
+\item ToPS allows the use of any implemented model to represent the emissions of the GHMM's states. 
+\item Sequence samplers are available. 
+\item ToPS contains the implementation of Viterbi decoding, forward and backward algorithmhs for "decodable" models (HMM, pair-HMM, profile-HMM, and GHMM).
+\item Baum-Welch training is implemented for HMM, and pair-HMM.
+\item Maximum Likelihood training (profile-HMM, and Markov chains)
+\item The object-oriented design of ToPS is extensible and developers are welcome to include the implementation of other probabilistic models or algorithms.
+\item The ToPS source-code is under the GiT version control system (\url{http://git-scm.com}). 
+\item ToPS provides the implementation of many distinct and different programs:
+\begin{itemize}
+\item aligner
+\item sequence sampler
+\item bayesian classifier
+\item sliding window analysis
+\item posterior decoding
+\item viterbi decoding
+\item path sampler given a sequence and a GHMM
+\end{itemize}
+
+\end{enumerate}
+

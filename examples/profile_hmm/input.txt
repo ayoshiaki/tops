@@ -1,0 +1,1 @@
+profile_trained.txt_0:	A G T A T C 
