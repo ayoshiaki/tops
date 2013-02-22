@@ -45,6 +45,7 @@ namespace tops {
        (emissions == NULL))
       {
         std::cerr << help() << std::endl;
+	exit(-1);
       }
     ProbabilisticModelPtr model = PairHiddenMarkovModelPtr(new PairHiddenMarkovModel());
     model->initialize(parameters);

@@ -4,7 +4,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR})
 
 find_package(Boost 1.52 COMPONENTS regex REQUIRED)
 find_package(Boost 1.52 COMPONENTS program_options REQUIRED)
-find_package(Boost 1.52 COMPONENTS  system REQUIRED)
+find_package(Boost 1.52 COMPONENTS system REQUIRED)
 find_package(Boost 1.52 COMPONENTS filesystem REQUIRED)
 
 # find_package(PerlLibs)
@@ -24,5 +24,6 @@ ENDIF(UNIX)
 add_subdirectory(src)
 add_subdirectory(app)
 add_subdirectory(lang)
+add_subdirectory(googletest)
 
-# enable_testing()
+enable_testing()

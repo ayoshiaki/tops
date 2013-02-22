@@ -1,4 +1,4 @@
-include_directories(../src ../../src)
+include_directories(../src ../../src ../../googletest/include)
 
 enable_testing()
 

@@ -25,7 +25,7 @@ void parse_lang(std::string str_input)
 [a-zA-Z_][a-zA-Z0-9_]*            { nextChar(yyleng); SAVE_TOKEN; return TIDENTIFIER; }
 L?\"(\\.|[^\\"])*\"               { nextChar(yyleng); SAVE_TOKEN; return TSTRING; }
 "#"[^\r\n]*
-[0-9]+\.[0-9]+([Ee][+-]?[0-9]+)?  { nextChar(yyleng); SAVE_TOKEN; return TFLOAT; }
+[0-9]+[Ee][+-]?[0-9]+|[0-9]+\.[0-9]+([Ee][+-]?[0-9]+)?  { nextChar(yyleng); SAVE_TOKEN; return TFLOAT; }
 [0-9]+                            { nextChar(yyleng); SAVE_TOKEN; return TINTEGER; }
 "="                               { nextChar(yyleng); return TOKEN(TEQUAL); }
 "|"                               { nextChar(yyleng); return TOKEN(TPIPE); }
