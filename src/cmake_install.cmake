@@ -1,4 +1,4 @@
-# Install script for directory: /home/rafael/Mestrado/Bioinformatica/Trabalho/antigo_tops/tops/src
+# Install script for directory: /Users/yoshiaki/work/programas/tops/src
 
 # Set the install prefix
 IF(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -27,104 +27,97 @@ IF(NOT CMAKE_INSTALL_COMPONENT)
   ENDIF(COMPONENT)
 ENDIF(NOT CMAKE_INSTALL_COMPONENT)
 
-# Install shared libraries without execute permission?
-IF(NOT DEFINED CMAKE_INSTALL_SO_NO_EXE)
-  SET(CMAKE_INSTALL_SO_NO_EXE "1")
-ENDIF(NOT DEFINED CMAKE_INSTALL_SO_NO_EXE)
-
 IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  IF(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/libToPS.so" AND
-     NOT IS_SYMLINK "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/libToPS.so")
-    FILE(RPATH_CHECK
-         FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/libToPS.so"
-         RPATH "")
-  ENDIF()
-  FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" TYPE SHARED_LIBRARY FILES "/home/rafael/Mestrado/Bioinformatica/Trabalho/antigo_tops/tops/src/libToPS.so")
-  IF(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/libToPS.so" AND
-     NOT IS_SYMLINK "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/libToPS.so")
+  FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" TYPE SHARED_LIBRARY FILES "/Users/yoshiaki/work/programas/tops/src/libToPS.dylib")
+  IF(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/libToPS.dylib" AND
+     NOT IS_SYMLINK "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/libToPS.dylib")
+    EXECUTE_PROCESS(COMMAND "/usr/bin/install_name_tool"
+      -id "libToPS.dylib"
+      "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/libToPS.dylib")
     IF(CMAKE_INSTALL_DO_STRIP)
-      EXECUTE_PROCESS(COMMAND "/usr/bin/strip" "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/libToPS.so")
+      EXECUTE_PROCESS(COMMAND "/usr/bin/strip" "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/libToPS.dylib")
     ENDIF(CMAKE_INSTALL_DO_STRIP)
   ENDIF()
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 
 IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
   FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/tops" TYPE FILE FILES
-    "/home/rafael/Mestrado/Bioinformatica/Trabalho/antigo_tops/tops/src/AkaikeInformationCriteria.hpp"
-    "/home/rafael/Mestrado/Bioinformatica/Trabalho/antigo_tops/tops/src/Alphabet.hpp"
-    "/home/rafael/Mestrado/Bioinformatica/Trabalho/antigo_tops/tops/src/BayesianInformationCriteria.hpp"
-    "/home/rafael/Mestrado/Bioinformatica/Trabalho/antigo_tops/tops/src/ConfigurationReader.hpp"
-    "/home/rafael/Mestrado/Bioinformatica/Trabalho/antigo_tops/tops/src/ContextTree.hpp"
-    "/home/rafael/Mestrado/Bioinformatica/Trabalho/antigo_tops/tops/src/DecodableModel.hpp"
-    "/home/rafael/Mestrado/Bioinformatica/Trabalho/antigo_tops/tops/src/DegenerateDistribution.hpp"
-    "/home/rafael/Mestrado/Bioinformatica/Trabalho/antigo_tops/tops/src/FactorableModel.hpp"
-    "/home/rafael/Mestrado/Bioinformatica/Trabalho/antigo_tops/tops/src/FactorableModelPrefixSumArray.hpp"
-    "/home/rafael/Mestrado/Bioinformatica/Trabalho/antigo_tops/tops/src/DiscreteIIDModel.hpp"
-    "/home/rafael/Mestrado/Bioinformatica/Trabalho/antigo_tops/tops/src/DiscreteIIDModelCreator.hpp"
-    "/home/rafael/Mestrado/Bioinformatica/Trabalho/antigo_tops/tops/src/FixedSequenceAtPosition.hpp"
-    "/home/rafael/Mestrado/Bioinformatica/Trabalho/antigo_tops/tops/src/FixedSequenceAtPositionCreator.hpp"
-    "/home/rafael/Mestrado/Bioinformatica/Trabalho/antigo_tops/tops/src/GHMMStates.hpp"
-    "/home/rafael/Mestrado/Bioinformatica/Trabalho/antigo_tops/tops/src/GeneralizedHiddenMarkovModel.hpp"
-    "/home/rafael/Mestrado/Bioinformatica/Trabalho/antigo_tops/tops/src/GeneralizedHiddenMarkovModelCreator.hpp"
-    "/home/rafael/Mestrado/Bioinformatica/Trabalho/antigo_tops/tops/src/HiddenMarkovModel.hpp"
-    "/home/rafael/Mestrado/Bioinformatica/Trabalho/antigo_tops/tops/src/HiddenMarkovModelCreator.hpp"
-    "/home/rafael/Mestrado/Bioinformatica/Trabalho/antigo_tops/tops/src/InhomogeneousFactorableModel.hpp"
-    "/home/rafael/Mestrado/Bioinformatica/Trabalho/antigo_tops/tops/src/InhomogeneousMarkovChain.hpp"
-    "/home/rafael/Mestrado/Bioinformatica/Trabalho/antigo_tops/tops/src/InhomogeneousMarkovChainCreator.hpp"
-    "/home/rafael/Mestrado/Bioinformatica/Trabalho/antigo_tops/tops/src/MultipleAlignment.hpp"
-    "/home/rafael/Mestrado/Bioinformatica/Trabalho/antigo_tops/tops/src/NullPrefixSumArray.hpp"
-    "/home/rafael/Mestrado/Bioinformatica/Trabalho/antigo_tops/tops/src/PhasedFactorableModelEvaluationAlgorithm.hpp"
-    "/home/rafael/Mestrado/Bioinformatica/Trabalho/antigo_tops/tops/src/PhasedRunLengthDistribution.hpp"
-    "/home/rafael/Mestrado/Bioinformatica/Trabalho/antigo_tops/tops/src/PhasedRunLengthDistributionCreator.hpp"
-    "/home/rafael/Mestrado/Bioinformatica/Trabalho/antigo_tops/tops/src/PrefixSumArray.hpp"
-    "/home/rafael/Mestrado/Bioinformatica/Trabalho/antigo_tops/tops/src/ProbabilisticModel.hpp"
-    "/home/rafael/Mestrado/Bioinformatica/Trabalho/antigo_tops/tops/src/ProbabilisticModelCreator.hpp"
-    "/home/rafael/Mestrado/Bioinformatica/Trabalho/antigo_tops/tops/src/ProbabilisticModelCreatorClient.hpp"
-    "/home/rafael/Mestrado/Bioinformatica/Trabalho/antigo_tops/tops/src/ProbabilisticModelDecorator.hpp"
-    "/home/rafael/Mestrado/Bioinformatica/Trabalho/antigo_tops/tops/src/ProbabilisticModelParameter.hpp"
-    "/home/rafael/Mestrado/Bioinformatica/Trabalho/antigo_tops/tops/src/RemoveSequenceFromModel.hpp"
-    "/home/rafael/Mestrado/Bioinformatica/Trabalho/antigo_tops/tops/src/ReverseComplementDNA.hpp"
-    "/home/rafael/Mestrado/Bioinformatica/Trabalho/antigo_tops/tops/src/ReverseComplementDNACreator.hpp"
-    "/home/rafael/Mestrado/Bioinformatica/Trabalho/antigo_tops/tops/src/Sequence.hpp"
-    "/home/rafael/Mestrado/Bioinformatica/Trabalho/antigo_tops/tops/src/SequenceEntry.hpp"
-    "/home/rafael/Mestrado/Bioinformatica/Trabalho/antigo_tops/tops/src/SequenceFactory.hpp"
-    "/home/rafael/Mestrado/Bioinformatica/Trabalho/antigo_tops/tops/src/SequenceFormat.hpp"
-    "/home/rafael/Mestrado/Bioinformatica/Trabalho/antigo_tops/tops/src/SmoothedHistogramBurge.hpp"
-    "/home/rafael/Mestrado/Bioinformatica/Trabalho/antigo_tops/tops/src/SmoothedHistogramKernelDensity.hpp"
-    "/home/rafael/Mestrado/Bioinformatica/Trabalho/antigo_tops/tops/src/SmoothedHistogramStanke.hpp"
-    "/home/rafael/Mestrado/Bioinformatica/Trabalho/antigo_tops/tops/src/SparseMatrix.hpp"
-    "/home/rafael/Mestrado/Bioinformatica/Trabalho/antigo_tops/tops/src/Symbol.hpp"
-    "/home/rafael/Mestrado/Bioinformatica/Trabalho/antigo_tops/tops/src/TargetModel.hpp"
-    "/home/rafael/Mestrado/Bioinformatica/Trabalho/antigo_tops/tops/src/TargetModelCreator.hpp"
-    "/home/rafael/Mestrado/Bioinformatica/Trabalho/antigo_tops/tops/src/TrainDiscreteIIDModel.hpp"
-    "/home/rafael/Mestrado/Bioinformatica/Trabalho/antigo_tops/tops/src/TrainFixedLengthMarkovChain.hpp"
-    "/home/rafael/Mestrado/Bioinformatica/Trabalho/antigo_tops/tops/src/TrainInterpolatedMarkovChain.hpp"
-    "/home/rafael/Mestrado/Bioinformatica/Trabalho/antigo_tops/tops/src/TrainHMMBaumWelch.hpp"
-    "/home/rafael/Mestrado/Bioinformatica/Trabalho/antigo_tops/tops/src/TrainPhasedMarkovChain.hpp"
-    "/home/rafael/Mestrado/Bioinformatica/Trabalho/antigo_tops/tops/src/TrainInterpolatedPhasedMarkovChain.hpp"
-    "/home/rafael/Mestrado/Bioinformatica/Trabalho/antigo_tops/tops/src/TrainPhasedMarkovChainContextAlgorithm.hpp"
-    "/home/rafael/Mestrado/Bioinformatica/Trabalho/antigo_tops/tops/src/TrainVariableLengthInhomogeneousMarkovChain.hpp"
-    "/home/rafael/Mestrado/Bioinformatica/Trabalho/antigo_tops/tops/src/TrainVariableLengthMarkovChain.hpp"
-    "/home/rafael/Mestrado/Bioinformatica/Trabalho/antigo_tops/tops/src/TrainWeightArrayModel.hpp"
-    "/home/rafael/Mestrado/Bioinformatica/Trabalho/antigo_tops/tops/src/VariableLengthMarkovChain.hpp"
-    "/home/rafael/Mestrado/Bioinformatica/Trabalho/antigo_tops/tops/src/VariableLengthMarkovChainCreator.hpp"
-    "/home/rafael/Mestrado/Bioinformatica/Trabalho/antigo_tops/tops/src/util.hpp"
-    "/home/rafael/Mestrado/Bioinformatica/Trabalho/antigo_tops/tops/src/TrainGHMMTransitions.hpp"
-    "/home/rafael/Mestrado/Bioinformatica/Trabalho/antigo_tops/tops/src/BernoulliModelCreator.hpp"
-    "/home/rafael/Mestrado/Bioinformatica/Trabalho/antigo_tops/tops/src/SimilarityBasedSequenceWeighting.hpp"
-    "/home/rafael/Mestrado/Bioinformatica/Trabalho/antigo_tops/tops/src/SimilarityBasedSequenceWeightingCreator.hpp"
-    "/home/rafael/Mestrado/Bioinformatica/Trabalho/antigo_tops/tops/src/TrainSimilarityBasedSequenceWeighting.hpp"
-    "/home/rafael/Mestrado/Bioinformatica/Trabalho/antigo_tops/tops/src/MultipleSequentialModel.hpp"
-    "/home/rafael/Mestrado/Bioinformatica/Trabalho/antigo_tops/tops/src/MultipleSequentialModelCreator.hpp"
-    "/home/rafael/Mestrado/Bioinformatica/Trabalho/antigo_tops/tops/src/StoreLoadedModel.hpp"
-    "/home/rafael/Mestrado/Bioinformatica/Trabalho/antigo_tops/tops/src/PairHiddenMarkovModel.hpp"
-    "/home/rafael/Mestrado/Bioinformatica/Trabalho/antigo_tops/tops/src/PairHiddenMarkovModelCreator.hpp"
-    "/home/rafael/Mestrado/Bioinformatica/Trabalho/antigo_tops/tops/src/TrainPHMMBaumWelch.hpp"
-    "/home/rafael/Mestrado/Bioinformatica/Trabalho/antigo_tops/tops/src/MaximumDependenceDecomposition.hpp"
-    "/home/rafael/Mestrado/Bioinformatica/Trabalho/antigo_tops/tops/src/ProfileHiddenMarkovModel.hpp"
-    "/home/rafael/Mestrado/Bioinformatica/Trabalho/antigo_tops/tops/src/ProfileHiddenMarkovModelCreator.hpp"
-    "/home/rafael/Mestrado/Bioinformatica/Trabalho/antigo_tops/tops/src/TrainProfileHMMMaxLikelihood.hpp"
-    "/home/rafael/Mestrado/Bioinformatica/Trabalho/antigo_tops/tops/src/TrainProfileHMMBaumWelch.hpp"
+    "/Users/yoshiaki/work/programas/tops/src/AkaikeInformationCriteria.hpp"
+    "/Users/yoshiaki/work/programas/tops/src/Alphabet.hpp"
+    "/Users/yoshiaki/work/programas/tops/src/BayesianInformationCriteria.hpp"
+    "/Users/yoshiaki/work/programas/tops/src/ConfigurationReader.hpp"
+    "/Users/yoshiaki/work/programas/tops/src/ContextTree.hpp"
+    "/Users/yoshiaki/work/programas/tops/src/DecodableModel.hpp"
+    "/Users/yoshiaki/work/programas/tops/src/DegenerateDistribution.hpp"
+    "/Users/yoshiaki/work/programas/tops/src/FactorableModel.hpp"
+    "/Users/yoshiaki/work/programas/tops/src/FactorableModelPrefixSumArray.hpp"
+    "/Users/yoshiaki/work/programas/tops/src/DiscreteIIDModel.hpp"
+    "/Users/yoshiaki/work/programas/tops/src/DiscreteIIDModelCreator.hpp"
+    "/Users/yoshiaki/work/programas/tops/src/FixedSequenceAtPosition.hpp"
+    "/Users/yoshiaki/work/programas/tops/src/FixedSequenceAtPositionCreator.hpp"
+    "/Users/yoshiaki/work/programas/tops/src/GHMMStates.hpp"
+    "/Users/yoshiaki/work/programas/tops/src/GeneralizedHiddenMarkovModel.hpp"
+    "/Users/yoshiaki/work/programas/tops/src/GeneralizedHiddenMarkovModelCreator.hpp"
+    "/Users/yoshiaki/work/programas/tops/src/HiddenMarkovModel.hpp"
+    "/Users/yoshiaki/work/programas/tops/src/HiddenMarkovModelCreator.hpp"
+    "/Users/yoshiaki/work/programas/tops/src/InhomogeneousFactorableModel.hpp"
+    "/Users/yoshiaki/work/programas/tops/src/InhomogeneousMarkovChain.hpp"
+    "/Users/yoshiaki/work/programas/tops/src/InhomogeneousMarkovChainCreator.hpp"
+    "/Users/yoshiaki/work/programas/tops/src/MultipleAlignment.hpp"
+    "/Users/yoshiaki/work/programas/tops/src/NullPrefixSumArray.hpp"
+    "/Users/yoshiaki/work/programas/tops/src/PhasedFactorableModelEvaluationAlgorithm.hpp"
+    "/Users/yoshiaki/work/programas/tops/src/PhasedRunLengthDistribution.hpp"
+    "/Users/yoshiaki/work/programas/tops/src/PhasedRunLengthDistributionCreator.hpp"
+    "/Users/yoshiaki/work/programas/tops/src/PrefixSumArray.hpp"
+    "/Users/yoshiaki/work/programas/tops/src/ProbabilisticModel.hpp"
+    "/Users/yoshiaki/work/programas/tops/src/ProbabilisticModelCreator.hpp"
+    "/Users/yoshiaki/work/programas/tops/src/ProbabilisticModelCreatorClient.hpp"
+    "/Users/yoshiaki/work/programas/tops/src/ProbabilisticModelDecorator.hpp"
+    "/Users/yoshiaki/work/programas/tops/src/ProbabilisticModelParameter.hpp"
+    "/Users/yoshiaki/work/programas/tops/src/RemoveSequenceFromModel.hpp"
+    "/Users/yoshiaki/work/programas/tops/src/ReverseComplementDNA.hpp"
+    "/Users/yoshiaki/work/programas/tops/src/ReverseComplementDNACreator.hpp"
+    "/Users/yoshiaki/work/programas/tops/src/Sequence.hpp"
+    "/Users/yoshiaki/work/programas/tops/src/SequenceEntry.hpp"
+    "/Users/yoshiaki/work/programas/tops/src/SequenceFactory.hpp"
+    "/Users/yoshiaki/work/programas/tops/src/SequenceFormat.hpp"
+    "/Users/yoshiaki/work/programas/tops/src/SmoothedHistogramBurge.hpp"
+    "/Users/yoshiaki/work/programas/tops/src/SmoothedHistogramKernelDensity.hpp"
+    "/Users/yoshiaki/work/programas/tops/src/SmoothedHistogramStanke.hpp"
+    "/Users/yoshiaki/work/programas/tops/src/SparseMatrix.hpp"
+    "/Users/yoshiaki/work/programas/tops/src/Symbol.hpp"
+    "/Users/yoshiaki/work/programas/tops/src/TargetModel.hpp"
+    "/Users/yoshiaki/work/programas/tops/src/TargetModelCreator.hpp"
+    "/Users/yoshiaki/work/programas/tops/src/TrainDiscreteIIDModel.hpp"
+    "/Users/yoshiaki/work/programas/tops/src/TrainFixedLengthMarkovChain.hpp"
+    "/Users/yoshiaki/work/programas/tops/src/TrainInterpolatedMarkovChain.hpp"
+    "/Users/yoshiaki/work/programas/tops/src/TrainHMMBaumWelch.hpp"
+    "/Users/yoshiaki/work/programas/tops/src/TrainHMMMaximumLikelihood.hpp"
+    "/Users/yoshiaki/work/programas/tops/src/TrainPhasedMarkovChain.hpp"
+    "/Users/yoshiaki/work/programas/tops/src/TrainInterpolatedPhasedMarkovChain.hpp"
+    "/Users/yoshiaki/work/programas/tops/src/TrainPhasedMarkovChainContextAlgorithm.hpp"
+    "/Users/yoshiaki/work/programas/tops/src/TrainVariableLengthInhomogeneousMarkovChain.hpp"
+    "/Users/yoshiaki/work/programas/tops/src/TrainVariableLengthMarkovChain.hpp"
+    "/Users/yoshiaki/work/programas/tops/src/TrainWeightArrayModel.hpp"
+    "/Users/yoshiaki/work/programas/tops/src/VariableLengthMarkovChain.hpp"
+    "/Users/yoshiaki/work/programas/tops/src/VariableLengthMarkovChainCreator.hpp"
+    "/Users/yoshiaki/work/programas/tops/src/util.hpp"
+    "/Users/yoshiaki/work/programas/tops/src/TrainGHMMTransitions.hpp"
+    "/Users/yoshiaki/work/programas/tops/src/BernoulliModelCreator.hpp"
+    "/Users/yoshiaki/work/programas/tops/src/SimilarityBasedSequenceWeighting.hpp"
+    "/Users/yoshiaki/work/programas/tops/src/SimilarityBasedSequenceWeightingCreator.hpp"
+    "/Users/yoshiaki/work/programas/tops/src/TrainSimilarityBasedSequenceWeighting.hpp"
+    "/Users/yoshiaki/work/programas/tops/src/MultipleSequentialModel.hpp"
+    "/Users/yoshiaki/work/programas/tops/src/MultipleSequentialModelCreator.hpp"
+    "/Users/yoshiaki/work/programas/tops/src/StoreLoadedModel.hpp"
+    "/Users/yoshiaki/work/programas/tops/src/PairHiddenMarkovModel.hpp"
+    "/Users/yoshiaki/work/programas/tops/src/PairHiddenMarkovModelCreator.hpp"
+    "/Users/yoshiaki/work/programas/tops/src/TrainPHMMBaumWelch.hpp"
+    "/Users/yoshiaki/work/programas/tops/src/MaximumDependenceDecomposition.hpp"
+    "/Users/yoshiaki/work/programas/tops/src/ProfileHiddenMarkovModel.hpp"
+    "/Users/yoshiaki/work/programas/tops/src/ProfileHiddenMarkovModelCreator.hpp"
+    "/Users/yoshiaki/work/programas/tops/src/TrainProfileHMMMaxLikelihood.hpp"
+    "/Users/yoshiaki/work/programas/tops/src/TrainProfileHMMBaumWelch.hpp"
     )
 ENDIF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
 
