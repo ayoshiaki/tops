@@ -99,6 +99,7 @@ void generate_sequence(std::string & model_file, int nseq, int length, ostream &
 {
   ProbabilisticModelCreatorClient creator;
   ProbabilisticModelPtr model = creator.create(model_file);
+
   if(model == NULL)
     {
       exit(-1);

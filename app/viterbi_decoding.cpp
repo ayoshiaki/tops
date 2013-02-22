@@ -97,6 +97,8 @@ int main (int argc, char ** argv)
         clock_t begin = clock();
 
         double score = model->decodable()->viterbi(entry.getSequence(), states, v);
+    //    double score = model->decodable()->forward(entry.getSequence(),  v);
+    //    double score = model->decodable()->backward(entry.getSequence(), v);
         clock_t end = clock();
         std::cerr << "TIME: " << (double)(end - begin)/CLOCKS_PER_SEC << std::endl;
         stringstream new_name;

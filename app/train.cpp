@@ -31,6 +31,8 @@
 
 #include "TrainHMMBaumWelch.hpp"
 #include "TrainPHMMBaumWelch.hpp"
+#include "TrainProfileHMMMaxLikelihood.hpp"
+#include "TrainProfileHMMBaumWelch.hpp"
 #include "TrainVariableLengthMarkovChain.hpp"
 #include "TrainDiscreteIIDModel.hpp"
 #include "TrainFixedLengthMarkovChain.hpp"
@@ -85,6 +87,9 @@ int main(int argc, char ** argv) {
 
         createModelCommand["PHMMBaumWelch"] = TrainPHMMBaumWelchPtr(
                         new TrainPHMMBaumWelch());
+
+	createModelCommand["ProfileHMMMaxLikelihood"] = TrainProfileHMMMaxLikelihoodPtr(new TrainProfileHMMMaxLikelihood());
+	createModelCommand["ProfileHMMBaumWelch"] = TrainProfileHMMBaumWelchPtr(new TrainProfileHMMBaumWelch());
         createModelCommand["WeightArrayModel"] = TrainWeightArrayModelPtr(
                         new TrainWeightArrayModel());
         createModelCommand["VariableLengthInhomogeneousMarkovChain"]
@@ -266,3 +271,4 @@ int main(int argc, char ** argv) {
 
         return 0;
 }
+

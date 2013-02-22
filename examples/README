@@ -6,6 +6,7 @@
 
 1. Hidden Markov Model                                 |hmm|
 1.1 CpG island HMM                                     |cpg_island_hmm|
+1.2 Profile HMM					       |profile_hmm|
 2. Independent Identically Distributed Model           |iid|
 3. Inhomogeneous Markov Model                          |wam|
 4. Variable Length Markov Chain                        |vlmc|
@@ -85,6 +86,34 @@ C. DECODING HMMs (VITERBI ALGORITHM)
 2. Run the viterbi_decoding program:
    viterbi_decoding -m cpg_island.txt < in.txt 
 
+
+==============================================================================
+1.2 Profile HMM                                               	*profile_hmm*
+==============================================================================
+A. TRAINING HMMs USING MAXIMUM LIKELIHOOD
+---------------------------------
+1. Go to the profile_hmm folder:
+   cd profile_hmm
+2. Run the train program put the result in file 'profile_trained_ml.txt':
+   train -c profile_config_ml.txt > profile_trained_ml.txt
+3. See the results (using the 'more' command)
+   more profile_trained_ml.txt
+
+A. TRAINING HMMs USING BAUM-WELCH
+---------------------------------
+1. Go to the profile_hmm folder:
+   cd profile_hmm
+2. Run the train program put the result in file 'profile_trained_bw.txt':
+   train -c profile_config_bw.txt > profile_trained_bw.txt
+3. See the results (using the 'more' command)
+   more profile_trained_bw.txt
+
+C. DECODING HMMs (VITERBI ALGORITHM)                             
+------------------------------------
+1. Go to the profile_hmm folder:
+   cd profile_hmm
+2. Run the viterbi_decoding program:
+   viterbi_decoding -m profile_trained_ml.txt < input.txt 
 
 
 ==============================================================================

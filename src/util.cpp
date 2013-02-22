@@ -155,7 +155,8 @@ namespace tops {
       {
         SequenceEntryPtr  inseq = SequenceEntryPtr(new SequenceEntry(alphabet));
         input >> *inseq;
-        if((inseq->getSequence()).size() > 0)
+     //   if((inseq->getSequence()).size() > 0)
+        if (inseq->getName().size() > 0)
           s.push_back(inseq);
       }
     input.close();
@@ -175,7 +176,8 @@ namespace tops {
       {
         SequenceEntry  inseq(alphabet);
         input >> inseq;
-        if((inseq.getSequence()).size() > 0)
+        //   if((inseq.getSequence()).size() > 0)
+        if (inseq.getName().size() > 0)
           s.push_back(inseq.getSequence());
       }
     input.close();

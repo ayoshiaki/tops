@@ -1,0 +1,45 @@
+\chapter{Sequence Formats}
+
+
+ToPS can read two distinct text-based file format: (1) FASTA; (2) ToPS sequence format.  
+
+\section {FASTA format}
+
+FASTA format has become a standard in the field of Bioinformatics and it represents any sequence data such as  nucleotide sequences or protein sequences.
+
+A sequence in FASTA format always begins with a single-line description, followed by the lines of the sequence data.  The description line begins with the greater-than (">") symbol. The sequence data ends when another ">" appears or when the end-of-file is encountered. 
+
+\vspace{1em}
+
+\noindent {\bf Example:}
+
+\begin{Verbatim}
+>chr13_72254614
+AGGAGAGAATTTGTCTTTGAATTCACTTTTTCTTACCTATTTCCC
+TTCAAAAAGAAGGAGGGAGGCCGATCTTAGTATAGTTCTCGCTGT
+TTCCCCTCCACACACCTTTCCTTATCATTCAGTTTAGAAAAACTG
+AAATATTTAATAGCATAATTTGTTATATCATGAGGTATTAAAACA
+AGGTAGTTGCTAACATTCTTATGAGAGAGTTAGAAGTAAGTTCTA
+>chr12_54396566
+ACTCTGGAGGGAGGAGGGTGTGGGGAACCCCCCAGAGATGGGCTT
+CTTGGAGGCCTGAAACCACCGGAACGGAGGTGGGGCACTTGTTTC
+CTGAGTCCGGGCTGGAAATCTCGGAGTTACCGATTCTGCGGCCGA
+GTAGTGGAGAAAGAGTGCCTGGGAGTCAGGAGTCCTGGGCGCTGC
+CGCTGACTTCCTGGCGTCCCTGAGTGAGTCCATTTCCCTCCCAGG
+\end{Verbatim}
+
+\section{ToPS sequence format}
+
+ToPS sequence format assumes that each line contains a single sequence data. 
+A sequence in ToPS sequence format begins with a description followed by the two-dots (":") symbol, followed by a space, followed by the sequence data. ToPS allows the presence of multiple-character symbols, and the symbols in the sequence data are isolated by a space. 
+
+\vspace{1em}
+\noindent {\bf Example:}
+
+\begin{Verbatim}
+chr13_72254614: A G G A G A G A A T T T G T C T T T
+seq1234: CPG CPG NOCPG CPG CPG CPG CPG NOCPG 
+\end{Verbatim}
+
+
+
