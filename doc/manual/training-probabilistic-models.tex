@@ -19,6 +19,7 @@ To train a probabilistic model using ToPS, you need to create a file that will c
 \item \texttt{SmoothedHistogramKernelDensity}
 \item \texttt{SmoothedHistogramKernelStanke}
 \item \texttt{SmoothedHistogramKernelBurge}
+\item \texttt{SBSW}
 \end{itemize}
 
 In this chapter we describe how the user can use each training algorithm.
@@ -56,7 +57,40 @@ training_set="sequence_from_discreteiid.txt"
 \vspace{1em}
 
 % ----------------------------------------------------------------- %
-\section{Context Algorithm}
+\section{Discrete IID - Smoothed Histogram (Burge)}
+
+To create a smoothed histogram of positive integers, you can use the \textit{SmoothedHistogramBurge}~\cite{Burge1997}. It receives a training set containing a sequence of positive integers and it returns a \textit{DiscreteIIDModel} with the estimated probabilities of for each number.
+
+\begin{Verbatim}[frame=single, label=train.txt]
+training_algorithm = "SmoothedHistogramBurge"
+training_set = "lengths.txt"
+C=1.0
+\end{Verbatim}
+
+% ----------------------------------------------------------------- %
+\section{Discrete IID - Smoothed Histogram (Stanke)}
+
+
+To create a smoothed histogram of positive integers, you can use the \textit{SmoothedHistogramStanke}~\cite{Stanke2003b}. It receives a training set containing a sequence of positive integers and it returns a \textit{DiscreteIIDModel} with the estimated probabilities of for each number.
+
+\begin{Verbatim}[frame=single, label=train.txt]
+training_algorithm = "SmoothedHistogramStanke"
+training_set = "lengths.txt"
+\end{Verbatim}
+
+
+% ----------------------------------------------------------------- %
+\section{Discrete IID - Smoothe Histogram (Kernel Density Estimation)}
+
+To create a smoothed histogram of positive integers, you can use the \textit{SmoothedHistogramKernelDensity}~\cite{Sheather2004}. It receives a training set containing a sequence of positive integers and it returns a \textit{DiscreteIIDModel} with the estimated probabilities of for each number.
+
+\begin{Verbatim}[frame=single, label=train.txt]
+training_algorithm = "SmoothedHistogramKernelDensity"
+training_set = "lengths.txt"
+\end{Verbatim}
+% ----------------------------------------------------------------- %
+
+\section{Variable Length Markov Chains - Context Algorithm}
 
 To train variable length Markov chains, you can use the algorithm Context~\cite{Rissanen1983,Galves2008}. It receives a training set, the alphabet, and the parameter \textit{cut}. The \textit{cut} specifies a threshold for the pruning of the probabilistic suffix tree. The greater the value of the \textit{cut}, the smaller will be the tree, because more nodes will be considered indistinguishable with their descendents.   The output of this algorithm is a "VariableLengthMarkovChain" description.
 
@@ -89,31 +123,6 @@ alphabet = ("0", "1")
 \end{minipage}
 \vspace{1em}
 
-% ----------------------------------------------------------------- %
-\section{Training the GHMM transition probabilities}
-
-To estimate the transition probabilities of a GHMM using maximum likelihood method, you can use the algorithm \texttt{GHMMTransition}. It receives a training set containing the a set of sequences of states and an initial ghmm model. It returns a new GHMM with the estimated transition probabilities.
-
-\begin{Verbatim}[frame=single, label=train\_transitions.txt]
-training_algorithm="GHMMTransitions"
-training_set="train.txt"
-ghmm_model="ghmm.txt"
-\end{Verbatim}
-
-
-% ----------------------------------------------------------------- %
-\section{Training HMM using algorithm Baum-Welch}
-
-To estimate the parameter of a HMM, given an initial HMM, you can use the algorithm \textit{BaumWelchHMM}. It receives a training set, an initial HMM model, and the maximum number of iteration. It returns a new \textit{HiddenMarkovModel} with the estimated parameters.
-
-\begin{Verbatim}[frame=single, label=train.txt]
-training_algorithm = "BaumWelchHMM"
-training_set = "trainhmm_bw.sequences"
-initial_specification = "initial_hmm.txt"
-maxiter=300
-\end{Verbatim}
-
-
 
 % ----------------------------------------------------------------- %
 \section{Interpolated Markov Chain}
@@ -130,9 +139,37 @@ order=4
 
 
 
+
 % ----------------------------------------------------------------- %
-\section{Profile HMM Maximum Likelihood}
-To estimate the parameters of a Profile HMM, you can use de \textit{ProfileHMMMaxLikelihood} algorithm. It receives an alignment in the fasta format file, the alphabet of the model, the residue fraction which is used to decide what multiple alignment columns assign as match, insert and delete states, and the pseudocounts value. It returns a \textit{Profile HMM} with the estimated parameters.
+\section{Training HMM - Maximum Likelihood}
+{\huge{PREENCHER AQUI}}
+Maximum likelihood is one of the simplest methods to estimate the parameters of a HMM.  In this case the algorihm receives a training set, an initial HMM model. It returns a new \textit{HiddenMarkovModel} with the estimated parameters.
+
+\begin{Verbatim}[frame=single, label=train.txt]
+training_algorithm = "BaumWelchHMM"
+training_set = "trainhmm_bw.sequences"
+initial_specification = "initial_hmm.txt"
+maxiter=300
+\end{Verbatim}
+
+
+% ----------------------------------------------------------------- %
+\section{Training HMM - Baum-Welch}
+
+To estimate the parameters of a HMM, given an initial HMM, you can use the algorithm \textit{BaumWelchHMM}. It receives a training set, an initial HMM model, and the maximum number of iteration. It returns a new \textit{HiddenMarkovModel} with the estimated parameters.
+
+\begin{Verbatim}[frame=single, label=train.txt]
+training_algorithm = "BaumWelchHMM"
+training_set = "trainhmm_bw.sequences"
+initial_specification = "initial_hmm.txt"
+maxiter=300
+\end{Verbatim}
+
+
+
+% ----------------------------------------------------------------- %
+\section{Profile HMM -Maximum Likelihood}
+To estimate the parameters of a Profile HMM, you can use de \textit{ProfileHMMMaxLikelihood} algorithm. It receives an alignment in the fasta format, the alphabet of the model, the residue fraction which is used to decide what multiple alignment columns assign as match, insert and delete states, and the pseudocounts value. It returns a \textit{Profile HMM} with the estimated parameters.
 
 \begin{Verbatim}[frame=single,label=train.txt]
 training_algorithm="ProfileHMMMaxLikelihood"
@@ -161,7 +198,7 @@ pseudocounts = 1
 
 
 % ----------------------------------------------------------------- %
-\section{Weight Array Model}
+\section{Inhomogeneous Markov Model - Weight Array Model}
 
 Weight array models~\cite{Burge1997,Zhang1993} are inhomogeneous Markov models that represent fixed-length sequences. It is useful to model biological signal, such as splicing sites,  branch points sites, and stop codons. To train a WAM, you can use the \textit{WeightArrayModel} algorithm, it receives a set of sequences with length specified using the \textit{length} parameter. This training algorithm returns a \textit{InhomogeneousMarkovChain} description with the estimated parameters.
 
@@ -174,7 +211,7 @@ order=1
 \end{Verbatim}
 
 % ----------------------------------------------------------------- %
-\section{Phased Markov Model}
+\section{Inhomogeneous Markov Model - Phased Markov Model}
 
 Phased Markov Model is an Inhomogeneous Markov Model for which the positional distributions are periodically reused to generate the sequences. 
 Three-periodic Markov Model~\cite{Borodovsky1993}  is an example of this model and it is useful to represent protein-coding regions of the gene. 
@@ -189,38 +226,36 @@ number_of_phases=3
 phased = 1
 \end{Verbatim}
 
-% ----------------------------------------------------------------- %
-\section{Smoothed Histogram (Burge)}
-
-To create a smoothed histogram of positive integers, you can use the \textit{SmoothedHistogramBurge}~\cite{Burge1997}. It receives a training set containing a sequence of positive integers and it returns a \textit{DiscreteIIDModel} with the estimated probabilities of for each number.
-
-\begin{Verbatim}[frame=single, label=train.txt]
-training_algorithm = "SmoothedHistogramBurge"
-training_set = "lengths.txt"
-C=1.0
-\end{Verbatim}
 
 % ----------------------------------------------------------------- %
-\section{Smoothed Histogram (Stanke)}
+\section{Training  GHMM transition probabilities}
 
+To estimate the transition probabilities of a GHMM using maximum likelihood method, you can use the algorithm \texttt{GHMMTransition}. It receives a training set containing the a set of sequences of states and an initial ghmm model. It returns a new GHMM with the estimated transition probabilities.
 
-To create a smoothed histogram of positive integers, you can use the \textit{SmoothedHistogramStanke}~\cite{Stanke2003b}. It receives a training set containing a sequence of positive integers and it returns a \textit{DiscreteIIDModel} with the estimated probabilities of for each number.
-
-\begin{Verbatim}[frame=single, label=train.txt]
-training_algorithm = "SmoothedHistogramStanke"
-training_set = "lengths.txt"
+\begin{Verbatim}[frame=single, label=train\_transitions.txt]
+training_algorithm="GHMMTransitions"
+training_set="train.txt"
+ghmm_model="ghmm.txt"
 \end{Verbatim}
+\section{Similarity Based Sequence Weighting}
 
+To create  a  Similarity Based Sequence Weighting~\cite{Stanke2003}
+model, you can use the algorithm named as \texttt{SBSW}. It receives a
+training set containing fixed length sequences, the alphabet, the
+specification of the subsequence to be skipped consisting in three
+components (skip\_offset, skip\_length, and skip\_sequence). This
+algorithm returns a \textit{SBSW} with the estimated parameters.
 
-% ----------------------------------------------------------------- %
-\section{Smoothe Histogram (Kernel Density Estimation)}
-
-To create a smoothed histogram of positive integers, you can use the \textit{SmoothedHistogramKernelDensity}~\cite{Sheather2004}. It receives a training set containing a sequence of positive integers and it returns a \textit{DiscreteIIDModel} with the estimated probabilities of for each number.
-
+\begin{minipage} {\textwidth}
 \begin{Verbatim}[frame=single, label=train.txt]
-training_algorithm = "SmoothedHistogramKernelDensity"
-training_set = "lengths.txt"
+training_algorithm="SBSW"
+training_set="donor.fasta"
+alphabet=("A", "C", "G", "T")
+skip_offset=3
+skip_length=2
+skip_sequence="GT"
 \end{Verbatim}
+\end{minipage}
 
 
 % ----------------------------------------------------------------- %

@@ -3,9 +3,24 @@
 Here we describe other functionalities of ToPS. 
 % ----------------------------------------------------------------- %
 \section{Aligning Using Pair HMM}
+With ToPS it is possible to align pairs of sequences according to a Pair Hidden Markov Model (PairHMM) through the \texttt{align} program. This program will find the alignment of maximum expected accuracy between pairs of sequences. To do this task it is necessary to have a PairHMM model file in the format described in section \ref{pairHMMModelDesc}, and two files with the sequences we want to align. The first sequence of the first file will be aligned with the first sequence of the second file and so on.  The sequence files can either be in ToPS native format, or in the FASTA format with the program option -F. Below we can see an example of a command line call to the align program.
+\vspace{1em}
+\begin{Verbatim}[frame=single, label={Command line}]
+align -m pairHMM.txt -o out.fasta -a seqFile1.fasta \
+          -b seqFile2.fasta -F
+\end{Verbatim}
+
+ The -m parameter specifies the model file, -o the output file, -a the first sequences file,  and -b the second sequences file. The -F option tells the program its input and output will be in the fasta format rather than in the ToPS native format
+
+%The download package of the system includes a file "blosumPairHMM.txt" with the specification of a pairHMM that uses Blosum parameters for protein alignment
+
+
 
 % ----------------------------------------------------------------- %
-\section{Bayesing Classifier}
+
+% ----------------------------------------------------------------- %
+
+\section{Bayesian Classifier}
 
 
 When we have a set of pre-defined sequence families each specified by a different probabilistic model, we can use a Bayesian classifier to decide to which family a given sequence belongs.  For each sequence, the Bayesian classifier selects the family that corresponds to the model with the highest posterior probability. In ToPS, the program \textit{bayes\_classifier} implements the Bayesian classifier. Based on a configuration file containing a list of specified probabilistic models and the {\it a priori} probabilities,  this program reads sequences from the standard input and returns, for each sequence, the posterior probabilities of each model. In box \textit{bayes\_classifier.txt}, we show an example of such a configuration file. Using our CpG island example we can model it with two Markov chains~\cite{Durbin1998}, one to characterize CpG islands and another to characterize general genomic sequences. Then we can build a Bayesian classifier using the two models, and apply this classifier to candidate sequences. We will need then first to describe two Markov models, train each one, and with the trained files, build a classifier:
@@ -32,11 +47,13 @@ bayes_classifier -c bayes_classifier.txt \
 The program output is a table in CSV (comma separated values) format, which is compatible with most spreadsheet programs. The rows are showing, from left to right the name of each sequence, the log-likelihood of the sequence given each model, the \textit{a posteriori} probabilities of each model, and the predicted classification of the sequence. An example of result produced by the command above is at Table~\ref{tab:bayes}.
 
 \begin{table}
-  \begin{tabular*}{\textwidth}[t!]{@{\extracolsep{\fill}}lccccc}\toprule
+\resizebox{\textwidth}{!}{
+  \begin{tabular}{lccccc}\toprule
    sequence name & $log P(S|CPG)$ & $P(CPG|S)$ &  $log P(S|NONCPG)$ & $P(NONCPG|S)$ & classification \\ \hline
    seq1&-141.029&0.0831703&-138.629&0.916827&NONCPG \\
    seq2&-132.381&0.9981&-138.629&0.00192936&CPG \\ \bottomrule
- \end{tabular*}
+ \end{tabular}
+}
  \caption{An example of \textit{ bayesian\_classifier}'s output.}
  \label{tab:bayes}
 \end{table}
@@ -44,7 +61,7 @@ The program output is a table in CSV (comma separated values) format, which is c
 
 
 % ----------------------------------------------------------------- %
-\section{Sliding Window}
+%%\section{Sliding Window}
 
 
 % ----------------------------------------------------------------- %

@@ -3,7 +3,7 @@
 
 ToPS uses its own language to describe models and configurations. This is a simple language that will help users without previous knowledge in programming to define the parameters of the model and to do sequence analysis experiments.  
 
-To use a model, you need to define a mandatory parameter called "model\_name" to specify which model you will use. Currently, available "model\_name"  values are:
+To use a model, you will need to write a configuration file.  The first element of any model configuration file is   a mandatory parameter called "model\_name" that  specify which model you will use. Currently, available "model\_name"  values are:
 
 \begin{itemize}
 \item \texttt{DiscreteIIDModel} 
@@ -15,13 +15,22 @@ To use a model, you need to define a mandatory parameter called "model\_name" to
 \item \texttt{GeneralizedHiddenMarkovModel}
 \end{itemize}
 
+After specifying the model you need to define which is the "alphabet" that will be used, that is, you have to enumerate the input symbols. These can be either single characters, or small words. we show below a few examples
+\begin{verbatim}
+alphabet={"A","C","G","T"}
+alphabet={"Heads", "Tails"}
+alphabet={"ATG", "GTT"}
+\end{verbatim}
+When "alphabet" is not present, ToPS assumes the input symbols are non-negative integer numbers.
+
+After you have specified the model name and the alphabet, you need to specify the rest of the model.
 In this chapter we describe how the user can define the specific parameters of each model using simple examples. Finally, we show the formal specification of the language in the Extended Backus-Naur Form (EBNF). 
 
 
 % ----------------------------------------------------------------- %
-\section{Independent Identically Distributed Model}
+\section{Discreet Independent Identically Distributed Model}
 
-We specify a discrete i.i.d. model using a vector of probabilities values. The file \textit{fdd.txt} describes a distribution of two symbols: symbol $Sun$ with probability $0.2$, and symbol $Rain$ with probability $0.8$.
+We specify a discrete i.i.d. model using a vector of probabilities values. The file \textit{fdd.txt} describes a distribution with two symbols: symbol $Sun$ with probability $0.2$, and symbol $Rain$ with probability $0.8$.
 
 \begin{Verbatim}[frame=single,label=fdd.txt]
 model_name = "DiscreteIIDModel"
@@ -30,7 +39,7 @@ probabilities = (0.2, 0.8)
 \end{Verbatim}
 
 
-When the "alphabet" is not present, it means that we are describing the distribution over non-negative integers numbers. For example, the 
+As we mentioned above, when the "alphabet" ToPS assumes we are describing the distribution over non-negative integer numbers. For example, the 
 file described below is specifying that the probability of $0$ is $0.2$, the probability of $1$ is $0.1$, the probability of $2$ is $0.3$ and the probability of $3$ is $0.4$.
 
 \begin{Verbatim}[frame=single]
@@ -70,7 +79,7 @@ probabilities = (
 % ----------------------------------------------------------------- %
 \section{Hidden Markov Model}
 
-A simple example where HMM can be used is in the dishonest casino problem. A dishonest casino has two different dice, one is loaded and the other is fair. The casino can change the die without the player knowing and the challenge is to predict when the casino has changed the dice.  Figure~\ref{fig:hmm-casino} shows the HMM for this problem.  This model has two states (Fair, and Loaded). When the model is in Loaded state there is a greater probability to observe the number one than the other numbers,  and when the model is in Fair state the numbers are uniformly distributed. The file below shows an example of HMM described using ToPS:
+A simple example where HMM can be used is in the dishonest casino problem. A dishonest casino has two different dice, one is loaded and the other is fair. The casino can change the die without the player knowing, and the challenge is to predict when the casino has changed the dice.  Figure~\ref{fig:hmm-casino} shows the HMM for this problem.  This model has two states (Fair, and Loaded). When the model is in Loaded state there is a greater probability to observe the number one than the other numbers,  and when the model is in Fair state the numbers are uniformly distributed. All the state names are arbitrary and can be freely chosen by the user. A specification of an HMM needs to determine the observation symbols, the states, the various emission probabilities for each state and the transition probabilities between pairs of states.The file below shows an example of HMM described using ToPS:
 
 
 \begin{Verbatim}[frame=single,label="hmm.txt"]
@@ -110,12 +119,13 @@ initial_probabilities= ("Fair": 0.5; "Loaded": 0.5)
 % ----------------------------------------------------------------- %
 \section{Inhomogeneous Markov Model}
 
-To create an inhomogeneous Markov model, we have to specify the conditional probabilities for each position of the sequence. The file \textit{ihm.txt} has  an example of how we can specify this model.
+To create an inhomogeneous Markov model, we have to specify the conditional probabilities for each position of the sequence. The file \textit{ihm.txt} has  an example of how we can specify this model. There we have three distributions of the symbols "A", "C", "G", "T": p1, p2 and p3.  These names are arbitrary and can be chosen by the user.
 
 \vspace{1em}
 \begin{minipage}{\textwidth}
 \begin{Verbatim}[frame=single,  label={ihm.txt}]
 model_name = "InhomogeneousMarkovChain"
+alphabet = ("A", "C", "G", "T")
 p1 = ("A" | "" : 0.97;
       "C" | "" : 0.01;
       "G" | "" : 0.01 ;
@@ -130,7 +140,6 @@ p3 = ("A" | "" : 0.01;
       "G" | "" : 0.01)
 position_specific_distribution = ("p1","p2","p3")
 phased =0
-alphabet = ("A", "C", "G", "T")
 \end{Verbatim}
 \end{minipage}
 \vspace{1em}
@@ -139,13 +148,13 @@ The \textit{position\_specific\_distribution} argument  uses the parameters p1, 
 
 In this example the \textit{phased} parameter, with value equals to zero, is specifying that the model is describing fixed-length sequences.  A model that represents fixed-length sequences is useful when we want to model biological signal. Weight Array Model~\cite{Zhang1993} is an example of this type of Inhomogeneous Markov Chain.
 
-If the \textit{phased} is equal to one, then the sequences are generated  using  periodically the distribution p1, p2, and p3. This behaviour is useful to model coding regions of the gene. Three-periodic Markov chain~\cite{Borodovsky1993} is an example of a inhomogeneous Markov Chain with phased  equals to 1 and three position specific distributions.
+If the \textit{phased} is equal to one, then the sequences are generated  using  periodically the distributions p1, p2, and p3. In other words, p1 is used in positions 1, 4, 7 and so on; p2 is used in positions 2, 5, 8 and so on; p3 is used in positions 3, 6, 9 and so on. This behaviour is useful to model coding regions of the gene. Three-periodic Markov chain~\cite{Borodovsky1993} is an example of a inhomogeneous Markov Chain with phased  equals to 1 and three position specific distributions.
 
 
 % ----------------------------------------------------------------- %
-\section{Pair Hidden Markov Model}
+\section{Pair Hidden Markov Model}\label{pairHMMModelDesc}
 
-A very common problem when analyzing biological sequences is that of aligning a pair of sequences. This task can be done through the use of decodable models, although in this case these models must be able to handle a pair of sequences simultaneously. Here we define this kind of model a pair hidden Markov model (PHMM). This pairHMM has a Match state (M),  two insertion states (I1, I2), two deletion state (D1, D2) an initial state (B), and a final state (E). 
+A very common problem when analyzing biological sequences is that of aligning a pair of sequences. This task can be accomplished with he use of decodable models, although in this case these models must be able to handle a pair of sequences simultaneously. Here we describe who to use ToPS to specify pair hidden Markov models (pair-HMM). This specify pair-HMM has a Match state (M),  two insertion states (I1, I2), two deletion states (D1, D2) an initial state (B), and a final state (E). All the state names are arbitrary and can be freely chosen by the user.Similar to HMMs, a pair-HMM specification need to determine the observation symbols, the states, the various emission probabilities for each state and the transition probabilities between pairs of states.
 
 \vspace{1em}
 \begin{Verbatim}[frame=single,  label={ihm.txt}]
@@ -221,7 +230,7 @@ number_of_emissions = ("M" : "1,1";
 \section{Profile Hidden Markov Model}
 
 
-Biologial sequences usually come in families and a very common problem when analyzing this sequences is identify the relationship of an individual sequence to a sequence family. Profile HMMs turn a multiple sequence alignment into a position-specific scoring system on which is possible to perform a database search for more members. This kind of model is described in the \textit{profilehmm.txt} file and has five match states $ M0, M1, M2, M3, M4 $ ($M0$ and $M4$ are modeled as the begin and end states respectively), four insert states $ I0, I1, I2, I3 $ and three delete states $D1, D2, D3$.
+Biologial sequences usually come in families and a very common problem when analyzing this sequences is identify the relationship of an individual sequence to a sequence family. Profile HMMs are variations of HMMs with three types of states: Match states, Insertion States and Deletion States. Deletion States have no emission probabilities. Profile-HMMs were  designed to classify a family os sequences based on  a multiple sequence alignment. Our example below (file  \textit{profilehmm.txt})  has five match states $ M0, M1, M2, M3, M4 $ ($M0$ and $M4$ are modeled as the begin and end states respectively), four insert states $ I0, I1, I2, I3 $ and three delete states $D1, D2, D3$.
  \pagebreak
 
 \vspace{1em}
@@ -293,10 +302,11 @@ initial_probabilities = ("M0": 1)
 
 \end{Verbatim}
 
+Profile HMMs can also be automatically inferred from multiple sequence alignments (see Training). 
 % ----------------------------------------------------------------- %
 \section{Generalized Hidden Markov Model}
 
-GHMMs are useful in Bioinformatics to represent the structure of genes. As an illustrative  example we will use a simplified  model for a bacterial gene. In bacteria, genes are regions of the genome with a different composition, specific start and stop signals, and  noncoding regions separating different genes.  Figure~\ref{fig:ghmm} illustrates this gene model. The model has four states:   $NonCoding$ state, representing the intergenic regions, with geometric duration distribution (represented by a self transition in the figure); $Start$ and $Stop$ states , representing  the signals at the boundaries of a gene, with a fixed duration distribution ; $Coding$,  representing the coding region of a gene, with  an i.i.d.  duration distribution.  Box  \textit{ghmm.txt} shows the description of this GHMM.
+GHMMs are useful in Bioinformatics to represent the structure of genes. With GHHMs each state can have an arbitrary probabilistic model as a sub-model. Also, we can specify the durations of states either by a self transition with a given probability value or as a distribution over integer numbers.  As an illustrative  example we will use a simplified  model for a bacterial gene. In bacteria, genes are regions of the genome with a different composition, specific start and stop signals, and  noncoding regions separating different genes.  Figure~\ref{fig:ghmm} illustrates this gene model. The model has four states:   $NonCoding$ state, representing the intergenic regions, with geometric duration distribution (represented by a self transition in the figure); $Start$ and $Stop$ states , representing  the signals at the boundaries of a gene, with a fixed duration distribution (with value 3); $Coding$,  representing the coding region of a gene, with  an i.i.d.  duration distribution (ideally this would be associated with the size distribution of bacterial genes).  Box  \textit{ghmm.txt} shows the description of this GHMM.
 
 \begin{figure}[htpb]
   \centering
