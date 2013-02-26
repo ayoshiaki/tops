@@ -41,10 +41,8 @@ using namespace boost::program_options;
 
 int main(int argc, char ** argv) {
   AlphabetPtr alphabet = AlphabetPtr(new Alphabet());
-  alphabet->createSymbol(string("A"));
-  alphabet->createSymbol(string("C"));
-  alphabet->createSymbol(string("G"));
-  alphabet->createSymbol(string("T"));
+  alphabet->createSymbol(string("Sol"));
+  alphabet->createSymbol(string("Chuva"));
   SequenceFormatManager::instance()->setFormat(SequenceFormatPtr(new FastaSequenceFormat()));
   while(!cin.eof())
     {

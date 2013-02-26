@@ -28,6 +28,9 @@
 #include <boost/algorithm/string.hpp>
 
 namespace tops {
+  unsigned int Alphabet::maxSymbolSize() {
+    return _max_symbol_size;
+  }
   bool Alphabet::has (const std::string & s)
   {
     std::map<std::string, SymbolPtr>::iterator it;
@@ -98,6 +101,8 @@ namespace tops {
   SymbolPtr Alphabet::createSymbol (const std::string & name)
   {
     int i;
+    if (name.size() > _max_symbol_size) 
+      _max_symbol_size = name.size();
     for(i = 0; i < (int)_pool.size(); i++)
       if(_pool[i]->name() == name)
         return getSymbol(i);

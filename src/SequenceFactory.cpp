@@ -70,16 +70,17 @@ namespace tops {
             if((substr.size() > 0) && _alphabet->has(substr))
               {
                 result.push_back (_alphabet->getSymbol(substr)->id());
+		start = i+1;
               }
             else
               {
-                if(substr.size() >0) {
+                if(substr.size() >= _alphabet->maxSymbolSize()) {
                   result.push_back (0);
-                  std::cerr << "WARNING: Invalid symbol at position " <<  start <<": '" << substr << "'" << std::endl;
+                  std::cerr << "WARNING: Invalid symbol at position " <<  start <<": '" << substr.substr(0, 5) << "'" << std::endl;
                   invalidPositions.push_back(result.size()-1);
+		  start ++;
                 }
               }
-            start = i+1;
       }
       std::string substr = seq.substr(start, seq.size()-start);
       if((substr.size() > 0) && _alphabet->has(substr))

@@ -54,6 +54,8 @@ namespace tops {
     */
     SymbolPtr createSymbol(const std::string & name);
     SymbolPtr createSymbol(char * name);
+    //! Returns the maximum length of the symbol
+    unsigned int maxSymbolSize();
 
     //! Returns the alphabet size
     unsigned int size ();
@@ -80,6 +82,7 @@ namespace tops {
   private:
     std::vector<SymbolPtr, boost::pool_allocator<SymbolPtr> > _pool;
     std::map <std::string, SymbolPtr> _stringToSymbol;
+    unsigned int _max_symbol_size;
   };
 
   typedef boost::shared_ptr<Alphabet> AlphabetPtr;
