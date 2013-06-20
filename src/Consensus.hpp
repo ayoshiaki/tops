@@ -27,8 +27,8 @@
 #include <boost/shared_ptr.hpp>
 
 #include "crossplatform.hpp"
-
- #include "Sequence.hpp"
+#include "util.hpp"
+#include "Sequence.hpp"
 
 #include <iostream>
 #include <string>
@@ -42,12 +42,25 @@ namespace tops {
 
   class Consensus {
   public:
-    Consensus(Sequence symbols, double frequency):_symbols(symbols), _frequency(frequency) {}
+    Consensus(Sequence symbols, vector<double> frequency):_symbols(symbols), _frequency(frequency) {}
     bool is(int symbol);
-    double getFrequency();
+    vector<double> getFrequency();
   private:
     Sequence _symbols;
-    double _frequency;
+    vector<double> _frequency;
+  };
+
+  typedef std::vector<Consensus> ConsensusSequence;
+
+  class ConsensusDependence {
+  public:
+    ConsensusDependence(ConsensusSequence consensus_sequence, SequenceList sequences):_consensus_sequence(consensus_sequence), _sequences(sequences) { init(); }
+    void init();
+    double chi(int ci, int xi);
+    Matrix dependences();
+  private:
+    ConsensusSequence _consensus_sequence;
+    SequenceList _sequences;
   };
 
 }
