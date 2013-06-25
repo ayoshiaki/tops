@@ -19,6 +19,7 @@ ADD_LIBRARY(ToPS SHARED Symbol Alphabet  util SparseMatrix MultipleAlignment GHM
 crossplatform.hpp ProbabilisticModelConfiguration ProbabilisticModelParameterValue2
 ../lang/src/ASTNode ../lang/src/PropertyNode ../lang/src/KeyNode ../lang/src/ValueNode ../lang/src/StringNode ../lang/src/ListNode ../lang/src/ConfigurationNode ../lang/src/IntegerNode ../lang/src/FloatNode ../lang/src/ConditionalProbabilityNode ../lang/src/ConditionalProbabilityMapNode ../lang/src/ConditionNode ../lang/src/ProbabilityMapNode ../lang/src/ProbabilityNode ../lang/src/parser ../lang/src/tokens ../lang/src/lang ../lang/src/ToPSLangVisitor ProfileHiddenMarkovModel ProfileHiddenMarkovModelCreator TrainProfileHMMMaxLikelihood TrainProfileHMMBaumWelch
 Consensus
+ChiSquare
 )
 
 
