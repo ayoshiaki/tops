@@ -22,8 +22,8 @@
  *       MA 02110-1301, USA.
  */
 
-#ifndef CONFIGURATION_READER_HPP
-#define CONFIGURATION_READER_HPP
+#ifndef CONSENSUS_HPP
+#define CONSENSUS_HPP
 #include <boost/shared_ptr.hpp>
 
 #include "crossplatform.hpp"
