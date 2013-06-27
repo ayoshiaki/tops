@@ -70,7 +70,7 @@ namespace tops {
     return ((dfi - 30)/10 + 25);
   }
 
-  double chi(double p, int df) {
+  double chiSquare(double p, int df) {
     int pi = chiPi(p);
     int dfi = chiDfi(df);
     return CHI_QUARE[dfi][pi];

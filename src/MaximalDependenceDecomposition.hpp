@@ -1,5 +1,5 @@
 /*
- *       ConfigurationReader.hpp
+ *       MaximalDependenceDecomposition.hpp
  *
  *       Copyright 2011 Andre Yoshiaki Kashiwabara <akashiwabara@usp.br>
  *                      Ígor Bonadio <ibonadio@ime.usp.br>
@@ -22,13 +22,14 @@
  *       MA 02110-1301, USA.
  */
 
-#ifndef CONSENSUS_HPP
-#define CONSENSUS_HPP
+#ifndef MAXIMAL_DEPENDENCE_DECOMPOSITION_HPP
+#define MAXIMAL_DEPENDENCE_DECOMPOSITION_HPP
 #include <boost/shared_ptr.hpp>
 
 #include "crossplatform.hpp"
 #include "util.hpp"
 #include "Sequence.hpp"
+ #include "Consensus.hpp"
 
 #include <iostream>
 #include <string>
@@ -40,17 +41,8 @@ using namespace std;
 
 namespace tops {
 
-  class Consensus {
-  public:
-    Consensus(Sequence symbols):_symbols(symbols) {}
-    bool is(int symbol);
-    std::string str();
-  private:
-    Sequence _symbols;
+  class MaximalDependenceDecomposition {
   };
-
-  typedef std::vector<Consensus> ConsensusSequence;
-
 }
 
 #endif

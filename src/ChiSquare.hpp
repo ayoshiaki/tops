@@ -30,7 +30,7 @@
 
 
 namespace tops {
-  double chi(double p, int df);
+  double chiSquare(double p, int df);
 }
 
 #endif
