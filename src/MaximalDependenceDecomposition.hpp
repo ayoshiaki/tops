@@ -29,7 +29,8 @@
 #include "crossplatform.hpp"
 #include "util.hpp"
 #include "Sequence.hpp"
- #include "Consensus.hpp"
+#include "Consensus.hpp"
+#include "ProbabilisticModel.hpp"
 
 #include <iostream>
 #include <string>
@@ -41,8 +42,43 @@ using namespace std;
 
 namespace tops {
 
-  class MaximalDependenceDecomposition {
+  class MaximalDependenceDecompositionNode;
+  typedef boost::shared_ptr<MaximalDependenceDecompositionNode> MaximalDependenceDecompositionNodePtr;
+
+  class MaximalDependenceDecompositionNode {
+  public:
+    MaximalDependenceDecompositionNode(ProbabilisticModelPtr model, int symbol):_model(model), _symbol(symbol) {};
+
+    int getSymbol();
+    ProbabilisticModelPtr getModel();
+
+    void setChildern(MaximalDependenceDecompositionNodePtr left, MaximalDependenceDecompositionNodePtr right);
+    MaximalDependenceDecompositionNodePtr getLeft();
+    MaximalDependenceDecompositionNodePtr getRight();
+  private:
+    ProbabilisticModelPtr _model;
+    int _symbol;
+    MaximalDependenceDecompositionNodePtr _left;
+    MaximalDependenceDecompositionNodePtr _right;
   };
+
+  class MaximalDependenceDecomposition : public ProbabilisticModel {
+  public:
+    MaximalDependenceDecomposition() {};
+    void setMDDTree(MaximalDependenceDecompositionNodePtr root);
+    void setConsensusSequence(ConsensusSequence consensus_sequence);
+
+    
+
+    virtual std::string model_name() const {
+      return "MaximumDependenceDecomposition";
+    }
+  private:
+    MaximalDependenceDecompositionNodePtr _mdd_tree;
+    ConsensusSequence _consensus_sequence;
+  };
+
+  typedef boost::shared_ptr<MaximalDependenceDecomposition> MaximalDependenceDecompositionPtr;
 }
 
 #endif
