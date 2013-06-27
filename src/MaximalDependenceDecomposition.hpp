@@ -47,17 +47,18 @@ namespace tops {
 
   class MaximalDependenceDecompositionNode {
   public:
-    MaximalDependenceDecompositionNode(ProbabilisticModelPtr model, int symbol):_model(model), _symbol(symbol) {};
+    MaximalDependenceDecompositionNode(ProbabilisticModelPtr model, int index):_model(model), _index(index) {};
 
-    int getSymbol();
+    int getIndex();
     ProbabilisticModelPtr getModel();
 
     void setChildern(MaximalDependenceDecompositionNodePtr left, MaximalDependenceDecompositionNodePtr right);
     MaximalDependenceDecompositionNodePtr getLeft();
     MaximalDependenceDecompositionNodePtr getRight();
   private:
+    vector<int> _otherIndexes;
     ProbabilisticModelPtr _model;
-    int _symbol;
+    int _index;
     MaximalDependenceDecompositionNodePtr _left;
     MaximalDependenceDecompositionNodePtr _right;
   };
@@ -68,12 +69,15 @@ namespace tops {
     void setMDDTree(MaximalDependenceDecompositionNodePtr root);
     void setConsensusSequence(ConsensusSequence consensus_sequence);
 
-    
+    virtual double evaluate(const Sequence & s, unsigned int begin, unsigned int end);
 
     virtual std::string model_name() const {
       return "MaximumDependenceDecomposition";
     }
   private:
+
+    double _evaluateAux(const Sequence & s, MaximalDependenceDecompositionNodePtr node, vector<int> &indexes);
+
     MaximalDependenceDecompositionNodePtr _mdd_tree;
     ConsensusSequence _consensus_sequence;
   };
