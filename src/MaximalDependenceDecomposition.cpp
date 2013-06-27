@@ -41,17 +41,17 @@ namespace tops {
     if (node->getLeft()) {
       p = node->getModel()->inhomogeneous()->evaluatePosition(s, node->getIndex(), node->getIndex());
       indexes.push_back(node->getIndex());
-      cout << node->getIndex() << endl;
-      cout << "tem filho" << endl;
+      // cout << node->getIndex() << endl;
+      // cout << "tem filho" << endl;
       if (_consensus_sequence[node->getIndex()].is(s[node->getIndex()])) {
-        cout << "eh consensus" << endl;
+        // cout << "eh consensus" << endl;
         p += _evaluateAux(s, node->getLeft(), indexes);
       } else {
-        cout << "nao eh consensus" << endl;
+        // cout << "nao eh consensus" << endl;
         p += _evaluateAux(s, node->getRight(), indexes);
       }
     } else { // leaf
-      cout << "nao tem filho" << endl;
+      // cout << "nao tem filho" << endl;
       for (int i = 0; i < s.size(); i++) {
         if (std::find(indexes.begin(), indexes.end(), i) == indexes.end()) {
           p += node->getModel()->inhomogeneous()->evaluatePosition(s, i, i);
