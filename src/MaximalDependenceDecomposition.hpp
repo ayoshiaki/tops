@@ -70,6 +70,7 @@ namespace tops {
     void setConsensusSequence(ConsensusSequence consensus_sequence);
 
     virtual double evaluate(const Sequence & s, unsigned int begin, unsigned int end);
+    virtual Sequence & choose(Sequence & h, int size);
 
     virtual std::string model_name() const {
       return "MaximumDependenceDecomposition";
@@ -77,6 +78,8 @@ namespace tops {
   private:
 
     double _evaluateAux(const Sequence & s, MaximalDependenceDecompositionNodePtr node, vector<int> &indexes);
+    int _chooseAux(Sequence & s, MaximalDependenceDecompositionNodePtr node);
+
 
     MaximalDependenceDecompositionNodePtr _mdd_tree;
     ConsensusSequence _consensus_sequence;

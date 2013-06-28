@@ -60,4 +60,28 @@ namespace tops {
     }
     return p;
   }
+
+  Sequence & MaximalDependenceDecomposition::choose(Sequence & s, int size) {
+    s = Sequence(size, -1);
+    _chooseAux(s, _mdd_tree);
+    return s;
+  }
+
+  int MaximalDependenceDecomposition::_chooseAux(Sequence & s, MaximalDependenceDecompositionNodePtr node) {
+    if (node->getLeft()) {
+      s[node->getIndex()] = node->getModel()->inhomogeneous()->choosePosition(s, node->getIndex(), node->getIndex());
+      if (_consensus_sequence[node->getIndex()].is(s[node->getIndex()])) {
+        _chooseAux(s, node->getLeft());
+      } else {
+        _chooseAux(s, node->getRight());
+      }
+    } else { // leaf
+      for (int i = 0; i < s.size(); i++) {
+        if (s[i] == -1) {
+          s[i] = node->getModel()->inhomogeneous()->choosePosition(s, i, i);
+        }
+      }
+    }
+    return 0;
+  }
 }
