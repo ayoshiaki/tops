@@ -31,6 +31,7 @@
 #include "Sequence.hpp"
 #include "Consensus.hpp"
 #include "ProbabilisticModel.hpp"
+#include "InhomogeneousMarkovChain.hpp"
 
 #include <iostream>
 #include <string>
@@ -65,24 +66,33 @@ namespace tops {
 
   class MaximalDependenceDecomposition : public ProbabilisticModel {
   public:
-    MaximalDependenceDecomposition() {};
+    MaximalDependenceDecomposition(AlphabetPtr alphabet):_alphabet(alphabet) {};
     void setMDDTree(MaximalDependenceDecompositionNodePtr root);
     void setConsensusSequence(ConsensusSequence consensus_sequence);
+    void setConsensusModel(ProbabilisticModelPtr model);
 
-    virtual double evaluate(const Sequence & s, unsigned int begin, unsigned int end);
-    virtual Sequence & choose(Sequence & h, int size);
+    InhomogeneousMarkovChainPtr trainInhomogeneousMarkovChain(SequenceEntryList & sequences);
+    int getMaximalDependenceIndex(InhomogeneousMarkovChainPtr model, Sequence selected);
+    void subset(int index, SequenceEntryList & sequences, SequenceEntryList & consensus, SequenceEntryList & nonconsensus);
+    MaximalDependenceDecompositionNodePtr newNode(SequenceEntryList & sequences, int divmin, Sequence selected);
+    void train(SequenceEntryList & sequences, int divmin);
+
+    virtual double evaluate(const Sequence & s, unsigned int begin, unsigned int end) const;
+    virtual Sequence & choose(Sequence & h, int size) const;
 
     virtual std::string model_name() const {
       return "MaximumDependenceDecomposition";
     }
   private:
 
-    double _evaluateAux(const Sequence & s, MaximalDependenceDecompositionNodePtr node, vector<int> &indexes);
-    int _chooseAux(Sequence & s, MaximalDependenceDecompositionNodePtr node);
+    double _evaluateAux(const Sequence & s, MaximalDependenceDecompositionNodePtr node, vector<int> &indexes) const;
+    void _chooseAux(Sequence & s, MaximalDependenceDecompositionNodePtr node) const;
 
 
     MaximalDependenceDecompositionNodePtr _mdd_tree;
     ConsensusSequence _consensus_sequence;
+    ProbabilisticModelPtr _consensus_model;
+    AlphabetPtr _alphabet;
   };
 
   typedef boost::shared_ptr<MaximalDependenceDecomposition> MaximalDependenceDecompositionPtr;

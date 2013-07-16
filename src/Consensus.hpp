@@ -43,7 +43,7 @@ namespace tops {
   class Consensus {
   public:
     Consensus(Sequence symbols):_symbols(symbols) {}
-    bool is(int symbol);
+    bool is(int symbol) const;
     std::string str();
   private:
     Sequence _symbols;
