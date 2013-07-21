@@ -70,7 +70,10 @@ namespace tops {
 
   class MaximalDependenceDecomposition : public ProbabilisticModel {
   public:
-    MaximalDependenceDecomposition(AlphabetPtr alphabet):_alphabet(alphabet) {};
+    MaximalDependenceDecomposition() {};
+    void setAlphabet(AlphabetPtr alphabet) {
+      _alphabet = alphabet;
+    }
     void setMDDTree(MaximalDependenceDecompositionNodePtr root);
     void setConsensusSequence(ConsensusSequence consensus_sequence);
     void setConsensusModel(ProbabilisticModelPtr model);
@@ -89,6 +92,9 @@ namespace tops {
     }
 
     virtual std::string str () const ;
+
+    virtual void initialize(const ProbabilisticModelParameters & parameters);
+    MaximalDependenceDecompositionNodePtr initializeTree(const ProbabilisticModelParameters & parameters, std::vector<std::string>& tree);
   private:
 
     double _evaluateAux(const Sequence & s, MaximalDependenceDecompositionNodePtr node, vector<int> &indexes) const;

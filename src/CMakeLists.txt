@@ -21,6 +21,7 @@ crossplatform.hpp ProbabilisticModelConfiguration ProbabilisticModelParameterVal
 Consensus
 ChiSquare
 MaximalDependenceDecomposition
+MaximalDependenceDecompositionCreator
 )
 
 

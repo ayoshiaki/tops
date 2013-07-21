@@ -100,7 +100,8 @@ int main (int argc, char ** argv)
   /***********************************************************/
   // MDD definition
 
-  MaximalDependenceDecompositionPtr mdd = MaximalDependenceDecompositionPtr(new MaximalDependenceDecomposition(alphabet));
+  MaximalDependenceDecompositionPtr mdd = MaximalDependenceDecompositionPtr(new MaximalDependenceDecomposition());
+  mdd->setAlphabet(alphabet);
   mdd->setMDDTree(mdd_root);
   mdd->setConsensusSequence(consensus_sequence);
   ProbabilisticModelPtr consensus_model = creator.create("_test2/consensus_model.txt");
@@ -146,7 +147,8 @@ int main (int argc, char ** argv)
 
   /***********************************************************/
   // Treinando MDD
-  MaximalDependenceDecompositionPtr trained_mdd = MaximalDependenceDecompositionPtr(new MaximalDependenceDecomposition(alphabet));
+  MaximalDependenceDecompositionPtr trained_mdd = MaximalDependenceDecompositionPtr(new MaximalDependenceDecomposition());
+  trained_mdd->setAlphabet(alphabet);
   trained_mdd->setConsensusSequence(consensus_sequence);
 
   // ProbabilisticModelPtr consensus_model = creator.create("_test2/consensus_model.txt");
@@ -170,7 +172,11 @@ int main (int argc, char ** argv)
 
   // cout << tree->getContext(0)->getDistribution()->str() << endl;
 
-  cout << trained_mdd->str() << endl;
+  // cout << mdd->str() << endl;
+
+  cout << "--------------------------" << endl;
+  ProbabilisticModelPtr mdd_from_config = creator.create("_test2/mdd.txt");
+  cout << mdd_from_config->str() << endl;
 
   return 0;
 }

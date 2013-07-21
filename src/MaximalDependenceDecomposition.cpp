@@ -1,6 +1,11 @@
 #include "MaximalDependenceDecomposition.hpp"
 #include "InhomogeneousMarkovChain.hpp"
 #include "ContextTree.hpp"
+#include "ProbabilisticModelParameter.hpp"
+#include "Symbol.hpp"
+#include "ProbabilisticModelCreatorClient.hpp"
+
+#include <boost/algorithm/string.hpp>
 
 namespace tops {
   int MaximalDependenceDecompositionNode::getIndex() {
@@ -27,13 +32,13 @@ namespace tops {
   std::string MaximalDependenceDecompositionNode::tree_str() {
     std::stringstream out;
     if (_left && _right) {
-      out << "(";
-      out << _node_name;
-      out << ", ";
+      out << "( ";
+      out << _node_name << ":" << _index;
+      out << " ";
       out << _left->tree_str();
-      out << ", ";
+      out << " ";
       out << _right->tree_str();
-      out << ")";
+      out << " )";
     } else {
       out << _node_name;
     }
@@ -253,13 +258,133 @@ namespace tops {
     out<< "]" << endl;
 
     out << _mdd_tree->model_str();
-    out << "tree = " << _mdd_tree->tree_str() << endl;
+    out << "tree = {" << _mdd_tree->tree_str() << "}" << endl;
     
     return out.str();
   }
+  void MaximalDependenceDecomposition::initialize(const ProbabilisticModelParameters & parameters) {
+    ProbabilisticModelParameterValuePtr symbols = parameters.getMandatoryParameterValue("alphabet");
+    ProbabilisticModelParameterValuePtr consensus_param = parameters.getMandatoryParameterValue("consensus");
+    ProbabilisticModelParameterValuePtr consensus_model_param = parameters.getMandatoryParameterValue("consensus_model");
+    ProbabilisticModelParameterValuePtr tree = parameters.getMandatoryParameterValue("tree");
+
+    AlphabetPtr alphabet = AlphabetPtr(new Alphabet());
+    alphabet->initializeFromVector(symbols->getStringVector());
+    setAlphabet(alphabet);
+
+    std::vector<std::string> consensus_symbols = consensus_param->getStringVector();
+    ConsensusSequence consensus_sequence;
+    for (int i = 0; i < consensus_symbols.size(); i++) {
+      std::vector<std::string> syms;
+      boost::split(syms, consensus_symbols[i], boost::is_any_of(" "));
+      vector<int> s;
+      for (int j = 0; j < syms.size(); j++) {
+        s.push_back(alphabet->getSymbol(syms[j])->id());
+      }
+      Consensus cons(s);
+      consensus_sequence.push_back(cons);
+    }
+    setConsensusSequence(consensus_sequence);
+
+    std::string consensus_model_str = consensus_model_param->getString();
+    consensus_model_str = consensus_model_str.substr(1, consensus_model_str.size() - 2);
+    ConfigurationReader consensus_model_reader;
+    ProbabilisticModelCreatorClient consensus_model_creator;
+    consensus_model_reader.load(consensus_model_str);
+    setConsensusModel(consensus_model_creator.create(*(consensus_model_reader.parameters())));
+
+    std::vector<std::string> _tree;
+    string tree_str = tree->getString();
+    boost::split(_tree, tree_str, boost::is_any_of(" "));
+    std::vector<std::string> tree_r;
+    for (int i = 0; i < _tree.size(); i++)
+      if (_tree[i] != "" && _tree[i] != " " && _tree[i] != "\n" && _tree[i] != "\t")
+        tree_r.push_back(_tree[i]);
+    setMDDTree(initializeTree(parameters, tree_r));
+  }
+
+  MaximalDependenceDecompositionNodePtr MaximalDependenceDecomposition::initializeTree(const ProbabilisticModelParameters & parameters, std::vector<std::string>& tree) {
+    MaximalDependenceDecompositionNodePtr node;
+    if (tree[0] == "(") {
+      std::vector<std::string> tree_node;
+      
+      boost::split(tree_node, tree[1], boost::is_any_of(":"));
+      string node_name = tree_node[0];
+      
+      int index = std::atoi(tree_node[1].c_str());
+
+      std::string model_str = parameters.getMandatoryParameterValue(node_name)->getString();
+      model_str = model_str.substr(1, model_str.size() - 2);
+      ConfigurationReader model_reader;
+      ProbabilisticModelCreatorClient model_creator;
+      model_reader.load(model_str);
+
+      cout << node_name << endl;
+      cout << index << endl;
+
+      MaximalDependenceDecompositionNodePtr root = MaximalDependenceDecompositionNodePtr(new
+        MaximalDependenceDecompositionNode(node_name, model_creator.create(*(model_reader.parameters())), index));
+
+      int count = 0;
+      int i = 2;
+      std::vector<std::string> tree_node_left;
+      tree_node_left.push_back(tree[2]);
+      if (tree[2] == "(") {
+        count = 1;
+        i = 2;
+        while (count > 0) {
+          i++;
+          if (tree[i] == "(")
+            count++;
+          else if (tree[i] == ")")
+            count--;
+          tree_node_left.push_back(tree[i]);
+        }
+      }
+      
+      std::vector<std::string> tree_node_right;
+      tree_node_right.push_back(tree[i+1]);
+      if (tree[count] == "(") {
+        count = 1;
+        i++;
+        while (count > 0) {
+          i++;
+          if (tree[i] == "(")
+            count++;
+          else if (tree[i] == ")")
+            count--;
+          tree_node_right.push_back(tree[i]);
+        }
+      }
+
+      // cout << "left:" << endl;
+      MaximalDependenceDecompositionNodePtr left_node = initializeTree(parameters, tree_node_left);
+      // cout << "right:" << endl;
+      MaximalDependenceDecompositionNodePtr right_node = initializeTree(parameters, tree_node_right);
+
+      root->setChildern(left_node, right_node);
+
+      node = root;
+    } else {
+      string node_name = tree[0];
+      int index = -1;
+
+      // cout << "-> " << node_name << endl;
+
+      std::string model_str = parameters.getMandatoryParameterValue(node_name)->getString();
+      model_str = model_str.substr(1, model_str.size() - 2);
+      ConfigurationReader model_reader;
+      ProbabilisticModelCreatorClient model_creator;
+      model_reader.load(model_str);
+
+      MaximalDependenceDecompositionNodePtr root = MaximalDependenceDecompositionNodePtr(new
+        MaximalDependenceDecompositionNode(node_name, model_creator.create(*(model_reader.parameters())), index));
+
+      node = root;
+    }
+    return node;
+  }
 }
-
-
 
 
 
