@@ -48,7 +48,7 @@ namespace tops {
 
   class MaximalDependenceDecompositionNode {
   public:
-    MaximalDependenceDecompositionNode(ProbabilisticModelPtr model, int index):_model(model), _index(index) {};
+    MaximalDependenceDecompositionNode(std::string node_name, ProbabilisticModelPtr model, int index):_model(model), _index(index), _node_name(node_name) {};
 
     int getIndex();
     ProbabilisticModelPtr getModel();
@@ -56,10 +56,14 @@ namespace tops {
     void setChildern(MaximalDependenceDecompositionNodePtr left, MaximalDependenceDecompositionNodePtr right);
     MaximalDependenceDecompositionNodePtr getLeft();
     MaximalDependenceDecompositionNodePtr getRight();
+
+    std::string tree_str();
+    std::string model_str();
   private:
     vector<int> _otherIndexes;
     ProbabilisticModelPtr _model;
     int _index;
+    std::string _node_name;
     MaximalDependenceDecompositionNodePtr _left;
     MaximalDependenceDecompositionNodePtr _right;
   };
@@ -74,7 +78,7 @@ namespace tops {
     InhomogeneousMarkovChainPtr trainInhomogeneousMarkovChain(SequenceEntryList & sequences);
     int getMaximalDependenceIndex(InhomogeneousMarkovChainPtr model, Sequence selected);
     void subset(int index, SequenceEntryList & sequences, SequenceEntryList & consensus, SequenceEntryList & nonconsensus);
-    MaximalDependenceDecompositionNodePtr newNode(SequenceEntryList & sequences, int divmin, Sequence selected);
+    MaximalDependenceDecompositionNodePtr newNode(std::string node_name, SequenceEntryList & sequences, int divmin, Sequence selected);
     void train(SequenceEntryList & sequences, int divmin);
 
     virtual double evaluate(const Sequence & s, unsigned int begin, unsigned int end) const;
@@ -83,6 +87,8 @@ namespace tops {
     virtual std::string model_name() const {
       return "MaximumDependenceDecomposition";
     }
+
+    virtual std::string str () const ;
   private:
 
     double _evaluateAux(const Sequence & s, MaximalDependenceDecompositionNodePtr node, vector<int> &indexes) const;

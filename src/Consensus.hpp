@@ -44,7 +44,8 @@ namespace tops {
   public:
     Consensus(Sequence symbols):_symbols(symbols) {}
     bool is(int symbol) const;
-    std::string str();
+    std::string str() const;
+    std::string sym_str(AlphabetPtr alphabet) const;
   private:
     Sequence _symbols;
   };

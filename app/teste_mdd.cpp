@@ -74,23 +74,23 @@ int main (int argc, char ** argv)
   /***********************************************************/
   // MDD tree
   MaximalDependenceDecompositionNodePtr mdd_root = MaximalDependenceDecompositionNodePtr(
-    new MaximalDependenceDecompositionNode(root, 7));
+    new MaximalDependenceDecompositionNode("root", root, 7));
   MaximalDependenceDecompositionNodePtr mdd_g5 = MaximalDependenceDecompositionNodePtr(
-    new MaximalDependenceDecompositionNode(g5, 2));
+    new MaximalDependenceDecompositionNode("g5", g5, 2));
   MaximalDependenceDecompositionNodePtr mdd_h5 = MaximalDependenceDecompositionNodePtr(
-    new MaximalDependenceDecompositionNode(h5, -1));
+    new MaximalDependenceDecompositionNode("h5", h5, -1));
   MaximalDependenceDecompositionNodePtr mdd_g5gm1 = MaximalDependenceDecompositionNodePtr(
-    new MaximalDependenceDecompositionNode(g5gm1, 1));
+    new MaximalDependenceDecompositionNode("g5gm1", g5gm1, 1));
   MaximalDependenceDecompositionNodePtr mdd_g5hm1 = MaximalDependenceDecompositionNodePtr(
-    new MaximalDependenceDecompositionNode(g5hm1, -1));
+    new MaximalDependenceDecompositionNode("g5hm1", g5hm1, -1));
   MaximalDependenceDecompositionNodePtr mdd_g5gm1am2 = MaximalDependenceDecompositionNodePtr(
-    new MaximalDependenceDecompositionNode(g5gm1am2, 8));
+    new MaximalDependenceDecompositionNode("g5gm1am2", g5gm1am2, 8));
   MaximalDependenceDecompositionNodePtr mdd_g5gm1bm2 = MaximalDependenceDecompositionNodePtr(
-    new MaximalDependenceDecompositionNode(g5gm1bm2, -1));
+    new MaximalDependenceDecompositionNode("g5gm1bm2", g5gm1bm2, -1));
   MaximalDependenceDecompositionNodePtr mdd_g5gm1am2u6 = MaximalDependenceDecompositionNodePtr(
-    new MaximalDependenceDecompositionNode(g5gm1am2u6, -1));
+    new MaximalDependenceDecompositionNode("g5gm1am2u6", g5gm1am2u6, -1));
   MaximalDependenceDecompositionNodePtr mdd_g5gm1am2v6 = MaximalDependenceDecompositionNodePtr(
-    new MaximalDependenceDecompositionNode(g5gm1am2v6, -1));
+    new MaximalDependenceDecompositionNode("g5gm1am2v6", g5gm1am2v6, -1));
 
   mdd_root->setChildern(mdd_g5, mdd_h5);
   mdd_g5->setChildern(mdd_g5gm1, mdd_g5hm1);
@@ -103,6 +103,8 @@ int main (int argc, char ** argv)
   MaximalDependenceDecompositionPtr mdd = MaximalDependenceDecompositionPtr(new MaximalDependenceDecomposition(alphabet));
   mdd->setMDDTree(mdd_root);
   mdd->setConsensusSequence(consensus_sequence);
+  ProbabilisticModelPtr consensus_model = creator.create("_test2/consensus_model.txt");
+  mdd->setConsensusModel(consensus_model);
 
   /***********************************************************/
   // Evaluate
@@ -147,7 +149,7 @@ int main (int argc, char ** argv)
   MaximalDependenceDecompositionPtr trained_mdd = MaximalDependenceDecompositionPtr(new MaximalDependenceDecomposition(alphabet));
   trained_mdd->setConsensusSequence(consensus_sequence);
 
-  ProbabilisticModelPtr consensus_model = creator.create("_test2/consensus_model.txt");
+  // ProbabilisticModelPtr consensus_model = creator.create("_test2/consensus_model.txt");
   trained_mdd->setConsensusModel(consensus_model);
 
   trained_mdd->train(sequences, 2);
@@ -167,6 +169,8 @@ int main (int argc, char ** argv)
   // tree->normalize();
 
   // cout << tree->getContext(0)->getDistribution()->str() << endl;
+
+  cout << trained_mdd->str() << endl;
 
   return 0;
 }

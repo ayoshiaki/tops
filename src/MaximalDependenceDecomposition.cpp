@@ -24,6 +24,34 @@ namespace tops {
     return _right;
   }
 
+  std::string MaximalDependenceDecompositionNode::tree_str() {
+    std::stringstream out;
+    if (_left && _right) {
+      out << "(";
+      out << _node_name;
+      out << ", ";
+      out << _left->tree_str();
+      out << ", ";
+      out << _right->tree_str();
+      out << ")";
+    } else {
+      out << _node_name;
+    }
+    return out.str();
+  }
+
+  std::string MaximalDependenceDecompositionNode::model_str() {
+    std::stringstream out;
+    out << _node_name << " = [" << endl;
+    out << _model->str();
+    out << "]" << endl;
+    if (_left && _right) {
+      out << _left->model_str();
+      out << _right->model_str();
+    }
+    return out.str();
+  }
+
   void MaximalDependenceDecomposition::setMDDTree(MaximalDependenceDecompositionNodePtr root) {
     _mdd_tree = root;
   }
@@ -107,6 +135,7 @@ namespace tops {
     }
     InhomogeneousMarkovChainPtr model = InhomogeneousMarkovChainPtr(new InhomogeneousMarkovChain());
     model->setPositionSpecificDistribution(position_specific_context_trees);
+    model->setAlphabet(_alphabet);
     return model;
   }
 
@@ -166,7 +195,7 @@ namespace tops {
     }
   }
 
-  MaximalDependenceDecompositionNodePtr MaximalDependenceDecomposition::newNode(SequenceEntryList & sequences, int divmin, Sequence selected) {
+  MaximalDependenceDecompositionNodePtr MaximalDependenceDecomposition::newNode(std::string node_name, SequenceEntryList & sequences, int divmin, Sequence selected) {
     InhomogeneousMarkovChainPtr model = trainInhomogeneousMarkovChain(sequences);
     int consensus_index = getMaximalDependenceIndex(model, selected);
     selected.push_back(consensus_index);
@@ -183,12 +212,16 @@ namespace tops {
     // cout << "nonconsensus_siquences = " << nonconsensus_sequences.size() << endl;
 
     if ((consensus_sequences.size() > divmin) && (nonconsensus_sequences.size() > divmin)) {
-      mdd_node = MaximalDependenceDecompositionNodePtr(new MaximalDependenceDecompositionNode(model, consensus_index));
-      MaximalDependenceDecompositionNodePtr left = newNode(consensus_sequences, divmin, selected);
-      MaximalDependenceDecompositionNodePtr right = newNode(nonconsensus_sequences, divmin, selected);
+      mdd_node = MaximalDependenceDecompositionNodePtr(new MaximalDependenceDecompositionNode(node_name, model, consensus_index));
+      std::stringstream p;
+      p << "mdd_node_p" << consensus_index;
+      MaximalDependenceDecompositionNodePtr left = newNode(p.str(), consensus_sequences, divmin, selected);
+      std::stringstream n;
+      n << "mdd_node_n" << consensus_index;
+      MaximalDependenceDecompositionNodePtr right = newNode(n.str(), nonconsensus_sequences, divmin, selected);
       mdd_node->setChildern(left, right);
     } else {
-      mdd_node = MaximalDependenceDecompositionNodePtr(new MaximalDependenceDecompositionNode(model, -1));
+      mdd_node = MaximalDependenceDecompositionNodePtr(new MaximalDependenceDecompositionNode(node_name, model, -1));
     }
     
 
@@ -197,12 +230,34 @@ namespace tops {
 
   void MaximalDependenceDecomposition::train(SequenceEntryList & sequences, int divmin) {
     Sequence selected;
-    setMDDTree(newNode(sequences, divmin, selected));
+    setMDDTree(newNode("root", sequences, divmin, selected));
+  }
+
+  std::string MaximalDependenceDecomposition::str () const {
+    std::stringstream out;
+
+    out << "model_name = \"MaximalDependenceDecomposition\"" << endl;
+
+    out << _alphabet->str();
+
+    out << "consensus = (";
+    for (int i = 0; i < _consensus_sequence.size(); i++) {
+      out << _consensus_sequence[i].sym_str(_alphabet);
+      if (i != (_consensus_sequence.size() - 1))
+        out << ", ";
+    }
+    out << ")" << endl;
+
+    out << "consensus_model = [" << endl;
+    out << _consensus_model->str();
+    out<< "]" << endl;
+
+    out << _mdd_tree->model_str();
+    out << "tree = " << _mdd_tree->tree_str() << endl;
+    
+    return out.str();
   }
 }
-
-
-
 
 
 
