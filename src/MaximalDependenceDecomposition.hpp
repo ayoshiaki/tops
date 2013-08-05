@@ -74,6 +74,10 @@ namespace tops {
     void setAlphabet(AlphabetPtr alphabet) {
       _alphabet = alphabet;
     }
+    virtual AlphabetPtr alphabet() const
+    {
+      return _alphabet;
+    }
     void setMDDTree(MaximalDependenceDecompositionNodePtr root);
     void setConsensusSequence(ConsensusSequence consensus_sequence);
     void setConsensusModel(ProbabilisticModelPtr model);
