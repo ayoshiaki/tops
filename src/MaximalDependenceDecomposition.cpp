@@ -319,8 +319,8 @@ namespace tops {
       ProbabilisticModelCreatorClient model_creator;
       model_reader.load(model_str);
 
-      cout << node_name << endl;
-      cout << index << endl;
+      // cout << node_name << endl;
+      // cout << index << endl;
 
       MaximalDependenceDecompositionNodePtr root = MaximalDependenceDecompositionNodePtr(new
         MaximalDependenceDecompositionNode(node_name, model_creator.create(*(model_reader.parameters())), index));

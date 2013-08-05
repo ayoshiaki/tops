@@ -73,12 +73,8 @@ namespace tops {
 
       SequenceEntryList sample_set;
       readSequencesFromFile(sample_set, alphabet, training_set_parameter->getString());
-
-      cout << "-------------------------------" << endl;
       
       mdd->train(sample_set, 2);
-
-      cout << "-------------------------------" << endl;
 
       return mdd;
     }
