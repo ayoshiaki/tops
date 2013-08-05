@@ -22,6 +22,7 @@ Consensus
 ChiSquare
 MaximalDependenceDecomposition
 MaximalDependenceDecompositionCreator
+TrainMaximalDependenceDecomposition
 )
 
 
