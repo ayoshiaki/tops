@@ -40,6 +40,7 @@ namespace tops {
     ProbabilisticModelParameterValuePtr consensus_parameter = parameters.getOptionalParameterValue("consensus");
     ProbabilisticModelParameterValuePtr consensus_model_parameter = parameters.getOptionalParameterValue("consensus_model");
     ProbabilisticModelParameterValuePtr training_set_parameter = parameters.getOptionalParameterValue("training_set");
+    ProbabilisticModelParameterValuePtr minimum_subset_parameter = parameters.getOptionalParameterValue("minimum_subset");
 
     if(alphabet_parameter == NULL || consensus_parameter == NULL || consensus_model_parameter == NULL || training_set_parameter == NULL) {
       std::cerr << "ERROR: initial_specification is a mandatory paramenter\n" << std::endl;
@@ -74,7 +75,7 @@ namespace tops {
       SequenceEntryList sample_set;
       readSequencesFromFile(sample_set, alphabet, training_set_parameter->getString());
       
-      mdd->train(sample_set, 2);
+      mdd->train(sample_set, minimum_subset_parameter->getInt());
 
       return mdd;
     }
