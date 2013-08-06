@@ -46,6 +46,9 @@ namespace tops {
     bool is(int symbol) const;
     std::string str() const;
     std::string sym_str(AlphabetPtr alphabet) const;
+    Sequence symbols() {
+      return _symbols;
+    }
   private:
     Sequence _symbols;
   };

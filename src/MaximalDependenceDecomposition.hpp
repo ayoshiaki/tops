@@ -54,6 +54,7 @@ namespace tops {
     ProbabilisticModelPtr getModel();
 
     void setChildern(MaximalDependenceDecompositionNodePtr left, MaximalDependenceDecompositionNodePtr right);
+    void setChild(MaximalDependenceDecompositionNodePtr child);
     MaximalDependenceDecompositionNodePtr getLeft();
     MaximalDependenceDecompositionNodePtr getRight();
 
