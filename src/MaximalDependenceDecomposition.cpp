@@ -224,7 +224,7 @@ namespace tops {
       if ( prob >= -0.001 && prob <= 0.001) {
         mdd_node = MaximalDependenceDecompositionNodePtr(new MaximalDependenceDecompositionNode(node_name, model, consensus_index));
         std::stringstream p;
-        p << "mdd_node_p" << consensus_index;
+        p << node_name << "_p" << consensus_index;
         MaximalDependenceDecompositionNodePtr child = newNode(p.str(), sequences, divmin, selected);
         mdd_node->setChild(child);
       } else {
@@ -241,10 +241,10 @@ namespace tops {
         if ((consensus_sequences.size() > divmin) && (nonconsensus_sequences.size() > divmin)) {
           mdd_node = MaximalDependenceDecompositionNodePtr(new MaximalDependenceDecompositionNode(node_name, model, consensus_index));
           std::stringstream p;
-          p << "mdd_node_p" << consensus_index;
+          p << node_name << "_p" << consensus_index;
           MaximalDependenceDecompositionNodePtr left = newNode(p.str(), consensus_sequences, divmin, selected);
           std::stringstream n;
-          n << "mdd_node_n" << consensus_index;
+          n << node_name << "_n" << consensus_index;
           MaximalDependenceDecompositionNodePtr right = newNode(n.str(), nonconsensus_sequences, divmin, selected);
           mdd_node->setChildern(left, right);
         } else {
@@ -259,7 +259,7 @@ namespace tops {
 
   void MaximalDependenceDecomposition::train(SequenceEntryList & sequences, int divmin) {
     Sequence selected;
-    setMDDTree(newNode("root", sequences, divmin, selected));
+    setMDDTree(newNode("node_r0", sequences, divmin, selected));
   }
 
   std::string MaximalDependenceDecomposition::str () const {
