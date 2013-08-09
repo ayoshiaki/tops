@@ -178,21 +178,22 @@ int main (int argc, char ** argv)
   ProbabilisticModelPtr mdd_from_config = creator.create("_test2/mdd.txt");
   // cout << mdd_from_config->str() << endl;
 
-  cout << trained_mdd->evaluate(new_sequence, 0, 9) << endl;
-  cout << trained_mdd->evaluate(new_sequence, 0, 1) << endl;
+  // cout << trained_mdd->evaluate(new_sequence, 0, 9) << endl;
+  // cout << trained_mdd->evaluate(new_sequence, 0, 1) << endl;
 
   new_sequence.push_back(0);
   new_sequence.push_back(0);
   new_sequence.push_back(0);
   new_sequence.push_back(0);
   
-  trained_mdd->initialize_prefix_sum_array(new_sequence);
-  cout << trained_mdd->prefix_sum_array_compute(0, 1) << endl;
-  cout << trained_mdd->prefix_sum_array_compute(0, 9) << endl;
-  cout << trained_mdd->prefix_sum_array_compute(1, 10) << endl;
-  cout << trained_mdd->prefix_sum_array_compute(2, 11) << endl;
-  cout << trained_mdd->prefix_sum_array_compute(3, 12) << endl;
-  cout << trained_mdd->prefix_sum_array_compute(4, 13) << endl;
+  mdd->initialize_prefix_sum_array(new_sequence);
+  // cout << mdd->evaluate(new_sequence, 0, 8);
+  cout << mdd->prefix_sum_array_compute(0, 1) << endl;
+  cout << mdd->prefix_sum_array_compute(0, 8) << endl;
+  cout << mdd->prefix_sum_array_compute(1, 9) << endl;
+  cout << mdd->prefix_sum_array_compute(2, 10) << endl;
+  cout << mdd->prefix_sum_array_compute(3, 11) << endl;
+  cout << mdd->prefix_sum_array_compute(4, 12) << endl;
 
   return 0;
 }

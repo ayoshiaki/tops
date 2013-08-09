@@ -74,7 +74,7 @@ namespace tops {
   }
 
   double MaximalDependenceDecomposition::prefix_sum_array_compute(int begin , int end) {
-    if ((end - begin) != _consensus_sequence.size())
+    if ((end - begin + 1) != _consensus_sequence.size())
       return -HUGE;
     return _prefix_sum_array[begin];
   }
@@ -83,16 +83,16 @@ namespace tops {
     int len = s.size();
     int clen = _consensus_sequence.size();
     for (int i = 0; i < (len - clen); i++) {
-      _prefix_sum_array.push_back(evaluate(s, i, i + clen));
+      _prefix_sum_array.push_back(evaluate(s, i, i + clen - 1));
     }
     return true;
   }
 
   double MaximalDependenceDecomposition::evaluate(const Sequence & s, unsigned int begin, unsigned int end) const {
-    if ((end - begin) != _consensus_sequence.size())
+    if ((end - begin + 1) != _consensus_sequence.size())
       return -HUGE;
     vector<int>::const_iterator first = s.begin() + begin;
-    vector<int>::const_iterator last = s.begin() + end;
+    vector<int>::const_iterator last = s.begin() + end + 1;
     vector<int> subseq(first, last);
     vector<int> indexes;
     return _evaluateAux(subseq, _mdd_tree, indexes);
