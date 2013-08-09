@@ -92,6 +92,9 @@ namespace tops {
     virtual double evaluate(const Sequence & s, unsigned int begin, unsigned int end) const;
     virtual Sequence & choose(Sequence & h, int size) const;
 
+    virtual bool initialize_prefix_sum_array(const Sequence & s);
+    virtual double prefix_sum_array_compute(int begin , int end);
+
     virtual std::string model_name() const {
       return "MaximumDependenceDecomposition";
     }
@@ -110,6 +113,7 @@ namespace tops {
     ConsensusSequence _consensus_sequence;
     ProbabilisticModelPtr _consensus_model;
     AlphabetPtr _alphabet;
+    vector<double> _prefix_sum_array;
   };
 
   typedef boost::shared_ptr<MaximalDependenceDecomposition> MaximalDependenceDecompositionPtr;

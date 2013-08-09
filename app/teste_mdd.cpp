@@ -176,7 +176,23 @@ int main (int argc, char ** argv)
 
   cout << "--------------------------" << endl;
   ProbabilisticModelPtr mdd_from_config = creator.create("_test2/mdd.txt");
-  cout << mdd_from_config->str() << endl;
+  // cout << mdd_from_config->str() << endl;
+
+  cout << trained_mdd->evaluate(new_sequence, 0, 9) << endl;
+  cout << trained_mdd->evaluate(new_sequence, 0, 1) << endl;
+
+  new_sequence.push_back(0);
+  new_sequence.push_back(0);
+  new_sequence.push_back(0);
+  new_sequence.push_back(0);
+  
+  trained_mdd->initialize_prefix_sum_array(new_sequence);
+  cout << trained_mdd->prefix_sum_array_compute(0, 1) << endl;
+  cout << trained_mdd->prefix_sum_array_compute(0, 9) << endl;
+  cout << trained_mdd->prefix_sum_array_compute(1, 10) << endl;
+  cout << trained_mdd->prefix_sum_array_compute(2, 11) << endl;
+  cout << trained_mdd->prefix_sum_array_compute(3, 12) << endl;
+  cout << trained_mdd->prefix_sum_array_compute(4, 13) << endl;
 
   return 0;
 }

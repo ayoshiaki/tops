@@ -73,9 +73,29 @@ namespace tops {
     _consensus_sequence = consensus_sequence;
   }
 
+  double MaximalDependenceDecomposition::prefix_sum_array_compute(int begin , int end) {
+    if ((end - begin) != _consensus_sequence.size())
+      return -HUGE;
+    return _prefix_sum_array[begin];
+  }
+
+  bool MaximalDependenceDecomposition::initialize_prefix_sum_array(const Sequence & s) {
+    int len = s.size();
+    int clen = _consensus_sequence.size();
+    for (int i = 0; i < (len - clen); i++) {
+      _prefix_sum_array.push_back(evaluate(s, i, i + clen));
+    }
+    return true;
+  }
+
   double MaximalDependenceDecomposition::evaluate(const Sequence & s, unsigned int begin, unsigned int end) const {
+    if ((end - begin) != _consensus_sequence.size())
+      return -HUGE;
+    vector<int>::const_iterator first = s.begin() + begin;
+    vector<int>::const_iterator last = s.begin() + end;
+    vector<int> subseq(first, last);
     vector<int> indexes;
-    return _evaluateAux(s, _mdd_tree, indexes);
+    return _evaluateAux(subseq, _mdd_tree, indexes);
   }
 
   double MaximalDependenceDecomposition::_evaluateAux(const Sequence & s, MaximalDependenceDecompositionNodePtr node, vector<int> &indexes) const {
