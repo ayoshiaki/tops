@@ -234,7 +234,7 @@ namespace tops {
 
     int consensus_index = getMaximalDependenceIndex(model, selected);
 
-    if (consensus_index > 0) {
+    if (consensus_index >= 0) {
 
       selected.push_back(consensus_index);
 
