@@ -1,7 +1,7 @@
 Overview
 =========
 
-ToPS is an objected-oriented framework implemented using C++ that facilitates the integration of probabilistic models for sequences over a user defined alphabet. ToPS contains the implementation of five distinct models to analyze discrete sequences:
+ToPS is an objected-oriented framework implemented using C++ that facilitates the integration of probabilistic models for sequences over a user defined alphabet. ToPS contains the implementation of eight distinct models to analyze discrete sequences:
 
 1. Independent and identically distributed model
 2. Variable-Length Markov Chain (VLMC)
