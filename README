@@ -30,7 +30,7 @@ Git Repository
 
 You can download the development version of ToPS by executing the command below:
 
-git clone git://tops.git.sourceforge.net/gitroot/tops/tops
+git clone https://github.com/ayoshiaki/tops.git 
 
 Platforms
 =========
@@ -49,14 +49,14 @@ ToPS was written in C++. It was compiled using the g++ version 4.2.1 and it requ
 Installing ToPS
 ===============
 
-   1. Gunzip and untar the package
+   1. Download ToPS from GitHub  
 
-      git clone git://tops.git.sourceforge.net/gitroot/tops/tops 
+      git clone https://github.com/ayoshiaki/tops.git
       git submodule update --init
 
       This will create a directory named tops
 
-   2. Go to the tops_v1 directory:
+   2. Go to the tops directory:
 
        cd tops
 
