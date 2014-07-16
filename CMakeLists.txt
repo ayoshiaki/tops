@@ -20,10 +20,9 @@ IF(UNIX)
 ENDIF(UNIX)
 
 
-
+add_subdirectory(googletest)
 add_subdirectory(src)
 add_subdirectory(app)
 add_subdirectory(lang)
-add_subdirectory(googletest)
 
 enable_testing()
