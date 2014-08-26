@@ -3,7 +3,7 @@
  *
  *       Copyright 2011 Vitor Onuchic <vitoronuchic@gmail.com>
  *                      André Yoshiaki Kashiwabara <akashiwabara@usp.br>
- *                      Ígor Bonadio <ibonadio@ime.usp.br>
+ *                      Ígor Bonádio <ibonadio@ime.usp.br>
  *                      Vitor Onuchic <vitoronuchic@gmail.com>
  *                      Alan Mitchell Durham <aland@usp.br>
  *
@@ -96,19 +96,19 @@ namespace tops{
 
     void removeEndId(int end_id){
       for(IntVector::iterator it = _outgoingTransitions.begin(); it != _outgoingTransitions.end(); it++){
-  if((*it) == end_id){
-    _outgoingTransitions.erase(it);
-    break;
-  }
+	if((*it) == end_id){
+	  _outgoingTransitions.erase(it);
+	  break;
+	}
       }
     }
-
+    
     void removeBeginId(int begin_id){
       for(IntVector::iterator it = _incomingTransitions.begin(); it != _incomingTransitions.end(); it++){
-  if((*it) == begin_id){
-    _incomingTransitions.erase(it);
-    break;
-  }
+	if((*it) == begin_id){
+	  _incomingTransitions.erase(it);
+	  break;
+	}
       }
     }
   };
@@ -167,6 +167,7 @@ namespace tops{
     void backwardSum(vector<PHMMStatePtr> &states, const Sequence &seq1, const Sequence &seq2, vector<Matrix> &a, int i, int j, int gap_id, int currStateId, double *accumulator);
 
     void postProbSum(fMatrix &ppMatch, fMatrix &ppGap1, fMatrix &ppGap2, Matrix &alpha, Matrix &beta, double full, int i, int j);
+
   };
 
   class DLLEXPORT SilentState: public PHMMState {
@@ -221,10 +222,12 @@ namespace tops{
     //virtual double backwardSum(int k,int i,int j,vector<Matrix> &a,const Sequence &seq1, const Sequence &seq2);
 
     virtual double viterbi(const Sequence & seq1, const Sequence & seq2, Sequence & path, Sequence & al1, Sequence & al2, vector<Matrix> &a){
-      return 0.0;
-    };
+      return 0;
+    }
 
     virtual float posteriorProbabilities (const Sequence &seq1, const Sequence &seq2, SparseMatrixPtr &ppMatch,SparseMatrixPtr &ppGap1, SparseMatrixPtr &ppGap2);
+
+    virtual void posteriorDecoding(const Sequence &seq1, const Sequence &seq2, Sequence &al1, Sequence &al2);
 
     virtual float expectedAccuracy(int size1, int size2, fMatrix &postProbs);
 
