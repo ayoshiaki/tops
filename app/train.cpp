@@ -49,6 +49,7 @@
 #include "TrainInterpolatedMarkovChain.hpp"
 #include "TrainSimilarityBasedSequenceWeighting.hpp"
 #include "TrainPhasedMarkovChainContextAlgorithm.hpp"
+#include "TrainMaximalDependenceDecomposition.hpp"
 #include "TrainHMMMaximumLikelihood.hpp"
 #include "RemoveSequenceFromModel.hpp"
 #include "SequenceFormat.hpp"
@@ -114,6 +115,7 @@ int main(int argc, char ** argv) {
         createModelCommand["SmoothedHistogramStanke"] = SmoothedHistogramStankePtr(new SmoothedHistogramStanke());
         createModelCommand["SmoothedHistogramBurge"] = SmoothedHistogramBurgePtr(new SmoothedHistogramBurge());
         createModelCommand["DiscreteIIDModel"] = TrainDiscreteIIDModelPtr(new TrainDiscreteIIDModel());
+        createModelCommand["MaximalDependenceDecomposition"] = TrainMaximalDependenceDecompositionPtr(new TrainMaximalDependenceDecomposition());
 
 
         modelSelectionCommand["BIC"] = BayesianInformationCriteriaPtr(
