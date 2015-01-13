@@ -471,14 +471,23 @@ namespace tops {
 
     rule<phrase_scanner_t> config_file, parameter_spec, parameter_value,
       parameter_name,  prob_table, string_vector, double_vector,
-      int_vector, word, word_p, string_map, transition_map, nested_configuration, nested_parameter_spec;
+      int_vector, word, word_p, string_map, transition_map, nested_configuration, nested_parameter_spec,
+      tree_p, tree;
     word_p
       = lexeme_d [ +(alnum_p | (ch_p('_') | '.' | '/' | '-' | ' ' | ',' | '+' ))]
+      ;
+    tree_p
+      = lexeme_d [ +(alnum_p | (ch_p('_') | '.' | '/' | '-' | ' ' | ',' | '+' | '(' | ')' | ':' ))]
       ;
     word
       = ch_p('"')
       >> word_p
       >> ch_p('"')
+      ;
+    tree
+      = ch_p('{')
+      >> tree_p
+      >> ch_p('}')
       ;
     double_vector
       = ch_p('(')
@@ -541,6 +550,7 @@ namespace tops {
       = double_vector
       | parameter_name [set_parameter_value_string(this)]
       | word  [set_parameter_value_word(this)]
+      | tree  [set_parameter_value_word(this)]
       | string_vector
       | transition_map
       | strict_real_p [set_parameter_value_double(this)]

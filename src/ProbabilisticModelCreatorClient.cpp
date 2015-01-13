@@ -43,6 +43,7 @@
 #include "ProbabilisticModelParameter.hpp"
 #include "SimilarityBasedSequenceWeightingCreator.hpp"
 #include "MultipleSequentialModelCreator.hpp"
+#include "MaximalDependenceDecompositionCreator.hpp"
 #include "util.hpp"
 
 
@@ -154,7 +155,7 @@ namespace tops
         conf.append(line);
       }
     input.close();
-    tops::lang::parse(conf);
+    // tops::lang::parse(conf);
     if(readConfig.load(conf)){
       _p = *(readConfig.parameters());
       return _p;
@@ -314,6 +315,8 @@ namespace tops
     _createModelCommand["SimilarityBasedSequenceWeighting"] =
       SimilarityBasedSequenceWeightingCreatorPtr(new SimilarityBasedSequenceWeightingCreator());
     _createModelCommand["MultipleSequentialModels"] = MultipleSequentialModelCreatorPtr( new MultipleSequentialModelCreator());
+    _createModelCommand["MaximalDependenceDecomposition"] =
+      MaximalDependenceDecompositionCreatorPtr(new MaximalDependenceDecompositionCreator());
 
   }
 }

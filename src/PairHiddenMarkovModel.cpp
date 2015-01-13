@@ -3,7 +3,7 @@
  *
  *      Copyright 2011  Vitor Onuchic <vitoronuchic@gmail.com>
  *                      Andre Yoshiaki Kashiwabara <akashiwabara@usp.br>
- *                      Ígor Bonadio <ibonadio@ime.usp.br>
+ *                      Ígor Bonádio <ibonadio@ime.usp.br>
  *                      Alan Mitchell Durham <aland@usp.br>
  *
  *       This program is free software; you can redistribute it and/or modify
@@ -29,6 +29,81 @@ namespace tops {
   /////////////////////////////////////////////////////////
   //////// Decoding algorithms ////////////////////////////
   /////////////////////////////////////////////////////////
+
+  void PairHiddenMarkovModel::posteriorDecoding(const Sequence &seq1, const Sequence &seq2, Sequence &al1, Sequence &al2){
+    int nstates = _states.size();
+    int length1 = seq1.size();
+    int size1 = length1+1;
+    int length2 = seq2.size();
+    int size2 = length2+1;
+    fMatrix ppMatch(length1+1,length2+1);
+    fMatrix ppGap1(length1+1,length2+1);
+    fMatrix ppGap2(length1+1,length2+1);
+    vector<Matrix> alpha; // forward
+    vector<Matrix> beta;  // backward
+    
+    double full = forward(seq1, seq2, alpha);
+    backward(seq1, seq2, beta);
+    for(int i = 0; i <= length1; i++){
+      for(int j = 0; j <= length2; j++){
+	ppMatch(i,j) = 0;
+	ppGap1(i,j) = 0;
+	ppGap2(i,j) = 0;
+	for(int k = 0; k < nstates; k++)
+	  _states[k]->postProbSum(ppMatch,ppGap1,ppGap2,alpha[k],beta[k],full,i,j);
+      }
+    }    
+    
+    fMatrix ea(size1,size2);
+    IntMatrix ptrs(size1,size2);
+
+    for(int i = 0; i < size1; i++){
+      ea(i,0) = 0.0;
+      ptrs(i,0) = 1;
+    }
+    for(int j = 1; j < size2; j++){
+      ea(0,j) = 0.0;
+      ptrs(0,j) = 2;
+    }
+
+    for(int i = 1; i < size1; i++){
+      for(int j = 1; j < size2; j++){
+	ea(i,j) = ea(i-1,j);
+	ptrs(i,j) = 1;
+	if(ea(i,j) <= ea(i,j-1)){
+	  ea(i,j) = ea(i,j-1);
+	  ptrs(i,j) = 2;
+	}
+	if(ea(i,j) <= ea(i-1,j-1)+ppMatch(i,j)){
+	  ea(i,j) = ea(i-1,j-1)+ppMatch(i,j);
+	  ptrs(i,j) = 3;
+	}
+      }
+    }
+    int i = size1-1;
+    int j = size2-1;
+    while(i != 0 || j != 0){
+      if(ptrs(i,j) == 1){
+	i--;
+	al1.push_back(seq1[i]);
+	al2.push_back(_gap_id);
+      }
+      else if(ptrs(i,j) == 2){
+	j--;
+	al1.push_back(_gap_id);
+	al2.push_back(seq2[j]);
+      }
+      else if(ptrs(i,j) == 3){
+	i--;
+	j--;
+	al1.push_back(seq1[i]);
+	al2.push_back(seq2[j]);
+      }
+    }
+    std::reverse(al1.begin(),al1.end());
+    std::reverse(al2.begin(),al2.end());
+  }
+    
 
   float PairHiddenMarkovModel::posteriorProbabilities (const Sequence &seq1, const Sequence &seq2, SparseMatrixPtr &sparsePPMatch,SparseMatrixPtr &sparsePPGap1, SparseMatrixPtr &sparsePPGap2)
   {
@@ -122,31 +197,52 @@ namespace tops {
     }*/
 
   float PairHiddenMarkovModel::expectedAccuracy(int size1, int size2, fMatrix &postProbs){
-    int allen = size1;
-    if(size2 < allen)
-      allen = size2;
     fMatrix ea(size1,size2);
+    IntMatrix ptrs(size1,size2);
 
-    for(int i = 0; i < size1; i++)
+    for(int i = 0; i < size1; i++){
       ea(i,0) = 0.0;
-    for(int j = 1; j < size2; j++)
+      ptrs(i,0) = 1;
+    }
+    for(int j = 1; j < size2; j++){
       ea(0,j) = 0.0;
+      ptrs(0,j) = 2;
+    }
 
     for(int i = 1; i < size1; i++){
       for(int j = 1; j < size2; j++){
-  ea(i,j) = ea(i-1,j);
-  if(ea(i,j) <= ea(i,j-1)){
-    ea(i,j) = ea(i,j-1);
-  }
-  if(ea(i,j) <= ea(i-1,j-1)+postProbs(i,j)){
-    ea(i,j) = ea(i-1,j-1)+postProbs(i,j);
-  }
+	ea(i,j) = ea(i-1,j);
+	ptrs(i,j) = 1;
+	if(ea(i,j) <= ea(i,j-1)){
+	  ea(i,j) = ea(i,j-1);
+	  ptrs(i,j) = 2;
+	}
+	if(ea(i,j) <= ea(i-1,j-1)+postProbs(i,j)){
+	  ea(i,j) = ea(i-1,j-1)+postProbs(i,j);
+	  ptrs(i,j) = 3;
+	}
       }
     }
-    return ea(size1-1,size2-1)/allen;;
+    int i = size1-1;
+    int j = size2-1;
+    int allen = 0;
+    while(i != 0 || j != 0){
+      if(ptrs(i,j) == 1)
+	i--;
+      else if(ptrs(i,j) == 2)
+	j--;
+      else if(ptrs(i,j) == 3){
+	i--;
+	j--;
+	allen++;
+      }
+    }
+
+    cerr << ea(size1-1,size2-1)/allen << endl;
+    return ea(size1-1,size2-1)/allen;
   }
 
-  /*  double PairHiddenMarkovModel::viterbi(const Sequence & seq1, const Sequence & seq2, Sequence & statePath, Sequence & alignment1, Sequence & alignment2, vector<Matrix> &a)
+  /*double PairHiddenMarkovModel::viterbi(const Sequence & seq1, const Sequence & seq2, Sequence & statePath, Sequence & alignment1, Sequence & alignment2, vector<Matrix> &a)
   {
     int nstates = _states.size();
     int nsilentstates = _silent_states.size();
@@ -198,8 +294,8 @@ namespace tops {
           }
 
           double aux = -HUGE;
-          for(int l = 0; l < (int)(_states[k]->iTransitions()).size(); l++){
-            int id = _states[k]->getITransId(l);
+          for(int l = 0; l < (int)(_states[k]->getNumiTrans()); l++){
+            int id = _states[k]->getiTrans(l);
             aux = alpha[id](i-ne1,j-ne2) + _states[id]->transitions()->log_probability_of(k);
             if(aux > alpha[k](i,j)){
               alpha[k](i,j) = aux;
@@ -220,8 +316,8 @@ namespace tops {
           alpha[id1](i,j) = -HUGE;
           if(id1 == (int)_begin_id)
             continue;
-          for(int l = 0; l < (int)(_states[id1]->iTransitions()).size(); l++){
-            int id2 = _states[id1]->getITransId(l);
+          for(int l = 0; l < (int)(_states[id1]->getNumiTrans()); l++){
+            int id2 = _states[id1]->getiTrans(l);
             double aux = alpha[id2](i,j) + _states[id2]->transitions()->log_probability_of(id1);
             if(aux > alpha[id1](i,j)){
               alpha[id1](i,j) = aux;
@@ -638,7 +734,7 @@ namespace tops {
     if(observations->has("-"))
       _gap_id = observations->getSymbol("-")->id();
     else{
-      observations->createSymbol(string("-"));
+      observations->createSymbol("-");
       _gap_id = observations->getSymbol("-")->id();
     }
 

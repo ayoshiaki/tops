@@ -52,7 +52,6 @@ Installing ToPS
    1. Download ToPS from GitHub  
 
       git clone https://github.com/ayoshiaki/tops.git
-      git submodule update --init
 
       This will create a directory named tops
 
@@ -60,19 +59,23 @@ Installing ToPS
 
        cd tops
 
-   3. Run the configuration script:
+   3.  Update googletest submodule
+
+       git submodule update --init
+
+   4. Run the configuration script:
 
       cmake .
 
-   4. Run make
+   5. Run make
 
        make
 
-   5. Run make install
+   6. Run make install
 
       sudo make install
 
-   6. If you are using linux run ldconfig
+   7. If you are using linux run ldconfig
 
       sudo ldconfig
 

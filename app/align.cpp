@@ -3,7 +3,7 @@
  *
  *       Copyright 2011 Vitor Onuchic <vitoronuchic@gmail.com>
  *                      Andre Yoshiaki Kashiwabara <akashiwabara@usp.br>
- *                      Ígor Bonadio <ibonadio@ime.usp.br>
+ *                      Ígor Bonádio <ibonadio@ime.usp.br>
  *                      Alan Mitchell Durham <aland@usp.br>
  *
  *       This program is free software; you can redistribute it and/or modify
@@ -42,7 +42,7 @@ using namespace tops;
 using namespace std;
 using namespace boost::program_options;
 
-void alignSeqs(ProbabilisticModelPtr model, SequenceList seqs1, SequenceList seqs2, vector<std::string> names1, vector<std::string> names2, ostream & output, ostream & states_output)
+void alignSeqs(ProbabilisticModelPtr model, SequenceList seqs1, SequenceList seqs2, vector<std::string> names1, vector<std::string> names2, ostream & output)
 {
   if(seqs1.size() != seqs2.size()){
     cerr << "Both files must to have the same amount of sequences." << endl;
@@ -50,25 +50,19 @@ void alignSeqs(ProbabilisticModelPtr model, SequenceList seqs1, SequenceList seq
   }
   for(int i = 0; i < (int)seqs1.size(); i++)
     {
-      Sequence s1,s2,path;
-      std::stringstream aux1,aux2,aux3;
-      vector<Matrix> a;
-      model->pairDecodable()->viterbi(seqs1[i], seqs2[i], path, s1, s2, a);
+      Sequence s1,s2;
+      std::stringstream aux1,aux2;
+      model->pairDecodable()->posteriorDecoding(seqs1[i], seqs2[i], s1, s2);
       aux1 << names1[i] << "_" << names2[i] << "_al1" ;
       aux2 << names1[i] << "_" << names2[i] << "_al2" ;
-      aux3 << names1[i] << "_" << names2[i] << "_path" ;
       SequenceEntry out1(model->alphabet());
       SequenceEntry out2(model->alphabet());
-      SequenceEntry out3(model->pairDecodable()->getStateNames());
       out1.setName(aux1.str());
       out2.setName(aux2.str());
-      out3.setName(aux3.str());
       out1.setSequence(s1);
       out2.setSequence(s2);
-      out3.setSequence(path);
       output << out1;
       output << out2 << endl;
-      states_output << out3 << endl;
     }
 }
 
@@ -81,7 +75,6 @@ int main (int argc, char ** argv)
       ("help,?", "produce help message")
       ("model,m", value<string> (), "model")
       ("output,o", value<string>(), "file to store  the sequences")
-      ("hidden_states,h", value<string>(), "file to store hidden state sequence")
       ("asequence,a", value<string> (), "sequence1 file")
       ("bsequence,b", value<string> (), "sequence2 file")
       ("fasta,F",  "use fasta format");
@@ -127,26 +120,11 @@ int main (int argc, char ** argv)
         if(vm.count("output")) {
           string output = vm["output"].as<string>();
           ofstream obs_output(output.c_str());
-          if(vm.count("hidden_states")) {
-            string hidden = vm["hidden_states"].as<string>();
-            ofstream hidden_output (hidden.c_str());
-            alignSeqs(model, seqs1, seqs2, names1, names2, obs_output, hidden_output);
-            hidden_output.close();
-          }
-          else {
-            alignSeqs(model, seqs1, seqs2, names1, names2, obs_output, std::cout);
-          }
+	  alignSeqs(model, seqs1, seqs2, names1, names2, obs_output);
           obs_output.close();
         }
         else {
-          if(vm.count("hidden_states")) {
-            string hidden = vm["hidden_states"].as<string>();
-            ofstream hidden_output (hidden.c_str());
-            alignSeqs(model, seqs1, seqs2, names1, names2, std::cout, hidden_output);
-            hidden_output.close();
-          }
-          else
-            alignSeqs(model, seqs1, seqs2, names1, names2, std::cout, std::cerr);
+	  alignSeqs(model, seqs1, seqs2, names1, names2, std::cout);
         }
 
     }
