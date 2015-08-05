@@ -41,32 +41,66 @@ ProbabilisticModelPtr TrainVariableLengthInhomogeneousMarkovChain::create(
                         parameters.getMandatoryParameterValue("length");
         ProbabilisticModelParameterValuePtr phasedpar =
                         parameters.getMandatoryParameterValue("phased");
+        ProbabilisticModelParameterValuePtr maxorderpar =
+                        parameters.getMandatoryParameterValue("maxorder");
+        ProbabilisticModelParameterValuePtr weightspar =
+                        parameters.getMandatoryParameterValue("weights");
 
         if ((alphabetpar == NULL) || (trainingsetpar == NULL)
             || (lengthpar == NULL) || (cutpar == NULL) || (phasedpar == NULL)) {
                 std::cerr << help() << std::endl;
                 exit(-1);
         }
+        std::map <std::string, double> weights;
+        if(weightspar != NULL) {
+          readMapFromFile(weights, weightspar->getString());
+        }
+
+
         AlphabetPtr alphabet = AlphabetPtr(new Alphabet());
         alphabet->initializeFromVector(alphabetpar ->getStringVector());
         SequenceEntryList sample_set;
         readSequencesFromFile(sample_set, alphabet, trainingsetpar->getString());
-        std::vector<std::string> cuts = cutpar->getStringVector();
+	double cut = cutpar->getDouble();
         int length = lengthpar->getInt();
         std::vector<ContextTreePtr> positional_distribution;
         int phased = phasedpar->getInt();
         positional_distribution.resize(length);
         sample_size = 0;
-        if ((int) cuts.size() < length) {
-                std::cerr
-                                << "ERROR: The number of cuts is smaller than the sequence length "
-                                << std::endl;
-                exit(-1);
-        }
-
-
+	int order = maxorderpar->getInt();
         for (int i = 0; i < length; i++) {
-                SequenceEntryList positionalSample;
+	  SequenceEntryList positionalSample;
+	  for(int j = 0; j < (int)sample_set.size(); j++)
+	  {
+	    int nseq = 0;
+	    std::string name = sample_set[j]->getName();
+	    while(true)
+	    {
+	      int start = (length) * nseq - order + i;
+	      if(start < 0) {
+		nseq++;
+		continue;
+	      }
+	      int end = (length) * nseq + i;
+	      if(end >= (int)(sample_set[j]->getSequence()).size())
+		break;
+	      Sequence s;
+	      for(int k = start; k <= end; k++)
+		s.push_back((sample_set[j]->getSequence())[k]);
+	      SequenceEntryPtr entry = SequenceEntryPtr (new SequenceEntry(alphabet));
+	      entry->setSequence(s);
+	      entry->setName(name);
+	      positionalSample.push_back(entry);
+	      nseq++;
+	    }
+	  }
+
+
+
+
+
+
+#if 0
                 int o = i;
                 for (int j = 0; j < (int) sample_set.size(); j++) {
                         if(!phased) {
@@ -107,23 +141,16 @@ ProbabilisticModelPtr TrainVariableLengthInhomogeneousMarkovChain::create(
                           }
                         }
                 }
-                ProbabilisticModelParameterValuePtr c = parameters.getOptionalParameterValue(cuts[i]);
-                if(c == NULL){
-                  std::cerr << "Undefined cut value for " << cuts[i] << std::endl;
-                  exit(-1);
-                }
-                double delta =
-                                (parameters.getOptionalParameterValue(cuts[i]))->getDouble();
-                ContextTreePtr tree = ContextTreePtr(new ContextTree(alphabet));
-                tree->initializeContextTreeRissanen(positionalSample);
-                tree->pruneTree(delta);
-                tree->removeContextNotUsed();
-                tree->normalize();
-                positional_distribution[i] = tree;
-        }
-        InhomogeneousMarkovChainPtr model = InhomogeneousMarkovChainPtr(new InhomogeneousMarkovChain());
+#endif
+		ContextTreePtr tree = ContextTreePtr(new ContextTree(alphabet));
+		tree->initializeCounter(positionalSample, order, 1, weights);
+		tree->pruneTreeSmallSampleSize(400);
+		tree->pruneTree(cut);
+		tree->normalize();
+		positional_distribution[i] = tree;
+	}
+	InhomogeneousMarkovChainPtr model = InhomogeneousMarkovChainPtr(new InhomogeneousMarkovChain());
         model->setPositionSpecificDistribution(positional_distribution);
-        model->phased(0);
         model->setAlphabet(alphabet);
         model->phased(phased);
         loglikelihood = 0.0;

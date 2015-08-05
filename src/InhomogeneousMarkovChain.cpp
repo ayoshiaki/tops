@@ -116,7 +116,7 @@ namespace tops{
 
         }
       if(!node->isLeaf())
-        for(int l = 0; l < node->alphabet_size(); l++)
+        for(int l = 0; l < (int)node->alphabet_size(); l++)
           if(node->getChild(l) != NULL)
             printDistribution(tree, node->getChild(l), out, alphabet);
     }
@@ -141,7 +141,7 @@ namespace tops{
       for(int l = 0; l < (int)alphabet()->size(); l++) {
         ContextTreeNodePtr n = _context_trees[phase]->createContext();
         DoubleVector prob;
-        for(int i = 0; i < n->alphabet_size(); i++)
+        for(int i = 0; i < (int)n->alphabet_size(); i++)
           prob.push_back(exp(c ->getDistribution()->log_probability_of(i)));
         DiscreteIIDModelPtr distr = DiscreteIIDModelPtr(new DiscreteIIDModel(prob));
         n->setDistribution(distr);
@@ -155,11 +155,11 @@ namespace tops{
 
     current->getDistribution()->log_probability_of(s[s.size()-1], -HUGE);
     double sum = 0;
-    for(int symbol = 0; symbol < alphabet()->size(); symbol++)
+    for(int symbol = 0; symbol < (int)alphabet()->size(); symbol++)
         {
             sum += exp(current->getDistribution()->log_probability_of(symbol));
         }
-    for(int symbol = 0; symbol < alphabet()->size(); symbol++)
+    for(int symbol = 0; symbol < (int)alphabet()->size(); symbol++)
         {
             if(symbol != s[s.size()-1]) {
                 double x = exp(current->getDistribution()->log_probability_of(symbol));
@@ -189,11 +189,11 @@ namespace tops{
 
     current->getDistribution()->log_probability_of(s[s.size()-1], -HUGE);
     double sum = 0;
-    for(int symbol = 0; symbol < alphabet()->size(); symbol++)
+    for(int symbol = 0; symbol < (int)alphabet()->size(); symbol++)
         {
             sum += exp(current->getDistribution()->log_probability_of(symbol));
         }
-    for(int symbol = 0; symbol < alphabet()->size(); symbol++)
+    for(int symbol = 0; symbol < (int)alphabet()->size(); symbol++)
         {
             if(symbol != s[s.size()-1]) {
                 double x = exp(current->getDistribution()->log_probability_of(symbol));

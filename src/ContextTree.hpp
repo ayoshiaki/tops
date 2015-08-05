@@ -174,6 +174,8 @@ namespace tops {
     //! Initialize context tree using the Rissanen algorithm
     void initializeContextTreeRissanen(const SequenceEntryList & sequences);
 
+    void initializeContextTreeRissanen(const SequenceEntryList & sequences, int order);
+
     DoubleMapParameterValuePtr getParameterValue () const;
 
     int getNumberOfNodes() const

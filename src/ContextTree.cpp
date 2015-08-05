@@ -488,13 +488,13 @@ namespace tops
 
   void ContextTree::pruneTree(double delta)
   {
-
     double sample_size = 0.0;
-    for (int l = 0; l < (int)_alphabet->size(); l++)
-      sample_size += (getRoot()->getCounter())[l];
     std::set<int> x = getLevelOneNodes();
     std::vector<int> nodesToPrune (x.begin(),x.end());
     std::set<int>::iterator it;
+
+    for(int m = 0; m < (int)_alphabet->size(); m++) 
+      sample_size += (getRoot()->getCounter())[m];
     double small_ = ((double)_alphabet->size())*log(sample_size);
 
     while(nodesToPrune.size() > 0)
@@ -504,15 +504,18 @@ namespace tops
         double total = 0.0;
         double total_diff = 0.0;
         ContextTreeNodePtr parentNode = getContext(id);
+	if (parentNode == NULL)
+	  continue;
         if(parentNode->isLeaf())
           break;
-
         for(int m = 0; m < (int)_alphabet->size(); m++)
           total += (parentNode->getCounter())[m];
         bool foundSmall = false;
         for (int l = 0; l < (int)_alphabet->size(); l++)
           {
             ContextTreeNodePtr childNode = parentNode->getChild(l);
+	    if (childNode == NULL)
+	      continue;
             double totalChild = 0.0;
             for(int m = 0; m < (int)_alphabet->size(); m++)
               totalChild+= (childNode->getCounter())[m];
@@ -550,6 +553,76 @@ namespace tops
                 }
             if(toPrune)
               nodesToPrune.push_back(parentNode2->id());
+          }
+      }
+  }
+
+  void ContextTree::initializeContextTreeRissanen(const SequenceEntryList & sequences, int maxorder)
+  {
+    ContextTreeNodePtr root = createContext();
+    for(int i = 0; i < (int)_alphabet->size(); i++)
+      root->addCount(i);
+
+    for(int s = 0; s < (int)sequences.size(); s++)
+      {
+        for(int i = 0; i < (int)(sequences[s]->getSequence()).size(); i++)
+          {
+            int v = (sequences[s]->getSequence())[i];
+            ContextTreeNodePtr w = root;
+            if((!w->isLeaf()) && ((w->getCounter())[v] == 1.0))
+              {
+                for(int l = 0; l < (int)_alphabet->size(); l++)
+                  {
+                    ContextTreeNodePtr n = w->getChild(l);
+                    n->addCount(v);
+                  }
+                w->addCount(v);
+                continue;
+              }
+            if(w->isLeaf() && ((w->getCounter())[v] == 1.0))
+              {
+                for(int l = 0; l < (int)_alphabet->size(); l++)
+                  {
+                    ContextTreeNodePtr n = createContext();
+                    n->addCount(v);
+                    w->setChild(n, l);
+                  }
+                w->addCount(v);
+                continue;
+              }
+            int j = i - 1;
+            if(j < 0)
+              w->addCount(v);
+	    int ord = maxorder;
+            while((j >= 0) && (ord >= 0))
+              {
+                int u = (sequences[s]->getSequence())[j];
+                w->addCount(v);
+                w = w->getChild(u);
+                if((!w->isLeaf()) && (w->getCounter())[v] == 1.0)
+                  {
+                    for(int l = 0; l < (int)_alphabet->size(); l++)
+                      {
+                        ContextTreeNodePtr n = w->getChild(l);
+                        n->addCount(v);
+                      }
+                    w->addCount(v);
+                    break;
+                  }
+                if(w->isLeaf() && ((w->getCounter())[v] == 1.0) )
+                  {
+                    for(int l = 0; l  < (int)_alphabet->size(); l++)
+                      {
+                        ContextTreeNodePtr n = createContext();
+                        n->addCount(v);
+                        w->setChild(n,l);
+                      }
+                    w->addCount(v);
+                    break;
+                  }
+                j = j-1;
+		ord--;
+              }
           }
       }
   }
