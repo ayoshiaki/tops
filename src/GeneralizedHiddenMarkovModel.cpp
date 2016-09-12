@@ -746,8 +746,7 @@ double GeneralizedHiddenMarkovModel::viterbi(const Sequence &s, Sequence &path,
 
   // initialization
   for (int k = 0; k < nstates; k++) {
-      gamma(k, 0) = getInitialProbabilities()->log_probability_of(k)
-          + _all_states[k]->observation()->prefix_sum_array_compute(0, 0);
+      gamma(k, 0) = getInitialProbabilities()->log_probability_of(k) + _all_states[k]->observation()->prefix_sum_array_compute(0, 0);
       possible_path[k] = 1;
       if(gamma(k,0) <= -HUGE)
           {
@@ -824,19 +823,24 @@ double GeneralizedHiddenMarkovModel::viterbi(const Sequence &s, Sequence &path,
 
   }
 #endif
-  while(L > 0){
+  while(1){
       int d = psilen(state, L);
       int p = psi(state, L);
+      if (L == 0) {
+	path[0] = state;
+	break;
+      }
       for(int i = 0; i < d; i++){
           path[L] = state;
+	  if(L==0) break;
           L--;
       }
-      if(d == 0)
+      if(L != 0 && d == 0)
           {
               std::cerr << "Something wrong: [ predicted state duration equals to " << d << "]" << std::endl;
               break;
           }
-      state = p;
+     state = p;
   }
 #if 0
   for(int i = 0; i < size ; i ++) {
