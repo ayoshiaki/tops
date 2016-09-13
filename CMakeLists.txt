@@ -10,7 +10,7 @@ find_package(Boost 1.50 COMPONENTS filesystem REQUIRED)
 
 # find_package(PerlLibs)
 # ADD_DEFINITIONS("-O0 -Wall -gdwarf-2")
-ADD_DEFINITIONS(" -O3 -finline-functions -funroll-loops -ffast-math  -g ")
+ADD_DEFINITIONS(" -O3  -funroll-loops -ffast-math  -g ")
 
 
 IF(UNIX)
