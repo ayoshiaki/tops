@@ -189,112 +189,111 @@ namespace tops {
     if(maxiterations < 0)
       maxiterations = 500;
 
-    for(int s = 0; s < (int)sample.size(); s++)
-      {
-        double last =10000;
-        for(int iterations = 0; iterations < maxiterations; iterations++)
+    for (int s = 0; s < (int)sample.size(); s++) {
+      double last =10000;
+
+      for(int iterations = 0; iterations < maxiterations; iterations++) {
+
+
+        Matrix A (nstates, nstates);
+        Matrix E (nstates,alphabet_size);
+        Matrix pi (nstates, 1);
+
+        Matrix alpha(nstates, sample[s].size());
+        Matrix beta(nstates, sample[s].size());
+
+        double P = forward(sample[s], alpha);
+        backward(sample[s], beta);
+
+        double sum = alpha(0, 0) + beta(0, 0);
+        for(int i = 1; i < nstates; i++)
+          sum = log_sum_2(sum, alpha(i,0) + beta(i,0));
+
+        for(int i = 0; i < nstates; i++){
+          pi(i, 0) = alpha(i, 0) + beta(i, 0) - sum;
+        }
+
+        for(int i = 0; i < nstates; i++)
+        {
+          for(int j = 0; j < nstates; j++)
           {
-
-            Matrix A (nstates, nstates);
-            Matrix E (nstates,alphabet_size);
-            Matrix pi (nstates, 1);
-
-            Matrix alpha(nstates, sample[s].size());
-            Matrix beta(nstates, sample[s].size());
-
-            double P = forward(sample[s], alpha);
-
-            double sum = alpha(0, 0) + beta(0, 0);
-            for(int i = 1; i < nstates; i++)
-              sum = log_sum_2(sum, alpha(i,0) + beta(i,0));
-
-            for(int i = 0; i < nstates; i++){
-              pi(i, 0) = alpha(i, 0) + beta(i, 0) - sum;
+            int t = 0;
+            double sum = -HUGE;
+            if(t < (int)sample[s].size()-1) {
+              sum = alpha(i, t) + getState(i)->transitions()->log_probability_of(j) + getState(j)->emission()-> log_probability_of(sample[s][t+1]) + beta(j, t+1);
+              for( t = 1; t < (int)sample[s].size()-1; t++)
+              {
+                sum = log_sum_2(sum, alpha(i, t) + getState(i)->transitions()->log_probability_of(j) + getState(j)->emission()-> log_probability_of(sample[s][t+1]) + beta(j, t+1));
+              }
             }
-
-            for(int i = 0; i < nstates; i++)
-              {
-                for(int j = 0; j < nstates; j++)
-                  {
-                    int t = 0;
-                    double sum = -HUGE;
-                    if(t < (int)sample[s].size()-1) {
-                      sum = alpha(i, t) + getState(i)->transitions()->log_probability_of(j) + getState(j)->emission()-> log_probability_of(sample[s][t+1]) + beta(j, t+1);
-                      for( t = 1; t < (int)sample[s].size()-1; t++)
-                        {
-                          sum = log_sum_2(sum, alpha(i, t) + getState(i)->transitions()->log_probability_of(j) + getState(j)->emission()-> log_probability_of(sample[s][t+1]) + beta(j, t+1));
-                        }
-                    }
-                    A(i,j) =  sum;
-                  }
-                for(int sigma = 0; sigma < alphabet_size; sigma++)
-                  {
-                    int t = 0;
-                    double sum = -HUGE;
-                    bool first = true;
-                    for(t = 0; t < (int)sample[s].size(); t++)
-                      {
-                        if((sigma == sample[s][t]) && first){
-                          sum =  alpha(i, t) + beta(i,t);
-                          first = false;
-                        }else if(sigma == sample[s][t]) {
-                          sum  = log_sum_2(sum, alpha(i,t) + beta(i,t));
-                        }
-                      }
-                    E(i, sigma) =  sum ;
-                  }
-              }
-
-
-
-            Matrix sumA(1, nstates);
-            Matrix sumE(1, alphabet_size);
-            for(int k = 0; k < nstates; k++)
-              {
-                int l = 0;
-                if(l < nstates) {
-                  sumA(0, k) = A(k, l);
-                  for(l = 1; l < nstates; l++)
-                    sumA(0, k) = log_sum_2(sumA(0,k), A(k,l));
-                }
-                int b = 0;
-                if(b < alphabet_size) {
-                  sumE(0, k) = E(k,b);
-                  for( b = 1; b < alphabet_size; b++)
-                    sumE(0, k) = log_sum_2(sumE(0, k), E(k,b));
-                }
-              }
-            std::vector <double> probs;
-            probs.resize(nstates);
-            for(int k = 0; k < nstates; k++)
-              {
-                _initial_probability->log_probability_of(k,pi(k,0) );
-                for(int l = 0; l < nstates; l++)
-                  {
-                    A(k,l) = A(k,l) - sumA(0,k);
-                    getState(k)->transitions()->log_probability_of(l, A(k,l));
-                  }
-                for(int b = 0; b <alphabet_size; b++){
-                  E(k,b) = E(k,b) - sumE(0,k);
-                  getState(k)->emission()->log_probability_of(b, E(k,b));
-                }
-              }
-
-            diff = fabs(last - P);
-#if 0 
-            if(diff < diff_threshold)
-                break;
-#endif
-#if 1
-            std::cerr << "iteration: " << iterations << std::endl;
-            fprintf(stderr, "LL: %lf\n" , P );
-            std::cerr << "Diff: " << diff << std::endl;
-#endif
-            last = P;
+            A(i,j) =  sum;
           }
+          for(int sigma = 0; sigma < alphabet_size; sigma++)
+          {
+            int t = 0;
+            double sum = -HUGE;
+            bool first = true;
+            for(t = 0; t < (int)sample[s].size(); t++)
+            {
+              if((sigma == sample[s][t]) && first){
+                sum =  alpha(i, t) + beta(i,t);
+                first = false;
+              }else if(sigma == sample[s][t]) {
+                sum  = log_sum_2(sum, alpha(i,t) + beta(i,t));
+              }
+            }
+            E(i, sigma) =  sum ;
+          }
+        }
+
+
+
+        Matrix sumA(1, nstates);
+        Matrix sumE(1, alphabet_size);
+        for(int k = 0; k < nstates; k++)
+        {
+          int l = 0;
+          if(l < nstates) {
+            sumA(0, k) = A(k, l);
+            for(l = 1; l < nstates; l++)
+              sumA(0, k) = log_sum_2(sumA(0,k), A(k,l));
+          }
+          int b = 0;
+          if(b < alphabet_size) {
+            sumE(0, k) = E(k,b);
+            for( b = 1; b < alphabet_size; b++)
+              sumE(0, k) = log_sum_2(sumE(0, k), E(k,b));
+          }
+        }
+        std::vector <double> probs;
+        probs.resize(nstates);
+        for(int k = 0; k < nstates; k++)
+        {
+          _initial_probability->log_probability_of(k,pi(k,0) );
+          for(int l = 0; l < nstates; l++)
+          {
+            A(k,l) = A(k,l) - sumA(0,k);
+            getState(k)->transitions()->log_probability_of(l, A(k,l));
+          }
+          for(int b = 0; b <alphabet_size; b++){
+            E(k,b) = E(k,b) - sumE(0,k);
+            getState(k)->emission()->log_probability_of(b, E(k,b));
+          }
+        }
+
+        diff = fabs(last - P);
+
+        if(diff < diff_threshold)
+          break;
+
+        // std::cerr << "iteration: " << iterations << std::endl;
+        // fprintf(stderr, "LL: %lf\n" , P );
+        // std::cerr << "Diff: " << diff << std::endl;
+        // std::cerr << str() << std::endl;
+
+        last = P;
       }
-
-
+    }
 
   }
 
