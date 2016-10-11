@@ -59,23 +59,19 @@ Installing ToPS
 
        cd tops
 
-   3.  Update googletest submodule
-
-       git submodule update --init
-
-   4. Run the configuration script:
+   3. Run the configuration script:
 
       cmake .
 
-   5. Run make
+   4. Run make
 
        make
 
-   6. Run make install
+   5. Run make install
 
       sudo make install
 
-   7. If you are using linux run ldconfig
+   6. If you are using linux run ldconfig
 
       sudo ldconfig
 
