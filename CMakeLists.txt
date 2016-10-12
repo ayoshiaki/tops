@@ -2,6 +2,7 @@ project(ToPS)
 cmake_minimum_required(VERSION 2.6)
 set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR})
 
+set(Boost_USE_STATIC_LIBS   ON)
 find_package(Boost 1.50 COMPONENTS regex REQUIRED)
 find_package(Boost 1.50 COMPONENTS program_options REQUIRED)
 find_package(Boost 1.50 COMPONENTS date_time REQUIRED)
