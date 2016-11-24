@@ -751,6 +751,11 @@ double GeneralizedHiddenMarkovModel::viterbi(const Sequence &s, Sequence &path,
     else 
       gamma(k, 0) = getInitialProbabilities()->log_probability_of(k) + _all_states[k]->observation()->prefix_sum_array_compute(0, 0, _all_states[k]->getInputPhase());
 
+    psi(k, 0)= 0;
+    psilen(k , 0) = 0;
+
+
+
       possible_path[k] = 1;
       if(gamma(k,0) <= -HUGE)
 	possible_path[k] = 0;
@@ -777,10 +782,12 @@ double GeneralizedHiddenMarkovModel::viterbi(const Sequence &s, Sequence &path,
 
   for(int i = 1; i < size; i++){
       for(int k = 0; k < nstates; k++){
-          gamma(k, i) = -HUGE;
           possible_path[k] = 1;
-          _all_states[k]->findBestPredecessor (gamma, psi, psilen,  s, i, _all_states, valid_positions);
-          if(gamma(k,i) <= -HUGE)
+	  gamma(k, i) = -HUGE;
+	  psi(k, i)= 0;
+	  psilen(k , i) = 0;
+	  _all_states[k]->findBestPredecessor (gamma, psi, psilen,  s, i, _all_states, valid_positions);
+	  if(gamma(k,i) <= -HUGE)
 	    possible_path[k] = 0;
       }
       for(int s = 0; s < (int)possible_path.size(); s++)

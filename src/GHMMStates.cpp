@@ -42,6 +42,10 @@ namespace tops{
 
     void GHMMState::findBestPredecessor (Matrix & gamma, Matrix &psi, IntMatrix &psilen, const Sequence & s, int base, const GHMMStates & all_states, std::map < int, std::list<int> >  & valid_positions){
         int d = 1;
+
+	gamma(id(), base) = -HUGE;
+	psi(id(), base) = 0;
+	psilen(id(), base) = 0;
         if(predecessors().size() <= 0)
             return;
 
@@ -59,11 +63,12 @@ namespace tops{
         int phase = getInputPhase();
         gmax = gmax + duration_probability(d) + observation()->prefix_sum_array_compute(base-d +1, base, phase);
 
-        if(gamma(id(), base) < gmax){
-            gamma(id(), base) = gmax;
-            psi(id(), base) = pmax;
-            psilen(id(), base) = d;
-        }
+	if(gmax > gamma(id(), base)) {
+	  gamma(id(), base) = gmax;
+	  psi(id(), base) = pmax;
+	  psilen(id(), base) = d;
+	}
+
     }
 
     void GHMMState::choosePredecessor (Matrix & alpha, int base, int & state, int & position, const GHMMStates & all_states) {
@@ -339,6 +344,10 @@ namespace tops{
 
     void GHMMSignalState::findBestPredecessor (Matrix & gamma, Matrix &psi, IntMatrix &psilen, const Sequence & s, int base, const GHMMStates & all_states, std::map < int, std::list<int> >  & valid_positions){
         int d = size();
+
+	gamma(id(), base) = -HUGE;
+	psi(id(), base) = 0;
+	psilen(id(), base) = 0;
         if(predecessors().size() <= 0)
             return;
 
@@ -356,13 +365,12 @@ namespace tops{
             }
         }
         int phase = getInputPhase();
-        gmax = gmax + duration_probability(d) + observation()->prefix_sum_array_compute(base-d +1, base, phase);
-
-        if(gamma(id(), base) < gmax){
-            gamma(id(), base) = gmax;
-            psi(id(), base) = pmax;
-            psilen(id(), base) = d;
-        }
+	gmax = gmax + duration_probability(d) + observation()->prefix_sum_array_compute(base-d +1, base, phase);
+	if(gmax > gamma(id(), base)) {
+	  gamma(id(), base) = gmax;
+	  psi(id(), base) = pmax;
+	  psilen(id(), base) = d;
+	}
     }
 
 
@@ -452,6 +460,9 @@ namespace tops{
       if(offset > 15000)
 	offset = 15000;
 
+	gamma(id(), base) = -HUGE;
+	psi(id(), base) = 0;
+	psilen(id(), base) = 0;
 #if 0
       bool toContinue = false;
       for(int suc = 0; suc < (int)successors().size(); suc++)
@@ -537,7 +548,7 @@ namespace tops{
 
 	gmax = gmax + dur + observation()->prefix_sum_array_compute(d, base, getInputPhase()); 
 
-	if(gamma(id(), base) < gmax){
+	if (gmax > gamma(id(), base)) {
 	  gamma(id(), base) = gmax;
 	  psi(id(), base) = pmax;
 	  psilen(id(), base) = base-d+1;
