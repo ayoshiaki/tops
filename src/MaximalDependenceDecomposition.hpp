@@ -113,7 +113,7 @@ namespace tops {
     ConsensusSequence _consensus_sequence;
     ProbabilisticModelPtr _consensus_model;
     AlphabetPtr _alphabet;
-    vector<double> _prefix_sum_array;
+    DoubleVector _prefix_sum_array;
   };
 
   typedef boost::shared_ptr<MaximalDependenceDecomposition> MaximalDependenceDecompositionPtr;

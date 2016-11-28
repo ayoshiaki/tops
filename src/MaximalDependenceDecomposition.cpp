@@ -76,6 +76,8 @@ namespace tops {
   double MaximalDependenceDecomposition::prefix_sum_array_compute(int begin , int end) {
     if ((end - begin + 1) != _consensus_sequence.size())
       return -HUGE;
+    if(begin >= _prefix_sum_array.size())
+      return -HUGE;
     return _prefix_sum_array[begin];
   }
 
