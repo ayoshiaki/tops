@@ -98,7 +98,7 @@ namespace tops {
     virtual std::string durationModelName() const;
     virtual void fixTransitionDistribution () const {} ;
     virtual ProbabilisticModelParameters parameters() const;
-    virtual void findBestPredecessor (Matrix & gamma, Matrix &psi, Matrix &psilen, const Sequence & s, int base, const GHMMStates & all_states, std::map < int, std::list<int> >  & valid_positions );
+    virtual void findBestPredecessor (Matrix & gamma, Matrix &psi, IntMatrix &psilen, const Sequence & s, int base, const GHMMStates & all_states, std::map < int, std::list<int> >  & valid_positions );
     virtual void forwardSum (Matrix & alpha, const Sequence & s, int base, const GHMMStates & all_states, std::vector< std::list<int> > &valid_positions);
     virtual double backwardSum(Matrix &beta, const Sequence &s, int base, std::vector< std::list<int> > &valid_positions);
     virtual void posteriorSum (Matrix & alpha, Matrix &beta, fMatrix &postProbs, const Sequence & s, int base, const GHMMStates & all_states, std::vector< std::list<int> > &valid_positions, double prob, int stateNumber);
@@ -135,10 +135,11 @@ namespace tops {
     virtual void setThreshold(double threshold) ;
     virtual double duration_probability(int l) const ;
     virtual std::string str() const ;
+    virtual bool isGeometricDuration() const ;
 
     virtual ProbabilisticModelParameters parameters() const;
     virtual void fixTransitionDistribution () const ;
-      virtual void findBestPredecessor (Matrix & gamma, Matrix &psi, Matrix &psilen, const Sequence & s, int base, const GHMMStates & all_states, std::map < int, std::list<int> >  & valid_positions );
+      virtual void findBestPredecessor (Matrix & gamma, Matrix &psi, IntMatrix &psilen, const Sequence & s, int base, const GHMMStates & all_states, std::map < int, std::list<int> >  & valid_positions );
       virtual void forwardSum (Matrix & alpha, const Sequence & s, int base, const GHMMStates & all_states, std::vector< std::list<int> > &valid_positions);
     virtual double backwardSum(Matrix &beta, const Sequence &s, int base, std::vector< std::list<int> > &valid_positions);
     virtual void posteriorSum (Matrix & alpha, Matrix &beta, fMatrix &postProbs, const Sequence & s, int base, const GHMMStates & all_states, std::vector< std::list<int> > &valid_positions, double prob, int stateNumber);
@@ -160,7 +161,7 @@ namespace tops {
     GHMMExplicitDurationState(ProbabilisticModelPtr observation,
                               DiscreteIIDModelPtr transition, SymbolPtr name) :
       GHMMState(observation, transition, name) {};
-      virtual void findBestPredecessor (Matrix & gamma, Matrix &psi, Matrix &psilen, const Sequence & s, int base, const GHMMStates & all_states, std::map < int, std::list<int> >  & valid_positions );
+      virtual void findBestPredecessor (Matrix & gamma, Matrix &psi, IntMatrix &psilen, const Sequence & s, int base, const GHMMStates & all_states, std::map < int, std::list<int> >  & valid_positions );
       virtual void forwardSum (Matrix & alpha, const Sequence & s, int base, const GHMMStates & all_states, std::vector< std::list<int> > &valid_positions);
     virtual double backwardSum(Matrix &beta, const Sequence &s, int base, std::vector< std::list<int> > &valid_positions);
     virtual void posteriorSum (Matrix & alpha, Matrix &beta, fMatrix &postProbs, const Sequence & s, int base, const GHMMStates & all_states, std::vector< std::list<int> > &valid_positions, double prob, int stateNumber);
