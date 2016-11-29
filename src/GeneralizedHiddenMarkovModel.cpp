@@ -666,9 +666,9 @@ double GeneralizedHiddenMarkovModel::_viterbi(const Sequence &s, Sequence &path,
   int nstates = _all_states.size();
   initialize_prefix_sum_arrays(s);
 
-  Matrix gamma(nstates, size);
-  Matrix psi(nstates, size);
-  IntMatrix psilen(nstates, size);
+  Matrix gamma(nstates, size, -HUGE);
+  Matrix psi(nstates, size, 0 );
+  IntMatrix psilen(nstates, size, 0);
 
   // initialization
   for (int k = 0; k < nstates; k++) {
@@ -683,9 +683,9 @@ double GeneralizedHiddenMarkovModel::_viterbi(const Sequence &s, Sequence &path,
         double gmax = gamma(0, i-d) + _all_states[0]->transition()->log_probability_of(k);
         int pmax = 0;
         for(int p = 1; p < nstates; p++){
-          double g = gamma(p, i-d) + _all_states[p]->transition()->log_probability_of(k);
-          if(gmax < g){
-            gmax = g;
+          double g1 = gamma(p, i-d) + _all_states[p]->transition()->log_probability_of(k);
+          if(gmax < g1){
+            gmax = g1;
             pmax = p;
           }
         }
@@ -731,9 +731,13 @@ double GeneralizedHiddenMarkovModel::viterbi(const Sequence &s, Sequence &path,
 
   initialize_prefix_sum_arrays(s);
 
-  Matrix gamma(nstates, size);
-  Matrix psi(nstates, size);
-  IntMatrix psilen(nstates, size);
+  Matrix gamma(nstates, size, 0);
+  Matrix psi(nstates, size, 0);
+  IntMatrix psilen(nstates, size, 0 );
+
+  for (int k = 0; k <  nstates; k++)
+    for(int i = 0; i < size; i++)
+      gamma(k, i) = -HUGE;
 
   std::map < int, std::list<int>  > valid_positions;
   std::list <int> e;
@@ -815,8 +819,8 @@ double GeneralizedHiddenMarkovModel::viterbi(const Sequence &s, Sequence &path,
   path.resize(size);
 
   int state = 0;
-  double max = gamma(0, L);
-  for(int k = 1; k < nstates; k++){
+  double max = -HUGE;
+  for(int k = 0; k < nstates; k++){
     if(max < gamma(k, L)){
         max = gamma(k, L) ;
         state = k;
