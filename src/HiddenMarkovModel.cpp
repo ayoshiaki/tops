@@ -246,17 +246,16 @@ namespace tops {
           }
         }
 
-
-
         Matrix sumA(1, nstates);
-        Matrix sumE(1, alphabet_size);
+        Matrix sumE(1, nstates);
         for(int k = 0; k < nstates; k++)
         {
           int l = 0;
           if(l < nstates) {
             sumA(0, k) = A(k, l);
-            for(l = 1; l < nstates; l++)
+            for(l = 1; l < nstates; l++) {
               sumA(0, k) = log_sum_2(sumA(0,k), A(k,l));
+            }
           }
           int b = 0;
           if(b < alphabet_size) {
