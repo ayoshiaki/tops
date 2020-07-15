@@ -1,4 +1,5 @@
 #include "ChiSquare.hpp"
+#include "util.hpp"
 
 namespace tops {
 
@@ -43,7 +44,7 @@ namespace tops {
       if (p >= prob[i]) {
         if (i == 0)
           pi = 0;
-        else if (abs(p - prob[i]) > abs(p - prob[i-1]))
+        else if (fabs(p - prob[i]) > fabs(p - prob[i-1]))
           pi = i-1;
         else
           pi = i;
@@ -61,7 +62,7 @@ namespace tops {
     while ((df - dfi) > 0) {
       dfi += 10;
       if (dfi == 80) {
-        if (abs(df - 80) > abs(df - 100))
+        if (fabs(df - 80) > fabs(df - 100))
           return 30;
         else
           return 29;
