@@ -121,5 +121,9 @@ namespace tops {
   void readMapFromFile(std::map<std::string, double> & s, std::string  file_name);
 
 
+#ifndef HUGE
+#include <limits>
+#define HUGE (std::numeric_limits<double>::max())
+#endif
 }
 #endif
