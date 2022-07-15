@@ -2,7 +2,7 @@
  *       Alphabet.hpp
  *
  *       Copyright 2011 Andre Yoshiaki Kashiwabara <akashiwabara@usp.br>
- *                      Ígor Bonadio <ibonadio@ime.usp.br>
+ *                      ï¿½gor Bonadio <ibonadio@ime.usp.br>
  *                      Vitor Onuchic <vitoronuchic@gmail.com>
  *                      Alan Mitchell Durham <aland@usp.br>
  *
@@ -53,7 +53,7 @@ namespace tops {
       \param name is the symbol name
     */
     SymbolPtr createSymbol(const std::string & name);
-    SymbolPtr createSymbol(char * name);
+    SymbolPtr createSymbol(const char * name);
     //! Returns the maximum length of the symbol
     unsigned int maxSymbolSize();
 
