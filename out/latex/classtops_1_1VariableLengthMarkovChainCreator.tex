@@ -1,0 +1,92 @@
+\hypertarget{classtops_1_1VariableLengthMarkovChainCreator}{}\section{tops\+:\+:Variable\+Length\+Markov\+Chain\+Creator Class Reference}
+\label{classtops_1_1VariableLengthMarkovChainCreator}\index{tops\+::\+Variable\+Length\+Markov\+Chain\+Creator@{tops\+::\+Variable\+Length\+Markov\+Chain\+Creator}}
+
+
+This class is a factory for the variable length markov chain.  
+
+
+
+
+{\ttfamily \#include $<$Variable\+Length\+Markov\+Chain\+Creator.\+hpp$>$}
+
+
+
+Inheritance diagram for tops\+:\+:Variable\+Length\+Markov\+Chain\+Creator\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=218pt]{classtops_1_1VariableLengthMarkovChainCreator__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for tops\+:\+:Variable\+Length\+Markov\+Chain\+Creator\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=218pt]{classtops_1_1VariableLengthMarkovChainCreator__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual Probabilistic\+Model\+Ptr \hyperlink{classtops_1_1VariableLengthMarkovChainCreator_a7b5275f19b97f4060274a7f8ec4f016b}{create} (\hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} \&parameters) const
+\begin{DoxyCompactList}\small\item\em Creates a probabilistic model. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1VariableLengthMarkovChainCreator_acf02afd89f6d8d51478b13469cc97b7d}\label{classtops_1_1VariableLengthMarkovChainCreator_acf02afd89f6d8d51478b13469cc97b7d}} 
+virtual Variable\+Length\+Markov\+Chain\+Ptr {\bfseries create\+V\+L\+MC} (\hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} \&parameters) const
+\item 
+\mbox{\Hypertarget{classtops_1_1VariableLengthMarkovChainCreator_aaf10a74d2a592983790df5fd0a957724}\label{classtops_1_1VariableLengthMarkovChainCreator_aaf10a74d2a592983790df5fd0a957724}} 
+virtual std\+::string \hyperlink{classtops_1_1VariableLengthMarkovChainCreator_aaf10a74d2a592983790df5fd0a957724}{help} () const
+\begin{DoxyCompactList}\small\item\em This method returns a help message. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1VariableLengthMarkovChainCreator_ac1d49fc6a6e1370337947243c8d3cd2f}\label{classtops_1_1VariableLengthMarkovChainCreator_ac1d49fc6a6e1370337947243c8d3cd2f}} 
+virtual std\+::string {\bfseries factory\+\_\+name} () const
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+This class is a factory for the variable length markov chain. 
+
+Definition at line 37 of file Variable\+Length\+Markov\+Chain\+Creator.\+hpp.
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classtops_1_1VariableLengthMarkovChainCreator_a7b5275f19b97f4060274a7f8ec4f016b}\label{classtops_1_1VariableLengthMarkovChainCreator_a7b5275f19b97f4060274a7f8ec4f016b}} 
+\index{tops\+::\+Variable\+Length\+Markov\+Chain\+Creator@{tops\+::\+Variable\+Length\+Markov\+Chain\+Creator}!create@{create}}
+\index{create@{create}!tops\+::\+Variable\+Length\+Markov\+Chain\+Creator@{tops\+::\+Variable\+Length\+Markov\+Chain\+Creator}}
+\subsubsection{\texorpdfstring{create()}{create()}}
+{\footnotesize\ttfamily Probabilistic\+Model\+Ptr tops\+::\+Variable\+Length\+Markov\+Chain\+Creator\+::create (\begin{DoxyParamCaption}\item[{\hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} \&}]{parameters }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Creates a probabilistic model. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em parameters} & is a set of parameters that is utilized to build the model \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented from \hyperlink{classtops_1_1ProbabilisticModelCreator_afed6c8ffa45fff446bdaa8b533da8f7c}{tops\+::\+Probabilistic\+Model\+Creator}.
+
+
+
+Definition at line 34 of file Variable\+Length\+Markov\+Chain\+Creator.\+cpp.
+
+
+\begin{DoxyCode}
+34                                                                                                            
+           \{
+35     VariableLengthMarkovChainPtr mc = createVLMC(parameters);
+36     \textcolor{keywordflow}{return} mc;
+37   \}
+\end{DoxyCode}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/Variable\+Length\+Markov\+Chain\+Creator.\+hpp\item 
+src/Variable\+Length\+Markov\+Chain\+Creator.\+cpp\end{DoxyCompactItemize}

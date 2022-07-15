@@ -1,0 +1,63 @@
+\hypertarget{classtops_1_1GeneralizedPairHiddenMarkovModel}{}\section{tops\+:\+:Generalized\+Pair\+Hidden\+Markov\+Model Class Reference}
+\label{classtops_1_1GeneralizedPairHiddenMarkovModel}\index{tops\+::\+Generalized\+Pair\+Hidden\+Markov\+Model@{tops\+::\+Generalized\+Pair\+Hidden\+Markov\+Model}}
+
+
+Inheritance diagram for tops\+:\+:Generalized\+Pair\+Hidden\+Markov\+Model\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=221pt]{classtops_1_1GeneralizedPairHiddenMarkovModel__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for tops\+:\+:Generalized\+Pair\+Hidden\+Markov\+Model\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=221pt]{classtops_1_1GeneralizedPairHiddenMarkovModel__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classtops_1_1GeneralizedPairHiddenMarkovModel_a7419fbad2199f504b84f492be603281a}\label{classtops_1_1GeneralizedPairHiddenMarkovModel_a7419fbad2199f504b84f492be603281a}} 
+virtual void {\bfseries initialize} (const \hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} \&par)
+\item 
+\mbox{\Hypertarget{classtops_1_1GeneralizedPairHiddenMarkovModel_a1f5984bf7b929bf2619c93a01e7d582e}\label{classtops_1_1GeneralizedPairHiddenMarkovModel_a1f5984bf7b929bf2619c93a01e7d582e}} 
+virtual std\+::string \hyperlink{classtops_1_1GeneralizedPairHiddenMarkovModel_a1f5984bf7b929bf2619c93a01e7d582e}{model\+\_\+name} () const
+\begin{DoxyCompactList}\small\item\em returns the model name \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1GeneralizedPairHiddenMarkovModel_ae059692ad74c1052d4e7b3eaa3a4f17d}\label{classtops_1_1GeneralizedPairHiddenMarkovModel_ae059692ad74c1052d4e7b3eaa3a4f17d}} 
+virtual \hyperlink{classtops_1_1PairDecodableModel}{Pair\+Decodable\+Model} $\ast$ {\bfseries pair\+Decodable} ()
+\item 
+\mbox{\Hypertarget{classtops_1_1GeneralizedPairHiddenMarkovModel_a04f95a6d9a7a7117623a4e2d0843b663}\label{classtops_1_1GeneralizedPairHiddenMarkovModel_a04f95a6d9a7a7117623a4e2d0843b663}} 
+void {\bfseries set\+Initial\+Probabilities} (Discrete\+I\+I\+D\+Model\+Ptr init)
+\item 
+\mbox{\Hypertarget{classtops_1_1GeneralizedPairHiddenMarkovModel_a11a0385fdc0a6193f171da0c14143556}\label{classtops_1_1GeneralizedPairHiddenMarkovModel_a11a0385fdc0a6193f171da0c14143556}} 
+Discrete\+I\+I\+D\+Model\+Ptr {\bfseries initial\+Probabilities} ()
+\item 
+\mbox{\Hypertarget{classtops_1_1GeneralizedPairHiddenMarkovModel_a012f49565891748243f04d3ee60bfad4}\label{classtops_1_1GeneralizedPairHiddenMarkovModel_a012f49565891748243f04d3ee60bfad4}} 
+double {\bfseries forward} (const Sequence \&seq1, const Sequence \&seq2, vector$<$ Matrix $>$ \&a)
+\item 
+\mbox{\Hypertarget{classtops_1_1GeneralizedPairHiddenMarkovModel_a5f0fe994bb25852ea65d2f0b547918d1}\label{classtops_1_1GeneralizedPairHiddenMarkovModel_a5f0fe994bb25852ea65d2f0b547918d1}} 
+virtual double {\bfseries backward} (const Sequence \&seq1, const Sequence \&seq2, vector$<$ Matrix $>$ \&a)
+\item 
+\mbox{\Hypertarget{classtops_1_1GeneralizedPairHiddenMarkovModel_aa472191f618dded4021c29997e9aaa43}\label{classtops_1_1GeneralizedPairHiddenMarkovModel_aa472191f618dded4021c29997e9aaa43}} 
+virtual double {\bfseries viterbi} (const Sequence \&seq1, const Sequence \&seq2, Sequence \&path, Sequence \&al1, Sequence \&al2, vector$<$ Matrix $>$ \&a)
+\end{DoxyCompactItemize}
+\subsection*{Additional Inherited Members}
+
+
+\subsection{Detailed Description}
+
+
+Definition at line 88 of file Generalized\+Pair\+Hidden\+Markov\+Model.\+hpp.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/Generalized\+Pair\+Hidden\+Markov\+Model.\+hpp\item 
+src/Generalized\+Pair\+Hidden\+Markov\+Model.\+cpp\end{DoxyCompactItemize}

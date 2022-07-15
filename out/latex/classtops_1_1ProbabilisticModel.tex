@@ -1,0 +1,141 @@
+\hypertarget{classtops_1_1ProbabilisticModel}{}\section{tops\+:\+:Probabilistic\+Model Class Reference}
+\label{classtops_1_1ProbabilisticModel}\index{tops\+::\+Probabilistic\+Model@{tops\+::\+Probabilistic\+Model}}
+
+
+This is an abstract class representing a generative probabilistic model.  
+
+
+
+
+{\ttfamily \#include $<$Probabilistic\+Model.\+hpp$>$}
+
+
+
+Inheritance diagram for tops\+:\+:Probabilistic\+Model\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classtops_1_1ProbabilisticModel__inherit__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classtops_1_1ProbabilisticModel_a79e266e7d01a22b1a4dea5dd3d77d468}\label{classtops_1_1ProbabilisticModel_a79e266e7d01a22b1a4dea5dd3d77d468}} 
+{\bfseries Probabilistic\+Model} (Alphabet\+Ptr alpha)
+\item 
+\mbox{\Hypertarget{classtops_1_1ProbabilisticModel_a6c7312aec9b63195c18f49d75399f61f}\label{classtops_1_1ProbabilisticModel_a6c7312aec9b63195c18f49d75399f61f}} 
+virtual double \hyperlink{classtops_1_1ProbabilisticModel_a6c7312aec9b63195c18f49d75399f61f}{evaluate} (const Sequence \&s, unsigned int begin, unsigned int end) const
+\begin{DoxyCompactList}\small\item\em Calculates the sequence likelihood given this model. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1ProbabilisticModel_aedb06966b655ff01de373fafc5449c8d}\label{classtops_1_1ProbabilisticModel_aedb06966b655ff01de373fafc5449c8d}} 
+virtual double \hyperlink{classtops_1_1ProbabilisticModel_aedb06966b655ff01de373fafc5449c8d}{evaluate\+Position} (const Sequence \&s, unsigned int i) const
+\begin{DoxyCompactList}\small\item\em Calculates the probability of Pr(Si = s\mbox{[}i\mbox{]} $\vert$ s\mbox{[}i-\/1\mbox{]},...,s\mbox{[}0\mbox{]}) \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1ProbabilisticModel_a759335f8c811c1fcc9a64a77f3753420}\label{classtops_1_1ProbabilisticModel_a759335f8c811c1fcc9a64a77f3753420}} 
+virtual double \hyperlink{classtops_1_1ProbabilisticModel_a759335f8c811c1fcc9a64a77f3753420}{evaluate\+Position} (const Sequence \&s, int i, int t) const
+\begin{DoxyCompactList}\small\item\em Calculates the probability of Pr\+\_\+t(Si = s\mbox{[}i\mbox{]} $\vert$ s\mbox{[}i-\/1\mbox{]},...,s\mbox{[}0\mbox{]}) \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1ProbabilisticModel_a861d4381848b9e8d5794d546fd145599}\label{classtops_1_1ProbabilisticModel_a861d4381848b9e8d5794d546fd145599}} 
+virtual double \hyperlink{classtops_1_1ProbabilisticModel_a861d4381848b9e8d5794d546fd145599}{choose} () const
+\begin{DoxyCompactList}\small\item\em Choose a symbol. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1ProbabilisticModel_a00ccd90f44ba06d2419011947aa0a44c}\label{classtops_1_1ProbabilisticModel_a00ccd90f44ba06d2419011947aa0a44c}} 
+virtual Sequence \& {\bfseries choose} (Sequence \&h, int \hyperlink{classtops_1_1ProbabilisticModel_a4e3910e9b9b848b7078e7101909ae82a}{size}) const
+\item 
+\mbox{\Hypertarget{classtops_1_1ProbabilisticModel_a2fb9f5efd989dca9bbfe5606dcf1ca8d}\label{classtops_1_1ProbabilisticModel_a2fb9f5efd989dca9bbfe5606dcf1ca8d}} 
+virtual Sequence \& {\bfseries choose} (Sequence \&h, int initial\+\_\+phase, int \hyperlink{classtops_1_1ProbabilisticModel_a4e3910e9b9b848b7078e7101909ae82a}{size}) const
+\item 
+\mbox{\Hypertarget{classtops_1_1ProbabilisticModel_abff09b1fae1a63c8af61c66219dc08c4}\label{classtops_1_1ProbabilisticModel_abff09b1fae1a63c8af61c66219dc08c4}} 
+virtual Sequence \& {\bfseries choose} (Sequence \&h, Sequence \&path, int \hyperlink{classtops_1_1ProbabilisticModel_a4e3910e9b9b848b7078e7101909ae82a}{size}) const
+\item 
+\mbox{\Hypertarget{classtops_1_1ProbabilisticModel_a321b0383ae7e08f7070d1334f24c9122}\label{classtops_1_1ProbabilisticModel_a321b0383ae7e08f7070d1334f24c9122}} 
+virtual Sequence \& {\bfseries choose} (Sequence \&h, Sequence \&path, int i, int \hyperlink{classtops_1_1ProbabilisticModel_a4e3910e9b9b848b7078e7101909ae82a}{size}) const
+\item 
+\mbox{\Hypertarget{classtops_1_1ProbabilisticModel_a05c51b45ddd2430eb03a0331f7855b80}\label{classtops_1_1ProbabilisticModel_a05c51b45ddd2430eb03a0331f7855b80}} 
+virtual Sequence \& {\bfseries choose\+With\+History} (Sequence \&h, int i, int \hyperlink{classtops_1_1ProbabilisticModel_a4e3910e9b9b848b7078e7101909ae82a}{size}) const
+\item 
+\mbox{\Hypertarget{classtops_1_1ProbabilisticModel_ad37b3f08436f2ebfa98409e627c44558}\label{classtops_1_1ProbabilisticModel_ad37b3f08436f2ebfa98409e627c44558}} 
+virtual Sequence \& {\bfseries choose\+With\+History} (Sequence \&h, int i, int phase, int \hyperlink{classtops_1_1ProbabilisticModel_a4e3910e9b9b848b7078e7101909ae82a}{size}) const
+\item 
+\mbox{\Hypertarget{classtops_1_1ProbabilisticModel_acacbfeb9cce968e034b5c18c72f7e217}\label{classtops_1_1ProbabilisticModel_acacbfeb9cce968e034b5c18c72f7e217}} 
+virtual Alphabet\+Ptr \hyperlink{classtops_1_1ProbabilisticModel_acacbfeb9cce968e034b5c18c72f7e217}{alphabet} () const
+\begin{DoxyCompactList}\small\item\em Returns the alphabet. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1ProbabilisticModel_a684637528b3666ca9637fdb15ac5b37f}\label{classtops_1_1ProbabilisticModel_a684637528b3666ca9637fdb15ac5b37f}} 
+virtual void \hyperlink{classtops_1_1ProbabilisticModel_a684637528b3666ca9637fdb15ac5b37f}{set\+Alphabet} (Alphabet\+Ptr \hyperlink{classtops_1_1ProbabilisticModel_acacbfeb9cce968e034b5c18c72f7e217}{alphabet})
+\begin{DoxyCompactList}\small\item\em Setter for the \hyperlink{classtops_1_1Alphabet}{Alphabet}. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1ProbabilisticModel_abd79e4840a437df6107bb1b0d3dd6098}\label{classtops_1_1ProbabilisticModel_abd79e4840a437df6107bb1b0d3dd6098}} 
+virtual std\+::string \hyperlink{classtops_1_1ProbabilisticModel_abd79e4840a437df6107bb1b0d3dd6098}{str} () const
+\begin{DoxyCompactList}\small\item\em returns the string representation of the model \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1ProbabilisticModel_adb90c7d6655feb5dd4e828b451777dd2}\label{classtops_1_1ProbabilisticModel_adb90c7d6655feb5dd4e828b451777dd2}} 
+virtual std\+::string \hyperlink{classtops_1_1ProbabilisticModel_adb90c7d6655feb5dd4e828b451777dd2}{model\+\_\+name} () const
+\begin{DoxyCompactList}\small\item\em returns the model name \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1ProbabilisticModel_a4e3910e9b9b848b7078e7101909ae82a}\label{classtops_1_1ProbabilisticModel_a4e3910e9b9b848b7078e7101909ae82a}} 
+virtual int \hyperlink{classtops_1_1ProbabilisticModel_a4e3910e9b9b848b7078e7101909ae82a}{size} () const
+\begin{DoxyCompactList}\small\item\em Returns the number of parameters of the model. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1ProbabilisticModel_aeead765622ab52ff8069ebe0a7a8ee4d}\label{classtops_1_1ProbabilisticModel_aeead765622ab52ff8069ebe0a7a8ee4d}} 
+virtual \hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} {\bfseries parameters} () const
+\item 
+\mbox{\Hypertarget{classtops_1_1ProbabilisticModel_a0e61b57a8890bec9fdb99e9393485eec}\label{classtops_1_1ProbabilisticModel_a0e61b57a8890bec9fdb99e9393485eec}} 
+virtual void {\bfseries initialize} (const \hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} \&p)
+\item 
+\mbox{\Hypertarget{classtops_1_1ProbabilisticModel_a4e1f5d3498629ab59c91731680118b85}\label{classtops_1_1ProbabilisticModel_a4e1f5d3498629ab59c91731680118b85}} 
+virtual void {\bfseries not\+\_\+implemented} (std\+::string method) const
+\item 
+\mbox{\Hypertarget{classtops_1_1ProbabilisticModel_abf2ca201c9bf0ba9987c831636014774}\label{classtops_1_1ProbabilisticModel_abf2ca201c9bf0ba9987c831636014774}} 
+virtual double \hyperlink{classtops_1_1ProbabilisticModel_abf2ca201c9bf0ba9987c831636014774}{log\+\_\+probability\+\_\+of} (int s) const
+\begin{DoxyCompactList}\small\item\em Returns the log\+\_\+probability\+\_\+of the number s. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1ProbabilisticModel_ae584dc413f9494f50e00ffcbbbe75296}\label{classtops_1_1ProbabilisticModel_ae584dc413f9494f50e00ffcbbbe75296}} 
+virtual double \hyperlink{classtops_1_1ProbabilisticModel_ae584dc413f9494f50e00ffcbbbe75296}{probability\+\_\+of} (int s, double new\+\_\+value)
+\begin{DoxyCompactList}\small\item\em Set the probability value of the number s. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1ProbabilisticModel_aebaa3ff8a48e983b479fcb00a6b1397b}\label{classtops_1_1ProbabilisticModel_aebaa3ff8a48e983b479fcb00a6b1397b}} 
+virtual double {\bfseries evaluate} (const Sequence \&s, unsigned int begin, unsigned int end, int phase) const
+\item 
+\mbox{\Hypertarget{classtops_1_1ProbabilisticModel_a8af04b27c44db7c0094cbd9c07a0b899}\label{classtops_1_1ProbabilisticModel_a8af04b27c44db7c0094cbd9c07a0b899}} 
+virtual double {\bfseries prefix\+\_\+sum\+\_\+array\+\_\+compute} (int begin, int end)
+\item 
+\mbox{\Hypertarget{classtops_1_1ProbabilisticModel_a6945f65205f92053f933a86fbd30c2d8}\label{classtops_1_1ProbabilisticModel_a6945f65205f92053f933a86fbd30c2d8}} 
+virtual double {\bfseries prefix\+\_\+sum\+\_\+array\+\_\+compute} (int begin, int end, int phase)
+\item 
+\mbox{\Hypertarget{classtops_1_1ProbabilisticModel_a894714015cec786d0a7817f99c432900}\label{classtops_1_1ProbabilisticModel_a894714015cec786d0a7817f99c432900}} 
+virtual bool {\bfseries initialize\+\_\+prefix\+\_\+sum\+\_\+array} (const Sequence \&s, int phase)
+\item 
+\mbox{\Hypertarget{classtops_1_1ProbabilisticModel_a820b813147ba615ab21da019bcb4af26}\label{classtops_1_1ProbabilisticModel_a820b813147ba615ab21da019bcb4af26}} 
+virtual bool {\bfseries initialize\+\_\+prefix\+\_\+sum\+\_\+array} (const Sequence \&s)
+\item 
+\mbox{\Hypertarget{classtops_1_1ProbabilisticModel_a99f53996f6a6e0d61836c4d472b5eeb3}\label{classtops_1_1ProbabilisticModel_a99f53996f6a6e0d61836c4d472b5eeb3}} 
+virtual void {\bfseries remove\+Sequence\+From\+Model} (const Sequence \&s, int phase)
+\item 
+\mbox{\Hypertarget{classtops_1_1ProbabilisticModel_ada4951dff102aff33cfb5cedbc931651}\label{classtops_1_1ProbabilisticModel_ada4951dff102aff33cfb5cedbc931651}} 
+virtual Alphabet\+Ptr {\bfseries get\+State\+Names} () const
+\item 
+\mbox{\Hypertarget{classtops_1_1ProbabilisticModel_a0145495e3e76e2969bcf7501a677afa9}\label{classtops_1_1ProbabilisticModel_a0145495e3e76e2969bcf7501a677afa9}} 
+virtual void \hyperlink{classtops_1_1ProbabilisticModel_a0145495e3e76e2969bcf7501a677afa9}{train\+Baum\+Welch} (Sequence\+List \&training\+\_\+set, int maxiterations, double diff)
+\begin{DoxyCompactList}\small\item\em Train baum Welch. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1ProbabilisticModel_ad9e4a254a3ea39acaf8ec0481d567a08}\label{classtops_1_1ProbabilisticModel_ad9e4a254a3ea39acaf8ec0481d567a08}} 
+virtual \hyperlink{classtops_1_1InhomogeneousFactorableModel}{Inhomogeneous\+Factorable\+Model} $\ast$ {\bfseries inhomogeneous} ()
+\item 
+\mbox{\Hypertarget{classtops_1_1ProbabilisticModel_a1ec53df016e5590321bbd050b068a87f}\label{classtops_1_1ProbabilisticModel_a1ec53df016e5590321bbd050b068a87f}} 
+virtual \hyperlink{classtops_1_1DecodableModel}{Decodable\+Model} $\ast$ {\bfseries decodable} ()
+\item 
+\mbox{\Hypertarget{classtops_1_1ProbabilisticModel_a5d2300a6a09c78630501dfdabddd3161}\label{classtops_1_1ProbabilisticModel_a5d2300a6a09c78630501dfdabddd3161}} 
+virtual \hyperlink{classtops_1_1PairHiddenMarkovModel}{Pair\+Hidden\+Markov\+Model} $\ast$ {\bfseries pair\+Decodable} ()
+\item 
+\mbox{\Hypertarget{classtops_1_1ProbabilisticModel_afd243cce452b0f9faaf0d2d95b6d39e9}\label{classtops_1_1ProbabilisticModel_afd243cce452b0f9faaf0d2d95b6d39e9}} 
+virtual \hyperlink{classtops_1_1ProfileHiddenMarkovModel}{Profile\+Hidden\+Markov\+Model} $\ast$ {\bfseries profile\+Decodable} ()
+\item 
+\mbox{\Hypertarget{classtops_1_1ProbabilisticModel_ab0f984d0ee8cda8ba67f19d98670b01b}\label{classtops_1_1ProbabilisticModel_ab0f984d0ee8cda8ba67f19d98670b01b}} 
+virtual \hyperlink{classtops_1_1FactorableModel}{Factorable\+Model} $\ast$ {\bfseries factorable} ()
+\item 
+\mbox{\Hypertarget{classtops_1_1ProbabilisticModel_a558a526479c0b3fbc1f7f5820cbf7e7f}\label{classtops_1_1ProbabilisticModel_a558a526479c0b3fbc1f7f5820cbf7e7f}} 
+virtual std\+::string {\bfseries print\+\_\+graph} () const
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+This is an abstract class representing a generative probabilistic model. 
+
+Definition at line 53 of file Probabilistic\+Model.\+hpp.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/Probabilistic\+Model.\+hpp\end{DoxyCompactItemize}

@@ -1,0 +1,90 @@
+\hypertarget{classtops_1_1ProbabilisticModelCreator}{}\section{tops\+:\+:Probabilistic\+Model\+Creator Class Reference}
+\label{classtops_1_1ProbabilisticModelCreator}\index{tops\+::\+Probabilistic\+Model\+Creator@{tops\+::\+Probabilistic\+Model\+Creator}}
+
+
+Represents an algorithm to create a probabilistic model.  
+
+
+
+
+{\ttfamily \#include $<$Probabilistic\+Model\+Creator.\+hpp$>$}
+
+
+
+Inheritance diagram for tops\+:\+:Probabilistic\+Model\+Creator\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=550pt]{classtops_1_1ProbabilisticModelCreator__inherit__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual Probabilistic\+Model\+Ptr \hyperlink{classtops_1_1ProbabilisticModelCreator_afed6c8ffa45fff446bdaa8b533da8f7c}{create} (\hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} \&parameters) const
+\begin{DoxyCompactList}\small\item\em Creates a probabilistic model. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1ProbabilisticModelCreator_a955a04df47682338236ec54f4c06a1a0}\label{classtops_1_1ProbabilisticModelCreator_a955a04df47682338236ec54f4c06a1a0}} 
+virtual Probabilistic\+Model\+Ptr \hyperlink{classtops_1_1ProbabilisticModelCreator_a955a04df47682338236ec54f4c06a1a0}{create} (\hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} \&parameters, double \&loglikelihood, int \&sample\+\_\+size) const
+\begin{DoxyCompactList}\small\item\em Creates the model and returns the loglikelihood of the training set. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1ProbabilisticModelCreator_a17917058f57a25d8a88886a19f672344}\label{classtops_1_1ProbabilisticModelCreator_a17917058f57a25d8a88886a19f672344}} 
+virtual Probabilistic\+Model\+Ptr \hyperlink{classtops_1_1ProbabilisticModelCreator_a17917058f57a25d8a88886a19f672344}{create} (\hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} \&parameters, const std\+::vector$<$ std\+::string $>$ \&sample\+\_\+set, double \&loglikelihood, int \&sample\+\_\+size) const
+\begin{DoxyCompactList}\small\item\em Creates the model and returns the loglikelihood of the training set. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1ProbabilisticModelCreator_a90daa44181259291f76c97c60a179e8e}\label{classtops_1_1ProbabilisticModelCreator_a90daa44181259291f76c97c60a179e8e}} 
+virtual Probabilistic\+Model\+Ptr \hyperlink{classtops_1_1ProbabilisticModelCreator_a90daa44181259291f76c97c60a179e8e}{create} (\hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} \&parameters, const std\+::map$<$ std\+::string, Probabilistic\+Model\+Ptr $>$ \&models) const
+\begin{DoxyCompactList}\small\item\em Creates the model and returns the loglikelihood of the training set. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1ProbabilisticModelCreator_a468486a1562442aadfc53bb55c62496b}\label{classtops_1_1ProbabilisticModelCreator_a468486a1562442aadfc53bb55c62496b}} 
+virtual std\+::string \hyperlink{classtops_1_1ProbabilisticModelCreator_a468486a1562442aadfc53bb55c62496b}{help} () const
+\begin{DoxyCompactList}\small\item\em This method returns a help message. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1ProbabilisticModelCreator_ac3a711019d9b50c4449e233dca9c4f9b}\label{classtops_1_1ProbabilisticModelCreator_ac3a711019d9b50c4449e233dca9c4f9b}} 
+virtual void {\bfseries not\+\_\+implemented} (std\+::string method) const
+\item 
+\mbox{\Hypertarget{classtops_1_1ProbabilisticModelCreator_a8ada638f68782c6750ac40031c4c2bb0}\label{classtops_1_1ProbabilisticModelCreator_a8ada638f68782c6750ac40031c4c2bb0}} 
+virtual void {\bfseries set\+Creator} (Probabilistic\+Model\+Creator\+Ptr creator)
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Represents an algorithm to create a probabilistic model. 
+
+Definition at line 37 of file Probabilistic\+Model\+Creator.\+hpp.
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classtops_1_1ProbabilisticModelCreator_afed6c8ffa45fff446bdaa8b533da8f7c}\label{classtops_1_1ProbabilisticModelCreator_afed6c8ffa45fff446bdaa8b533da8f7c}} 
+\index{tops\+::\+Probabilistic\+Model\+Creator@{tops\+::\+Probabilistic\+Model\+Creator}!create@{create}}
+\index{create@{create}!tops\+::\+Probabilistic\+Model\+Creator@{tops\+::\+Probabilistic\+Model\+Creator}}
+\subsubsection{\texorpdfstring{create()}{create()}}
+{\footnotesize\ttfamily virtual Probabilistic\+Model\+Ptr tops\+::\+Probabilistic\+Model\+Creator\+::create (\begin{DoxyParamCaption}\item[{\hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} \&}]{parameters }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+Creates a probabilistic model. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em parameters} & is a set of parameters that is utilized to build the model \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented in \hyperlink{classtops_1_1AkaikeInformationCriteria_a925de08fa8373de8f7ddf48cd6b2c6e0}{tops\+::\+Akaike\+Information\+Criteria}, \hyperlink{classtops_1_1TrainProfileHMMBaumWelch_a90acae2f12580eeb2f2010c5321fd6f9}{tops\+::\+Train\+Profile\+H\+M\+M\+Baum\+Welch}, \hyperlink{classtops_1_1BayesianInformationCriteria_a025c7fff02580703f901376eea7db340}{tops\+::\+Bayesian\+Information\+Criteria}, \hyperlink{classtops_1_1TrainProfileHMMMaxLikelihood_ad73c7f1ec96af19a08186cfec7a141e7}{tops\+::\+Train\+Profile\+H\+M\+M\+Max\+Likelihood}, \hyperlink{classtops_1_1ProfileHiddenMarkovModelCreator_ac6787c8bf7b790c566ee01f4f0c67744}{tops\+::\+Profile\+Hidden\+Markov\+Model\+Creator}, \hyperlink{classtops_1_1RemoveSequenceFromModel_a46f4928e36936559659d9503c1edd550}{tops\+::\+Remove\+Sequence\+From\+Model}, \hyperlink{classtops_1_1TrainDiscreteIIDModel_a072a44dfaeb57cdffea9988f7a053bb8}{tops\+::\+Train\+Discrete\+I\+I\+D\+Model}, \hyperlink{classtops_1_1TrainFixedLengthMarkovChain_a13c61bbbe042026a4e406f5ba9214b0e}{tops\+::\+Train\+Fixed\+Length\+Markov\+Chain}, \hyperlink{classtops_1_1TrainHMMBaumWelch_a8c7334a4a970afc9dac9d66c1001999a}{tops\+::\+Train\+H\+M\+M\+Baum\+Welch}, \hyperlink{classtops_1_1TrainHMMMaximumLikelihood_a70881378e3f71eba8683df6e5e3d0433}{tops\+::\+Train\+H\+M\+M\+Maximum\+Likelihood}, \hyperlink{classtops_1_1TrainInterpolatedMarkovChain_aecbe1110e2a9c7479340b39e3d3c55ef}{tops\+::\+Train\+Interpolated\+Markov\+Chain}, \hyperlink{classtops_1_1TrainInterpolatedPhasedMarkovChain_a218b211bb755e02ffd30e8420d52d949}{tops\+::\+Train\+Interpolated\+Phased\+Markov\+Chain}, \hyperlink{classtops_1_1TrainMaximalDependenceDecomposition_a5a46f3f1f25d021766099e3dc6a470e6}{tops\+::\+Train\+Maximal\+Dependence\+Decomposition}, \hyperlink{classtops_1_1TrainPhasedMarkovChain_a31219afb1abf369674c2862a5017a112}{tops\+::\+Train\+Phased\+Markov\+Chain}, \hyperlink{classtops_1_1TrainPhasedMarkovChainContextAlgorithm_aa97236d43efb5312776d41ae36827d08}{tops\+::\+Train\+Phased\+Markov\+Chain\+Context\+Algorithm}, \hyperlink{classtops_1_1TrainPHMMBaumWelch_a7e11d58b3556af7dd44a85a18743a6ba}{tops\+::\+Train\+P\+H\+M\+M\+Baum\+Welch}, \hyperlink{classtops_1_1TrainSimilarityBasedSequenceWeighting_afccb17be7a84c13a4e7166a583b3597e}{tops\+::\+Train\+Similarity\+Based\+Sequence\+Weighting}, \hyperlink{classtops_1_1TrainVariableLengthInhomogeneousMarkovChain_a1a0e7cada3c58961aa186904214a6dac}{tops\+::\+Train\+Variable\+Length\+Inhomogeneous\+Markov\+Chain}, \hyperlink{classtops_1_1GeneralizedHiddenMarkovModelCreator_a8834cbceabf3922c348c632bb5e660e6}{tops\+::\+Generalized\+Hidden\+Markov\+Model\+Creator}, \hyperlink{classtops_1_1TrainWeightArrayModel_a7494fc0ad9ab876be3dd0ebee7613206}{tops\+::\+Train\+Weight\+Array\+Model}, \hyperlink{classtops_1_1DiscreteIIDModelCreator_a3eeca79afe4c57388385fed4299421d6}{tops\+::\+Discrete\+I\+I\+D\+Model\+Creator}, \hyperlink{classtops_1_1PairHiddenMarkovModelCreator_aa426cbbbcd7af43cd92f62d71e30b129}{tops\+::\+Pair\+Hidden\+Markov\+Model\+Creator}, \hyperlink{classtops_1_1SmoothedHistogramBurge_a7f148c400879d8594da5fedda12641b1}{tops\+::\+Smoothed\+Histogram\+Burge}, \hyperlink{classtops_1_1SmoothedHistogramKernelDensity_a4d3c3a63d0810ef133a14855fd937a8e}{tops\+::\+Smoothed\+Histogram\+Kernel\+Density}, \hyperlink{classtops_1_1SmoothedHistogramStanke_a2d04479a872f3f139652a55632a27e00}{tops\+::\+Smoothed\+Histogram\+Stanke}, \hyperlink{classtops_1_1TrainGHMMTransitionsCreator_a83d716ee938b4ccbc76b110d4b6b7ae9}{tops\+::\+Train\+G\+H\+M\+M\+Transitions\+Creator}, \hyperlink{classtops_1_1TrainVariableLengthMarkovChain_a67d4799e147f66deb1646d1ba45f7e65}{tops\+::\+Train\+Variable\+Length\+Markov\+Chain}, \hyperlink{classtops_1_1VariableLengthMarkovChainCreator_a7b5275f19b97f4060274a7f8ec4f016b}{tops\+::\+Variable\+Length\+Markov\+Chain\+Creator}, \hyperlink{classtops_1_1HiddenMarkovModelCreator_a91a39f3246a9da001388e8de75b29964}{tops\+::\+Hidden\+Markov\+Model\+Creator}, \hyperlink{classtops_1_1InhomogeneousMarkovChainCreator_ac31f56513eef40d55c7e09dcfa5a80c8}{tops\+::\+Inhomogeneous\+Markov\+Chain\+Creator}, \hyperlink{classtops_1_1MultipleSequentialModelCreator_acfa2befa902d9dd44ae84cefd2b9c452}{tops\+::\+Multiple\+Sequential\+Model\+Creator}, \hyperlink{classtops_1_1SimilarityBasedSequenceWeightingCreator_a8d0c396745a850e8fd2f17df6d4244b5}{tops\+::\+Similarity\+Based\+Sequence\+Weighting\+Creator}, \hyperlink{classtops_1_1TargetModelCreator_ac50e4d0f68f47511d4c5b9683cba11b4}{tops\+::\+Target\+Model\+Creator}, \hyperlink{classtops_1_1BernoulliModelCreator_a7269fc3cbc7bef0bc7456e6cf2ec44b3}{tops\+::\+Bernoulli\+Model\+Creator}, \hyperlink{classtops_1_1MaximalDependenceDecompositionCreator_a9d90148ccc1e27acc090f549d7c442af}{tops\+::\+Maximal\+Dependence\+Decomposition\+Creator}, \hyperlink{classtops_1_1FixedSequenceAtPositionCreator_af4daf171afbef0494ee98f9877ff1787}{tops\+::\+Fixed\+Sequence\+At\+Position\+Creator}, \hyperlink{classtops_1_1PhasedRunLengthDistributionCreator_aaf3fd1675098f4f5c3e4da8f06056ab1}{tops\+::\+Phased\+Run\+Length\+Distribution\+Creator}, \hyperlink{classtops_1_1ReverseComplementDNACreator_a9928572204114498356297cf0892019b}{tops\+::\+Reverse\+Complement\+D\+N\+A\+Creator}, and \hyperlink{classtops_1_1GeneralizedPairHiddenMarkovModelCreator_a0f83a29fb5bf772d82ce311ba3e16216}{tops\+::\+Generalized\+Pair\+Hidden\+Markov\+Model\+Creator}.
+
+
+
+Definition at line 43 of file Probabilistic\+Model\+Creator.\+hpp.
+
+
+\begin{DoxyCode}
+43                                                                                            \{
+44       ProbabilisticModelPtr n;
+45       not\_implemented( \textcolor{stringliteral}{"create ()"});
+46       \textcolor{keywordflow}{return} n;
+47     \}
+\end{DoxyCode}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/Probabilistic\+Model\+Creator.\+hpp\end{DoxyCompactItemize}

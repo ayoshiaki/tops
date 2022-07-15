@@ -1,0 +1,104 @@
+\hypertarget{classtops_1_1GeneralizedPairHiddenMarkovModelCreator}{}\section{tops\+:\+:Generalized\+Pair\+Hidden\+Markov\+Model\+Creator Class Reference}
+\label{classtops_1_1GeneralizedPairHiddenMarkovModelCreator}\index{tops\+::\+Generalized\+Pair\+Hidden\+Markov\+Model\+Creator@{tops\+::\+Generalized\+Pair\+Hidden\+Markov\+Model\+Creator}}
+
+
+Inheritance diagram for tops\+:\+:Generalized\+Pair\+Hidden\+Markov\+Model\+Creator\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=221pt]{classtops_1_1GeneralizedPairHiddenMarkovModelCreator__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for tops\+:\+:Generalized\+Pair\+Hidden\+Markov\+Model\+Creator\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=221pt]{classtops_1_1GeneralizedPairHiddenMarkovModelCreator__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual Probabilistic\+Model\+Ptr \hyperlink{classtops_1_1GeneralizedPairHiddenMarkovModelCreator_a0f83a29fb5bf772d82ce311ba3e16216}{create} (\hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} \&parameters) const
+\begin{DoxyCompactList}\small\item\em Creates a probabilistic model. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1GeneralizedPairHiddenMarkovModelCreator_a51574d0c38fdf8b8fd2d703b4481b861}\label{classtops_1_1GeneralizedPairHiddenMarkovModelCreator_a51574d0c38fdf8b8fd2d703b4481b861}} 
+virtual std\+::string \hyperlink{classtops_1_1GeneralizedPairHiddenMarkovModelCreator_a51574d0c38fdf8b8fd2d703b4481b861}{help} () const
+\begin{DoxyCompactList}\small\item\em This method returns a help message. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+
+
+Definition at line 9 of file Generalized\+Pair\+Hidden\+Markov\+Model\+Creator.\+hpp.
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classtops_1_1GeneralizedPairHiddenMarkovModelCreator_a0f83a29fb5bf772d82ce311ba3e16216}\label{classtops_1_1GeneralizedPairHiddenMarkovModelCreator_a0f83a29fb5bf772d82ce311ba3e16216}} 
+\index{tops\+::\+Generalized\+Pair\+Hidden\+Markov\+Model\+Creator@{tops\+::\+Generalized\+Pair\+Hidden\+Markov\+Model\+Creator}!create@{create}}
+\index{create@{create}!tops\+::\+Generalized\+Pair\+Hidden\+Markov\+Model\+Creator@{tops\+::\+Generalized\+Pair\+Hidden\+Markov\+Model\+Creator}}
+\subsubsection{\texorpdfstring{create()}{create()}}
+{\footnotesize\ttfamily Probabilistic\+Model\+Ptr tops\+::\+Generalized\+Pair\+Hidden\+Markov\+Model\+Creator\+::create (\begin{DoxyParamCaption}\item[{\hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} \&}]{parameters }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Creates a probabilistic model. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em parameters} & is a set of parameters that is utilized to build the model \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented from \hyperlink{classtops_1_1ProbabilisticModelCreator_afed6c8ffa45fff446bdaa8b533da8f7c}{tops\+::\+Probabilistic\+Model\+Creator}.
+
+
+
+Definition at line 6 of file Generalized\+Pair\+Hidden\+Markov\+Model\+Creator.\+cpp.
+
+
+\begin{DoxyCode}
+6                                                                                                            
+                  \{
+7     ProbabilisticModelParameterValuePtr state\_names = parameters.getMandatoryParameterValue(\textcolor{stringliteral}{"state\_names"});
+8     ProbabilisticModelParameterValuePtr observation\_symbols = parameters.getMandatoryParameterValue(\textcolor{stringliteral}{"
+      observation\_symbols"});
+9     ProbabilisticModelParameterValuePtr number\_of\_emissions = parameters.getMandatoryParameterValue(\textcolor{stringliteral}{"
+      number\_of\_emissions"});
+10     ProbabilisticModelParameterValuePtr initial\_probabilities = parameters.getMandatoryParameterValue(\textcolor{stringliteral}{"
+      initial\_probabilities"});   
+11     ProbabilisticModelParameterValuePtr end\_probabilities = parameters.getMandatoryParameterValue(\textcolor{stringliteral}{"
+      end\_probabilities"});   
+12     ProbabilisticModelParameterValuePtr transitions = parameters.getMandatoryParameterValue(\textcolor{stringliteral}{"transitions"});
+13     ProbabilisticModelParameterValuePtr emissions = parameters.getMandatoryParameterValue(\textcolor{stringliteral}{"
+      emission\_probabilities"});
+14     ProbabilisticModelParameterValuePtr durations = parameters.getOptionalParameterValue(\textcolor{stringliteral}{"
+      duration\_probabilities"});
+15 
+16     \textcolor{keywordflow}{if}((state\_names == NULL)||
+17        (observation\_symbols == NULL)||
+18        (number\_of\_emissions == NULL) || 
+19        (initial\_probabilities == NULL) || 
+20        (end\_probabilities == NULL) || 
+21        (transitions == NULL) || 
+22        (emissions == NULL)) 
+23       \{
+24     std::cerr << \hyperlink{classtops_1_1GeneralizedPairHiddenMarkovModelCreator_a51574d0c38fdf8b8fd2d703b4481b861}{help}() << std::endl;
+25       \}
+26     ProbabilisticModelPtr model = GeneralizedPairHiddenMarkovModelPtr(\textcolor{keyword}{new} GeneralizedPairHiddenMarkovModel(
+      ));
+27     model->initialize(parameters);
+28     \textcolor{keywordflow}{return} model;
+29   \}
+\end{DoxyCode}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/Generalized\+Pair\+Hidden\+Markov\+Model\+Creator.\+hpp\item 
+src/Generalized\+Pair\+Hidden\+Markov\+Model\+Creator.\+cpp\end{DoxyCompactItemize}

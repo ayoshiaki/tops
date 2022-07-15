@@ -1,0 +1,122 @@
+\hypertarget{classtops_1_1Alphabet}{}\section{tops\+:\+:Alphabet Class Reference}
+\label{classtops_1_1Alphabet}\index{tops\+::\+Alphabet@{tops\+::\+Alphabet}}
+
+
+A class representing \hyperlink{classtops_1_1Alphabet}{Alphabet}.  
+
+
+
+
+{\ttfamily \#include $<$Alphabet.\+hpp$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+Symbol\+Ptr \hyperlink{classtops_1_1Alphabet_ae82947c05a15225d90a93547d26c10b0}{create\+Symbol} (const std\+::string \&name)
+\begin{DoxyCompactList}\small\item\em Creates a new symbol. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1Alphabet_a559fdaf75922ccb4927ad868822c9305}\label{classtops_1_1Alphabet_a559fdaf75922ccb4927ad868822c9305}} 
+Symbol\+Ptr {\bfseries create\+Symbol} (char $\ast$name)
+\item 
+\mbox{\Hypertarget{classtops_1_1Alphabet_ad72e398ac3123f76c978e3c41e61e959}\label{classtops_1_1Alphabet_ad72e398ac3123f76c978e3c41e61e959}} 
+unsigned int \hyperlink{classtops_1_1Alphabet_ad72e398ac3123f76c978e3c41e61e959}{max\+Symbol\+Size} ()
+\begin{DoxyCompactList}\small\item\em Returns the maximum length of the symbol. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1Alphabet_a0ecfdfad56bda227522acb504b20c20e}\label{classtops_1_1Alphabet_a0ecfdfad56bda227522acb504b20c20e}} 
+unsigned int \hyperlink{classtops_1_1Alphabet_a0ecfdfad56bda227522acb504b20c20e}{size} ()
+\begin{DoxyCompactList}\small\item\em Returns the alphabet size. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1Alphabet_ada9bbe4368c00ca714b99ba49bd9d350}\label{classtops_1_1Alphabet_ada9bbe4368c00ca714b99ba49bd9d350}} 
+Symbol\+Ptr \hyperlink{classtops_1_1Alphabet_ada9bbe4368c00ca714b99ba49bd9d350}{get\+Symbol} (int k)
+\begin{DoxyCompactList}\small\item\em Returns the symbol given an id. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1Alphabet_a74ceff8279639cdafc261e70bb37f6ea}\label{classtops_1_1Alphabet_a74ceff8279639cdafc261e70bb37f6ea}} 
+Symbol\+Ptr \hyperlink{classtops_1_1Alphabet_a74ceff8279639cdafc261e70bb37f6ea}{get\+Symbol} (const std\+::string \&s)
+\begin{DoxyCompactList}\small\item\em Get the symbol given the symbol name. \end{DoxyCompactList}\item 
+bool \hyperlink{classtops_1_1Alphabet_af41f8fcef3a5e540a8af63afc85df668}{has} (const std\+::string \&s)
+\begin{DoxyCompactList}\small\item\em Returns true if the symbol name s is in the \hyperlink{classtops_1_1Alphabet}{Alphabet}. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1Alphabet_ab0d2d98fe0612f204aaf59e6e18f7c8b}\label{classtops_1_1Alphabet_ab0d2d98fe0612f204aaf59e6e18f7c8b}} 
+void \hyperlink{classtops_1_1Alphabet_ab0d2d98fe0612f204aaf59e6e18f7c8b}{initialize\+From\+Vector} (const std\+::vector$<$ std\+::string $>$ \&\hyperlink{classtops_1_1Alphabet_a85e599e3d65ffc47e3588c887fa2da95}{str})
+\begin{DoxyCompactList}\small\item\em Initialize the alphabet using a list of symbols. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1Alphabet_a85e599e3d65ffc47e3588c887fa2da95}\label{classtops_1_1Alphabet_a85e599e3d65ffc47e3588c887fa2da95}} 
+std\+::string \hyperlink{classtops_1_1Alphabet_a85e599e3d65ffc47e3588c887fa2da95}{str} () const
+\begin{DoxyCompactList}\small\item\em String representation of this alphabet. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1Alphabet_a3afc3b5cc761fcfb896839ac07b8144c}\label{classtops_1_1Alphabet_a3afc3b5cc761fcfb896839ac07b8144c}} 
+Probabilistic\+Model\+Parameter\+Value\+Ptr {\bfseries get\+Parameter\+Value} ()
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+A class representing \hyperlink{classtops_1_1Alphabet}{Alphabet}. 
+
+Definition at line 48 of file Alphabet.\+hpp.
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classtops_1_1Alphabet_ae82947c05a15225d90a93547d26c10b0}\label{classtops_1_1Alphabet_ae82947c05a15225d90a93547d26c10b0}} 
+\index{tops\+::\+Alphabet@{tops\+::\+Alphabet}!create\+Symbol@{create\+Symbol}}
+\index{create\+Symbol@{create\+Symbol}!tops\+::\+Alphabet@{tops\+::\+Alphabet}}
+\subsubsection{\texorpdfstring{create\+Symbol()}{createSymbol()}}
+{\footnotesize\ttfamily Symbol\+Ptr tops\+::\+Alphabet\+::create\+Symbol (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{name }\end{DoxyParamCaption})}
+
+
+
+Creates a new symbol. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em name} & is the symbol name \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 101 of file Alphabet.\+cpp.
+
+
+\begin{DoxyCode}
+102   \{
+103     \textcolor{keywordtype}{int} i;
+104     \textcolor{keywordflow}{if} (name.size() > \_max\_symbol\_size) 
+105       \_max\_symbol\_size = name.size();
+106     \textcolor{keywordflow}{for}(i = 0; i < (int)\_pool.size(); i++)
+107       \textcolor{keywordflow}{if}(\_pool[i]->name() == name)
+108         \textcolor{keywordflow}{return} \hyperlink{classtops_1_1Alphabet_ada9bbe4368c00ca714b99ba49bd9d350}{getSymbol}(i);
+109     SymbolPtr s = SymbolPtr( \textcolor{keyword}{new} Symbol(i, name, \textcolor{keyword}{this}));
+110     \_stringToSymbol[name] = s;
+111     \_pool.push\_back(s);
+112     \textcolor{keywordflow}{return} \hyperlink{classtops_1_1Alphabet_ada9bbe4368c00ca714b99ba49bd9d350}{getSymbol}(i);
+113   \}
+\end{DoxyCode}
+\mbox{\Hypertarget{classtops_1_1Alphabet_af41f8fcef3a5e540a8af63afc85df668}\label{classtops_1_1Alphabet_af41f8fcef3a5e540a8af63afc85df668}} 
+\index{tops\+::\+Alphabet@{tops\+::\+Alphabet}!has@{has}}
+\index{has@{has}!tops\+::\+Alphabet@{tops\+::\+Alphabet}}
+\subsubsection{\texorpdfstring{has()}{has()}}
+{\footnotesize\ttfamily bool tops\+::\+Alphabet\+::has (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{s }\end{DoxyParamCaption})}
+
+
+
+Returns true if the symbol name s is in the \hyperlink{classtops_1_1Alphabet}{Alphabet}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em s} & is the name of the symbol \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if the name of the symbol is in the \hyperlink{classtops_1_1Alphabet}{Alphabet} 
+\end{DoxyReturn}
+
+
+Definition at line 34 of file Alphabet.\+cpp.
+
+
+\begin{DoxyCode}
+35   \{
+36     std::map<std::string, SymbolPtr>::iterator it;
+37     it = \_stringToSymbol.find(s);
+38     \textcolor{keywordflow}{return} it != \_stringToSymbol.end();
+39   \}
+\end{DoxyCode}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/Alphabet.\+hpp\item 
+src/Alphabet.\+cpp\end{DoxyCompactItemize}

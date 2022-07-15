@@ -1,0 +1,133 @@
+\hypertarget{classtops_1_1TrainMaximalDependenceDecomposition}{}\section{tops\+:\+:Train\+Maximal\+Dependence\+Decomposition Class Reference}
+\label{classtops_1_1TrainMaximalDependenceDecomposition}\index{tops\+::\+Train\+Maximal\+Dependence\+Decomposition@{tops\+::\+Train\+Maximal\+Dependence\+Decomposition}}
+
+
+Creates a H\+MM using Baum-\/\+Welch.  
+
+
+
+
+{\ttfamily \#include $<$Train\+Maximal\+Dependence\+Decomposition.\+hpp$>$}
+
+
+
+Inheritance diagram for tops\+:\+:Train\+Maximal\+Dependence\+Decomposition\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=235pt]{classtops_1_1TrainMaximalDependenceDecomposition__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for tops\+:\+:Train\+Maximal\+Dependence\+Decomposition\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=235pt]{classtops_1_1TrainMaximalDependenceDecomposition__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual Probabilistic\+Model\+Ptr \hyperlink{classtops_1_1TrainMaximalDependenceDecomposition_a5a46f3f1f25d021766099e3dc6a470e6}{create} (\hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} \&parameters) const
+\begin{DoxyCompactList}\small\item\em Creates a probability model. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1TrainMaximalDependenceDecomposition_a253d78fc2415582241022a2faa0d999d}\label{classtops_1_1TrainMaximalDependenceDecomposition_a253d78fc2415582241022a2faa0d999d}} 
+virtual std\+::string \hyperlink{classtops_1_1TrainMaximalDependenceDecomposition_a253d78fc2415582241022a2faa0d999d}{help} () const
+\begin{DoxyCompactList}\small\item\em Provides a help. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Creates a H\+MM using Baum-\/\+Welch. 
+
+Definition at line 38 of file Train\+Maximal\+Dependence\+Decomposition.\+hpp.
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classtops_1_1TrainMaximalDependenceDecomposition_a5a46f3f1f25d021766099e3dc6a470e6}\label{classtops_1_1TrainMaximalDependenceDecomposition_a5a46f3f1f25d021766099e3dc6a470e6}} 
+\index{tops\+::\+Train\+Maximal\+Dependence\+Decomposition@{tops\+::\+Train\+Maximal\+Dependence\+Decomposition}!create@{create}}
+\index{create@{create}!tops\+::\+Train\+Maximal\+Dependence\+Decomposition@{tops\+::\+Train\+Maximal\+Dependence\+Decomposition}}
+\subsubsection{\texorpdfstring{create()}{create()}}
+{\footnotesize\ttfamily Probabilistic\+Model\+Ptr tops\+::\+Train\+Maximal\+Dependence\+Decomposition\+::create (\begin{DoxyParamCaption}\item[{\hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} \&}]{parameters }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Creates a probability model. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em parameters} & is a set of parameters that is utilized to build the model \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented from \hyperlink{classtops_1_1ProbabilisticModelCreator_afed6c8ffa45fff446bdaa8b533da8f7c}{tops\+::\+Probabilistic\+Model\+Creator}.
+
+
+
+Definition at line 37 of file Train\+Maximal\+Dependence\+Decomposition.\+cpp.
+
+
+\begin{DoxyCode}
+38   \{
+39     ProbabilisticModelParameterValuePtr alphabet\_parameter = parameters.getOptionalParameterValue(\textcolor{stringliteral}{"alphabet
+      "});
+40     ProbabilisticModelParameterValuePtr consensus\_parameter = parameters.getOptionalParameterValue(\textcolor{stringliteral}{"
+      consensus"});
+41     ProbabilisticModelParameterValuePtr consensus\_model\_parameter = parameters.getOptionalParameterValue(\textcolor{stringliteral}{"
+      consensus\_model"});
+42     ProbabilisticModelParameterValuePtr training\_set\_parameter = parameters.getOptionalParameterValue(\textcolor{stringliteral}{"
+      training\_set"});
+43     ProbabilisticModelParameterValuePtr minimum\_subset\_parameter = parameters.getOptionalParameterValue(\textcolor{stringliteral}{"
+      minimum\_subset"});
+44 
+45     \textcolor{keywordflow}{if}(alphabet\_parameter == NULL || consensus\_parameter == NULL || consensus\_model\_parameter == NULL || 
+      training\_set\_parameter == NULL) \{
+46       std::cerr << \textcolor{stringliteral}{"ERROR: initial\_specification is a mandatory paramenter\(\backslash\)n"} << std::endl;
+47       \textcolor{keywordflow}{return} MaximalDependenceDecompositionPtr();
+48     \} \textcolor{keywordflow}{else} \{
+49       MaximalDependenceDecompositionPtr mdd = MaximalDependenceDecompositionPtr(\textcolor{keyword}{new} 
+      MaximalDependenceDecomposition());
+50       AlphabetPtr alphabet = AlphabetPtr(\textcolor{keyword}{new} Alphabet());
+51       alphabet->initializeFromVector(alphabet\_parameter->getStringVector());
+52       mdd->setAlphabet(alphabet);
+53 
+54       std::vector<std::string> consensus\_symbols = consensus\_parameter->getStringVector();
+55       ConsensusSequence consensus\_sequence;
+56       \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = 0; i < consensus\_symbols.size(); i++) \{
+57         std::vector<std::string> syms;
+58         boost::split(syms, consensus\_symbols[i], boost::is\_any\_of(\textcolor{stringliteral}{" "}));
+59         vector<int> s;
+60         \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} j = 0; j < syms.size(); j++) \{
+61           s.push\_back(alphabet->getSymbol(syms[j])->id());
+62         \}
+63         Consensus cons(s);
+64         consensus\_sequence.push\_back(cons);
+65       \}
+66       mdd->setConsensusSequence(consensus\_sequence);
+67 
+68       std::string consensus\_model\_str = consensus\_model\_parameter->getString();
+69       consensus\_model\_str = consensus\_model\_str.substr(1, consensus\_model\_str.size() - 2);
+70       ConfigurationReader consensus\_model\_reader;
+71       ProbabilisticModelCreatorClient consensus\_model\_creator;
+72       consensus\_model\_reader.load(consensus\_model\_str);
+73       mdd->setConsensusModel(consensus\_model\_creator.create(*(consensus\_model\_reader.parameters())));
+74 
+75       SequenceEntryList sample\_set;
+76       readSequencesFromFile(sample\_set, alphabet, training\_set\_parameter->getString());
+77       
+78       mdd->train(sample\_set, minimum\_subset\_parameter->getInt());
+79 
+80       \textcolor{keywordflow}{return} mdd;
+81     \}
+82   \}
+\end{DoxyCode}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/Train\+Maximal\+Dependence\+Decomposition.\+hpp\item 
+src/Train\+Maximal\+Dependence\+Decomposition.\+cpp\end{DoxyCompactItemize}

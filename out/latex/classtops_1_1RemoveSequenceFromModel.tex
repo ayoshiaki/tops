@@ -1,0 +1,115 @@
+\hypertarget{classtops_1_1RemoveSequenceFromModel}{}\section{tops\+:\+:Remove\+Sequence\+From\+Model Class Reference}
+\label{classtops_1_1RemoveSequenceFromModel}\index{tops\+::\+Remove\+Sequence\+From\+Model@{tops\+::\+Remove\+Sequence\+From\+Model}}
+
+
+Inheritance diagram for tops\+:\+:Remove\+Sequence\+From\+Model\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=224pt]{classtops_1_1RemoveSequenceFromModel__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for tops\+:\+:Remove\+Sequence\+From\+Model\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=224pt]{classtops_1_1RemoveSequenceFromModel__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classtops_1_1RemoveSequenceFromModel_a8a6fe18c983df88c32019571500646d8}\label{classtops_1_1RemoveSequenceFromModel_a8a6fe18c983df88c32019571500646d8}} 
+{\bfseries Remove\+Sequence\+From\+Model} (Probabilistic\+Model\+Creator\+Ptr creator)
+\item 
+virtual Probabilistic\+Model\+Ptr \hyperlink{classtops_1_1RemoveSequenceFromModel_a46f4928e36936559659d9503c1edd550}{create} (\hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} \&parameters) const
+\begin{DoxyCompactList}\small\item\em Creates a probabilistic model. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1RemoveSequenceFromModel_a0b147b31e334ab5a784e4771178bea58}\label{classtops_1_1RemoveSequenceFromModel_a0b147b31e334ab5a784e4771178bea58}} 
+virtual std\+::string \hyperlink{classtops_1_1RemoveSequenceFromModel_a0b147b31e334ab5a784e4771178bea58}{help} () const
+\begin{DoxyCompactList}\small\item\em This method returns a help message. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1RemoveSequenceFromModel_ae932a9246e1df8c371b4617793ce7c16}\label{classtops_1_1RemoveSequenceFromModel_ae932a9246e1df8c371b4617793ce7c16}} 
+virtual std\+::string {\bfseries factory\+\_\+name} () const
+\item 
+\mbox{\Hypertarget{classtops_1_1RemoveSequenceFromModel_a67cdb070a2e0eb4f3520180f32058d09}\label{classtops_1_1RemoveSequenceFromModel_a67cdb070a2e0eb4f3520180f32058d09}} 
+virtual void {\bfseries set\+Creator} (Probabilistic\+Model\+Creator\+Ptr creator)
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+
+
+Definition at line 36 of file Remove\+Sequence\+From\+Model.\+hpp.
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classtops_1_1RemoveSequenceFromModel_a46f4928e36936559659d9503c1edd550}\label{classtops_1_1RemoveSequenceFromModel_a46f4928e36936559659d9503c1edd550}} 
+\index{tops\+::\+Remove\+Sequence\+From\+Model@{tops\+::\+Remove\+Sequence\+From\+Model}!create@{create}}
+\index{create@{create}!tops\+::\+Remove\+Sequence\+From\+Model@{tops\+::\+Remove\+Sequence\+From\+Model}}
+\subsubsection{\texorpdfstring{create()}{create()}}
+{\footnotesize\ttfamily Probabilistic\+Model\+Ptr tops\+::\+Remove\+Sequence\+From\+Model\+::create (\begin{DoxyParamCaption}\item[{\hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} \&}]{parameters }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Creates a probabilistic model. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em parameters} & is a set of parameters that is utilized to build the model \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented from \hyperlink{classtops_1_1ProbabilisticModelCreator_afed6c8ffa45fff446bdaa8b533da8f7c}{tops\+::\+Probabilistic\+Model\+Creator}.
+
+
+
+Definition at line 32 of file Remove\+Sequence\+From\+Model.\+cpp.
+
+
+\begin{DoxyCode}
+33   \{
+34     ProbabilisticModelParameterValuePtr seqlistpar = parameters.getMandatoryParameterValue(\textcolor{stringliteral}{"sequence\_list"})
+      ;
+35     ProbabilisticModelParameterValuePtr alphabetpar = parameters.getMandatoryParameterValue(\textcolor{stringliteral}{"alphabet"});
+36     ProbabilisticModelParameterValuePtr phasepar = parameters.getOptionalParameterValue(\textcolor{stringliteral}{"phase"});
+37 
+38     \textcolor{keywordflow}{if}((seqlistpar == NULL) || (alphabetpar == NULL))
+39       \{
+40         std::cerr << \hyperlink{classtops_1_1RemoveSequenceFromModel_a0b147b31e334ab5a784e4771178bea58}{help}() << std::endl;
+41         exit(-1);
+42       \}
+43     AlphabetPtr alphabet = AlphabetPtr(\textcolor{keyword}{new} Alphabet());
+44     alphabet->initializeFromVector(alphabetpar->getStringVector());
+45 
+46     std::vector<std::string> seqs = seqlistpar->getStringVector();
+47 
+48     \textcolor{keywordtype}{int} phase = 0;
+49     \textcolor{keywordflow}{if}(phasepar != NULL)
+50       phase = phasepar->getInt();
+51 
+52 
+53     ProbabilisticModelPtr result = \_creator->create(parameters);
+54     \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} i = 0; i < (int)seqs.size() ; i ++ )
+55       \{
+56         SequenceFactory factory(alphabet);
+57         boost::regex sep(\textcolor{stringliteral}{" "});
+58         std::vector<std::string> seqstr;
+59         split\_regex(seqs[i], seqstr,  sep);
+60         Sequence s = factory.createSequence(seqstr);
+61         result->removeSequenceFromModel(s, phase);
+62       \}
+63 
+64     \textcolor{keywordflow}{return} result;
+65   \}
+\end{DoxyCode}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/Remove\+Sequence\+From\+Model.\+hpp\item 
+src/Remove\+Sequence\+From\+Model.\+cpp\end{DoxyCompactItemize}

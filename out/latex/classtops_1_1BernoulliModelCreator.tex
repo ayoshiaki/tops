@@ -1,0 +1,94 @@
+\hypertarget{classtops_1_1BernoulliModelCreator}{}\section{tops\+:\+:Bernoulli\+Model\+Creator Class Reference}
+\label{classtops_1_1BernoulliModelCreator}\index{tops\+::\+Bernoulli\+Model\+Creator@{tops\+::\+Bernoulli\+Model\+Creator}}
+
+
+This class is a factory for the bernoulli distribution.  
+
+
+
+
+{\ttfamily \#include $<$Bernoulli\+Model\+Creator.\+hpp$>$}
+
+
+
+Inheritance diagram for tops\+:\+:Bernoulli\+Model\+Creator\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=217pt]{classtops_1_1BernoulliModelCreator__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for tops\+:\+:Bernoulli\+Model\+Creator\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=217pt]{classtops_1_1BernoulliModelCreator__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual Probabilistic\+Model\+Ptr \hyperlink{classtops_1_1BernoulliModelCreator_a7269fc3cbc7bef0bc7456e6cf2ec44b3}{create} (\hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} \&parameters) const
+\begin{DoxyCompactList}\small\item\em Creates a probabilistic model. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1BernoulliModelCreator_a7b95b973ccc98192f835e98b656cd6ee}\label{classtops_1_1BernoulliModelCreator_a7b95b973ccc98192f835e98b656cd6ee}} 
+virtual std\+::string \hyperlink{classtops_1_1BernoulliModelCreator_a7b95b973ccc98192f835e98b656cd6ee}{help} () const
+\begin{DoxyCompactList}\small\item\em This method returns a help message. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+This class is a factory for the bernoulli distribution. 
+
+Definition at line 36 of file Bernoulli\+Model\+Creator.\+hpp.
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classtops_1_1BernoulliModelCreator_a7269fc3cbc7bef0bc7456e6cf2ec44b3}\label{classtops_1_1BernoulliModelCreator_a7269fc3cbc7bef0bc7456e6cf2ec44b3}} 
+\index{tops\+::\+Bernoulli\+Model\+Creator@{tops\+::\+Bernoulli\+Model\+Creator}!create@{create}}
+\index{create@{create}!tops\+::\+Bernoulli\+Model\+Creator@{tops\+::\+Bernoulli\+Model\+Creator}}
+\subsubsection{\texorpdfstring{create()}{create()}}
+{\footnotesize\ttfamily Probabilistic\+Model\+Ptr tops\+::\+Bernoulli\+Model\+Creator\+::create (\begin{DoxyParamCaption}\item[{\hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} \&}]{parameters }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Creates a probabilistic model. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em parameters} & is a set of parameters that is utilized to build the model \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented from \hyperlink{classtops_1_1ProbabilisticModelCreator_afed6c8ffa45fff446bdaa8b533da8f7c}{tops\+::\+Probabilistic\+Model\+Creator}.
+
+
+
+Definition at line 31 of file Bernoulli\+Model\+Creator.\+cpp.
+
+
+\begin{DoxyCode}
+31                                                                                                      \{
+32     ProbabilisticModelParameterValuePtr probs = parameters.getMandatoryParameterValue(\textcolor{stringliteral}{"probability"});
+33     \textcolor{keywordflow}{if}(probs == NULL)
+34       \{
+35         std::cerr << \hyperlink{classtops_1_1BernoulliModelCreator_a7b95b973ccc98192f835e98b656cd6ee}{help}() << std::endl;
+36         exit(-1);
+37       \}
+38     DoubleVector distr;
+39     distr.push\_back(probs->getDouble());
+40     distr.push\_back(1.0 - probs->getDouble());
+41     ProbabilisticModelPtr model = DiscreteIIDModelPtr(\textcolor{keyword}{new} DiscreteIIDModel(distr));
+42     \textcolor{keywordflow}{return} model;
+43   \}
+\end{DoxyCode}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/Bernoulli\+Model\+Creator.\+hpp\item 
+src/Bernoulli\+Model\+Creator.\+cpp\end{DoxyCompactItemize}

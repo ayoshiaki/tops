@@ -1,0 +1,4 @@
+<map id="tops::GeneralizedPairHiddenMarkovModel" name="tops::GeneralizedPairHiddenMarkovModel">
+<area shape="rect" id="node2" href="$classtops_1_1PairDecodableModel.html" title="Interface defining probabilistic model with the viterbi, forward and backward algorithm for pairs of ..." alt="" coords="12,80,187,107"/>
+<area shape="rect" id="node3" href="$classtops_1_1ProbabilisticModel.html" title="This is an abstract class representing a generative probabilistic model. " alt="" coords="19,5,180,32"/>
+</map>

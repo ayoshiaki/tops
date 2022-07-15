@@ -1,0 +1,115 @@
+\hypertarget{classtops_1_1PairDecodableModel}{}\section{tops\+:\+:Pair\+Decodable\+Model Class Reference}
+\label{classtops_1_1PairDecodableModel}\index{tops\+::\+Pair\+Decodable\+Model@{tops\+::\+Pair\+Decodable\+Model}}
+
+
+Interface defining probabilistic model with the viterbi, forward and backward algorithm for pairs of sequences.  
+
+
+
+
+{\ttfamily \#include $<$Pair\+Decodable\+Model.\+hpp$>$}
+
+
+
+Inheritance diagram for tops\+:\+:Pair\+Decodable\+Model\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=221pt]{classtops_1_1PairDecodableModel__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for tops\+:\+:Pair\+Decodable\+Model\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=211pt]{classtops_1_1PairDecodableModel__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classtops_1_1PairDecodableModel_aaba9164fad0d0209017e503ce75bbcaf}\label{classtops_1_1PairDecodableModel_aaba9164fad0d0209017e503ce75bbcaf}} 
+void {\bfseries not\+\_\+implemented} (std\+::string method) const
+\item 
+\mbox{\Hypertarget{classtops_1_1PairDecodableModel_a23dfc7af7ac316f2ec625252375bdcb4}\label{classtops_1_1PairDecodableModel_a23dfc7af7ac316f2ec625252375bdcb4}} 
+void {\bfseries set\+States} (std\+::vector$<$ Pair\+Decodable\+State\+Ptr $>$ states, Alphabet\+Ptr state\+\_\+names)
+\item 
+\mbox{\Hypertarget{classtops_1_1PairDecodableModel_ae87ccad9f6260d4c2f796b948a28840b}\label{classtops_1_1PairDecodableModel_ae87ccad9f6260d4c2f796b948a28840b}} 
+void {\bfseries set\+Observation\+Symbols} (Alphabet\+Ptr obs)
+\item 
+\mbox{\Hypertarget{classtops_1_1PairDecodableModel_a8a441aa6c49e92a99a4785d35fd1b047}\label{classtops_1_1PairDecodableModel_a8a441aa6c49e92a99a4785d35fd1b047}} 
+Pair\+Decodable\+State\+Ptr {\bfseries get\+State} (int id) const
+\item 
+\mbox{\Hypertarget{classtops_1_1PairDecodableModel_a08d8be82741c7e4d7c23d0c722150733}\label{classtops_1_1PairDecodableModel_a08d8be82741c7e4d7c23d0c722150733}} 
+Alphabet\+Ptr {\bfseries get\+State\+Names} () const
+\item 
+\mbox{\Hypertarget{classtops_1_1PairDecodableModel_ac36d6f35fddcbbbe4fce8aefeb04499d}\label{classtops_1_1PairDecodableModel_ac36d6f35fddcbbbe4fce8aefeb04499d}} 
+virtual \hyperlink{classtops_1_1PairDecodableModel}{Pair\+Decodable\+Model} $\ast$ {\bfseries pair\+Decodable} ()
+\item 
+\mbox{\Hypertarget{classtops_1_1PairDecodableModel_ad412b8dc5649d420808eac52d3f9d316}\label{classtops_1_1PairDecodableModel_ad412b8dc5649d420808eac52d3f9d316}} 
+virtual std\+::string \hyperlink{classtops_1_1PairDecodableModel_ad412b8dc5649d420808eac52d3f9d316}{model\+\_\+name} () const
+\begin{DoxyCompactList}\small\item\em returns the model name \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1PairDecodableModel_aa7898d82d3ea5de246b9677cb03d2c1e}\label{classtops_1_1PairDecodableModel_aa7898d82d3ea5de246b9677cb03d2c1e}} 
+virtual string {\bfseries get\+State\+Name} (int state) const
+\item 
+\mbox{\Hypertarget{classtops_1_1PairDecodableModel_a3505ecdf567b392edb700d8734aa1baa}\label{classtops_1_1PairDecodableModel_a3505ecdf567b392edb700d8734aa1baa}} 
+virtual void {\bfseries set\+Silent\+States} (std\+::vector$<$ Pair\+Decodable\+State\+Ptr $>$ states)
+\item 
+\mbox{\Hypertarget{classtops_1_1PairDecodableModel_a19496eec82806c981dc0b99be9b4f37c}\label{classtops_1_1PairDecodableModel_a19496eec82806c981dc0b99be9b4f37c}} 
+virtual int {\bfseries get\+Silent\+Id} (int k) const
+\item 
+\mbox{\Hypertarget{classtops_1_1PairDecodableModel_abe4456add4701b0f5a3ea0a32cb66c2b}\label{classtops_1_1PairDecodableModel_abe4456add4701b0f5a3ea0a32cb66c2b}} 
+virtual void {\bfseries silent\+States\+Sort} (vector$<$ Pair\+Decodable\+State\+Ptr $>$ sil\+States)
+\item 
+\mbox{\Hypertarget{classtops_1_1PairDecodableModel_a53161986d61af00fadeed4043366077c}\label{classtops_1_1PairDecodableModel_a53161986d61af00fadeed4043366077c}} 
+virtual void {\bfseries initialize} (const \hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} \&par)=0
+\item 
+\mbox{\Hypertarget{classtops_1_1PairDecodableModel_a17f808a62358881d82768c944f4c47b0}\label{classtops_1_1PairDecodableModel_a17f808a62358881d82768c944f4c47b0}} 
+std\+::string \hyperlink{classtops_1_1PairDecodableModel_a17f808a62358881d82768c944f4c47b0}{str} () const
+\begin{DoxyCompactList}\small\item\em returns the string representation of the model \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1PairDecodableModel_acdcde5c8ea2140727caa660a9957ac98}\label{classtops_1_1PairDecodableModel_acdcde5c8ea2140727caa660a9957ac98}} 
+virtual double {\bfseries forward} (const Sequence \&seq1, const Sequence \&seq2, vector$<$ Matrix $>$ \&a)
+\item 
+\mbox{\Hypertarget{classtops_1_1PairDecodableModel_a34b0940267a5bb8506eea8608f3b0e4b}\label{classtops_1_1PairDecodableModel_a34b0940267a5bb8506eea8608f3b0e4b}} 
+virtual double {\bfseries backward} (const Sequence \&seq1, const Sequence \&seq2, vector$<$ Matrix $>$ \&a)
+\item 
+\mbox{\Hypertarget{classtops_1_1PairDecodableModel_a0f6960d373d1f6bed91e860a36d7eee9}\label{classtops_1_1PairDecodableModel_a0f6960d373d1f6bed91e860a36d7eee9}} 
+virtual double {\bfseries viterbi} (const Sequence \&seq1, const Sequence \&seq2, Sequence \&path, Sequence \&al1, Sequence \&al2, vector$<$ Matrix $>$ \&a)
+\item 
+\mbox{\Hypertarget{classtops_1_1PairDecodableModel_a8cb63bf6183bb505e7716a2de1b14319}\label{classtops_1_1PairDecodableModel_a8cb63bf6183bb505e7716a2de1b14319}} 
+virtual void {\bfseries posterior\+Probabilities} (const Sequence \&seq1, const Sequence \&seq2, vector$<$ Matrix $>$ \&probabilities)
+\item 
+\mbox{\Hypertarget{classtops_1_1PairDecodableModel_a0ac0b80316ebc9c0f149d021f85bf136}\label{classtops_1_1PairDecodableModel_a0ac0b80316ebc9c0f149d021f85bf136}} 
+virtual void {\bfseries generate\+Sequence} (Sequence \&seq1, Sequence \&seq2, Sequence \&path)
+\item 
+\mbox{\Hypertarget{classtops_1_1PairDecodableModel_affe56c2870846451da360217aa50446f}\label{classtops_1_1PairDecodableModel_affe56c2870846451da360217aa50446f}} 
+virtual void {\bfseries train\+Baum\+Welch} (Sequence\+List \&sample1, Sequence\+List \&sample2, int maxiterations, double diff\+\_\+threshold)
+\item 
+\mbox{\Hypertarget{classtops_1_1PairDecodableModel_a7a21b47bbaa56dfd40c7320a255e2f35}\label{classtops_1_1PairDecodableModel_a7a21b47bbaa56dfd40c7320a255e2f35}} 
+virtual Probabilistic\+Model\+Creator\+Ptr {\bfseries get\+Factory} () const
+\end{DoxyCompactItemize}
+\subsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classtops_1_1PairDecodableModel_af776384230a00d80683b4eecaccd4194}\label{classtops_1_1PairDecodableModel_af776384230a00d80683b4eecaccd4194}} 
+std\+::vector$<$ Pair\+Decodable\+State\+Ptr $>$ {\bfseries \+\_\+states}
+\item 
+\mbox{\Hypertarget{classtops_1_1PairDecodableModel_aea4a28637c497db64c7c4c7c47f63376}\label{classtops_1_1PairDecodableModel_aea4a28637c497db64c7c4c7c47f63376}} 
+Alphabet\+Ptr {\bfseries \+\_\+state\+\_\+names}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Interface defining probabilistic model with the viterbi, forward and backward algorithm for pairs of sequences. 
+
+Definition at line 106 of file Pair\+Decodable\+Model.\+hpp.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/Pair\+Decodable\+Model.\+hpp\end{DoxyCompactItemize}

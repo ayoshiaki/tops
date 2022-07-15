@@ -1,0 +1,155 @@
+\hypertarget{classtops_1_1TrainProfileHMMMaxLikelihood}{}\section{tops\+:\+:Train\+Profile\+H\+M\+M\+Max\+Likelihood Class Reference}
+\label{classtops_1_1TrainProfileHMMMaxLikelihood}\index{tops\+::\+Train\+Profile\+H\+M\+M\+Max\+Likelihood@{tops\+::\+Train\+Profile\+H\+M\+M\+Max\+Likelihood}}
+
+
+Creates a Profile\+H\+MM using Max\+Likelihood.  
+
+
+
+
+{\ttfamily \#include $<$Train\+Profile\+H\+M\+M\+Max\+Likelihood.\+hpp$>$}
+
+
+
+Inheritance diagram for tops\+:\+:Train\+Profile\+H\+M\+M\+Max\+Likelihood\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=214pt]{classtops_1_1TrainProfileHMMMaxLikelihood__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for tops\+:\+:Train\+Profile\+H\+M\+M\+Max\+Likelihood\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=214pt]{classtops_1_1TrainProfileHMMMaxLikelihood__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual Probabilistic\+Model\+Ptr \hyperlink{classtops_1_1TrainProfileHMMMaxLikelihood_ad73c7f1ec96af19a08186cfec7a141e7}{create} (\hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} \&parameters) const
+\begin{DoxyCompactList}\small\item\em Creates a probability model. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1TrainProfileHMMMaxLikelihood_a00146cd905b59b1a260227dfaf64829f}\label{classtops_1_1TrainProfileHMMMaxLikelihood_a00146cd905b59b1a260227dfaf64829f}} 
+virtual void {\bfseries infer\+\_\+model} (string fastafile, int pseudocounts, double residuefraction, string datetime, const vector$<$ string $>$ \&symbols) const
+\item 
+\mbox{\Hypertarget{classtops_1_1TrainProfileHMMMaxLikelihood_a058fd6f201c3f64db3385b591b1b21e7}\label{classtops_1_1TrainProfileHMMMaxLikelihood_a058fd6f201c3f64db3385b591b1b21e7}} 
+virtual bool {\bfseries match\+\_\+expression} (string input, string er) const
+\item 
+\mbox{\Hypertarget{classtops_1_1TrainProfileHMMMaxLikelihood_a9c0828cf670b48f74343bf1850b8414b}\label{classtops_1_1TrainProfileHMMMaxLikelihood_a9c0828cf670b48f74343bf1850b8414b}} 
+virtual void {\bfseries model\+\_\+file\+\_\+creator} (int n\+\_\+match\+\_\+states, const vector$<$ string $>$ \&symbols, string model\+\_\+filename) const
+\item 
+\mbox{\Hypertarget{classtops_1_1TrainProfileHMMMaxLikelihood_a94dbb667d355c3e7a5d84dfe4ae5dd83}\label{classtops_1_1TrainProfileHMMMaxLikelihood_a94dbb667d355c3e7a5d84dfe4ae5dd83}} 
+virtual void {\bfseries config\+\_\+file\+\_\+creator} (string states\+\_\+filename, string emiss\+\_\+filename, string model\+\_\+filename, string config\+\_\+filename, int pseudocounts) const
+\item 
+\mbox{\Hypertarget{classtops_1_1TrainProfileHMMMaxLikelihood_a3f3f85e3d6234eb962654e91953c8e94}\label{classtops_1_1TrainProfileHMMMaxLikelihood_a3f3f85e3d6234eb962654e91953c8e94}} 
+virtual void {\bfseries emiss\+\_\+states\+\_\+file\+\_\+creator} (const vector$<$ string $>$ \&seq, int index\mbox{[}$\,$\mbox{]}, bool match\mbox{[}$\,$\mbox{]}, const vector$<$ string $>$ \&seq\+\_\+names, string emiss\+\_\+filename, string states\+\_\+filename) const
+\item 
+\mbox{\Hypertarget{classtops_1_1TrainProfileHMMMaxLikelihood_a73cfab4b1ac555cbc5204ea955374220}\label{classtops_1_1TrainProfileHMMMaxLikelihood_a73cfab4b1ac555cbc5204ea955374220}} 
+virtual std\+::string \hyperlink{classtops_1_1TrainProfileHMMMaxLikelihood_a73cfab4b1ac555cbc5204ea955374220}{help} () const
+\begin{DoxyCompactList}\small\item\em Provides a help. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Creates a Profile\+H\+MM using Max\+Likelihood. 
+
+Definition at line 42 of file Train\+Profile\+H\+M\+M\+Max\+Likelihood.\+hpp.
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classtops_1_1TrainProfileHMMMaxLikelihood_ad73c7f1ec96af19a08186cfec7a141e7}\label{classtops_1_1TrainProfileHMMMaxLikelihood_ad73c7f1ec96af19a08186cfec7a141e7}} 
+\index{tops\+::\+Train\+Profile\+H\+M\+M\+Max\+Likelihood@{tops\+::\+Train\+Profile\+H\+M\+M\+Max\+Likelihood}!create@{create}}
+\index{create@{create}!tops\+::\+Train\+Profile\+H\+M\+M\+Max\+Likelihood@{tops\+::\+Train\+Profile\+H\+M\+M\+Max\+Likelihood}}
+\subsubsection{\texorpdfstring{create()}{create()}}
+{\footnotesize\ttfamily Probabilistic\+Model\+Ptr tops\+::\+Train\+Profile\+H\+M\+M\+Max\+Likelihood\+::create (\begin{DoxyParamCaption}\item[{\hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} \&}]{parameters }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Creates a probability model. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em parameters} & is a set of parameters that is utilized to build the model \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented from \hyperlink{classtops_1_1ProbabilisticModelCreator_afed6c8ffa45fff446bdaa8b533da8f7c}{tops\+::\+Probabilistic\+Model\+Creator}.
+
+
+
+Definition at line 34 of file Train\+Profile\+H\+M\+M\+Max\+Likelihood.\+cpp.
+
+
+\begin{DoxyCode}
+34                                                                                                           \{
+35 
+36     \textcolor{keywordtype}{string} datetime = to\_iso\_string(boost::posix\_time::microsec\_clock::local\_time()).substr(0, 15);
+37 
+38     ProbabilisticModelParameterValuePtr fastafilepathpar = parameters.getMandatoryParameterValue(\textcolor{stringliteral}{"
+      fasta\_file"});
+39     ProbabilisticModelParameterValuePtr pseudocountpar = parameters.getMandatoryParameterValue(\textcolor{stringliteral}{"
+      pseudocounts"});
+40     ProbabilisticModelParameterValuePtr residuefractionpar = parameters.getMandatoryParameterValue(\textcolor{stringliteral}{"
+      residue\_fraction"});
+41     ProbabilisticModelParameterValuePtr alphabetpar = parameters.getMandatoryParameterValue(\textcolor{stringliteral}{"alphabet"});
+42 
+43     vector<string> symbols;
+44     \textcolor{keywordtype}{string} alphabet = alphabetpar->getString();
+45     boost::split(symbols, alphabet, boost::is\_any\_of(\textcolor{stringliteral}{","}));
+46 
+47     \textcolor{keywordtype}{int} pseudocounts = 1;
+48     \textcolor{keywordflow}{if} (pseudocountpar != NULL)
+49         pseudocounts = pseudocountpar->getInt();
+50 
+51     infer\_model(fastafilepathpar->getString(), pseudocountpar->getInt(), residuefractionpar->getDouble(), 
+      datetime, symbols);
+52 
+53 \textcolor{comment}{//    ProbabilisticModelParameterValuePtr initmodelpar =
+       parameters.getMandatoryParameterValue("initial\_model");}
+54 \textcolor{comment}{//    ProbabilisticModelParameterValuePtr statespar =
+       parameters.getMandatoryParameterValue("states\_training\_set");}
+55 \textcolor{comment}{//    ProbabilisticModelParameterValuePtr emisspar =
+       parameters.getMandatoryParameterValue("emissions\_training\_set");}
+56 \textcolor{comment}{//    ProbabilisticModelParameterValuePtr pseudopar = parameters.getOptionalParameterValue("pseudocounts");}
+57 
+58     \textcolor{keywordtype}{string} emiss\_filename = \textcolor{stringliteral}{".emiss\_"} + datetime + \textcolor{stringliteral}{".txt"};
+59     \textcolor{keywordtype}{string} states\_filename = \textcolor{stringliteral}{".states\_"} + datetime + \textcolor{stringliteral}{".txt"};
+60     \textcolor{keywordtype}{string} model\_filename = \textcolor{stringliteral}{".model\_"} + datetime + \textcolor{stringliteral}{".txt"};
+61     \textcolor{keywordtype}{string} config\_filename = \textcolor{stringliteral}{".config\_"} + datetime + \textcolor{stringliteral}{".txt"};
+62 
+63     ProbabilisticModelCreatorClient creator;
+64 \textcolor{comment}{//    std::string name = initmodelpar->getString();}
+65     ProbabilisticModelPtr m = creator.create(model\_filename);
+66     SequenceEntryList states\_sample\_set, emiss\_sample\_set;
+67     AlphabetPtr emiss\_alphabet = m->alphabet();
+68     AlphabetPtr states\_alphabet = m->getStateNames();
+69     readSequencesFromFile(states\_sample\_set, states\_alphabet, states\_filename);
+70     readSequencesFromFile(emiss\_sample\_set, emiss\_alphabet, emiss\_filename);
+71 
+72     SequenceList seqs1, seqs2;
+73     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = 0; i < (int) states\_sample\_set.size(); i++)
+74         seqs1.push\_back(states\_sample\_set[i]->getSequence());
+75     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = 0; i < (int) emiss\_sample\_set.size(); i++)
+76         seqs2.push\_back(emiss\_sample\_set[i]->getSequence());
+77     m->profileDecodable()->trainMaxLikelihood(seqs1, seqs2, pseudocounts);
+78 
+79     \textcolor{keywordtype}{string} remover = \textcolor{stringliteral}{"rm "} + config\_filename + \textcolor{stringliteral}{" "} + model\_filename + \textcolor{stringliteral}{" "} + states\_filename + \textcolor{stringliteral}{" "} + 
+      emiss\_filename;
+80 
+81     system(remover.c\_str());
+82 
+83     \textcolor{keywordflow}{return} m;
+84 \}
+\end{DoxyCode}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/Train\+Profile\+H\+M\+M\+Max\+Likelihood.\+hpp\item 
+src/Train\+Profile\+H\+M\+M\+Max\+Likelihood.\+cpp\end{DoxyCompactItemize}

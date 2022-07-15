@@ -1,0 +1,92 @@
+\hypertarget{classtops_1_1FixedSequenceAtPosition}{}\section{tops\+:\+:Fixed\+Sequence\+At\+Position Class Reference}
+\label{classtops_1_1FixedSequenceAtPosition}\index{tops\+::\+Fixed\+Sequence\+At\+Position@{tops\+::\+Fixed\+Sequence\+At\+Position}}
+
+
+A decorator that forces the emission of the same sequence at a fixed position of the sequence.  
+
+
+
+
+{\ttfamily \#include $<$Fixed\+Sequence\+At\+Position.\+hpp$>$}
+
+
+
+Inheritance diagram for tops\+:\+:Fixed\+Sequence\+At\+Position\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=234pt]{classtops_1_1FixedSequenceAtPosition__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for tops\+:\+:Fixed\+Sequence\+At\+Position\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=234pt]{classtops_1_1FixedSequenceAtPosition__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classtops_1_1FixedSequenceAtPosition_afc84dd484d286f246a7536d6f50feb93}\label{classtops_1_1FixedSequenceAtPosition_afc84dd484d286f246a7536d6f50feb93}} 
+{\bfseries Fixed\+Sequence\+At\+Position} (Probabilistic\+Model\+Ptr m)
+\item 
+\mbox{\Hypertarget{classtops_1_1FixedSequenceAtPosition_a5337554ef494d0dce741580266b8cbbd}\label{classtops_1_1FixedSequenceAtPosition_a5337554ef494d0dce741580266b8cbbd}} 
+virtual void {\bfseries initialize} (int position, Sequence sequence, Discrete\+I\+I\+D\+Model\+Ptr distr)
+\item 
+\mbox{\Hypertarget{classtops_1_1FixedSequenceAtPosition_a18c28305c607a6d0a4699dd5244ad8d0}\label{classtops_1_1FixedSequenceAtPosition_a18c28305c607a6d0a4699dd5244ad8d0}} 
+virtual double \hyperlink{classtops_1_1FixedSequenceAtPosition_a18c28305c607a6d0a4699dd5244ad8d0}{evaluate} (const Sequence \&s, unsigned int begin, unsigned int end) const
+\begin{DoxyCompactList}\small\item\em Calculates the sequence likelihood given this model. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1FixedSequenceAtPosition_a3e50c13ff092961851feadd5f345943e}\label{classtops_1_1FixedSequenceAtPosition_a3e50c13ff092961851feadd5f345943e}} 
+virtual Sequence \& {\bfseries choose} (Sequence \&h, int \hyperlink{classtops_1_1ProbabilisticModel_a4e3910e9b9b848b7078e7101909ae82a}{size}) const
+\item 
+\mbox{\Hypertarget{classtops_1_1FixedSequenceAtPosition_a90c619825f8973acc053f2b3fee35497}\label{classtops_1_1FixedSequenceAtPosition_a90c619825f8973acc053f2b3fee35497}} 
+virtual Sequence \& {\bfseries choose} (Sequence \&h, int initial\+\_\+phase, int \hyperlink{classtops_1_1ProbabilisticModel_a4e3910e9b9b848b7078e7101909ae82a}{size}) const
+\item 
+\mbox{\Hypertarget{classtops_1_1FixedSequenceAtPosition_a25deb5048f3e1dd278a923c2bfce50bf}\label{classtops_1_1FixedSequenceAtPosition_a25deb5048f3e1dd278a923c2bfce50bf}} 
+virtual Sequence \& {\bfseries choose} (Sequence \&h, Sequence \&path, int \hyperlink{classtops_1_1ProbabilisticModel_a4e3910e9b9b848b7078e7101909ae82a}{size}) const
+\item 
+\mbox{\Hypertarget{classtops_1_1FixedSequenceAtPosition_a241d9315ae90fe8d8f57c8072af72a22}\label{classtops_1_1FixedSequenceAtPosition_a241d9315ae90fe8d8f57c8072af72a22}} 
+virtual Sequence \& {\bfseries choose} (Sequence \&h, Sequence \&path, int i, int \hyperlink{classtops_1_1ProbabilisticModel_a4e3910e9b9b848b7078e7101909ae82a}{size}) const
+\item 
+\mbox{\Hypertarget{classtops_1_1FixedSequenceAtPosition_ad5cfee86e160eb7249cd1f850aa53adf}\label{classtops_1_1FixedSequenceAtPosition_ad5cfee86e160eb7249cd1f850aa53adf}} 
+virtual Sequence \& {\bfseries choose\+With\+History} (Sequence \&h, int i, int \hyperlink{classtops_1_1ProbabilisticModel_a4e3910e9b9b848b7078e7101909ae82a}{size}) const
+\item 
+\mbox{\Hypertarget{classtops_1_1FixedSequenceAtPosition_a58e48dfdfdba8a8269508217fe5e0e6a}\label{classtops_1_1FixedSequenceAtPosition_a58e48dfdfdba8a8269508217fe5e0e6a}} 
+virtual Sequence \& {\bfseries choose\+With\+History} (Sequence \&h, int i, int phase, int \hyperlink{classtops_1_1ProbabilisticModel_a4e3910e9b9b848b7078e7101909ae82a}{size}) const
+\item 
+\mbox{\Hypertarget{classtops_1_1FixedSequenceAtPosition_a1600948006e576c46958c69eb3b9dde9}\label{classtops_1_1FixedSequenceAtPosition_a1600948006e576c46958c69eb3b9dde9}} 
+virtual double {\bfseries prefix\+\_\+sum\+\_\+array\+\_\+compute} (int begin, int end)
+\item 
+\mbox{\Hypertarget{classtops_1_1FixedSequenceAtPosition_a7aa2ee2c289eb7538c8fff063b17fdbc}\label{classtops_1_1FixedSequenceAtPosition_a7aa2ee2c289eb7538c8fff063b17fdbc}} 
+virtual double {\bfseries prefix\+\_\+sum\+\_\+array\+\_\+compute} (int begin, int end, int phase)
+\item 
+\mbox{\Hypertarget{classtops_1_1FixedSequenceAtPosition_acb1f8bebd2815c580c66526c55b292e7}\label{classtops_1_1FixedSequenceAtPosition_acb1f8bebd2815c580c66526c55b292e7}} 
+virtual bool {\bfseries initialize\+\_\+prefix\+\_\+sum\+\_\+array} (const Sequence \&s, int phase)
+\item 
+\mbox{\Hypertarget{classtops_1_1FixedSequenceAtPosition_a61cf8b9a9e91b1785fe52f05fc6d041e}\label{classtops_1_1FixedSequenceAtPosition_a61cf8b9a9e91b1785fe52f05fc6d041e}} 
+virtual bool {\bfseries initialize\+\_\+prefix\+\_\+sum\+\_\+array} (const Sequence \&s)
+\item 
+\mbox{\Hypertarget{classtops_1_1FixedSequenceAtPosition_a55c81be8635c092f980689e7fa723998}\label{classtops_1_1FixedSequenceAtPosition_a55c81be8635c092f980689e7fa723998}} 
+virtual std\+::string \hyperlink{classtops_1_1FixedSequenceAtPosition_a55c81be8635c092f980689e7fa723998}{str} () const
+\begin{DoxyCompactList}\small\item\em returns the string representation of the model \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1FixedSequenceAtPosition_acc3c6985dbd22612f13e0a7e1f485c2d}\label{classtops_1_1FixedSequenceAtPosition_acc3c6985dbd22612f13e0a7e1f485c2d}} 
+std\+::string \hyperlink{classtops_1_1FixedSequenceAtPosition_acc3c6985dbd22612f13e0a7e1f485c2d}{model\+\_\+name} () const
+\begin{DoxyCompactList}\small\item\em returns the model name \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+A decorator that forces the emission of the same sequence at a fixed position of the sequence. 
+
+Definition at line 34 of file Fixed\+Sequence\+At\+Position.\+hpp.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/Fixed\+Sequence\+At\+Position.\+hpp\item 
+src/Fixed\+Sequence\+At\+Position.\+cpp\end{DoxyCompactItemize}

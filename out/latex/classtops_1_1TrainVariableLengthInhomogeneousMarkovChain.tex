@@ -1,0 +1,89 @@
+\hypertarget{classtops_1_1TrainVariableLengthInhomogeneousMarkovChain}{}\section{tops\+:\+:Train\+Variable\+Length\+Inhomogeneous\+Markov\+Chain Class Reference}
+\label{classtops_1_1TrainVariableLengthInhomogeneousMarkovChain}\index{tops\+::\+Train\+Variable\+Length\+Inhomogeneous\+Markov\+Chain@{tops\+::\+Train\+Variable\+Length\+Inhomogeneous\+Markov\+Chain}}
+
+
+Train a inhomogeneous V\+L\+MC.  
+
+
+
+
+{\ttfamily \#include $<$Train\+Variable\+Length\+Inhomogeneous\+Markov\+Chain.\+hpp$>$}
+
+
+
+Inheritance diagram for tops\+:\+:Train\+Variable\+Length\+Inhomogeneous\+Markov\+Chain\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=223pt]{classtops_1_1TrainVariableLengthInhomogeneousMarkovChain__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for tops\+:\+:Train\+Variable\+Length\+Inhomogeneous\+Markov\+Chain\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=223pt]{classtops_1_1TrainVariableLengthInhomogeneousMarkovChain__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual Probabilistic\+Model\+Ptr \hyperlink{classtops_1_1TrainVariableLengthInhomogeneousMarkovChain_a1a0e7cada3c58961aa186904214a6dac}{create} (\hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} \&parameters) const
+\begin{DoxyCompactList}\small\item\em Creates a probability model. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1TrainVariableLengthInhomogeneousMarkovChain_af463e2df09043b1505d4dc9de4c5a749}\label{classtops_1_1TrainVariableLengthInhomogeneousMarkovChain_af463e2df09043b1505d4dc9de4c5a749}} 
+virtual Probabilistic\+Model\+Ptr \hyperlink{classtops_1_1TrainVariableLengthInhomogeneousMarkovChain_af463e2df09043b1505d4dc9de4c5a749}{create} (\hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} \&parameters, double \&loglikelihood, int \&sample\+\_\+size) const
+\begin{DoxyCompactList}\small\item\em Creates the model and returns the loglikelihood of the training set. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1TrainVariableLengthInhomogeneousMarkovChain_ac3f922be58ed8b1b15c828bfe714134c}\label{classtops_1_1TrainVariableLengthInhomogeneousMarkovChain_ac3f922be58ed8b1b15c828bfe714134c}} 
+virtual std\+::string \hyperlink{classtops_1_1TrainVariableLengthInhomogeneousMarkovChain_ac3f922be58ed8b1b15c828bfe714134c}{help} () const
+\begin{DoxyCompactList}\small\item\em Provides a help. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Train a inhomogeneous V\+L\+MC. 
+
+Definition at line 38 of file Train\+Variable\+Length\+Inhomogeneous\+Markov\+Chain.\+hpp.
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classtops_1_1TrainVariableLengthInhomogeneousMarkovChain_a1a0e7cada3c58961aa186904214a6dac}\label{classtops_1_1TrainVariableLengthInhomogeneousMarkovChain_a1a0e7cada3c58961aa186904214a6dac}} 
+\index{tops\+::\+Train\+Variable\+Length\+Inhomogeneous\+Markov\+Chain@{tops\+::\+Train\+Variable\+Length\+Inhomogeneous\+Markov\+Chain}!create@{create}}
+\index{create@{create}!tops\+::\+Train\+Variable\+Length\+Inhomogeneous\+Markov\+Chain@{tops\+::\+Train\+Variable\+Length\+Inhomogeneous\+Markov\+Chain}}
+\subsubsection{\texorpdfstring{create()}{create()}}
+{\footnotesize\ttfamily Probabilistic\+Model\+Ptr tops\+::\+Train\+Variable\+Length\+Inhomogeneous\+Markov\+Chain\+::create (\begin{DoxyParamCaption}\item[{\hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} \&}]{parameters }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Creates a probability model. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em parameters} & is a set of parameters that is utilized to build the model \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented from \hyperlink{classtops_1_1ProbabilisticModelCreator_afed6c8ffa45fff446bdaa8b533da8f7c}{tops\+::\+Probabilistic\+Model\+Creator}.
+
+
+
+Definition at line 166 of file Train\+Variable\+Length\+Inhomogeneous\+Markov\+Chain.\+cpp.
+
+
+\begin{DoxyCode}
+167                                                                  \{
+168         \textcolor{keywordtype}{int} size;
+169         \textcolor{keywordtype}{double} loglikelihood;
+170         \textcolor{keywordflow}{return} \hyperlink{classtops_1_1TrainVariableLengthInhomogeneousMarkovChain_a1a0e7cada3c58961aa186904214a6dac}{create}(parameters, loglikelihood, size);
+171 \}
+\end{DoxyCode}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/Train\+Variable\+Length\+Inhomogeneous\+Markov\+Chain.\+hpp\item 
+src/Train\+Variable\+Length\+Inhomogeneous\+Markov\+Chain.\+cpp\end{DoxyCompactItemize}

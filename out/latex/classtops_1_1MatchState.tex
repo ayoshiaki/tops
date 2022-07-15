@@ -1,0 +1,51 @@
+\hypertarget{classtops_1_1MatchState}{}\section{tops\+:\+:Match\+State Class Reference}
+\label{classtops_1_1MatchState}\index{tops\+::\+Match\+State@{tops\+::\+Match\+State}}
+
+
+Inheritance diagram for tops\+:\+:Match\+State\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=175pt]{classtops_1_1MatchState__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for tops\+:\+:Match\+State\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=175pt]{classtops_1_1MatchState__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classtops_1_1MatchState_a354e76018b7a8fd980c3bb6f9c3a503b}\label{classtops_1_1MatchState_a354e76018b7a8fd980c3bb6f9c3a503b}} 
+{\bfseries Match\+State} (int id, Symbol\+Ptr name, Discrete\+I\+I\+D\+Model\+Ptr emission, Discrete\+I\+I\+D\+Model\+Ptr transitions, Int\+Vector i\+Transitions, Int\+Vector o\+Transitions)
+\item 
+\mbox{\Hypertarget{classtops_1_1MatchState_a25f7824b2a3a3382e971f85a9a49afd7}\label{classtops_1_1MatchState_a25f7824b2a3a3382e971f85a9a49afd7}} 
+void {\bfseries forward\+Sum} (vector$<$ P\+H\+M\+M\+State\+Ptr $>$ \&states, const Sequence \&seq1, const Sequence \&seq2, vector$<$ Matrix $>$ \&a, int i, int j, int gap\+\_\+id, int begin\+\_\+id)
+\item 
+\mbox{\Hypertarget{classtops_1_1MatchState_a9d8a8827198fae7be7d19775805792d6}\label{classtops_1_1MatchState_a9d8a8827198fae7be7d19775805792d6}} 
+void {\bfseries backward\+Sum} (vector$<$ P\+H\+M\+M\+State\+Ptr $>$ \&states, const Sequence \&seq1, const Sequence \&seq2, vector$<$ Matrix $>$ \&a, int i, int j, int gap\+\_\+id, int curr\+State\+Id, double $\ast$accumulator)
+\item 
+\mbox{\Hypertarget{classtops_1_1MatchState_a8e39a0ae9b351d68bbb92e31d83ce860}\label{classtops_1_1MatchState_a8e39a0ae9b351d68bbb92e31d83ce860}} 
+void {\bfseries post\+Prob\+Sum} (f\+Matrix \&pp\+Match, f\+Matrix \&pp\+Gap1, f\+Matrix \&pp\+Gap2, Matrix \&alpha, Matrix \&beta, double full, int i, int j)
+\end{DoxyCompactItemize}
+\subsection*{Additional Inherited Members}
+
+
+\subsection{Detailed Description}
+
+
+Definition at line 118 of file Pair\+Hidden\+Markov\+Model.\+hpp.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/Pair\+Hidden\+Markov\+Model.\+hpp\item 
+src/Pair\+Hidden\+Markov\+Model.\+cpp\end{DoxyCompactItemize}

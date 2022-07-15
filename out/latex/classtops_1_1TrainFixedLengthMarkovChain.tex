@@ -1,0 +1,87 @@
+\hypertarget{classtops_1_1TrainFixedLengthMarkovChain}{}\section{tops\+:\+:Train\+Fixed\+Length\+Markov\+Chain Class Reference}
+\label{classtops_1_1TrainFixedLengthMarkovChain}\index{tops\+::\+Train\+Fixed\+Length\+Markov\+Chain@{tops\+::\+Train\+Fixed\+Length\+Markov\+Chain}}
+
+
+Creates a fixed length markov chain.  
+
+
+
+
+{\ttfamily \#include $<$Train\+Fixed\+Length\+Markov\+Chain.\+hpp$>$}
+
+
+
+Inheritance diagram for tops\+:\+:Train\+Fixed\+Length\+Markov\+Chain\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=229pt]{classtops_1_1TrainFixedLengthMarkovChain__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for tops\+:\+:Train\+Fixed\+Length\+Markov\+Chain\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=229pt]{classtops_1_1TrainFixedLengthMarkovChain__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual Probabilistic\+Model\+Ptr \hyperlink{classtops_1_1TrainFixedLengthMarkovChain_a13c61bbbe042026a4e406f5ba9214b0e}{create} (\hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} \&parameters) const
+\begin{DoxyCompactList}\small\item\em Creates a probability model. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1TrainFixedLengthMarkovChain_a69c2692580c3447db27a0e2cb4f02260}\label{classtops_1_1TrainFixedLengthMarkovChain_a69c2692580c3447db27a0e2cb4f02260}} 
+virtual Probabilistic\+Model\+Ptr \hyperlink{classtops_1_1TrainFixedLengthMarkovChain_a69c2692580c3447db27a0e2cb4f02260}{create} (\hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} \&parameters, double \&loglikelihood, int \&sample\+\_\+size) const
+\begin{DoxyCompactList}\small\item\em Creates the model and returns the loglikelihood of the training set. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Creates a fixed length markov chain. 
+
+Definition at line 38 of file Train\+Fixed\+Length\+Markov\+Chain.\+hpp.
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classtops_1_1TrainFixedLengthMarkovChain_a13c61bbbe042026a4e406f5ba9214b0e}\label{classtops_1_1TrainFixedLengthMarkovChain_a13c61bbbe042026a4e406f5ba9214b0e}} 
+\index{tops\+::\+Train\+Fixed\+Length\+Markov\+Chain@{tops\+::\+Train\+Fixed\+Length\+Markov\+Chain}!create@{create}}
+\index{create@{create}!tops\+::\+Train\+Fixed\+Length\+Markov\+Chain@{tops\+::\+Train\+Fixed\+Length\+Markov\+Chain}}
+\subsubsection{\texorpdfstring{create()}{create()}}
+{\footnotesize\ttfamily Probabilistic\+Model\+Ptr tops\+::\+Train\+Fixed\+Length\+Markov\+Chain\+::create (\begin{DoxyParamCaption}\item[{\hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} \&}]{parameters }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Creates a probability model. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em parameters} & is a set of parameters that is utilized to build the model \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented from \hyperlink{classtops_1_1ProbabilisticModelCreator_afed6c8ffa45fff446bdaa8b533da8f7c}{tops\+::\+Probabilistic\+Model\+Creator}.
+
+
+
+Definition at line 97 of file Train\+Fixed\+Length\+Markov\+Chain.\+cpp.
+
+
+\begin{DoxyCode}
+98                                                                  \{
+99         \textcolor{keywordtype}{double} loglike;
+100         \textcolor{keywordtype}{int} samplesize;
+101         \textcolor{keywordflow}{return} \hyperlink{classtops_1_1TrainFixedLengthMarkovChain_a13c61bbbe042026a4e406f5ba9214b0e}{create}(parameters, loglike, samplesize);
+102 
+103 \}
+\end{DoxyCode}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/Train\+Fixed\+Length\+Markov\+Chain.\+hpp\item 
+src/Train\+Fixed\+Length\+Markov\+Chain.\+cpp\end{DoxyCompactItemize}

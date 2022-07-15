@@ -1,0 +1,152 @@
+\hypertarget{classtops_1_1GeneralizedHiddenMarkovModel}{}\section{tops\+:\+:Generalized\+Hidden\+Markov\+Model Class Reference}
+\label{classtops_1_1GeneralizedHiddenMarkovModel}\index{tops\+::\+Generalized\+Hidden\+Markov\+Model@{tops\+::\+Generalized\+Hidden\+Markov\+Model}}
+
+
+This is a class representing Hidden semi-\/\+Markov Models.  
+
+
+
+
+{\ttfamily \#include $<$Generalized\+Hidden\+Markov\+Model.\+hpp$>$}
+
+
+
+Inheritance diagram for tops\+:\+:Generalized\+Hidden\+Markov\+Model\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=236pt]{classtops_1_1GeneralizedHiddenMarkovModel__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for tops\+:\+:Generalized\+Hidden\+Markov\+Model\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=236pt]{classtops_1_1GeneralizedHiddenMarkovModel__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classtops_1_1GeneralizedHiddenMarkovModel_acbe3287fb655a591d39908680e0fbc07}\label{classtops_1_1GeneralizedHiddenMarkovModel_acbe3287fb655a591d39908680e0fbc07}} 
+void {\bfseries fix\+States\+Predecessor\+Successor} ()
+\item 
+\mbox{\Hypertarget{classtops_1_1GeneralizedHiddenMarkovModel_a2cfc12de31de7744a5e08aa28f0cb220}\label{classtops_1_1GeneralizedHiddenMarkovModel_a2cfc12de31de7744a5e08aa28f0cb220}} 
+virtual double {\bfseries inefficient\+\_\+forward} (const Sequence \&s, Matrix \&alpha) const
+\item 
+\mbox{\Hypertarget{classtops_1_1GeneralizedHiddenMarkovModel_a7e7f9b05017d842f85efe10f52b4a0a0}\label{classtops_1_1GeneralizedHiddenMarkovModel_a7e7f9b05017d842f85efe10f52b4a0a0}} 
+virtual std\+::string {\bfseries print\+\_\+graph} () const
+\item 
+\mbox{\Hypertarget{classtops_1_1GeneralizedHiddenMarkovModel_a58c2de32d633890c97dee00301d5534c}\label{classtops_1_1GeneralizedHiddenMarkovModel_a58c2de32d633890c97dee00301d5534c}} 
+virtual double \hyperlink{classtops_1_1GeneralizedHiddenMarkovModel_a58c2de32d633890c97dee00301d5534c}{forward} (const Sequence \&s, Matrix \&alpha) const
+\begin{DoxyCompactList}\small\item\em Forward algorithm. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1GeneralizedHiddenMarkovModel_a073afb87466f0fc9b2fc52e94bae9269}\label{classtops_1_1GeneralizedHiddenMarkovModel_a073afb87466f0fc9b2fc52e94bae9269}} 
+virtual double \hyperlink{classtops_1_1GeneralizedHiddenMarkovModel_a073afb87466f0fc9b2fc52e94bae9269}{backward} (const Sequence \&s, Matrix \&beta) const
+\begin{DoxyCompactList}\small\item\em Backward algorithm. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1GeneralizedHiddenMarkovModel_a9c708d79292d082a2a1c0618d662fad7}\label{classtops_1_1GeneralizedHiddenMarkovModel_a9c708d79292d082a2a1c0618d662fad7}} 
+virtual void {\bfseries posterior\+Probabilities\+With\+Classes} (const Sequence \&s, Sparse\+Matrix\+Ptr probabilities) const
+\item 
+\mbox{\Hypertarget{classtops_1_1GeneralizedHiddenMarkovModel_aba67124b630b7e629247eaa01342f9a1}\label{classtops_1_1GeneralizedHiddenMarkovModel_aba67124b630b7e629247eaa01342f9a1}} 
+virtual void {\bfseries posterior\+Probabilities\+No\+Classes} (const Sequence \&s, f\+Matrix \&probabilities) const
+\item 
+\mbox{\Hypertarget{classtops_1_1GeneralizedHiddenMarkovModel_adbaf1c508674368629dc13e1e9d24896}\label{classtops_1_1GeneralizedHiddenMarkovModel_adbaf1c508674368629dc13e1e9d24896}} 
+void {\bfseries posterior\+Probabilities} (const Sequence \&s, f\+Matrix \&post\+Probs) const
+\item 
+\mbox{\Hypertarget{classtops_1_1GeneralizedHiddenMarkovModel_a05f89824bf4b86e60389eb81bec11014}\label{classtops_1_1GeneralizedHiddenMarkovModel_a05f89824bf4b86e60389eb81bec11014}} 
+float {\bfseries M\+E\+A\+Pred} (const Sequence \&s, Sequence \&path)
+\item 
+\mbox{\Hypertarget{classtops_1_1GeneralizedHiddenMarkovModel_a9da68c98f3541c708e619617a71277b0}\label{classtops_1_1GeneralizedHiddenMarkovModel_a9da68c98f3541c708e619617a71277b0}} 
+float {\bfseries M\+E\+A\+Pred} (const Sequence \&s, Sequence \&path, Sparse\+Matrix\+Ptr pp\+Pred)
+\item 
+\mbox{\Hypertarget{classtops_1_1GeneralizedHiddenMarkovModel_a3002226ce58a1a1add9473247a489e26}\label{classtops_1_1GeneralizedHiddenMarkovModel_a3002226ce58a1a1add9473247a489e26}} 
+virtual void {\bfseries set\+Num\+Classes} (int nclasses)
+\item 
+\mbox{\Hypertarget{classtops_1_1GeneralizedHiddenMarkovModel_a3a2b7a4a58b562f79e323bb08d6466ff}\label{classtops_1_1GeneralizedHiddenMarkovModel_a3a2b7a4a58b562f79e323bb08d6466ff}} 
+virtual int {\bfseries get\+Num\+Classes} ()
+\item 
+\mbox{\Hypertarget{classtops_1_1GeneralizedHiddenMarkovModel_ab2c66b9df98c2a06afb2101c4eff9fe3}\label{classtops_1_1GeneralizedHiddenMarkovModel_ab2c66b9df98c2a06afb2101c4eff9fe3}} 
+virtual double \hyperlink{classtops_1_1GeneralizedHiddenMarkovModel_ab2c66b9df98c2a06afb2101c4eff9fe3}{viterbi} (const Sequence \&s, Sequence \&path, Matrix \&gamma) const
+\begin{DoxyCompactList}\small\item\em Viterbi algorithm. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1GeneralizedHiddenMarkovModel_abb20e8b6109fb2e677a84c14a4cd4b1b}\label{classtops_1_1GeneralizedHiddenMarkovModel_abb20e8b6109fb2e677a84c14a4cd4b1b}} 
+virtual void \hyperlink{classtops_1_1GeneralizedHiddenMarkovModel_abb20e8b6109fb2e677a84c14a4cd4b1b}{choose\+Path} (const Sequence \&s, Sequence \&path)
+\begin{DoxyCompactList}\small\item\em Choose a path given a sequence\+\_\+length. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1GeneralizedHiddenMarkovModel_afb005c39b26f64015b8b00d86a992e61}\label{classtops_1_1GeneralizedHiddenMarkovModel_afb005c39b26f64015b8b00d86a992e61}} 
+virtual void {\bfseries initialize\+Choose\+Path\+Algorithm} (const Sequence \&s)
+\item 
+\mbox{\Hypertarget{classtops_1_1GeneralizedHiddenMarkovModel_a9cc86a386fb72dc574bc4ee990c48e1c}\label{classtops_1_1GeneralizedHiddenMarkovModel_a9cc86a386fb72dc574bc4ee990c48e1c}} 
+virtual double \hyperlink{classtops_1_1GeneralizedHiddenMarkovModel_a9cc86a386fb72dc574bc4ee990c48e1c}{\+\_\+viterbi} (const Sequence \&s, Sequence \&path, Matrix \&gamma) const
+\begin{DoxyCompactList}\small\item\em Inefficient Viterbi algorithm. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1GeneralizedHiddenMarkovModel_a233bb11a876558c449713e274f0f7f6c}\label{classtops_1_1GeneralizedHiddenMarkovModel_a233bb11a876558c449713e274f0f7f6c}} 
+virtual Sequence \& \hyperlink{classtops_1_1GeneralizedHiddenMarkovModel_a233bb11a876558c449713e274f0f7f6c}{choose\+Observation} (Sequence \&h, int i, int state) const
+\begin{DoxyCompactList}\small\item\em Choose the observation given a state. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1GeneralizedHiddenMarkovModel_ab7eb7993934b64eec491e956f9901b51}\label{classtops_1_1GeneralizedHiddenMarkovModel_ab7eb7993934b64eec491e956f9901b51}} 
+virtual int \hyperlink{classtops_1_1GeneralizedHiddenMarkovModel_ab7eb7993934b64eec491e956f9901b51}{choose\+State} (int state) const
+\begin{DoxyCompactList}\small\item\em Choose a state. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1GeneralizedHiddenMarkovModel_ae42041710ca7d90aeddfa139225a61fa}\label{classtops_1_1GeneralizedHiddenMarkovModel_ae42041710ca7d90aeddfa139225a61fa}} 
+virtual int \hyperlink{classtops_1_1GeneralizedHiddenMarkovModel_ae42041710ca7d90aeddfa139225a61fa}{choose\+First\+State} () const
+\begin{DoxyCompactList}\small\item\em Choose the initial state. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1GeneralizedHiddenMarkovModel_a7e3a1ae6f422ed74abb52c5f1ec4f5b6}\label{classtops_1_1GeneralizedHiddenMarkovModel_a7e3a1ae6f422ed74abb52c5f1ec4f5b6}} 
+virtual Discrete\+I\+I\+D\+Model\+Ptr \hyperlink{classtops_1_1GeneralizedHiddenMarkovModel_a7e3a1ae6f422ed74abb52c5f1ec4f5b6}{get\+Initial\+Probabilities} () const
+\begin{DoxyCompactList}\small\item\em Choose the initial state. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1GeneralizedHiddenMarkovModel_aaa5ecf2361626214250973423601232c}\label{classtops_1_1GeneralizedHiddenMarkovModel_aaa5ecf2361626214250973423601232c}} 
+virtual std\+::string \hyperlink{classtops_1_1GeneralizedHiddenMarkovModel_aaa5ecf2361626214250973423601232c}{get\+State\+Name} (int state) const
+\begin{DoxyCompactList}\small\item\em Get state name. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1GeneralizedHiddenMarkovModel_a000cb9fd5f3bd1bf4fae9397d865001d}\label{classtops_1_1GeneralizedHiddenMarkovModel_a000cb9fd5f3bd1bf4fae9397d865001d}} 
+virtual Alphabet\+Ptr \hyperlink{classtops_1_1GeneralizedHiddenMarkovModel_a000cb9fd5f3bd1bf4fae9397d865001d}{get\+State\+Names} () const
+\begin{DoxyCompactList}\small\item\em Get the state names. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1GeneralizedHiddenMarkovModel_a442965497ea65261192915f5ee174165}\label{classtops_1_1GeneralizedHiddenMarkovModel_a442965497ea65261192915f5ee174165}} 
+virtual std\+::string \hyperlink{classtops_1_1GeneralizedHiddenMarkovModel_a442965497ea65261192915f5ee174165}{model\+\_\+name} () const
+\begin{DoxyCompactList}\small\item\em returns the model name \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1GeneralizedHiddenMarkovModel_aa5388fadc9e63c0d7e254cdbc7f88974}\label{classtops_1_1GeneralizedHiddenMarkovModel_aa5388fadc9e63c0d7e254cdbc7f88974}} 
+virtual Probabilistic\+Model\+Creator\+Ptr {\bfseries get\+Factory} () const
+\item 
+\mbox{\Hypertarget{classtops_1_1GeneralizedHiddenMarkovModel_ae6cef52f4472e6a15b904c4d3241d75c}\label{classtops_1_1GeneralizedHiddenMarkovModel_ae6cef52f4472e6a15b904c4d3241d75c}} 
+virtual std\+::string \hyperlink{classtops_1_1GeneralizedHiddenMarkovModel_ae6cef52f4472e6a15b904c4d3241d75c}{str} () const
+\begin{DoxyCompactList}\small\item\em returns the string representation of the model \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1GeneralizedHiddenMarkovModel_a52b62c9be9188b0871ad31a16cc26cac}\label{classtops_1_1GeneralizedHiddenMarkovModel_a52b62c9be9188b0871ad31a16cc26cac}} 
+virtual \hyperlink{classtops_1_1DecodableModel}{Decodable\+Model} $\ast$ {\bfseries decodable} ()
+\item 
+\mbox{\Hypertarget{classtops_1_1GeneralizedHiddenMarkovModel_a01ced5a47f960c33a4a75fe590d104e9}\label{classtops_1_1GeneralizedHiddenMarkovModel_a01ced5a47f960c33a4a75fe590d104e9}} 
+int {\bfseries configure\+Explicit\+Duration\+State} (std\+::string observation\+\_\+model\+\_\+name, Discrete\+I\+I\+D\+Model\+Ptr transition\+\_\+distr, std\+::string duration\+\_\+model\+\_\+name, std\+::string state\+\_\+name, int iphase, int ophase, std\+::vector$<$ int $>$ classes)
+\item 
+\mbox{\Hypertarget{classtops_1_1GeneralizedHiddenMarkovModel_a1f4489eece946b60cb47e994f2a8a111}\label{classtops_1_1GeneralizedHiddenMarkovModel_a1f4489eece946b60cb47e994f2a8a111}} 
+int {\bfseries configure\+Signal\+State} (std\+::string observation\+\_\+model\+\_\+name, Discrete\+I\+I\+D\+Model\+Ptr transition\+\_\+distr, int \hyperlink{classtops_1_1ProbabilisticModel_a4e3910e9b9b848b7078e7101909ae82a}{size}, std\+::string state\+\_\+name, int iphase, int ophase, std\+::vector$<$ int $>$ classes)
+\item 
+\mbox{\Hypertarget{classtops_1_1GeneralizedHiddenMarkovModel_ac7fa2ff4ef33b9a5aebae230a3f99294}\label{classtops_1_1GeneralizedHiddenMarkovModel_ac7fa2ff4ef33b9a5aebae230a3f99294}} 
+int {\bfseries configure\+Geometric\+Duration\+State} (std\+::string observation\+\_\+model\+\_\+name, Discrete\+I\+I\+D\+Model\+Ptr transition\+\_\+distr, std\+::string state\+\_\+name, int iphase, int ophase, std\+::vector$<$ int $>$ classes)
+\item 
+\mbox{\Hypertarget{classtops_1_1GeneralizedHiddenMarkovModel_aecfcda2c1f5afb0b9b50a489ace2b948}\label{classtops_1_1GeneralizedHiddenMarkovModel_aecfcda2c1f5afb0b9b50a489ace2b948}} 
+void {\bfseries set\+Initial\+Probability} (Discrete\+I\+I\+D\+Model\+Ptr init)
+\item 
+\mbox{\Hypertarget{classtops_1_1GeneralizedHiddenMarkovModel_ad114f6a56a086db6e011ff5704470dcb}\label{classtops_1_1GeneralizedHiddenMarkovModel_ad114f6a56a086db6e011ff5704470dcb}} 
+void {\bfseries set\+Terminal\+Probability} (Discrete\+I\+I\+D\+Model\+Ptr term)
+\item 
+\mbox{\Hypertarget{classtops_1_1GeneralizedHiddenMarkovModel_aa48ddf680a571947310864983dcb0989}\label{classtops_1_1GeneralizedHiddenMarkovModel_aa48ddf680a571947310864983dcb0989}} 
+void {\bfseries set\+Observation\+Symbols} (Alphabet\+Ptr obs)
+\item 
+\mbox{\Hypertarget{classtops_1_1GeneralizedHiddenMarkovModel_aa1c6460cbf00e22b8a1766913b02776a}\label{classtops_1_1GeneralizedHiddenMarkovModel_aa1c6460cbf00e22b8a1766913b02776a}} 
+void {\bfseries set\+State\+Names} (Alphabet\+Ptr \hyperlink{classtops_1_1ProbabilisticModel_acacbfeb9cce968e034b5c18c72f7e217}{alphabet})
+\item 
+\mbox{\Hypertarget{classtops_1_1GeneralizedHiddenMarkovModel_adb3a3282849ac5a6fde81323088f61e8}\label{classtops_1_1GeneralizedHiddenMarkovModel_adb3a3282849ac5a6fde81323088f61e8}} 
+virtual \hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} {\bfseries parameters} () const
+\item 
+\mbox{\Hypertarget{classtops_1_1GeneralizedHiddenMarkovModel_a167c031b42565089d1e26b829e9d57c8}\label{classtops_1_1GeneralizedHiddenMarkovModel_a167c031b42565089d1e26b829e9d57c8}} 
+virtual void {\bfseries initialize} (const \hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} \&p)
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+This is a class representing Hidden semi-\/\+Markov Models. 
+
+Definition at line 45 of file Generalized\+Hidden\+Markov\+Model.\+hpp.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/Generalized\+Hidden\+Markov\+Model.\+hpp\item 
+src/Generalized\+Hidden\+Markov\+Model.\+cpp\end{DoxyCompactItemize}

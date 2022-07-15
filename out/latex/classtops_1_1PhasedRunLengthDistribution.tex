@@ -1,0 +1,80 @@
+\hypertarget{classtops_1_1PhasedRunLengthDistribution}{}\section{tops\+:\+:Phased\+Run\+Length\+Distribution Class Reference}
+\label{classtops_1_1PhasedRunLengthDistribution}\index{tops\+::\+Phased\+Run\+Length\+Distribution@{tops\+::\+Phased\+Run\+Length\+Distribution}}
+
+
+Provides mechanisms to control the phase of a probabilistic model.  
+
+
+
+
+{\ttfamily \#include $<$Phased\+Run\+Length\+Distribution.\+hpp$>$}
+
+
+
+Inheritance diagram for tops\+:\+:Phased\+Run\+Length\+Distribution\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=251pt]{classtops_1_1PhasedRunLengthDistribution__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for tops\+:\+:Phased\+Run\+Length\+Distribution\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=251pt]{classtops_1_1PhasedRunLengthDistribution__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classtops_1_1PhasedRunLengthDistribution_ad97ae799eb5ff9d311fc47f35043050f}\label{classtops_1_1PhasedRunLengthDistribution_ad97ae799eb5ff9d311fc47f35043050f}} 
+{\bfseries Phased\+Run\+Length\+Distribution} (Probabilistic\+Model\+Ptr m)
+\item 
+\mbox{\Hypertarget{classtops_1_1PhasedRunLengthDistribution_a05a323ceabf01e8dc0ffeb1704e72d2f}\label{classtops_1_1PhasedRunLengthDistribution_a05a323ceabf01e8dc0ffeb1704e72d2f}} 
+virtual void {\bfseries initialize} (int delta, int input\+\_\+phase, int output\+\_\+phase, int nphases)
+\item 
+\mbox{\Hypertarget{classtops_1_1PhasedRunLengthDistribution_aa353d25adeed132607dc95cc12bce15f}\label{classtops_1_1PhasedRunLengthDistribution_aa353d25adeed132607dc95cc12bce15f}} 
+virtual double \hyperlink{classtops_1_1PhasedRunLengthDistribution_aa353d25adeed132607dc95cc12bce15f}{choose} () const
+\begin{DoxyCompactList}\small\item\em Choose a symbol. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1PhasedRunLengthDistribution_a550b1133da43d3e78ae13b103d0d6420}\label{classtops_1_1PhasedRunLengthDistribution_a550b1133da43d3e78ae13b103d0d6420}} 
+virtual double \hyperlink{classtops_1_1PhasedRunLengthDistribution_a550b1133da43d3e78ae13b103d0d6420}{evaluate} (const Sequence \&s, unsigned int begin, unsigned int end) const
+\begin{DoxyCompactList}\small\item\em Calculates the sequence likelihood given this model. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1PhasedRunLengthDistribution_af0017534ef0aeaa16587399b529463c3}\label{classtops_1_1PhasedRunLengthDistribution_af0017534ef0aeaa16587399b529463c3}} 
+virtual double \hyperlink{classtops_1_1PhasedRunLengthDistribution_af0017534ef0aeaa16587399b529463c3}{log\+\_\+probability\+\_\+of} (int s) const
+\begin{DoxyCompactList}\small\item\em Returns the log\+\_\+probability\+\_\+of the number s. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1PhasedRunLengthDistribution_a45b778dbb694a98410815a141fae15fc}\label{classtops_1_1PhasedRunLengthDistribution_a45b778dbb694a98410815a141fae15fc}} 
+virtual Sequence \& {\bfseries choose} (Sequence \&h, int \hyperlink{classtops_1_1PhasedRunLengthDistribution_a1eeb20f70058842d6166ce07628b32f8}{size}) const
+\item 
+\mbox{\Hypertarget{classtops_1_1PhasedRunLengthDistribution_a1eeb20f70058842d6166ce07628b32f8}\label{classtops_1_1PhasedRunLengthDistribution_a1eeb20f70058842d6166ce07628b32f8}} 
+virtual int \hyperlink{classtops_1_1PhasedRunLengthDistribution_a1eeb20f70058842d6166ce07628b32f8}{size} () const
+\begin{DoxyCompactList}\small\item\em Returns the number of parameters of the model. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1PhasedRunLengthDistribution_a56fc08b990179dea63fd2fbc71748645}\label{classtops_1_1PhasedRunLengthDistribution_a56fc08b990179dea63fd2fbc71748645}} 
+virtual \hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} {\bfseries parameters} () const
+\item 
+\mbox{\Hypertarget{classtops_1_1PhasedRunLengthDistribution_acee6ce5284db10529fbf929d7dbb111b}\label{classtops_1_1PhasedRunLengthDistribution_acee6ce5284db10529fbf929d7dbb111b}} 
+virtual void {\bfseries initialize} (const \hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} \&p)
+\item 
+\mbox{\Hypertarget{classtops_1_1PhasedRunLengthDistribution_ac1755e1d7c2b1011c477a6184a7cadda}\label{classtops_1_1PhasedRunLengthDistribution_ac1755e1d7c2b1011c477a6184a7cadda}} 
+virtual std\+::string \hyperlink{classtops_1_1PhasedRunLengthDistribution_ac1755e1d7c2b1011c477a6184a7cadda}{str} () const
+\begin{DoxyCompactList}\small\item\em returns the string representation of the model \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1PhasedRunLengthDistribution_a0ac8bc022047c1e8b1fa3a4f3a69aa30}\label{classtops_1_1PhasedRunLengthDistribution_a0ac8bc022047c1e8b1fa3a4f3a69aa30}} 
+std\+::string \hyperlink{classtops_1_1PhasedRunLengthDistribution_a0ac8bc022047c1e8b1fa3a4f3a69aa30}{model\+\_\+name} () const
+\begin{DoxyCompactList}\small\item\em returns the model name \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Provides mechanisms to control the phase of a probabilistic model. 
+
+Definition at line 34 of file Phased\+Run\+Length\+Distribution.\+hpp.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/Phased\+Run\+Length\+Distribution.\+hpp\item 
+src/Phased\+Run\+Length\+Distribution.\+cpp\end{DoxyCompactItemize}

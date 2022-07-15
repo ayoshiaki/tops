@@ -1,0 +1,89 @@
+\hypertarget{classtops_1_1TrainPhasedMarkovChainContextAlgorithm}{}\section{tops\+:\+:Train\+Phased\+Markov\+Chain\+Context\+Algorithm Class Reference}
+\label{classtops_1_1TrainPhasedMarkovChainContextAlgorithm}\index{tops\+::\+Train\+Phased\+Markov\+Chain\+Context\+Algorithm@{tops\+::\+Train\+Phased\+Markov\+Chain\+Context\+Algorithm}}
+
+
+Train a Phased Markov Chain using the Context Algorithm.  
+
+
+
+
+{\ttfamily \#include $<$Train\+Phased\+Markov\+Chain\+Context\+Algorithm.\+hpp$>$}
+
+
+
+Inheritance diagram for tops\+:\+:Train\+Phased\+Markov\+Chain\+Context\+Algorithm\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=234pt]{classtops_1_1TrainPhasedMarkovChainContextAlgorithm__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for tops\+:\+:Train\+Phased\+Markov\+Chain\+Context\+Algorithm\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=234pt]{classtops_1_1TrainPhasedMarkovChainContextAlgorithm__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual Probabilistic\+Model\+Ptr \hyperlink{classtops_1_1TrainPhasedMarkovChainContextAlgorithm_aa97236d43efb5312776d41ae36827d08}{create} (\hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} \&parameters) const
+\begin{DoxyCompactList}\small\item\em Creates a probability model. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1TrainPhasedMarkovChainContextAlgorithm_a16c1d69fff51b49621daffee37639b13}\label{classtops_1_1TrainPhasedMarkovChainContextAlgorithm_a16c1d69fff51b49621daffee37639b13}} 
+virtual Probabilistic\+Model\+Ptr \hyperlink{classtops_1_1TrainPhasedMarkovChainContextAlgorithm_a16c1d69fff51b49621daffee37639b13}{create} (\hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} \&parameters, double \&loglikelihood, int \&sample\+\_\+size) const
+\begin{DoxyCompactList}\small\item\em Creates the model and returns the loglikelihood of the training set. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1TrainPhasedMarkovChainContextAlgorithm_aee635d00ef21f80055412b21dd94d061}\label{classtops_1_1TrainPhasedMarkovChainContextAlgorithm_aee635d00ef21f80055412b21dd94d061}} 
+virtual std\+::string \hyperlink{classtops_1_1TrainPhasedMarkovChainContextAlgorithm_aee635d00ef21f80055412b21dd94d061}{help} () const
+\begin{DoxyCompactList}\small\item\em This method returns a help message. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Train a Phased Markov Chain using the Context Algorithm. 
+
+Definition at line 38 of file Train\+Phased\+Markov\+Chain\+Context\+Algorithm.\+hpp.
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classtops_1_1TrainPhasedMarkovChainContextAlgorithm_aa97236d43efb5312776d41ae36827d08}\label{classtops_1_1TrainPhasedMarkovChainContextAlgorithm_aa97236d43efb5312776d41ae36827d08}} 
+\index{tops\+::\+Train\+Phased\+Markov\+Chain\+Context\+Algorithm@{tops\+::\+Train\+Phased\+Markov\+Chain\+Context\+Algorithm}!create@{create}}
+\index{create@{create}!tops\+::\+Train\+Phased\+Markov\+Chain\+Context\+Algorithm@{tops\+::\+Train\+Phased\+Markov\+Chain\+Context\+Algorithm}}
+\subsubsection{\texorpdfstring{create()}{create()}}
+{\footnotesize\ttfamily Probabilistic\+Model\+Ptr tops\+::\+Train\+Phased\+Markov\+Chain\+Context\+Algorithm\+::create (\begin{DoxyParamCaption}\item[{\hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} \&}]{parameters }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Creates a probability model. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em parameters} & is a set of parameters that is utilized to build the model \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented from \hyperlink{classtops_1_1ProbabilisticModelCreator_afed6c8ffa45fff446bdaa8b533da8f7c}{tops\+::\+Probabilistic\+Model\+Creator}.
+
+
+
+Definition at line 114 of file Train\+Phased\+Markov\+Chain\+Context\+Algorithm.\+cpp.
+
+
+\begin{DoxyCode}
+115                                                                  \{
+116         \textcolor{keywordtype}{int} size;
+117         \textcolor{keywordtype}{double} loglikelihood;
+118         \textcolor{keywordflow}{return} \hyperlink{classtops_1_1TrainPhasedMarkovChainContextAlgorithm_aa97236d43efb5312776d41ae36827d08}{create}(parameters, loglikelihood, size);
+119 \}
+\end{DoxyCode}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/Train\+Phased\+Markov\+Chain\+Context\+Algorithm.\+hpp\item 
+src/Train\+Phased\+Markov\+Chain\+Context\+Algorithm.\+cpp\end{DoxyCompactItemize}

@@ -1,0 +1,94 @@
+\hypertarget{classtops_1_1MaximalDependenceDecompositionCreator}{}\section{tops\+:\+:Maximal\+Dependence\+Decomposition\+Creator Class Reference}
+\label{classtops_1_1MaximalDependenceDecompositionCreator}\index{tops\+::\+Maximal\+Dependence\+Decomposition\+Creator@{tops\+::\+Maximal\+Dependence\+Decomposition\+Creator}}
+
+
+This class is a factory for the variable length markov chain.  
+
+
+
+
+{\ttfamily \#include $<$Maximal\+Dependence\+Decomposition\+Creator.\+hpp$>$}
+
+
+
+Inheritance diagram for tops\+:\+:Maximal\+Dependence\+Decomposition\+Creator\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=278pt]{classtops_1_1MaximalDependenceDecompositionCreator__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for tops\+:\+:Maximal\+Dependence\+Decomposition\+Creator\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=278pt]{classtops_1_1MaximalDependenceDecompositionCreator__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual Probabilistic\+Model\+Ptr \hyperlink{classtops_1_1MaximalDependenceDecompositionCreator_a9d90148ccc1e27acc090f549d7c442af}{create} (\hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} \&parameters) const
+\begin{DoxyCompactList}\small\item\em Creates a probabilistic model. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+This class is a factory for the variable length markov chain. 
+
+Definition at line 36 of file Maximal\+Dependence\+Decomposition\+Creator.\+hpp.
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classtops_1_1MaximalDependenceDecompositionCreator_a9d90148ccc1e27acc090f549d7c442af}\label{classtops_1_1MaximalDependenceDecompositionCreator_a9d90148ccc1e27acc090f549d7c442af}} 
+\index{tops\+::\+Maximal\+Dependence\+Decomposition\+Creator@{tops\+::\+Maximal\+Dependence\+Decomposition\+Creator}!create@{create}}
+\index{create@{create}!tops\+::\+Maximal\+Dependence\+Decomposition\+Creator@{tops\+::\+Maximal\+Dependence\+Decomposition\+Creator}}
+\subsubsection{\texorpdfstring{create()}{create()}}
+{\footnotesize\ttfamily Probabilistic\+Model\+Ptr tops\+::\+Maximal\+Dependence\+Decomposition\+Creator\+::create (\begin{DoxyParamCaption}\item[{\hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} \&}]{parameters }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Creates a probabilistic model. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em parameters} & is a set of parameters that is utilized to build the model \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented from \hyperlink{classtops_1_1ProbabilisticModelCreator_afed6c8ffa45fff446bdaa8b533da8f7c}{tops\+::\+Probabilistic\+Model\+Creator}.
+
+
+
+Definition at line 5 of file Maximal\+Dependence\+Decomposition\+Creator.\+cpp.
+
+
+\begin{DoxyCode}
+5                                                                                                            
+                \{
+6     MaximalDependenceDecompositionPtr model = MaximalDependenceDecompositionPtr(\textcolor{keyword}{new} 
+      MaximalDependenceDecomposition());
+7     ProbabilisticModelParameterValuePtr symbols = parameters.getMandatoryParameterValue(\textcolor{stringliteral}{"alphabet"});
+8     ProbabilisticModelParameterValuePtr concensus = parameters.getMandatoryParameterValue(\textcolor{stringliteral}{"consensus"});
+9     ProbabilisticModelParameterValuePtr concensus\_model = parameters.getMandatoryParameterValue(\textcolor{stringliteral}{"
+      consensus\_model"});
+10     ProbabilisticModelParameterValuePtr tree = parameters.getMandatoryParameterValue(\textcolor{stringliteral}{"tree"});
+11     \textcolor{keywordflow}{if}((symbols == NULL) || (concensus == NULL) || (concensus\_model == NULL) || (tree == NULL))
+12     \{
+13       std::cerr << \hyperlink{classtops_1_1ProbabilisticModelCreator_a468486a1562442aadfc53bb55c62496b}{help}() << std::endl;
+14     \}
+15     model->initialize(parameters);
+16     \textcolor{keywordflow}{return} model;
+17   \}
+\end{DoxyCode}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/Maximal\+Dependence\+Decomposition\+Creator.\+hpp\item 
+src/Maximal\+Dependence\+Decomposition\+Creator.\+cpp\end{DoxyCompactItemize}

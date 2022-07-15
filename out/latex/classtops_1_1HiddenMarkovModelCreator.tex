@@ -1,0 +1,103 @@
+\hypertarget{classtops_1_1HiddenMarkovModelCreator}{}\section{tops\+:\+:Hidden\+Markov\+Model\+Creator Class Reference}
+\label{classtops_1_1HiddenMarkovModelCreator}\index{tops\+::\+Hidden\+Markov\+Model\+Creator@{tops\+::\+Hidden\+Markov\+Model\+Creator}}
+
+
+This class is a factory for the finite discrete distribution.  
+
+
+
+
+{\ttfamily \#include $<$Hidden\+Markov\+Model\+Creator.\+hpp$>$}
+
+
+
+Inheritance diagram for tops\+:\+:Hidden\+Markov\+Model\+Creator\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=243pt]{classtops_1_1HiddenMarkovModelCreator__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for tops\+:\+:Hidden\+Markov\+Model\+Creator\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=243pt]{classtops_1_1HiddenMarkovModelCreator__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual Probabilistic\+Model\+Ptr \hyperlink{classtops_1_1HiddenMarkovModelCreator_a91a39f3246a9da001388e8de75b29964}{create} (\hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} \&parameters) const
+\begin{DoxyCompactList}\small\item\em Creates a probabilistic model. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1HiddenMarkovModelCreator_a9c05006a5d193d6ddc7c851430a3e2b6}\label{classtops_1_1HiddenMarkovModelCreator_a9c05006a5d193d6ddc7c851430a3e2b6}} 
+virtual std\+::string \hyperlink{classtops_1_1HiddenMarkovModelCreator_a9c05006a5d193d6ddc7c851430a3e2b6}{help} () const
+\begin{DoxyCompactList}\small\item\em This method returns a help message. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+This class is a factory for the finite discrete distribution. 
+
+Definition at line 36 of file Hidden\+Markov\+Model\+Creator.\+hpp.
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classtops_1_1HiddenMarkovModelCreator_a91a39f3246a9da001388e8de75b29964}\label{classtops_1_1HiddenMarkovModelCreator_a91a39f3246a9da001388e8de75b29964}} 
+\index{tops\+::\+Hidden\+Markov\+Model\+Creator@{tops\+::\+Hidden\+Markov\+Model\+Creator}!create@{create}}
+\index{create@{create}!tops\+::\+Hidden\+Markov\+Model\+Creator@{tops\+::\+Hidden\+Markov\+Model\+Creator}}
+\subsubsection{\texorpdfstring{create()}{create()}}
+{\footnotesize\ttfamily Probabilistic\+Model\+Ptr tops\+::\+Hidden\+Markov\+Model\+Creator\+::create (\begin{DoxyParamCaption}\item[{\hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} \&}]{parameters }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Creates a probabilistic model. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em parameters} & is a set of parameters that is utilized to build the model \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented from \hyperlink{classtops_1_1ProbabilisticModelCreator_afed6c8ffa45fff446bdaa8b533da8f7c}{tops\+::\+Probabilistic\+Model\+Creator}.
+
+
+
+Definition at line 33 of file Hidden\+Markov\+Model\+Creator.\+cpp.
+
+
+\begin{DoxyCode}
+33                                                                                                         \{
+34     ProbabilisticModelParameterValuePtr state\_names = parameters.getMandatoryParameterValue(\textcolor{stringliteral}{"state\_names"});
+35     ProbabilisticModelParameterValuePtr observation\_symbols = parameters.getMandatoryParameterValue(\textcolor{stringliteral}{"
+      observation\_symbols"});
+36     ProbabilisticModelParameterValuePtr initial\_probabilities = parameters.getMandatoryParameterValue(\textcolor{stringliteral}{"
+      initial\_probabilities"});
+37     ProbabilisticModelParameterValuePtr transitions = parameters.getMandatoryParameterValue(\textcolor{stringliteral}{"transitions"});
+38     ProbabilisticModelParameterValuePtr emissions = parameters.getMandatoryParameterValue(\textcolor{stringliteral}{"
+      emission\_probabilities"});
+39 
+40     \textcolor{keywordflow}{if}((state\_names == NULL)||
+41        (observation\_symbols == NULL)||
+42        (initial\_probabilities == NULL) ||
+43        (transitions == NULL) ||
+44        (emissions == NULL))
+45       \{
+46         std::cerr << \hyperlink{classtops_1_1HiddenMarkovModelCreator_a9c05006a5d193d6ddc7c851430a3e2b6}{help}() << std::endl;
+47       \}
+48     ProbabilisticModelPtr model = HiddenMarkovModelPtr(\textcolor{keyword}{new} HiddenMarkovModel());
+49     model->initialize(parameters);
+50     \textcolor{keywordflow}{return} model;
+51   \}
+\end{DoxyCode}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/Hidden\+Markov\+Model\+Creator.\+hpp\item 
+src/Hidden\+Markov\+Model\+Creator.\+cpp\end{DoxyCompactItemize}

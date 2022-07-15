@@ -1,0 +1,120 @@
+\hypertarget{classtops_1_1ContextTreeNode}{}\section{tops\+:\+:Context\+Tree\+Node Class Reference}
+\label{classtops_1_1ContextTreeNode}\index{tops\+::\+Context\+Tree\+Node@{tops\+::\+Context\+Tree\+Node}}
+
+
+This is a context tree node.  
+
+
+
+
+{\ttfamily \#include $<$Context\+Tree.\+hpp$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classtops_1_1ContextTreeNode_aef430feff82a67af06846a485d544a72}{Context\+Tree\+Node} (int \hyperlink{classtops_1_1ContextTreeNode_ad0596678234c3ae9ebcd61a18f7cc744}{alphabet\+\_\+size})
+\item 
+\mbox{\Hypertarget{classtops_1_1ContextTreeNode_a58494674e7793cae886a62533003309c}\label{classtops_1_1ContextTreeNode_a58494674e7793cae886a62533003309c}} 
+\hyperlink{classtops_1_1ContextTreeNode_a58494674e7793cae886a62533003309c}{Context\+Tree\+Node} ()
+\begin{DoxyCompactList}\small\item\em Default constructor. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1ContextTreeNode_a0137c15b9e5c3ee0769fefb215d3f995}\label{classtops_1_1ContextTreeNode_a0137c15b9e5c3ee0769fefb215d3f995}} 
+void \hyperlink{classtops_1_1ContextTreeNode_a0137c15b9e5c3ee0769fefb215d3f995}{add\+Count} (int s)
+\begin{DoxyCompactList}\small\item\em Add a count to the symbol s. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1ContextTreeNode_af01e5ee6dd48e5a61f770692591979a5}\label{classtops_1_1ContextTreeNode_af01e5ee6dd48e5a61f770692591979a5}} 
+void \hyperlink{classtops_1_1ContextTreeNode_af01e5ee6dd48e5a61f770692591979a5}{add\+Count} (int s, double w)
+\begin{DoxyCompactList}\small\item\em Add a count w to the symbol s. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1ContextTreeNode_a0b48f33eac62a57110b79c26ec6cc925}\label{classtops_1_1ContextTreeNode_a0b48f33eac62a57110b79c26ec6cc925}} 
+void \hyperlink{classtops_1_1ContextTreeNode_a0b48f33eac62a57110b79c26ec6cc925}{set\+Count} (int s, double v)
+\begin{DoxyCompactList}\small\item\em Add v to the counter to the symbol s. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1ContextTreeNode_a80bb65e1f6769b59d0300c8a5f58d8e3}\label{classtops_1_1ContextTreeNode_a80bb65e1f6769b59d0300c8a5f58d8e3}} 
+std\+::vector$<$ double $>$ \& \hyperlink{classtops_1_1ContextTreeNode_a80bb65e1f6769b59d0300c8a5f58d8e3}{get\+Counter} ()
+\begin{DoxyCompactList}\small\item\em get the counter \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1ContextTreeNode_ad0596678234c3ae9ebcd61a18f7cc744}\label{classtops_1_1ContextTreeNode_ad0596678234c3ae9ebcd61a18f7cc744}} 
+int \hyperlink{classtops_1_1ContextTreeNode_ad0596678234c3ae9ebcd61a18f7cc744}{alphabet\+\_\+size} ()
+\begin{DoxyCompactList}\small\item\em Set the alphabet size. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1ContextTreeNode_a5af2dc6bffc5d511386c2276c0949cec}\label{classtops_1_1ContextTreeNode_a5af2dc6bffc5d511386c2276c0949cec}} 
+void \hyperlink{classtops_1_1ContextTreeNode_a5af2dc6bffc5d511386c2276c0949cec}{set\+Parent} (int parent)
+\begin{DoxyCompactList}\small\item\em Set the parent id. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1ContextTreeNode_afe02c8d24337c7456fe327db23ecf080}\label{classtops_1_1ContextTreeNode_afe02c8d24337c7456fe327db23ecf080}} 
+int \hyperlink{classtops_1_1ContextTreeNode_afe02c8d24337c7456fe327db23ecf080}{get\+Parent} ()
+\begin{DoxyCompactList}\small\item\em Get the parent id;. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1ContextTreeNode_ab49bc61fd17b7e801b3c49a05ef3fc18}\label{classtops_1_1ContextTreeNode_ab49bc61fd17b7e801b3c49a05ef3fc18}} 
+int {\bfseries id} ()
+\item 
+\mbox{\Hypertarget{classtops_1_1ContextTreeNode_a6990cbe644cba6b5d04c72caa1c20bb0}\label{classtops_1_1ContextTreeNode_a6990cbe644cba6b5d04c72caa1c20bb0}} 
+void \hyperlink{classtops_1_1ContextTreeNode_a6990cbe644cba6b5d04c72caa1c20bb0}{set\+Id} (int id)
+\begin{DoxyCompactList}\small\item\em Set the id of the node. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1ContextTreeNode_a5e23540b51f90a50c42bc09f7b0b01ec}\label{classtops_1_1ContextTreeNode_a5e23540b51f90a50c42bc09f7b0b01ec}} 
+void \hyperlink{classtops_1_1ContextTreeNode_a5e23540b51f90a50c42bc09f7b0b01ec}{set\+Child} (Context\+Tree\+Node\+Ptr child, int \hyperlink{classtops_1_1ContextTreeNode_abda55f9f7239d05edc4e41e3bae092bd}{symbol})
+\begin{DoxyCompactList}\small\item\em set the child for a given symbol \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1ContextTreeNode_abda55f9f7239d05edc4e41e3bae092bd}\label{classtops_1_1ContextTreeNode_abda55f9f7239d05edc4e41e3bae092bd}} 
+int \hyperlink{classtops_1_1ContextTreeNode_abda55f9f7239d05edc4e41e3bae092bd}{symbol} ()
+\begin{DoxyCompactList}\small\item\em get the symbol of the node \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1ContextTreeNode_a59632e74e2a8d693e5182c1813c75bbc}\label{classtops_1_1ContextTreeNode_a59632e74e2a8d693e5182c1813c75bbc}} 
+void \hyperlink{classtops_1_1ContextTreeNode_a59632e74e2a8d693e5182c1813c75bbc}{set\+Symbol} (int \hyperlink{classtops_1_1ContextTreeNode_abda55f9f7239d05edc4e41e3bae092bd}{symbol})
+\begin{DoxyCompactList}\small\item\em get the symbol of the node \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1ContextTreeNode_a4812bc6482d8ae0f4b2f1bc32638f711}\label{classtops_1_1ContextTreeNode_a4812bc6482d8ae0f4b2f1bc32638f711}} 
+void \hyperlink{classtops_1_1ContextTreeNode_a4812bc6482d8ae0f4b2f1bc32638f711}{set\+Distribution} (Discrete\+I\+I\+D\+Model\+Ptr distribution)
+\begin{DoxyCompactList}\small\item\em set the distribution of this context \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1ContextTreeNode_a0103b347476067026d336c84d986d227}\label{classtops_1_1ContextTreeNode_a0103b347476067026d336c84d986d227}} 
+Context\+Tree\+Node\+Ptr \hyperlink{classtops_1_1ContextTreeNode_a0103b347476067026d336c84d986d227}{get\+Child} (int \hyperlink{classtops_1_1ContextTreeNode_abda55f9f7239d05edc4e41e3bae092bd}{symbol})
+\begin{DoxyCompactList}\small\item\em get the child of a symbol \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1ContextTreeNode_a6d5507e678dbeb8e6beae5d814c4d28c}\label{classtops_1_1ContextTreeNode_a6d5507e678dbeb8e6beae5d814c4d28c}} 
+Discrete\+I\+I\+D\+Model\+Ptr \hyperlink{classtops_1_1ContextTreeNode_a6d5507e678dbeb8e6beae5d814c4d28c}{get\+Distribution} ()
+\begin{DoxyCompactList}\small\item\em get the distribution of this context \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1ContextTreeNode_a16dcdabc0a3e007498610a34bd42110d}\label{classtops_1_1ContextTreeNode_a16dcdabc0a3e007498610a34bd42110d}} 
+void \hyperlink{classtops_1_1ContextTreeNode_a16dcdabc0a3e007498610a34bd42110d}{delete\+Children} ()
+\begin{DoxyCompactList}\small\item\em deletes the children of this contex \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1ContextTreeNode_a0fccae76145cd697dd2ffaa16bf25028}\label{classtops_1_1ContextTreeNode_a0fccae76145cd697dd2ffaa16bf25028}} 
+Context\+Tree\+Node\+Vector \hyperlink{classtops_1_1ContextTreeNode_a0fccae76145cd697dd2ffaa16bf25028}{get\+Children} ()
+\begin{DoxyCompactList}\small\item\em Returns the children. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1ContextTreeNode_af435e42ba07c1b2f8614787e121df706}\label{classtops_1_1ContextTreeNode_af435e42ba07c1b2f8614787e121df706}} 
+bool \hyperlink{classtops_1_1ContextTreeNode_af435e42ba07c1b2f8614787e121df706}{is\+Leaf} ()
+\begin{DoxyCompactList}\small\item\em returns true if this context node is a leaf \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1ContextTreeNode_aa3a335895d2c69b63d1a11b935197830}\label{classtops_1_1ContextTreeNode_aa3a335895d2c69b63d1a11b935197830}} 
+std\+::string {\bfseries str} () const
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+This is a context tree node. 
+
+Definition at line 41 of file Context\+Tree.\+hpp.
+
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classtops_1_1ContextTreeNode_aef430feff82a67af06846a485d544a72}\label{classtops_1_1ContextTreeNode_aef430feff82a67af06846a485d544a72}} 
+\index{tops\+::\+Context\+Tree\+Node@{tops\+::\+Context\+Tree\+Node}!Context\+Tree\+Node@{Context\+Tree\+Node}}
+\index{Context\+Tree\+Node@{Context\+Tree\+Node}!tops\+::\+Context\+Tree\+Node@{tops\+::\+Context\+Tree\+Node}}
+\subsubsection{\texorpdfstring{Context\+Tree\+Node()}{ContextTreeNode()}}
+{\footnotesize\ttfamily tops\+::\+Context\+Tree\+Node\+::\+Context\+Tree\+Node (\begin{DoxyParamCaption}\item[{int}]{alphabet\+\_\+size }\end{DoxyParamCaption})}
+
+
+\begin{DoxyParams}{Parameters}
+{\em alphabet} & is the alphabet to be used \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 70 of file Context\+Tree.\+cpp.
+
+
+\begin{DoxyCode}
+71   \{
+72     \_child.resize(\hyperlink{classtops_1_1ContextTreeNode_ad0596678234c3ae9ebcd61a18f7cc744}{alphabet\_size});
+73     \_counter.resize(\hyperlink{classtops_1_1ContextTreeNode_ad0596678234c3ae9ebcd61a18f7cc744}{alphabet\_size});
+74     \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} i = 0; i < (int)\_counter.size(); i++)
+75       \_counter[i] = 0;
+76     \_symbol = -1;
+77     \_alphabet\_size = \hyperlink{classtops_1_1ContextTreeNode_ad0596678234c3ae9ebcd61a18f7cc744}{alphabet\_size};
+78     \_leaf = \textcolor{keyword}{true};
+79     \_id = 0;
+80   \}
+\end{DoxyCode}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/Context\+Tree.\+hpp\item 
+src/Context\+Tree.\+cpp\end{DoxyCompactItemize}

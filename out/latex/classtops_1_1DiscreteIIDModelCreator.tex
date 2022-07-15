@@ -1,0 +1,87 @@
+\hypertarget{classtops_1_1DiscreteIIDModelCreator}{}\section{tops\+:\+:Discrete\+I\+I\+D\+Model\+Creator Class Reference}
+\label{classtops_1_1DiscreteIIDModelCreator}\index{tops\+::\+Discrete\+I\+I\+D\+Model\+Creator@{tops\+::\+Discrete\+I\+I\+D\+Model\+Creator}}
+
+
+This class is a factory for the finite discrete distribution.  
+
+
+
+
+{\ttfamily \#include $<$Discrete\+I\+I\+D\+Model\+Creator.\+hpp$>$}
+
+
+
+Inheritance diagram for tops\+:\+:Discrete\+I\+I\+D\+Model\+Creator\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=230pt]{classtops_1_1DiscreteIIDModelCreator__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for tops\+:\+:Discrete\+I\+I\+D\+Model\+Creator\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=230pt]{classtops_1_1DiscreteIIDModelCreator__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual Probabilistic\+Model\+Ptr \hyperlink{classtops_1_1DiscreteIIDModelCreator_a3eeca79afe4c57388385fed4299421d6}{create} (\hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} \&parameters) const
+\begin{DoxyCompactList}\small\item\em Creates a probabilistic model. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1DiscreteIIDModelCreator_a192c687e49763a08045f9c2d6728a6ed}\label{classtops_1_1DiscreteIIDModelCreator_a192c687e49763a08045f9c2d6728a6ed}} 
+virtual Discrete\+I\+I\+D\+Model\+Ptr {\bfseries create\+Discrete\+I\+I\+D\+Model} (\hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} \&parameters) const
+\item 
+\mbox{\Hypertarget{classtops_1_1DiscreteIIDModelCreator_afc22fa730452ff88495f66341ffbfb34}\label{classtops_1_1DiscreteIIDModelCreator_afc22fa730452ff88495f66341ffbfb34}} 
+virtual std\+::string \hyperlink{classtops_1_1DiscreteIIDModelCreator_afc22fa730452ff88495f66341ffbfb34}{help} () const
+\begin{DoxyCompactList}\small\item\em This method returns a help message. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+This class is a factory for the finite discrete distribution. 
+
+Definition at line 37 of file Discrete\+I\+I\+D\+Model\+Creator.\+hpp.
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classtops_1_1DiscreteIIDModelCreator_a3eeca79afe4c57388385fed4299421d6}\label{classtops_1_1DiscreteIIDModelCreator_a3eeca79afe4c57388385fed4299421d6}} 
+\index{tops\+::\+Discrete\+I\+I\+D\+Model\+Creator@{tops\+::\+Discrete\+I\+I\+D\+Model\+Creator}!create@{create}}
+\index{create@{create}!tops\+::\+Discrete\+I\+I\+D\+Model\+Creator@{tops\+::\+Discrete\+I\+I\+D\+Model\+Creator}}
+\subsubsection{\texorpdfstring{create()}{create()}}
+{\footnotesize\ttfamily Probabilistic\+Model\+Ptr tops\+::\+Discrete\+I\+I\+D\+Model\+Creator\+::create (\begin{DoxyParamCaption}\item[{\hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} \&}]{parameters }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Creates a probabilistic model. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em parameters} & is a set of parameters that is utilized to build the model \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented from \hyperlink{classtops_1_1ProbabilisticModelCreator_afed6c8ffa45fff446bdaa8b533da8f7c}{tops\+::\+Probabilistic\+Model\+Creator}.
+
+
+
+Definition at line 31 of file Discrete\+I\+I\+D\+Model\+Creator.\+cpp.
+
+
+\begin{DoxyCode}
+31                                                                                                        \{
+32     \textcolor{keywordflow}{return} createDiscreteIIDModel(parameters);
+33   \}
+\end{DoxyCode}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/Discrete\+I\+I\+D\+Model\+Creator.\+hpp\item 
+src/Discrete\+I\+I\+D\+Model\+Creator.\+cpp\end{DoxyCompactItemize}

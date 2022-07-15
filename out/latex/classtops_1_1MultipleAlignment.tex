@@ -1,0 +1,93 @@
+\hypertarget{classtops_1_1MultipleAlignment}{}\section{tops\+:\+:Multiple\+Alignment Class Reference}
+\label{classtops_1_1MultipleAlignment}\index{tops\+::\+Multiple\+Alignment@{tops\+::\+Multiple\+Alignment}}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classtops_1_1MultipleAlignment_a22470ebec1497089a3d67fc16831964b}\label{classtops_1_1MultipleAlignment_a22470ebec1497089a3d67fc16831964b}} 
+void {\bfseries compute\+One\+Alignment} (Probabilistic\+Model\+Ptr almodel, Sequence\+List seqs, vector$<$ string $>$ names, int numit, int cons\+Scheme)
+\item 
+\mbox{\Hypertarget{classtops_1_1MultipleAlignment_aa354bdf39e2ad92e7d3fcf1b2da55944}\label{classtops_1_1MultipleAlignment_aa354bdf39e2ad92e7d3fcf1b2da55944}} 
+void {\bfseries compute\+All\+Alignments} (Probabilistic\+Model\+Ptr almodel, Sequence\+List seqs, vector$<$ string $>$ names, int numit, string al\+File\+Name, string out\+Dir)
+\item 
+\mbox{\Hypertarget{classtops_1_1MultipleAlignment_aaa37920bf8831c9816ef2a59ad726718}\label{classtops_1_1MultipleAlignment_aaa37920bf8831c9816ef2a59ad726718}} 
+void {\bfseries compute\+Predictions\+And\+Alignment} (Probabilistic\+Model\+Ptr almodel, vector$<$ Probabilistic\+Model\+Ptr $>$ \&predmodels, Sequence\+List seqs, vector$<$ string $>$ names, int numit, bool alternate\+Consistencies, string out\+Dir)
+\item 
+\mbox{\Hypertarget{classtops_1_1MultipleAlignment_a4869247f263de3ab3d54d32f997e214b}\label{classtops_1_1MultipleAlignment_a4869247f263de3ab3d54d32f997e214b}} 
+float {\bfseries post\+Prob\+Align} (Probabilistic\+Model\+Ptr model, map$<$ string, map$<$ string, Sparse\+Matrix\+Ptr $>$ $>$ \&pp\+Align, map$<$ string, map$<$ string, Sparse\+Matrix\+Ptr $>$ $>$ \&pp\+Gap1, map$<$ string, map$<$ string, Sparse\+Matrix\+Ptr $>$ $>$ \&pp\+Gap2, map$<$ string, map$<$ string, float $>$ $>$ \&eas)
+\item 
+\mbox{\Hypertarget{classtops_1_1MultipleAlignment_ab8956ea130a048f79a9033a83d4baf40}\label{classtops_1_1MultipleAlignment_ab8956ea130a048f79a9033a83d4baf40}} 
+void {\bfseries picxaa\+Al\+Consistency} (map$<$ string, map$<$ string, Sparse\+Matrix\+Ptr $>$ $>$ \&pp\+Align, map$<$ string, map$<$ string, float $>$ $>$ eas, int numit)
+\item 
+\mbox{\Hypertarget{classtops_1_1MultipleAlignment_a9839d365d80d5fc59e8ddc0531218e41}\label{classtops_1_1MultipleAlignment_a9839d365d80d5fc59e8ddc0531218e41}} 
+void {\bfseries classic\+Al\+Consistency} (map$<$ string, map$<$ string, Sparse\+Matrix\+Ptr $>$ $>$ \&pp\+Align, int numit)
+\item 
+\mbox{\Hypertarget{classtops_1_1MultipleAlignment_a8ad84b7721d24cc22de344e521a54079}\label{classtops_1_1MultipleAlignment_a8ad84b7721d24cc22de344e521a54079}} 
+void {\bfseries predalign\+Al\+Consistency\+With\+Eas} (map$<$ string, map$<$ string, Sparse\+Matrix\+Ptr $>$ $>$ \&pp\+Align, map$<$ string, map$<$ string, Sparse\+Matrix\+Ptr $>$ $>$ \&pp\+Gap1, map$<$ string, map$<$ string, Sparse\+Matrix\+Ptr $>$ $>$ \&pp\+Gap2, int numit, map$<$ string, map$<$ string, float $>$ $>$ eas)
+\item 
+\mbox{\Hypertarget{classtops_1_1MultipleAlignment_a7efe6ad0de153316c612d66b0db74384}\label{classtops_1_1MultipleAlignment_a7efe6ad0de153316c612d66b0db74384}} 
+void {\bfseries predalign\+Al\+Consistency\+No\+Eas} (map$<$ string, map$<$ string, Sparse\+Matrix\+Ptr $>$ $>$ \&pp\+Align, map$<$ string, map$<$ string, Sparse\+Matrix\+Ptr $>$ $>$ \&pp\+Gap1, map$<$ string, map$<$ string, Sparse\+Matrix\+Ptr $>$ $>$ \&pp\+Gap2, int numit)
+\item 
+\mbox{\Hypertarget{classtops_1_1MultipleAlignment_a166704d79b96ad5935642995f4740b8f}\label{classtops_1_1MultipleAlignment_a166704d79b96ad5935642995f4740b8f}} 
+void {\bfseries make\+Alignment\+Consistent\+With\+Prediction} (map$<$ string, Sparse\+Matrix\+Ptr $>$ \&pp\+Pred, map$<$ string, map$<$ string, Sparse\+Matrix\+Ptr $>$ $>$ \&pp\+Align, int numit)
+\item 
+\mbox{\Hypertarget{classtops_1_1MultipleAlignment_ae4fce147af869d4db1465fe550de66b1}\label{classtops_1_1MultipleAlignment_ae4fce147af869d4db1465fe550de66b1}} 
+void {\bfseries make\+Prediction\+Consistent\+With\+Alignment} (map$<$ string, Sparse\+Matrix\+Ptr $>$ \&pp\+Pred, map$<$ string, map$<$ string, Sparse\+Matrix\+Ptr $>$ $>$ \&pp\+Align, int numit)
+\item 
+\mbox{\Hypertarget{classtops_1_1MultipleAlignment_a7f7878a5bcad01a61798a8b70232d48a}\label{classtops_1_1MultipleAlignment_a7f7878a5bcad01a61798a8b70232d48a}} 
+void {\bfseries post\+Prob\+Pred} (vector$<$ Probabilistic\+Model\+Ptr $>$ \&predmodels, map$<$ string, Sparse\+Matrix\+Ptr $>$ \&pp\+Pred)
+\item 
+\mbox{\Hypertarget{classtops_1_1MultipleAlignment_a3a9a92df5d13c52df581b3ccc4d69cee}\label{classtops_1_1MultipleAlignment_a3a9a92df5d13c52df581b3ccc4d69cee}} 
+void {\bfseries initialize\+Post\+Probs\+List} (map$<$ string, map$<$ string, Sparse\+Matrix\+Ptr $>$ $>$ \&pp\+Align)
+\item 
+\mbox{\Hypertarget{classtops_1_1MultipleAlignment_a1de6f68c1db8eab24b46cd78ac1db9a6}\label{classtops_1_1MultipleAlignment_a1de6f68c1db8eab24b46cd78ac1db9a6}} 
+void {\bfseries add\+List} (\hyperlink{structtops_1_1postProb}{post\+Prob} p)
+\item 
+\mbox{\Hypertarget{classtops_1_1MultipleAlignment_a545d7520ed30fb592fbe016aa8356fd9}\label{classtops_1_1MultipleAlignment_a545d7520ed30fb592fbe016aa8356fd9}} 
+void {\bfseries print\+P\+P\+List} ()
+\item 
+\mbox{\Hypertarget{classtops_1_1MultipleAlignment_a7ad20bb84d7b26f66f78e43c64ca8c03}\label{classtops_1_1MultipleAlignment_a7ad20bb84d7b26f66f78e43c64ca8c03}} 
+void {\bfseries generate\+Graph} ()
+\item 
+\mbox{\Hypertarget{classtops_1_1MultipleAlignment_ab078f7feccb9a40c558cac5bd61abd91}\label{classtops_1_1MultipleAlignment_ab078f7feccb9a40c558cac5bd61abd91}} 
+void {\bfseries add\+To\+Graph} (\hyperlink{structtops_1_1postProb}{post\+Prob} p)
+\item 
+\mbox{\Hypertarget{classtops_1_1MultipleAlignment_a0b27fab3988e6c4c2bb06c5caa887c0e}\label{classtops_1_1MultipleAlignment_a0b27fab3988e6c4c2bb06c5caa887c0e}} 
+void {\bfseries add\+To\+Gapped\+Graph} (\hyperlink{structtops_1_1postProb}{post\+Prob} p)
+\item 
+\mbox{\Hypertarget{classtops_1_1MultipleAlignment_ae47c17be6bbc3b33c4cc6fdef6cb6a5d}\label{classtops_1_1MultipleAlignment_ae47c17be6bbc3b33c4cc6fdef6cb6a5d}} 
+bool {\bfseries dfsf} (int ub, \hyperlink{structtops_1_1column}{column} n, vector$<$ \hyperlink{structtops_1_1column}{column} $>$ \&df)
+\item 
+\mbox{\Hypertarget{classtops_1_1MultipleAlignment_a63aeec5c698cb7cd0286f63864d0771f}\label{classtops_1_1MultipleAlignment_a63aeec5c698cb7cd0286f63864d0771f}} 
+void {\bfseries dfsb} (int lb, \hyperlink{structtops_1_1column}{column} n, vector$<$ \hyperlink{structtops_1_1column}{column} $>$ \&db)
+\item 
+\mbox{\Hypertarget{classtops_1_1MultipleAlignment_a02f3bc2d936a0d2aaaabaabd999899f4}\label{classtops_1_1MultipleAlignment_a02f3bc2d936a0d2aaaabaabd999899f4}} 
+void {\bfseries merge} (\hyperlink{structtops_1_1column}{column} $\ast$ub, \hyperlink{structtops_1_1column}{column} $\ast$lb)
+\item 
+\mbox{\Hypertarget{classtops_1_1MultipleAlignment_ab474aa9e0cb3dbddee7c5097c9f73f2b}\label{classtops_1_1MultipleAlignment_ab474aa9e0cb3dbddee7c5097c9f73f2b}} 
+void {\bfseries reorder} (vector$<$ \hyperlink{structtops_1_1column}{column} $>$ \&df, vector$<$ \hyperlink{structtops_1_1column}{column} $>$ \&db)
+\item 
+\mbox{\Hypertarget{classtops_1_1MultipleAlignment_ae50f05b816006f15bb524a94cf01486b}\label{classtops_1_1MultipleAlignment_ae50f05b816006f15bb524a94cf01486b}} 
+void {\bfseries find\+Graph\+Mcd} ()
+\item 
+\mbox{\Hypertarget{classtops_1_1MultipleAlignment_abb75c55b3d889cb6257ff087957c10bb}\label{classtops_1_1MultipleAlignment_abb75c55b3d889cb6257ff087957c10bb}} 
+void {\bfseries unvisit} (vector$<$ \hyperlink{structtops_1_1column}{column} $>$ \&v)
+\item 
+\mbox{\Hypertarget{classtops_1_1MultipleAlignment_aa03167eea7c9aa5290ad92ccd887c822}\label{classtops_1_1MultipleAlignment_aa03167eea7c9aa5290ad92ccd887c822}} 
+void {\bfseries generate\+Alignment} (Probabilistic\+Model\+Ptr almodel)
+\item 
+\mbox{\Hypertarget{classtops_1_1MultipleAlignment_af8bd2868b2400d7f68afe4bf97f60438}\label{classtops_1_1MultipleAlignment_af8bd2868b2400d7f68afe4bf97f60438}} 
+void {\bfseries clear\+All} ()
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+
+
+Definition at line 33 of file Multiple\+Alignment.\+hpp.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/Multiple\+Alignment.\+hpp\item 
+src/Multiple\+Alignment.\+cpp\end{DoxyCompactItemize}

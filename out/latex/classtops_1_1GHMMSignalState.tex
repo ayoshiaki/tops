@@ -1,0 +1,96 @@
+\hypertarget{classtops_1_1GHMMSignalState}{}\section{tops\+:\+:G\+H\+M\+M\+Signal\+State Class Reference}
+\label{classtops_1_1GHMMSignalState}\index{tops\+::\+G\+H\+M\+M\+Signal\+State@{tops\+::\+G\+H\+M\+M\+Signal\+State}}
+
+
+G\+H\+MM signal states.  
+
+
+
+
+{\ttfamily \#include $<$G\+H\+M\+M\+States.\+hpp$>$}
+
+
+
+Inheritance diagram for tops\+:\+:G\+H\+M\+M\+Signal\+State\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=203pt]{classtops_1_1GHMMSignalState__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for tops\+:\+:G\+H\+M\+M\+Signal\+State\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=203pt]{classtops_1_1GHMMSignalState__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classtops_1_1GHMMSignalState_aea28862a4fc11c36188b61cbcfc73916}\label{classtops_1_1GHMMSignalState_aea28862a4fc11c36188b61cbcfc73916}} 
+{\bfseries G\+H\+M\+M\+Signal\+State} (Probabilistic\+Model\+Ptr observation, Discrete\+I\+I\+D\+Model\+Ptr transition, Symbol\+Ptr name)
+\item 
+\mbox{\Hypertarget{classtops_1_1GHMMSignalState_abcaefd7fb338d7ac5f0a264b1c50664a}\label{classtops_1_1GHMMSignalState_abcaefd7fb338d7ac5f0a264b1c50664a}} 
+virtual int {\bfseries size} () const
+\item 
+\mbox{\Hypertarget{classtops_1_1GHMMSignalState_a5d8c08429ffe7b03e2ac715c21ede1ab}\label{classtops_1_1GHMMSignalState_a5d8c08429ffe7b03e2ac715c21ede1ab}} 
+virtual void {\bfseries set\+Size} (int s)
+\item 
+\mbox{\Hypertarget{classtops_1_1GHMMSignalState_a2149cfb9264dc36b7146445d3940cf1d}\label{classtops_1_1GHMMSignalState_a2149cfb9264dc36b7146445d3940cf1d}} 
+virtual int {\bfseries choose\+Duration} () const
+\item 
+\mbox{\Hypertarget{classtops_1_1GHMMSignalState_a53e4742911bd19ec76a6c97df9fb626c}\label{classtops_1_1GHMMSignalState_a53e4742911bd19ec76a6c97df9fb626c}} 
+virtual double {\bfseries get\+Threshold} () const
+\item 
+\mbox{\Hypertarget{classtops_1_1GHMMSignalState_afefd69d7735606350ebe38d6788f55ce}\label{classtops_1_1GHMMSignalState_afefd69d7735606350ebe38d6788f55ce}} 
+virtual void {\bfseries set\+Threshold} (double threshold)
+\item 
+\mbox{\Hypertarget{classtops_1_1GHMMSignalState_a2d80f5ff151a322d2058bdb2fbcc00cc}\label{classtops_1_1GHMMSignalState_a2d80f5ff151a322d2058bdb2fbcc00cc}} 
+virtual double {\bfseries duration\+\_\+probability} (int l) const
+\item 
+\mbox{\Hypertarget{classtops_1_1GHMMSignalState_a8f5bb288a212046737605d074ce61c88}\label{classtops_1_1GHMMSignalState_a8f5bb288a212046737605d074ce61c88}} 
+virtual std\+::string {\bfseries str} () const
+\item 
+\mbox{\Hypertarget{classtops_1_1GHMMSignalState_a414fe1dda478ffedddacf745ddfc6985}\label{classtops_1_1GHMMSignalState_a414fe1dda478ffedddacf745ddfc6985}} 
+virtual bool {\bfseries is\+Geometric\+Duration} () const
+\item 
+\mbox{\Hypertarget{classtops_1_1GHMMSignalState_a43a5c14c3c5a5e2278e86eac5342eb92}\label{classtops_1_1GHMMSignalState_a43a5c14c3c5a5e2278e86eac5342eb92}} 
+virtual \hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} {\bfseries parameters} () const
+\item 
+\mbox{\Hypertarget{classtops_1_1GHMMSignalState_afdea9614f4a1ba184c1b51a38e4f0d7b}\label{classtops_1_1GHMMSignalState_afdea9614f4a1ba184c1b51a38e4f0d7b}} 
+virtual void {\bfseries fix\+Transition\+Distribution} () const
+\item 
+\mbox{\Hypertarget{classtops_1_1GHMMSignalState_a370aa0c3dcff2ad533d3e0948c4e44e1}\label{classtops_1_1GHMMSignalState_a370aa0c3dcff2ad533d3e0948c4e44e1}} 
+virtual void {\bfseries find\+Best\+Predecessor} (Matrix \&gamma, Matrix \&psi, Int\+Matrix \&psilen, const Sequence \&s, int base, const G\+H\+M\+M\+States \&all\+\_\+states, std\+::map$<$ int, std\+::list$<$ int $>$ $>$ \&valid\+\_\+positions)
+\item 
+\mbox{\Hypertarget{classtops_1_1GHMMSignalState_ab2d59a2b4f8f7acf7dce68735f279e16}\label{classtops_1_1GHMMSignalState_ab2d59a2b4f8f7acf7dce68735f279e16}} 
+virtual void {\bfseries forward\+Sum} (Matrix \&alpha, const Sequence \&s, int base, const G\+H\+M\+M\+States \&all\+\_\+states, std\+::vector$<$ std\+::list$<$ int $>$ $>$ \&valid\+\_\+positions)
+\item 
+\mbox{\Hypertarget{classtops_1_1GHMMSignalState_ab62dc024ea9a723561d7c25e7d65eda2}\label{classtops_1_1GHMMSignalState_ab62dc024ea9a723561d7c25e7d65eda2}} 
+virtual double {\bfseries backward\+Sum} (Matrix \&beta, const Sequence \&s, int base, std\+::vector$<$ std\+::list$<$ int $>$ $>$ \&valid\+\_\+positions)
+\item 
+\mbox{\Hypertarget{classtops_1_1GHMMSignalState_ac8fad3365487d4be9bf7c0015f4d4cc2}\label{classtops_1_1GHMMSignalState_ac8fad3365487d4be9bf7c0015f4d4cc2}} 
+virtual void {\bfseries posterior\+Sum} (Matrix \&alpha, Matrix \&beta, f\+Matrix \&post\+Probs, const Sequence \&s, int base, const G\+H\+M\+M\+States \&all\+\_\+states, std\+::vector$<$ std\+::list$<$ int $>$ $>$ \&valid\+\_\+positions, double prob, int state\+Number)
+\item 
+\mbox{\Hypertarget{classtops_1_1GHMMSignalState_adc33b138f58cb0fc4ca6d2986e83a839}\label{classtops_1_1GHMMSignalState_adc33b138f58cb0fc4ca6d2986e83a839}} 
+virtual void {\bfseries choose\+Predecessor} (Matrix \&alpha, int base, int \&state, int \&position, const G\+H\+M\+M\+States \&all\+\_\+states)
+\end{DoxyCompactItemize}
+\subsection*{Additional Inherited Members}
+
+
+\subsection{Detailed Description}
+G\+H\+MM signal states. 
+
+Definition at line 125 of file G\+H\+M\+M\+States.\+hpp.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/G\+H\+M\+M\+States.\+hpp\item 
+src/G\+H\+M\+M\+States.\+cpp\end{DoxyCompactItemize}

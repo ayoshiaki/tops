@@ -1,0 +1,102 @@
+\hypertarget{classtops_1_1SparseMatrix}{}\section{tops\+:\+:Sparse\+Matrix Class Reference}
+\label{classtops_1_1SparseMatrix}\index{tops\+::\+Sparse\+Matrix@{tops\+::\+Sparse\+Matrix}}
+\subsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classtops_1_1SparseMatrix_abfa053dd3aa1f34e9ef0c048d5e4dfca}\label{classtops_1_1SparseMatrix_abfa053dd3aa1f34e9ef0c048d5e4dfca}} 
+typedef boost\+::shared\+\_\+ptr$<$ \hyperlink{classtops_1_1SparseMatrix}{Sparse\+Matrix} $>$ {\bfseries Sparse\+Matrix\+Ptr}
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classtops_1_1SparseMatrix_aa061bf06bd234a131c0df349240b421a}\label{classtops_1_1SparseMatrix_aa061bf06bd234a131c0df349240b421a}} 
+{\bfseries Sparse\+Matrix} (int nrows, int ncols)
+\item 
+\mbox{\Hypertarget{classtops_1_1SparseMatrix_a02357da8c9692782f548b0f37a7043b4}\label{classtops_1_1SparseMatrix_a02357da8c9692782f548b0f37a7043b4}} 
+{\bfseries Sparse\+Matrix} (int nrows, int ncols, f\+Matrix post\+Probs)
+\item 
+\mbox{\Hypertarget{classtops_1_1SparseMatrix_a2f7907516fea59264366c257bb33f148}\label{classtops_1_1SparseMatrix_a2f7907516fea59264366c257bb33f148}} 
+{\bfseries Sparse\+Matrix} (f\+Matrix post\+Probs, Sparse\+Matrix\+Ptr reference, float n)
+\item 
+\mbox{\Hypertarget{classtops_1_1SparseMatrix_a4e63287ab1c9abcbf42311d0bc0b7001}\label{classtops_1_1SparseMatrix_a4e63287ab1c9abcbf42311d0bc0b7001}} 
+{\bfseries Sparse\+Matrix} (Sparse\+Matrix\+Ptr reference)
+\item 
+\mbox{\Hypertarget{classtops_1_1SparseMatrix_afbb36d96c5bde26d33ca8ec8ef6619f6}\label{classtops_1_1SparseMatrix_afbb36d96c5bde26d33ca8ec8ef6619f6}} 
+void {\bfseries apply\+Prediction} (Sparse\+Matrix\+Ptr pred\+Matrix1, Sparse\+Matrix\+Ptr pred\+Matrix2)
+\item 
+\mbox{\Hypertarget{classtops_1_1SparseMatrix_a851a7c447d3f518f1d4b0e9159514200}\label{classtops_1_1SparseMatrix_a851a7c447d3f518f1d4b0e9159514200}} 
+void {\bfseries build\+Pred\+Matrix} (int nrows, int ncols, f\+Matrix \&post\+Probs)
+\item 
+\mbox{\Hypertarget{classtops_1_1SparseMatrix_a61d67463ba6a72b9184c35ebd883afdc}\label{classtops_1_1SparseMatrix_a61d67463ba6a72b9184c35ebd883afdc}} 
+void {\bfseries getf\+Matrix\+TimesX} (f\+Matrix \&fM, float x)
+\item 
+\mbox{\Hypertarget{classtops_1_1SparseMatrix_a422c266856b81fc949490ee9f86c4eae}\label{classtops_1_1SparseMatrix_a422c266856b81fc949490ee9f86c4eae}} 
+void {\bfseries getf\+Matrix\+Pred} (f\+Matrix \&fM)
+\item 
+\mbox{\Hypertarget{classtops_1_1SparseMatrix_a5922624524919432a4eef45125659251}\label{classtops_1_1SparseMatrix_a5922624524919432a4eef45125659251}} 
+void {\bfseries left\+Xright} (Sparse\+Matrix\+Ptr \&N, f\+Matrix \&O\+UT, float n)
+\item 
+\mbox{\Hypertarget{classtops_1_1SparseMatrix_a471cd61b541e26492040fcff198d4bff}\label{classtops_1_1SparseMatrix_a471cd61b541e26492040fcff198d4bff}} 
+void {\bfseries left\+Trans\+Xright} (Sparse\+Matrix\+Ptr \&N, f\+Matrix \&O\+UT, float n)
+\item 
+\mbox{\Hypertarget{classtops_1_1SparseMatrix_a2c08d58ef1273e1f3e3fb3b9613bc090}\label{classtops_1_1SparseMatrix_a2c08d58ef1273e1f3e3fb3b9613bc090}} 
+void {\bfseries left\+Xright} (Sparse\+Matrix\+Ptr \&N, f\+Matrix \&O\+UT)
+\item 
+\mbox{\Hypertarget{classtops_1_1SparseMatrix_a3a5d5bf24a29d08222eb3970d69ff8c4}\label{classtops_1_1SparseMatrix_a3a5d5bf24a29d08222eb3970d69ff8c4}} 
+void {\bfseries left\+Trans\+Xright} (Sparse\+Matrix\+Ptr \&N, f\+Matrix \&O\+UT)
+\item 
+\mbox{\Hypertarget{classtops_1_1SparseMatrix_a4fbcbf55d3740a7ad1dc4cfe20f7ae8b}\label{classtops_1_1SparseMatrix_a4fbcbf55d3740a7ad1dc4cfe20f7ae8b}} 
+void {\bfseries transpose\+Of} (Sparse\+Matrix\+Ptr \&A)
+\item 
+\mbox{\Hypertarget{classtops_1_1SparseMatrix_aacc8c863b1af0b3811ccda9f2a184bad}\label{classtops_1_1SparseMatrix_aacc8c863b1af0b3811ccda9f2a184bad}} 
+void {\bfseries resize} (int nrows, int ncols)
+\item 
+\mbox{\Hypertarget{classtops_1_1SparseMatrix_a7db70f4857d260d6b0d9b7541ecafd70}\label{classtops_1_1SparseMatrix_a7db70f4857d260d6b0d9b7541ecafd70}} 
+int {\bfseries nrows} ()
+\item 
+\mbox{\Hypertarget{classtops_1_1SparseMatrix_a489e4cf11c8f15242561bdc8fa141215}\label{classtops_1_1SparseMatrix_a489e4cf11c8f15242561bdc8fa141215}} 
+int {\bfseries ncols} ()
+\item 
+\mbox{\Hypertarget{classtops_1_1SparseMatrix_a9fd71945b10f36b68dc0c88229a2ccf6}\label{classtops_1_1SparseMatrix_a9fd71945b10f36b68dc0c88229a2ccf6}} 
+bool {\bfseries next} (int $\ast$i, int $\ast$j, float $\ast$prob)
+\item 
+\mbox{\Hypertarget{classtops_1_1SparseMatrix_ad4fe6eff4cad16417ba2b46bf4cb49ac}\label{classtops_1_1SparseMatrix_ad4fe6eff4cad16417ba2b46bf4cb49ac}} 
+vector$<$ map$<$ int, float $>$ $>$ \& {\bfseries matrix} ()
+\item 
+\mbox{\Hypertarget{classtops_1_1SparseMatrix_a344706ad46f08d9b6acb673643ec0982}\label{classtops_1_1SparseMatrix_a344706ad46f08d9b6acb673643ec0982}} 
+map$<$ int, float $>$\+::iterator {\bfseries line\+Begin} (int i)
+\item 
+\mbox{\Hypertarget{classtops_1_1SparseMatrix_a66c2da1d9e2a3b1b87883ba90f8439a1}\label{classtops_1_1SparseMatrix_a66c2da1d9e2a3b1b87883ba90f8439a1}} 
+map$<$ int, float $>$\+::iterator {\bfseries line\+End} (int i)
+\item 
+\mbox{\Hypertarget{classtops_1_1SparseMatrix_a56e2225c4a4c0de81888d0004cd3cdfb}\label{classtops_1_1SparseMatrix_a56e2225c4a4c0de81888d0004cd3cdfb}} 
+void {\bfseries print\+Matrix} ()
+\item 
+\mbox{\Hypertarget{classtops_1_1SparseMatrix_a369214fe38bd5f285bf95474425ca832}\label{classtops_1_1SparseMatrix_a369214fe38bd5f285bf95474425ca832}} 
+void {\bfseries remove\+Last\+Line} ()
+\item 
+\mbox{\Hypertarget{classtops_1_1SparseMatrix_a46170e2bc8e5a3d2c07f9ce9a711fd7e}\label{classtops_1_1SparseMatrix_a46170e2bc8e5a3d2c07f9ce9a711fd7e}} 
+void {\bfseries remove\+Last\+Column} ()
+\item 
+\mbox{\Hypertarget{classtops_1_1SparseMatrix_a3c2b100aaed7290ae603842d3e009bac}\label{classtops_1_1SparseMatrix_a3c2b100aaed7290ae603842d3e009bac}} 
+void {\bfseries add\+Gaps} (Sparse\+Matrix\+Ptr pp\+Gap1, Sparse\+Matrix\+Ptr pp\+Gap2)
+\end{DoxyCompactItemize}
+\subsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classtops_1_1SparseMatrix_a758203b466017aa095baac002927041f}\label{classtops_1_1SparseMatrix_a758203b466017aa095baac002927041f}} 
+static void {\bfseries setppthresh} (float n)
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+
+
+Definition at line 16 of file Sparse\+Matrix.\+hpp.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/Sparse\+Matrix.\+hpp\item 
+src/Sparse\+Matrix.\+cpp\end{DoxyCompactItemize}

@@ -1,0 +1,4 @@
+<map id="tops::HiddenMarkovModel" name="tops::HiddenMarkovModel">
+<area shape="rect" id="node2" href="$classtops_1_1DecodableModel.html" title="Interface defining probabilistic model with the viterbi, forward and backward algorithm. " alt="" coords="17,80,169,107"/>
+<area shape="rect" id="node3" href="$classtops_1_1ProbabilisticModel.html" title="This is an abstract class representing a generative probabilistic model. " alt="" coords="12,5,173,32"/>
+</map>

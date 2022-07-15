@@ -1,0 +1,92 @@
+\hypertarget{classtops_1_1TrainVariableLengthMarkovChain}{}\section{tops\+:\+:Train\+Variable\+Length\+Markov\+Chain Class Reference}
+\label{classtops_1_1TrainVariableLengthMarkovChain}\index{tops\+::\+Train\+Variable\+Length\+Markov\+Chain@{tops\+::\+Train\+Variable\+Length\+Markov\+Chain}}
+
+
+This class trains the Variable Length Markov Chain using the context algorithm.  
+
+
+
+
+{\ttfamily \#include $<$Train\+Variable\+Length\+Markov\+Chain.\+hpp$>$}
+
+
+
+Inheritance diagram for tops\+:\+:Train\+Variable\+Length\+Markov\+Chain\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=208pt]{classtops_1_1TrainVariableLengthMarkovChain__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for tops\+:\+:Train\+Variable\+Length\+Markov\+Chain\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=208pt]{classtops_1_1TrainVariableLengthMarkovChain__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual Probabilistic\+Model\+Ptr \hyperlink{classtops_1_1TrainVariableLengthMarkovChain_a67d4799e147f66deb1646d1ba45f7e65}{create} (\hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} \&parameters) const
+\begin{DoxyCompactList}\small\item\em Creates a probabilistic model. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1TrainVariableLengthMarkovChain_aed2ad7b84b2e8615077694f1c8fb3a91}\label{classtops_1_1TrainVariableLengthMarkovChain_aed2ad7b84b2e8615077694f1c8fb3a91}} 
+virtual Probabilistic\+Model\+Ptr \hyperlink{classtops_1_1TrainVariableLengthMarkovChain_aed2ad7b84b2e8615077694f1c8fb3a91}{create} (\hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} \&parameters, double \&loglikelihood, int \&sample\+\_\+size) const
+\begin{DoxyCompactList}\small\item\em Creates the model and returns the loglikelihood of the training set. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1TrainVariableLengthMarkovChain_ae1ffe7dedad3da1063bb67ed82ccb1a5}\label{classtops_1_1TrainVariableLengthMarkovChain_ae1ffe7dedad3da1063bb67ed82ccb1a5}} 
+virtual Probabilistic\+Model\+Ptr \hyperlink{classtops_1_1TrainVariableLengthMarkovChain_ae1ffe7dedad3da1063bb67ed82ccb1a5}{create} (\hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} \&parameters, const std\+::vector$<$ std\+::string $>$ \&training\+\_\+set, double \&loglikelihood, int \&sample\+\_\+size) const
+\begin{DoxyCompactList}\small\item\em Creates the model and returns the loglikelihood of the training set. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1TrainVariableLengthMarkovChain_a94d82bfb5f7dacfcd94043acf8ebf19c}\label{classtops_1_1TrainVariableLengthMarkovChain_a94d82bfb5f7dacfcd94043acf8ebf19c}} 
+virtual std\+::string \hyperlink{classtops_1_1TrainVariableLengthMarkovChain_a94d82bfb5f7dacfcd94043acf8ebf19c}{help} () const
+\begin{DoxyCompactList}\small\item\em Provides a help. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+This class trains the Variable Length Markov Chain using the context algorithm. 
+
+Definition at line 38 of file Train\+Variable\+Length\+Markov\+Chain.\+hpp.
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classtops_1_1TrainVariableLengthMarkovChain_a67d4799e147f66deb1646d1ba45f7e65}\label{classtops_1_1TrainVariableLengthMarkovChain_a67d4799e147f66deb1646d1ba45f7e65}} 
+\index{tops\+::\+Train\+Variable\+Length\+Markov\+Chain@{tops\+::\+Train\+Variable\+Length\+Markov\+Chain}!create@{create}}
+\index{create@{create}!tops\+::\+Train\+Variable\+Length\+Markov\+Chain@{tops\+::\+Train\+Variable\+Length\+Markov\+Chain}}
+\subsubsection{\texorpdfstring{create()}{create()}}
+{\footnotesize\ttfamily Probabilistic\+Model\+Ptr tops\+::\+Train\+Variable\+Length\+Markov\+Chain\+::create (\begin{DoxyParamCaption}\item[{\hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} \&}]{parameters }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Creates a probabilistic model. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em parameters} & is a set of parameters that is utilized to build the model \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented from \hyperlink{classtops_1_1ProbabilisticModelCreator_afed6c8ffa45fff446bdaa8b533da8f7c}{tops\+::\+Probabilistic\+Model\+Creator}.
+
+
+
+Definition at line 38 of file Train\+Variable\+Length\+Markov\+Chain.\+cpp.
+
+
+\begin{DoxyCode}
+39                                                                  \{
+40         \textcolor{keywordtype}{double} loglike;
+41         \textcolor{keywordtype}{int} samplesize;
+42         \textcolor{keywordflow}{return} \hyperlink{classtops_1_1TrainVariableLengthMarkovChain_a67d4799e147f66deb1646d1ba45f7e65}{create}(parameters, loglike, samplesize);
+43 \}
+\end{DoxyCode}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/Train\+Variable\+Length\+Markov\+Chain.\+hpp\item 
+src/Train\+Variable\+Length\+Markov\+Chain.\+cpp\end{DoxyCompactItemize}
