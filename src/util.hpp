@@ -2,7 +2,7 @@
  *       util.hpp
  *
  *       Copyright 2011 Andre Yoshiaki Kashiwabara <akashiwabara@usp.br>
- *                      Ígor Bonadio <ibonadio@ime.usp.br>
+ *                      ï¿½gor Bonadio <ibonadio@ime.usp.br>
  *                      Vitor Onuchic <vitoronuchic@gmail.com>
  *                      Alan Mitchell Durham <aland@usp.br>
  *
@@ -24,7 +24,7 @@
 
 #ifndef UTIL_H
 #define UTIL_H
-#define NDEBUG
+//#define NDEBUG
 
 #include "crossplatform.hpp"
 
