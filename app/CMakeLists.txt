@@ -38,6 +38,8 @@ ADD_EXECUTABLE(tops-print_graph_from_model tops-print_graph_from_model.cpp)
 ADD_EXECUTABLE(tops-profileHMMtests tops-profileHMMtests.cpp)
 ADD_EXECUTABLE(tops-teste_mdd tops-teste_mdd.cpp)
 
+ADD_EXECUTABLE(tops-torch-test tops-torch-test.cpp)
+
 TARGET_LINK_LIBRARIES(tops-evaluate ${APP_DEP} )
 TARGET_LINK_LIBRARIES(tops-train ${APP_DEP} )
 TARGET_LINK_LIBRARIES(tops-test_read_seq ${APP_DEP} )
@@ -63,7 +65,9 @@ TARGET_LINK_LIBRARIES(tops-print_graph_from_model ${APP_DEP} )
 TARGET_LINK_LIBRARIES(tops-profileHMMtests ${APP_DEP} )
 TARGET_LINK_LIBRARIES(tops-teste_mdd ${APP_DEP} )
 
-install(TARGETS tops-train tops-viterbi_decoding tops-mea_decoding tops-simulate tops-testeFBGHMM tops-testeGPHMM tops-simulateAlignment tops-align tops-predalign tops-runAllPredalignTests tops-bayes_classifier tops-one_file_model tops-sliding_window tops-evaluate tops-kullback_positional tops-posterior_probabilities tops-posterior_decoding tops-print_graph_from_model tops-profileHMMtests
+TARGET_LINK_LIBRARIES(tops-torch-test ${APP_DEP} ${TORCH_LIBRARIES})
+
+install(TARGETS tops-train tops-viterbi_decoding tops-mea_decoding tops-simulate tops-testeFBGHMM tops-testeGPHMM tops-simulateAlignment tops-align tops-predalign tops-runAllPredalignTests tops-bayes_classifier tops-one_file_model tops-sliding_window tops-evaluate tops-kullback_positional tops-posterior_probabilities tops-posterior_decoding tops-print_graph_from_model tops-profileHMMtests tops-torch-test
        RUNTIME DESTINATION bin
        LIBRARY DESTINATION lib
        ARCHIVE DESTINATION lib/static)
