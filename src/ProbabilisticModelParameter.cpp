@@ -2,7 +2,7 @@
  *       ProbabilisticModelParameter.cpp
  *
  *       Copyright 2011 Andre Yoshiaki Kashiwabara <akashiwabara@usp.br>
- *                      Ígor Bonadio <ibonadio@ime.usp.br>
+ *                      ï¿½gor Bonadio <ibonadio@ime.usp.br>
  *                      Vitor Onuchic <vitoronuchic@gmail.com>
  *                      Alan Mitchell Durham <aland@usp.br>
  *
@@ -167,6 +167,14 @@ namespace tops {
 
     return out.str();
   }
+
+
+  torch::Tensor ProbabilisticModelParameterValue::getTensor()  {
+    return t;
+  }
+
+
+
 
 
   void DoubleParameterValue::initialize(double d){
@@ -360,6 +368,30 @@ namespace tops {
     for(int i = 1; i < (int)_v.size(); i++)
       out << ", \"" << _v[i] << "\"";
     out << ")";
+    return out.str();
+  }
+
+
+/*
+  DEFINE TENSOR PARAMETER VALUE
+*/
+
+  void TensorParameterValue::initialize(torch::Tensor t){
+    _t = t;
+  }
+
+  std::string TensorParameterValue::parameter_type () const {
+    std::string type("TensorParameterValue");
+    return type;
+  }
+
+  torch::Tensor TensorParameterValue::getTensor() const {
+    return _t;
+  }
+
+  std::string TensorParameterValue::str() const {
+    std::stringstream out;
+    out << _t ;
     return out.str();
   }
 }

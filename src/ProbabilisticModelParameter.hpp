@@ -2,7 +2,7 @@
  *       ProbabilisticModelParameter.hpp
  *
  *       Copyright 2011 Andre Yoshiaki Kashiwabara <akashiwabara@usp.br>
- *                      Ígor Bonadio <ibonadio@ime.usp.br>
+ *                      ï¿½gor Bonadio <ibonadio@ime.usp.br>
  *                      Vitor Onuchic <vitoronuchic@gmail.com>
  *                      Alan Mitchell Durham <aland@usp.br>
  *
@@ -37,6 +37,8 @@
 
 #include "SequenceEntry.hpp"
 #include "Sequence.hpp"
+
+#include "torch/torch.h"
 
 namespace tops {
 
@@ -82,6 +84,7 @@ namespace tops {
     std::map<std::string,double> p;
     std::map<std::string,std::string> str_map;
     std::string _str;
+    torch::Tensor t;
     ProbabilisticModelParameters  _parameters;
   public:
     virtual void setIsRoot(bool root);
@@ -97,6 +100,7 @@ namespace tops {
     virtual std::map<std::string,std::string> &  getStringMap();
     virtual int getInt() const;
     virtual double getDouble()  const;
+    virtual torch::Tensor getTensor();
     virtual std::string str() const;
   };
 
@@ -259,6 +263,23 @@ namespace tops {
   };
 
 
+  //! Tensor parameter value
+  class DLLEXPORT TensorParameterValue: public ProbabilisticModelParameterValue {
+  private:
+    torch::Tensor _t;
+  public:
+    TensorParameterValue(){}    
+    TensorParameterValue(torch::Tensor t) {
+      _t = t;
+    }
+    virtual ~TensorParameterValue(){}
+    virtual void initialize(torch::Tensor t);
+    virtual std::string parameter_type () const;    
+    virtual torch::Tensor getTensor() const;    
+    virtual std::string str() const;
+  };
+
+
   typedef boost::shared_ptr <IntParameterValue> IntParameterValuePtr;
   typedef boost::shared_ptr <DoubleParameterValue> DoubleParameterValuePtr;
   typedef boost::shared_ptr <StringParameterValue> StringParameterValuePtr;
@@ -268,6 +289,8 @@ namespace tops {
   typedef boost::shared_ptr <DoubleVectorParameterValue> DoubleVectorParameterValuePtr;
   typedef boost::shared_ptr <StringVectorParameterValue> StringVectorParameterValuePtr;
   typedef boost::shared_ptr <DoubleMapParameterValue> DoubleMapParameterValuePtr;
+
+  typedef boost::shared_ptr <TensorParameterValue> TensorParameterValuePtr;
 }
 
 
