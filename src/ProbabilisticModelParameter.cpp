@@ -173,6 +173,10 @@ namespace tops {
     return t;
   }
 
+  torch::nn::Module ProbabilisticModelParameterValue::getModule() {
+    return nn;
+  }
+
 
 
 
@@ -392,6 +396,30 @@ namespace tops {
   std::string TensorParameterValue::str() const {
     std::stringstream out;
     out << _t ;
+    return out.str();
+  }
+
+
+  /*
+  DEFINE MODULE NN PARAMETER VALUE
+*/
+
+  void ModuleParameterValue::initialize(torch::nn::Module nn){
+    _nn = nn;
+  }
+
+  std::string ModuleParameterValue::parameter_type () const {
+    std::string type("ModuleParameterValue");
+    return type;
+  }
+
+  torch::nn::Module ModuleParameterValue::getModule() const {
+    return _nn;
+  }
+
+  std::string ModuleParameterValue::str() const {
+    std::stringstream out;
+    out << _nn ;
     return out.str();
   }
 }

@@ -34,22 +34,19 @@ namespace tops {
     NeuralNetworkModel::NeuralNetworkModel(){
     }
 
-    NeuralNetworkModel::NeuralNetworkModel(const torch::Tensor weight, const torch::Tensor bias){
-        _weight = weight;
-        _bias = bias;
+    NeuralNetworkModel::NeuralNetworkModel(torch::nn::Module module_nn){
+        _module_nn = module_nn;
     }
 
     std::string NeuralNetworkModel::str () const {
         std::stringstream out;
         out << "model_name = \"NeuralNetworkModel\"\n" ;
-        out << "weight = " << _weight << "\n";
-        out << "bias = " << _bias;
+        out << "module = " << _module_nn << "\n";
         return out.str();
     }
 
-    void NeuralNetworkModel::setParameters(const torch::Tensor weight, const torch::Tensor bias) {
-        _weight = weight;
-        _bias = bias;
+    void NeuralNetworkModel::setParameters(torch::nn::Module module_nn) {
+        _module_nn = module_nn;
     }
 
     ProbabilisticModelCreatorPtr NeuralNetworkModel::getFactory () const{
@@ -57,20 +54,19 @@ namespace tops {
     }
 
     void NeuralNetworkModel::initialize(const ProbabilisticModelParameters & p) {
-        ProbabilisticModelParameterValuePtr weight = p.getMandatoryParameterValue("weight");
-        ProbabilisticModelParameterValuePtr bias = p.getMandatoryParameterValue("bias");
+        //ProbabilisticModelParameterValuePtr weight = p.getMandatoryParameterValue("weight");
+        //ProbabilisticModelParameterValuePtr bias = p.getMandatoryParameterValue("bias");
+        ProbabilisticModelParameterValuePtr module_nn = p.getMandatoryParameterValue("module_nn");
         
-        setParameters(weight->getTensor(), bias->getTensor());
+        setParameters(module_nn->getModule());
     }
 
     ProbabilisticModelParameters NeuralNetworkModel::parameters () const {
         
         ProbabilisticModelParameters par;
         par.add("model_name", StringParameterValuePtr(new StringParameterValue("NeuralNetworkModel")));
-        torch::Tensor weight;
-        par.add("weight", TensorParameterValuePtr(new TensorParameterValue(weight)));
-        torch::Tensor bias;
-        par.add("bias", TensorParameterValuePtr(new TensorParameterValue(bias)));
+        torch::nn::Module module_nn;
+        par.add("module_nn", ModuleParameterValuePtr(new ModuleParameterValue(module_nn)));
         return par;
     }
 

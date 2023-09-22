@@ -106,12 +106,19 @@ int main (int argc, char ** argv) {
     //std::cout << tensor << std::endl;
 
 
-    /* TEST Net STRUCTURE
+    /* TEST Net STRUCTURE */
     auto net = std::make_shared<Net>();
 
     for (auto& param : net->named_parameters()){
     	std::cout << param.key() << std::endl;
-    }*/
+    }
+
+    string model_path = "net.csv";
+    torch::serialize::OutputArchive output_archive;
+    net->save(output_archive);
+    output_archive.save_to(model_path);
+
+
 
     /*auto lstm = torch::nn::LSTM(3, 3);
     torch::Tensor inputs[] = torch::randn({1, 3, 5});
@@ -154,7 +161,8 @@ int main (int argc, char ** argv) {
     std::cout << output << std::endl;
     */
 
-    options_description desc("Allowed options");
+    /* TEST Neural Network Creator */
+    /*options_description desc("Allowed options");
     desc.add_options()
       ("help,?", "produce help message")
       ("model,m", value<string> (), "model")
@@ -180,43 +188,8 @@ int main (int argc, char ** argv) {
     catch(const std::exception& e)
     {
       std::cerr << e.what() << '\n';
-    }
-    
-
-    /*try
-    {
-
-        string model_file = "model";
-        ProbabilisticModelCreatorClient creator;
-        ProbabilisticModelPtr model = creator.create(model_file);
-        if(model == NULL)
-          {
-            exit(-1);
-          }
-
-    }
-    catch (boost::program_options::invalid_command_line_syntax &e)
-    {
-        cout << argv[0] << ": ToPS version " << APP_VERSION << std::endl;
-        cout << std::endl;
-
-        cerr << "error: " << e.what() << std::endl;
-
-    }
-    catch (boost::program_options::unknown_option &e)
-    {
-        cout << argv[0] << ": ToPS version " << APP_VERSION << std::endl;
-        cout << std::endl;
-
-        cerr << "error: " << e.what() << std::endl;
-
-    }
-    catch (boost::bad_any_cast & e)
-    {
-        cout << argv[0] << ": ToPS version " << APP_VERSION << std::endl;
-        cout << std::endl;
-
     }*/
+    
     return 0;
 
 }

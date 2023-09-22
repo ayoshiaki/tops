@@ -85,6 +85,7 @@ namespace tops {
     std::map<std::string,std::string> str_map;
     std::string _str;
     torch::Tensor t;
+    torch::nn::Module nn;
     ProbabilisticModelParameters  _parameters;
   public:
     virtual void setIsRoot(bool root);
@@ -101,6 +102,7 @@ namespace tops {
     virtual int getInt() const;
     virtual double getDouble()  const;
     virtual torch::Tensor getTensor();
+    virtual torch::nn::Module getModule();
     virtual std::string str() const;
   };
 
@@ -279,6 +281,22 @@ namespace tops {
     virtual std::string str() const;
   };
 
+  //! torch::nn::Module parameter value
+  class DLLEXPORT ModuleParameterValue: public ProbabilisticModelParameterValue {
+  private:
+    torch::nn::Module _nn;
+  public:
+    ModuleParameterValue(){}    
+    ModuleParameterValue(torch::nn::Module nn) {
+      _nn = nn;
+    }
+    virtual ~ModuleParameterValue(){}
+    virtual void initialize(torch::nn::Module nn);
+    virtual std::string parameter_type () const;    
+    virtual torch::nn::Module getModule() const;    
+    virtual std::string str() const;
+  };
+
 
   typedef boost::shared_ptr <IntParameterValue> IntParameterValuePtr;
   typedef boost::shared_ptr <DoubleParameterValue> DoubleParameterValuePtr;
@@ -291,6 +309,7 @@ namespace tops {
   typedef boost::shared_ptr <DoubleMapParameterValue> DoubleMapParameterValuePtr;
 
   typedef boost::shared_ptr <TensorParameterValue> TensorParameterValuePtr;
+  typedef boost::shared_ptr <ModuleParameterValue> ModuleParameterValuePtr;
 }
 
 

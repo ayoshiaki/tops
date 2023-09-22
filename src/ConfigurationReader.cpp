@@ -2,7 +2,7 @@
  *       ConfigurationReader.cpp
  *
  *       Copyright 2011 Andre Yoshiaki Kashiwabara <akashiwabara@usp.br>
- *                      Ígor Bonadio <ibonadio@ime.usp.br>
+ *                      ï¿½gor Bonadio <ibonadio@ime.usp.br>
  *                      Vitor Onuchic <vitoronuchic@gmail.com>
  *                      Alan Mitchell Durham <aland@usp.br>
  *
@@ -472,7 +472,8 @@ namespace tops {
     rule<phrase_scanner_t> config_file, parameter_spec, parameter_value,
       parameter_name,  prob_table, string_vector, double_vector,
       int_vector, word, word_p, string_map, transition_map, nested_configuration, nested_parameter_spec,
-      tree_p, tree;
+      tree_p, tree,
+      layer_map;
     word_p
       = lexeme_d [ +(alnum_p | (ch_p('_') | '.' | '/' | '-' | ' ' | ',' | '+' ))]
       ;
@@ -543,6 +544,18 @@ namespace tops {
       >> !( ch_p(';') ) >> ')'
 
       ;
+
+    // *** Layer rules
+
+
+    layer_map 
+      = "conv(" >> int_p >> int_p >> ch_p(')')
+      | "pool(" >> int_p >> int_p >> ch_p(')')
+      ;
+
+    // *** Layer rules
+
+
     parameter_name
       = lexeme_d [ alpha_p >> *(alnum_p | (ch_p('_') | '.' | '/'))]
       ;
@@ -557,6 +570,7 @@ namespace tops {
       | int_p [set_parameter_value_int(this)]
       | nested_configuration [set_parameter_value_string(this)]
       | string_map
+      | layer_map
       ;
 
     nested_parameter_spec

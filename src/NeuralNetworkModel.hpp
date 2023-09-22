@@ -42,17 +42,15 @@ namespace tops {
   class DLLEXPORT NeuralNetworkModel : public ProbabilisticModel
   {
   private:
-    torch::Tensor _weight;
-    torch::Tensor _bias;
+    torch::nn::Module _module_nn;
   public:
     
     NeuralNetworkModel() ;
     //! Constructor
-    /*! \param bias is the bias value of the network
-        \param weight is the weight value of the network
+    /*! \param module_nn is the actual neural network referenced by the module libtorch class
      */
-    NeuralNetworkModel(const torch::Tensor weight, const torch::Tensor bias) ;
-
+    
+    NeuralNetworkModel(torch::nn::Module module_nn) ;
 
 
     //! Choose
@@ -94,7 +92,7 @@ namespace tops {
 
     virtual ProbabilisticModelParameters parameters() const;
 
-    void setParameters(const torch::Tensor weight, const torch::Tensor bias) ;
+    void setParameters(torch::nn::Module module_nn) ;
     
   };
 
