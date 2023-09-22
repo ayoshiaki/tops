@@ -175,11 +175,11 @@ int GeneralizedHiddenMarkovModel::configureExplicitDurationState(std::string obs
 
     void GeneralizedHiddenMarkovModel::initializeChoosePathAlgorithm(const Sequence &s)
     {
-        if(s != _last)
-            {
-                forward(s, _alpha);
-                _last = s;
-            }
+      if(s != _last)
+      {
+	forward(s, _alpha);
+	_last = s;
+      }
     }
 
   void GeneralizedHiddenMarkovModel::choosePath(const Sequence &s, Sequence &path) {
@@ -192,22 +192,22 @@ int GeneralizedHiddenMarkovModel::configureExplicitDurationState(std::string obs
     path.resize(s.size());
 #if 0
     for(int i = 0; i < size; i++)
-      {
-  std::cerr << i << " " << std::endl;
-  for (int j = 0; j < nstates; j++)
     {
-      std::cerr << " " << _all_states[j]->name() << " " << _alpha(j, i) << std::endl;
-    }
+      std::cerr << i << " " << std::endl;
+      for (int j = 0; j < nstates; j++)
+      {
+	std::cerr << " " << _all_states[j]->name() << " " << _alpha(j, i) << std::endl;
       }
+    }
 #endif
     for(int k = 0; k < nstates; k++)
-      {
-  sum = log_sum(sum, _alpha(k,L) );
-      }
+    {
+      sum = log_sum(sum, _alpha(k,L) );
+    }
     for(int k = 0; k < nstates; k++)
-      {
-  lastStateProbability[k] = exp(_alpha(k, L) - sum);
-      }
+    {
+      lastStateProbability[k] = exp(_alpha(k, L) - sum);
+    }
     DiscreteIIDModelPtr m = DiscreteIIDModelPtr(new DiscreteIIDModel(lastStateProbability));
 
     int q = m->choose();
@@ -220,9 +220,9 @@ int GeneralizedHiddenMarkovModel::configureExplicitDurationState(std::string obs
       state = q;
       _all_states[q]->choosePredecessor(_alpha, position, state, new_position, _all_states);
       for(int p = new_position + 1; p <= position; p++)
-  {
-    path[p] = q;
-  }
+      {
+	path[p] = q;
+      }
       position = new_position;
       q = state;
     }
@@ -356,32 +356,32 @@ int GeneralizedHiddenMarkovModel::configureExplicitDurationState(std::string obs
       postProbs(0,c) = 0.0;
     }
     for (int k = 0; k < nstates; k++) {
-      alpha(k, 0) = getInitialProbabilities()->log_probability_of(k)
-  + _all_states[k]->observation()->prefix_sum_array_compute(0, 0, _all_states[k]->getInputPhase()) + _all_states[k]->duration_probability(1);
+      alpha(k, 0) = getInitialProbabilities()->log_probability_of(k);
+      alpha(k, 0) +=  _all_states[k]->observation()->prefix_sum_array_compute(0, 0, _all_states[k]->getInputPhase()) + _all_states[k]->duration_probability(1);
       if(alpha(k,0) > -HUGE){
-  postProbs(0,k) = exp(alpha(k,0) + beta(k,0) - prob);
-  std::vector<int> succ = _all_states[k]->successors();
-  for(int p = 0; p < (int)succ.size(); p++){
-    int id = succ[p];
-    if(!_all_states[id]->isGeometricDuration())
-      valid_positions[id].push_back(0);
-  }
+	postProbs(0,k) = exp(alpha(k,0) + beta(k,0) - prob);
+	std::vector<int> succ = _all_states[k]->successors();
+	for(int p = 0; p < (int)succ.size(); p++){
+	  int id = succ[p];
+	  if(!_all_states[id]->isGeometricDuration())
+	    valid_positions[id].push_back(0);
+	}
       }
     }
 
     for (int i = 1; i < size; i++) {
       for(int c = 0; c < nstates; c++)
-  postProbs(i,c) = 0.0;
+	postProbs(i,c) = 0.0;
       for(int k = 0; k < nstates; k++) {
-  _all_states[k]->posteriorSum(alpha, beta, postProbs, s, i, _all_states, valid_positions, prob, k);
+	_all_states[k]->posteriorSum(alpha, beta, postProbs, s, i, _all_states, valid_positions, prob, k);
       }
     }
 
     /*double sum = alpha(0, size-1) + _terminal_probabilities->log_probability_of(0);
-    for(int k = 1; k < nstates; k++)
+      for(int k = 1; k < nstates; k++)
       sum = log_sum(sum, alpha(k, size-1) + _terminal_probabilities->log_probability_of(k));
       cout << "prob = " << prob << "  postProb = " << sum << endl;*/
-      //cout << (probabilities.value_data()).size() << "  " << postProbs.size1()*postProbs.size2() << endl;
+    //cout << (probabilities.value_data()).size() << "  " << postProbs.size1()*postProbs.size2() << endl;
   }
 
   void GeneralizedHiddenMarkovModel::posteriorProbabilitiesWithClasses (const Sequence &s, SparseMatrixPtr probabilities) const{
@@ -456,28 +456,47 @@ double GeneralizedHiddenMarkovModel::forward(const Sequence & s, Matrix &a) cons
 
   // initialization
   for (int k = 0; k < nstates; k++) {
-    alpha(k, 0) = getInitialProbabilities()->log_probability_of(k)
-      + _all_states[k]->observation()->prefix_sum_array_compute(0, 0, _all_states[k]->getInputPhase()) + _all_states[k]->duration_probability(1);
+    if (_all_states[k]->isGeometricDuration())
+      alpha(k, 0) = getInitialProbabilities()->log_probability_of(k) + _all_states[k]->observation()->prefix_sum_array_compute(0, 0);
+    else 
+      alpha(k, 0) = getInitialProbabilities()->log_probability_of(k) + _all_states[k]->observation()->prefix_sum_array_compute(0, 0, _all_states[k]->getInputPhase());
+
     if(alpha(k,0) > -HUGE){
       std::vector<int> succ = _all_states[k]->successors();
       for(int p = 0; p < (int)succ.size(); p++){
-  int id = succ[p];
-  if(!_all_states[id]->isGeometricDuration())
-    valid_positions[id].push_back(0);
+	int id = succ[p];
+	if(!_all_states[id]->isGeometricDuration())
+	  valid_positions[id].push_back(0);
       }
     }
   }
 
   for (int i = 1; i < size; i++) {
-      for(int k = 0; k < nstates; k++) {
-  _all_states[k]->forwardSum(alpha, s, i, _all_states, valid_positions);
-      }
+    for(int k = 0; k < nstates; k++) {
+      _all_states[k]->forwardSum(alpha, s, i, _all_states, valid_positions);
+    }
   }
+  double sum;
 
-  a = alpha;
-  double sum = alpha(0, size-1) + _terminal_probabilities->log_probability_of(0);
+  if(_terminal_probabilities != NULL)
+    sum = alpha(0,size-1) + _terminal_probabilities->log_probability_of(0);
+  else 
+    sum = alpha(0, size-1) ;
+
   for(int k = 1; k < nstates; k++)
-    sum = log_sum(sum, alpha(k, size-1) + _terminal_probabilities->log_probability_of(k));
+    sum = log_sum(sum, alpha(k, size-1));
+   
+  a = alpha;
+#if 0
+  for(int i = 0; i < size; i++) {
+      std::cerr << "i: " << i << std::endl;
+      for(int k = 0; k < nstates; k++){
+          std::cerr << " "  << getStateName(k) << " " << alpha(k, i) << std::endl;
+      }
+
+  }
+#endif
+ 
 
   return sum;
 }
@@ -497,27 +516,26 @@ double GeneralizedHiddenMarkovModel::inefficient_forward(const Sequence & s, Mat
   }
 
   for (int i = 1; i < size; i++) {
-    printf("i = %d\n",i);
     for(int k = 0; k < nstates; k++) {
       alpha(k, i) = -HUGE;
       for(int d = i; d > 0; d--){
-  int nphase = _all_states[k]->getInputPhase();
-  if(_all_states[k]->observation()->inhomogeneous() != NULL)
-    nphase = _all_states[k]->observation()->inhomogeneous()->maximumTimeValue() + 1;
-  if(_all_states[k]->getStart() > 0 && _all_states[k]->getStop() > 0) {
-    if((i-d+1-_all_states[k]->getStart() >= 0) && (i + _all_states[k]->getStop() < (int)s.size())) {
-      double joinable = _all_states[k]->observation()->prefix_sum_array_compute(i-d+1-_all_states[k]->getStart(),i+_all_states[k]->getStop(), mod(_all_states[k]->getInputPhase()-_all_states[k]->getStart(), nphase));
-      if(joinable <= -HUGE) {
-        continue;
-      }
-    }
-  }
-        for(int p = 0; p < nstates; p++){
-          alpha(k, i) = log_sum(alpha(k, i), alpha(p, i-d)
-        + _all_states[p]->transition()->log_probability_of(k)
-        + _all_states[k]->duration_probability(d)
-        + _all_states[k]->observation()->prefix_sum_array_compute(i-d+1, i, _all_states[k]->getInputPhase()));
-        }
+	int nphase = _all_states[k]->getInputPhase();
+	if(_all_states[k]->observation()->inhomogeneous() != NULL)
+	  nphase = _all_states[k]->observation()->inhomogeneous()->maximumTimeValue() + 1;
+	if(_all_states[k]->getStart() > 0 && _all_states[k]->getStop() > 0) {
+	  if((i-d+1-_all_states[k]->getStart() >= 0) && (i + _all_states[k]->getStop() < (int)s.size())) {
+	    double joinable = _all_states[k]->observation()->prefix_sum_array_compute(i-d+1-_all_states[k]->getStart(),i+_all_states[k]->getStop(), mod(_all_states[k]->getInputPhase()-_all_states[k]->getStart(), nphase));
+	    if(joinable <= -HUGE) {
+	      continue;
+	    }
+	  }
+	}
+	for(int p = 0; p < nstates; p++){
+	  alpha(k, i) = log_sum(alpha(k, i), alpha(p, i-d)
+	      + _all_states[p]->transition()->log_probability_of(k)
+	      + _all_states[k]->duration_probability(d)
+	      + _all_states[k]->observation()->prefix_sum_array_compute(i-d+1, i, _all_states[k]->getInputPhase()));
+	}
       }
     }
   }
@@ -528,7 +546,6 @@ double GeneralizedHiddenMarkovModel::inefficient_forward(const Sequence & s, Mat
   for(int k = 1; k < nstates; k++)
     sum = log_sum(sum, alpha(k, size-1) + _terminal_probabilities->log_probability_of(k));
 
-  printf("forward: %f\n\n", sum);
 
   return sum;
 
@@ -549,26 +566,35 @@ double GeneralizedHiddenMarkovModel::backward(const Sequence & s, Matrix &b) con
   valid_positions.resize(nstates);
   std::list <int> e;
   for(int k = 0; k <nstates; k++)
-      valid_positions[k] = e;
+    valid_positions[k] = e;
 
   // initialization
   for (int k = 0; k < nstates; k++) {
-    beta(k, size-1) = _terminal_probabilities->log_probability_of(k);
+    beta(k, size-1) = -HUGE;
+    if(_terminal_probabilities != NULL) 
+      beta(k, size-1) = _terminal_probabilities->log_probability_of(k);
     if(beta(k,size-1) > -HUGE){
       if(!_all_states[k]->isGeometricDuration())
-  valid_positions[k].push_back(size-1);
+	valid_positions[k].push_back(size-1);
     }
   }
   for (int i = size-2; i >= 0; i--){
     for (int k = 0; k < nstates; k++){
       beta(k,i) = -HUGE;
       for(int p = 0; p < (int)(_all_states[k]->successors()).size(); p++){
-  int id = _all_states[k]->successors()[p];
-  beta(k,i) = log_sum(beta(k,i), _all_states[k]->transition()->log_probability_of(id) + _all_states[id]->backwardSum(beta,s,i,valid_positions));
+	int id = _all_states[k]->successors()[p];
+#if 0
+	std::cerr << getStateName(k) << "->" ;
+	std::cerr << getStateName(id) << ":";
+	std::cerr << beta(k, i) << ",";
+	std::cerr << _all_states[k]->transition()->log_probability_of(id) << ",";
+	std::cerr << _all_states[id]->backwardSum(beta,s,i,valid_positions) << std::endl;
+#endif 
+	beta(k,i) = log_sum(beta(k,i), _all_states[k]->transition()->log_probability_of(id) + _all_states[id]->backwardSum(beta,s,i,valid_positions));
       }
       if(beta(k,i) > -HUGE){
-  if(!_all_states[k]->isGeometricDuration())
-      valid_positions[k].push_front(i);
+	if(!_all_states[k]->isGeometricDuration())
+	  valid_positions[k].push_front(i);
       }
     }
   }
@@ -578,6 +604,19 @@ double GeneralizedHiddenMarkovModel::backward(const Sequence & s, Matrix &b) con
   double sum = -HUGE;
   for(int k = 0; k < nstates; k++)
     sum = log_sum(sum, getInitialProbabilities()->log_probability_of(k) + _all_states[k]->backwardSum(beta,s,-1,valid_positions)) ;
+
+#if 0
+  for(int i = 0; i < size; i++) {
+    std::cerr << "i: " << i << std::endl;
+    for(int k = 0; k < nstates; k++){
+      std::cerr << " "  << getStateName(k) << " " << beta(k, i) << std::endl;
+    }
+
+  }
+#endif
+
+
+
 
   return sum;
 }
@@ -1070,6 +1109,13 @@ Sequence & GeneralizedHiddenMarkovModel::chooseObservation(Sequence & h, int i,
         DiscreteIIDModelPtr terminalprob = DiscreteIIDModelPtr(new DiscreteIIDModel());
         terminalprob->initializeFromMap(terminal_probabilities_par->getDoubleMap(), states);
         setTerminalProbability(terminalprob);
+    } else {
+        DiscreteIIDModelPtr terminalprob = DiscreteIIDModelPtr(new DiscreteIIDModel());
+	DoubleVector v ;
+	for(unsigned int l = 0; l < states->size(); l++)
+	  v.push_back((double)1.0/(double)states->size());
+	terminalprob->setProbabilities(v);
+        setTerminalProbability(terminalprob);
     }
 
 
@@ -1077,6 +1123,15 @@ Sequence & GeneralizedHiddenMarkovModel::chooseObservation(Sequence & h, int i,
     std::map<std::string, DoubleVector> trans;
     std::map<std::string, double>::const_iterator it;
     boost::regex separator("\\s*\\|\\s*");
+
+    // initializing transition matrix
+    for (unsigned int from = 0; from < states->size(); from++){
+      DoubleVector probs;
+      probs.resize(states->size());
+      for (unsigned int to = 0; to< states->size(); to++)
+	probs[to] = 0;
+      trans[states->getSymbol(from)->name()]  = probs;
+    }
 
     for (it = transpar.begin(); it != transpar.end(); it++) {
       std::vector<std::string> splited;
@@ -1094,19 +1149,17 @@ Sequence & GeneralizedHiddenMarkovModel::chooseObservation(Sequence & h, int i,
          std::cerr << "ERROR: The state '" << to << "' is not in state list !\n" << std::endl;
          exit(-1);
       }
-
+      int id = states->getSymbol(to)->id();
       if (trans.find(from) == trans.end()) {
-        int id = states->getSymbol(to)->id();
-        DoubleVector probs;
-        probs.resize(states->size() );
-        trans[from] = probs;
-        if (id < (int) trans[from].size())
-          trans[from][id] = it->second;
-      } else {
-        int id = states->getSymbol(to)->id();
-        if (id < (int) trans[from].size())
-          trans[from][id] = it->second;
+	DoubleVector probs;
+	probs.resize(states->size());
+	trans[from] = probs;
+	trans[from][id] = it->second;
+      } else  {
+	trans[from][id] = it->second;
       }
+
+	
     }
 
     setAlphabet(observation_symbols);
@@ -1157,23 +1210,20 @@ Sequence & GeneralizedHiddenMarkovModel::chooseObservation(Sequence & h, int i,
         std::string model_name = observationpar->getString();
         restore_model(model_name, parameters);
 
-        DiscreteIIDModelPtr transition =
-          DiscreteIIDModelPtr(
-                                        new DiscreteIIDModel(
-                                                                       trans[state_names[i]]));
+	DiscreteIIDModelPtr transition = DiscreteIIDModelPtr(new DiscreteIIDModel(trans[state_names[i]]));
 
-        int iphase = -1;
-        int ophase = -1;
-  std::vector<int> classes;
-  if(classespar != NULL){
-    std::vector<double> cl = classespar->getDoubleVector();
-    classes.resize(cl.size());
-    for(int c = 0; c < (int)cl.size(); c++){
-      classes[c] = (int)cl[c];
-      if(classes[c] > nclasses)
-        nclasses = classes[c];
-    }
-  }
+	int iphase = -1;
+	int ophase = -1;
+	std::vector<int> classes;
+	if(classespar != NULL){
+	  std::vector<double> cl = classespar->getDoubleVector();
+	  classes.resize(cl.size());
+	  for(int c = 0; c < (int)cl.size(); c++){
+	    classes[c] = (int)cl[c];
+	    if(classes[c] > nclasses)
+	      nclasses = classes[c];
+	  }
+	}
         if(inputphasepar != NULL)
             iphase = inputphasepar->getInt();
         if(outputphasepar != NULL)
@@ -1212,6 +1262,7 @@ Sequence & GeneralizedHiddenMarkovModel::chooseObservation(Sequence & h, int i,
     setInitialProbability(pi);
 
     fixStatesPredecessorSuccessor();
+
 
     for (int i = 0; i < (int)_all_states.size(); i++)
         if (_all_states[i]->transition()->size() <= 0)

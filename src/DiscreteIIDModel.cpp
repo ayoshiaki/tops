@@ -35,19 +35,17 @@ namespace tops {
 
   DiscreteIIDModel:: DiscreteIIDModel(const DoubleVector & probabilities)
   {
-    _size = probabilities.size() - 1;
-    _log_probabilities.resize(_size+1);
+    _log_probabilities.resize(probabilities.size());
+    _size = probabilities.size() - 1; // model size is the number of free parameters
     double  sum = 0;
     for(unsigned int i = 0; i < probabilities.size(); i++)
       sum += probabilities[i];
-    for(int i = 0; (i <= _size); i++)
-      if(i >= (int)probabilities.size())
-        _log_probabilities[i] = -HUGE;
-      else if(close(probabilities[i], 0.0, 1e-10))
-        _log_probabilities[i] = -HUGE;
-      else
-        _log_probabilities[i] = log(probabilities[i]/sum);
-     _geometric_tail = false;
+    for(int i = 0; (i < _size); i++){
+      _log_probabilities[i] = -HUGE;
+      if(!close(probabilities[i], 0.0, 1e-200))
+	_log_probabilities[i] = log(probabilities[i]/sum);
+    }
+    _geometric_tail = false;
   }
 
   DiscreteIIDModel::DiscreteIIDModel(const Matrix & probabilities){
@@ -210,23 +208,22 @@ namespace tops {
     for(int i = 0; i < (int)alphabet->size()  ; i++)
       probs[i] = 0.0;
     for(it = probabilities.begin(); it != probabilities.end(); it++)
-      {
-
-        int id = alphabet->getSymbol(it->first)->id();
-        if(id < (int)probs.size())
-          probs[id] = it->second;
-      }
+    {
+      int id = alphabet->getSymbol(it->first)->id();
+      if(id < (int)probs.size())
+	probs[id] = it->second;
+    }
     _log_probabilities.resize(probs.size());
     double  sum = 0;
     for(unsigned int i = 0; i < probs.size(); i++)
-      {
-        sum += probs[i] ;
-        if(close(probs[i], 0.0, 1e-100))
-          _log_probabilities[i] = -HUGE;
-        else
-          _log_probabilities[i] = log(probs[i]);
-      }
-    if(close(sum, 1.0, 1e-5))
+    {
+      sum += probs[i] ;
+      if(close(probs[i], 0.0, 1e-100))
+	_log_probabilities[i] = -HUGE;
+      else
+	_log_probabilities[i] = log(probs[i]);
+    }
+    if(close(sum, 1.0, 1e-100))
       _log_probabilities.push_back(-HUGE);
     else {
       _log_probabilities[probs.size()-1] = log(1.0 - sum);
