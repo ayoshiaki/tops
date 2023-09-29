@@ -473,38 +473,70 @@ namespace tops {
       parameter_name,  prob_table, string_vector, double_vector,
       int_vector, word, word_p, string_map, transition_map, nested_configuration, nested_parameter_spec,
       tree_p, tree,
-      layer_map;
+
+      layer_vector, layer_p, tuple_p, 
+      
+      convolutional_layer, 
+      convolutional1d_layer, convolutional2d_layer, convolutional3d_layer, 
+      convolutionaltranspose1d_layer, convolutionaltranspose2d_layer, convolutionaltranspose3d_layer,
+      
+      pooling_layer, 
+      maxpool1d_layer, maxpool2d_layer, maxpool3d_layer,
+      maxunpool1d_layer, maxunpool2d_layer, maxunpool3d_layer,
+      avgpool1d_layer, avgpool2d_layer, avgpool3d_layer,
+      avgunpool1d_layer, avgunpool2d_layer, avgunpool3d_layer,
+      
+      activation_layer, 
+      normalization_layer, 
+      recurrent_layer, 
+      linear_layer, 
+      dropout_layer 
+      ;
+    
+    /* recognizes a string with some special characters: "_./- ,+" (e.g. _Aa1 z) */
     word_p
       = lexeme_d [ +(alnum_p | (ch_p('_') | '.' | '/' | '-' | ' ' | ',' | '+' ))]
       ;
+
+    /* similar to word_p but with parenthesis and : characters (e.g. (_Aa1 z:_Aa1 z:))*/
     tree_p
       = lexeme_d [ +(alnum_p | (ch_p('_') | '.' | '/' | '-' | ' ' | ',' | '+' | '(' | ')' | ':' ))]
       ;
+
+    /* recognizes "word_p" */
     word
       = ch_p('"')
       >> word_p
       >> ch_p('"')
       ;
+
+    /* recognizes "{tree}" */
     tree
       = ch_p('{')
       >> tree_p
       >> ch_p('}')
       ;
+
+    /* recognizes a list of doubles (e.g. (1, 2.6, 0.0001)) */
     double_vector
       = ch_p('(')
       >> real_p[create_double_vector(this)]
       >> * (',' >>  real_p[add_value_to_double_vector(this)])
       >> ')'
       ;
+    
+    /* recognizes a list of (the rule) word (e.g ("e.g. _Aa1 z", "A", "a+A"))*/
     string_vector
       = ch_p('(')
       >> word[create_string_vector(this)]
       >> * (',' >>  word[add_value_to_string_vector(this)])
       >> ')'
       ;
+
+    /* recognizes a list of transitions or emission probabilities (e.g ("A"|"B":0.4; "A":0.4; "A b"|"":0.4)) */
     transition_map
       = ch_p('(')
-      >> '"'
+      >> '"' /* word is not enough?? */
       >> ( + word_p)  [set_first_word(this)]
       >> '"'
       >>
@@ -524,6 +556,8 @@ namespace tops {
             >> real_p [add_prob(this)] )
       >> !( ch_p(';') ) >> ')'
       ;
+
+    /* recognizes a map of strings "<key>":"<value>" (e.g ("A" : "B"; "A a B b" : "z"; "1 0" : "0 1")) */
     string_map
       = ch_p('(')
       >> ('"'
@@ -547,10 +581,73 @@ namespace tops {
 
     // *** Layer rules
 
+    tuple_p 
+      = ch_p('(')
+      >> int_p
+      >> + ( ',' >> int_p )
+      >> ')'
+      ;
 
-    layer_map 
-      = "conv(" >> int_p >> int_p >> ch_p(')')
-      | "pool(" >> int_p >> int_p >> ch_p(')')
+    convolutional1d_layer = str_p("Conv1d");
+    convolutional2d_layer = str_p("Conv2d");
+    convolutional3d_layer = str_p("Conv3d");
+    convolutionaltranspose1d_layer = str_p("ConvTranspose1d");
+    convolutionaltranspose2d_layer = str_p("ConvTranspose2d");
+    convolutionaltranspose3d_layer = str_p("ConvTranspose3d");
+
+    convolutional_layer 
+      = ( convolutional1d_layer | convolutional2d_layer | convolutional3d_layer 
+        | convolutionaltranspose1d_layer |  convolutionaltranspose2d_layer | convolutionaltranspose3d_layer  
+        )
+        
+      >> ch_p('(')
+                >> int_p /* in_channels */ >> ','
+                >> int_p /* out_channels */ >> ','
+                >> (int_p | tuple_p) /* kernel_size */
+      >> ')'
+      ;
+
+    maxpool1d_layer = str_p("MaxPool1d"); 
+    maxpool2d_layer = str_p("MaxPool2d"); 
+    maxpool3d_layer = str_p("MaxPool3d"); 
+    maxunpool1d_layer = str_p("MaxUnpool1d"); 
+    maxunpool2d_layer = str_p("MaxUnpool2d"); 
+    maxunpool3d_layer = str_p("MaxUnpool3d"); 
+    avgpool1d_layer = str_p("AvgPool1d"); 
+    avgpool2d_layer = str_p("AvgPool2d"); 
+    avgpool3d_layer = str_p("AvgPool3d"); 
+    avgunpool1d_layer = str_p("AvgUnpool1d"); 
+    avgunpool2d_layer = str_p("AvgUnpool1d"); 
+    avgunpool3d_layer = str_p("AvgUnpool1d"); 
+
+    pooling_layer
+      = ( maxpool1d_layer | maxpool2d_layer | maxpool3d_layer 
+        | maxunpool1d_layer | maxunpool2d_layer | maxunpool3d_layer 
+        | avgpool1d_layer | avgpool2d_layer | avgpool3d_layer 
+        | avgunpool1d_layer | avgunpool2d_layer | avgunpool3d_layer 
+        )
+      >> ch_p('(')
+                >> int_p /* in_channels */ >> ','
+                >> int_p /* out_channels */ >> ','
+                >> (int_p | tuple_p) /* kernel_size */
+      >> ')'
+      ;
+
+    layer_p /* kind of layer */
+      = convolutional_layer 
+      | pooling_layer
+      | activation_layer
+      | normalization_layer
+      | recurrent_layer
+      | linear_layer
+      | dropout_layer 
+      ;
+
+    layer_vector /* list of layers */
+      = ch_p('(')
+      >> layer_p
+      >> * ( ',' >> layer_p )
+      >> ')'
       ;
 
     // *** Layer rules
@@ -570,7 +667,7 @@ namespace tops {
       | int_p [set_parameter_value_int(this)]
       | nested_configuration [set_parameter_value_string(this)]
       | string_map
-      | layer_map
+      | layer_vector
       ;
 
     nested_parameter_spec

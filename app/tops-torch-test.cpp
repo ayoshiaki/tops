@@ -30,7 +30,7 @@ using namespace boost::program_options;
 struct Net : torch::nn::Module {
   Net() {
     //Construct and register CNN submodules.
-    conv1 = register_module("conv1", torch::nn::Conv2d(/*input_shape*/1, 70, /*kernel_size=*/(9, 4)));//, /*stride=*/1, /*padding=*/1));
+    conv1 = register_module("conv1", torch::nn::Conv2d(torch::nn::Conv2dOptions(1, 6, 4).stride(2).padding(1).bias(false)));//torch::nn::Conv2d(/*input_shape*/1, 70, /*kernel_size=*/(9, 4)));//, /*stride=*/1, /*padding=*/1));
     pool1 = register_module("pool1", torch::nn::MaxPool2d((3, 1)));
     conv2 = register_module("conv2", torch::nn::Conv2d(70, 100, /*kernel_size=*/(7, 1)));
     conv3 = register_module("conv3", torch::nn::Conv2d(100, 100, /*kernel_size=*/(7, 1)));
