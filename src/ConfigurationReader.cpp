@@ -433,6 +433,36 @@ namespace tops {
   };
 
 
+  /* Deep layer struct parsings */
+
+  struct create_layer_vector
+  {
+    create_layer_vector(ConfigurationReader *c) : _c(c){};
+    void operator()(IteratorT first, IteratorT last) const
+    {
+      LayerVectorParameterValuePtr v = LayerVectorParameterValuePtr(new LayerVectorParameterValue());      
+      _c->setCurrentParameterValue(v);
+    }
+  private:
+    ConfigurationReader * _c;
+  };
+
+  struct create_Conv1d
+  {
+    create_Conv1d(ConfigurationReader *c) : _c(c){};
+    void operator()(IteratorT first, IteratorT last) const
+    {
+      CreateConv1d layer
+      (_c->getCurrentParameterValue()->getLayerVector()).push_back();
+    }
+  private:
+    ConfigurationReader * _c;
+  };
+  
+  /* Deep layer struct parsings */
+
+
+
   struct print_context
   {
     print_context() {};
@@ -476,16 +506,8 @@ namespace tops {
 
       layer_vector, layer_p, tuple_p, 
       
-      convolutional_layer, 
-      convolutional1d_layer, convolutional2d_layer, convolutional3d_layer, 
-      convolutionaltranspose1d_layer, convolutionaltranspose2d_layer, convolutionaltranspose3d_layer,
-      
-      pooling_layer, 
-      maxpool1d_layer, maxpool2d_layer, maxpool3d_layer,
-      maxunpool1d_layer, maxunpool2d_layer, maxunpool3d_layer,
-      avgpool1d_layer, avgpool2d_layer, avgpool3d_layer,
-      avgunpool1d_layer, avgunpool2d_layer, avgunpool3d_layer,
-      
+      convolutional_layer,      
+      pooling_layer,      
       activation_layer, 
       normalization_layer, 
       recurrent_layer, 
@@ -579,27 +601,25 @@ namespace tops {
 
       ;
 
-    // *** Layer rules
+    // *** Deep layer rules
 
+    /* e.g. (1, 2); (1, 2, 3) */
     tuple_p 
       = ch_p('(')
-      >> int_p
-      >> + ( ',' >> int_p )
+      >> int_p[create_int_vector(this)]
+      >> + ( ',' >> int_p[add_value_to_int_vector(this)] )
       >> ')'
       ;
 
-    convolutional1d_layer = str_p("Conv1d");
-    convolutional2d_layer = str_p("Conv2d");
-    convolutional3d_layer = str_p("Conv3d");
-    convolutionaltranspose1d_layer = str_p("ConvTranspose1d");
-    convolutionaltranspose2d_layer = str_p("ConvTranspose2d");
-    convolutionaltranspose3d_layer = str_p("ConvTranspose3d");
-
+    /* e.g. Conv2d(100, 200, 4); Conv2d(100, 200, (4, 5)) */
     convolutional_layer 
-      = ( convolutional1d_layer | convolutional2d_layer | convolutional3d_layer 
-        | convolutionaltranspose1d_layer |  convolutionaltranspose2d_layer | convolutionaltranspose3d_layer  
-        )
-        
+      = ( str_p("Conv1d") 
+        | str_p("Conv2d") 
+        | str_p("Conv3d") 
+        | str_p("ConvTranspose1d") 
+        | str_p("ConvTranspose2d") 
+        | str_p("ConvTranspose3d")  
+        )        
       >> ch_p('(')
                 >> int_p /* in_channels */ >> ','
                 >> int_p /* out_channels */ >> ','
@@ -607,24 +627,20 @@ namespace tops {
       >> ')'
       ;
 
-    maxpool1d_layer = str_p("MaxPool1d"); 
-    maxpool2d_layer = str_p("MaxPool2d"); 
-    maxpool3d_layer = str_p("MaxPool3d"); 
-    maxunpool1d_layer = str_p("MaxUnpool1d"); 
-    maxunpool2d_layer = str_p("MaxUnpool2d"); 
-    maxunpool3d_layer = str_p("MaxUnpool3d"); 
-    avgpool1d_layer = str_p("AvgPool1d"); 
-    avgpool2d_layer = str_p("AvgPool2d"); 
-    avgpool3d_layer = str_p("AvgPool3d"); 
-    avgunpool1d_layer = str_p("AvgUnpool1d"); 
-    avgunpool2d_layer = str_p("AvgUnpool1d"); 
-    avgunpool3d_layer = str_p("AvgUnpool1d"); 
-
+    /* e.g. MaxPool1d(100, 200, 4); MaxPool1d(100, 200, (4, 5)) */
     pooling_layer
-      = ( maxpool1d_layer | maxpool2d_layer | maxpool3d_layer 
-        | maxunpool1d_layer | maxunpool2d_layer | maxunpool3d_layer 
-        | avgpool1d_layer | avgpool2d_layer | avgpool3d_layer 
-        | avgunpool1d_layer | avgunpool2d_layer | avgunpool3d_layer 
+      = ( str_p("MaxPool1d") 
+        | str_p("MaxPool2d") 
+        | str_p("MaxPool3d")
+        | str_p("MaxUnpool1d") 
+        | str_p("MaxUnpool2d") 
+        | str_p("MaxUnpool3d")
+        | str_p("AvgPool1d") 
+        | str_p("AvgPool2d") 
+        | str_p("AvgPool3d") 
+        | str_p("AvgUnpool1d")
+        | str_p("AvgUnpool2d")
+        | str_p("AvgUnpool3d")
         )
       >> ch_p('(')
                 >> int_p /* in_channels */ >> ','
@@ -650,7 +666,7 @@ namespace tops {
       >> ')'
       ;
 
-    // *** Layer rules
+    // *** Deep layer rules
 
 
     parameter_name
