@@ -1,0 +1,80 @@
+\hypertarget{classtops_1_1MultipleSequentialModel}{}\section{tops\+:\+:Multiple\+Sequential\+Model Class Reference}
+\label{classtops_1_1MultipleSequentialModel}\index{tops\+::\+Multiple\+Sequential\+Model@{tops\+::\+Multiple\+Sequential\+Model}}
+
+
+This class is a model that concatenates multiple models.  
+
+
+
+
+{\ttfamily \#include $<$Multiple\+Sequential\+Model.\+hpp$>$}
+
+
+
+Inheritance diagram for tops\+:\+:Multiple\+Sequential\+Model\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=201pt]{classtops_1_1MultipleSequentialModel__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for tops\+:\+:Multiple\+Sequential\+Model\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=201pt]{classtops_1_1MultipleSequentialModel__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classtops_1_1MultipleSequentialModel_a7929d648f8f2f1cdecb0ac7e03298519}\label{classtops_1_1MultipleSequentialModel_a7929d648f8f2f1cdecb0ac7e03298519}} 
+virtual double {\bfseries prefix\+\_\+sum\+\_\+array\+\_\+compute} (int begin, int end, int phase)
+\item 
+\mbox{\Hypertarget{classtops_1_1MultipleSequentialModel_a9dd8a61e7e9ac823fe7557b13fce160e}\label{classtops_1_1MultipleSequentialModel_a9dd8a61e7e9ac823fe7557b13fce160e}} 
+virtual double {\bfseries prefix\+\_\+sum\+\_\+array\+\_\+compute} (int begin, int end)
+\item 
+\mbox{\Hypertarget{classtops_1_1MultipleSequentialModel_a122a00bbf110019a7867525a2cb77b86}\label{classtops_1_1MultipleSequentialModel_a122a00bbf110019a7867525a2cb77b86}} 
+virtual bool {\bfseries initialize\+\_\+prefix\+\_\+sum\+\_\+array} (const Sequence \&s)
+\item 
+\mbox{\Hypertarget{classtops_1_1MultipleSequentialModel_aa53c8e2233d9854b40bd0c0fb966262b}\label{classtops_1_1MultipleSequentialModel_aa53c8e2233d9854b40bd0c0fb966262b}} 
+virtual bool {\bfseries initialize\+\_\+prefix\+\_\+sum\+\_\+array} (const Sequence \&s, int phase)
+\item 
+\mbox{\Hypertarget{classtops_1_1MultipleSequentialModel_adff3ab9747c56c23c1f1d3e9d8c519f4}\label{classtops_1_1MultipleSequentialModel_adff3ab9747c56c23c1f1d3e9d8c519f4}} 
+virtual void {\bfseries initialize} (const \hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} \&p)
+\item 
+\mbox{\Hypertarget{classtops_1_1MultipleSequentialModel_a4b01a6551dd705bf0f68b6cd4ed792cd}\label{classtops_1_1MultipleSequentialModel_a4b01a6551dd705bf0f68b6cd4ed792cd}} 
+virtual \hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} {\bfseries parameters} () const
+\item 
+\mbox{\Hypertarget{classtops_1_1MultipleSequentialModel_a5c54fa88e2abe4df49939f46368a9b71}\label{classtops_1_1MultipleSequentialModel_a5c54fa88e2abe4df49939f46368a9b71}} 
+virtual std\+::string \hyperlink{classtops_1_1MultipleSequentialModel_a5c54fa88e2abe4df49939f46368a9b71}{model\+\_\+name} () const
+\begin{DoxyCompactList}\small\item\em returns the model name \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1MultipleSequentialModel_a0758464ada45b626b922e320a1be91a4}\label{classtops_1_1MultipleSequentialModel_a0758464ada45b626b922e320a1be91a4}} 
+virtual double \hyperlink{classtops_1_1MultipleSequentialModel_a0758464ada45b626b922e320a1be91a4}{evaluate} (const Sequence \&s, unsigned int begin, unsigned int end) const
+\begin{DoxyCompactList}\small\item\em Calculates the sequence likelihood given this model. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1MultipleSequentialModel_acd9e80851854e709a22d943629a7fd48}\label{classtops_1_1MultipleSequentialModel_acd9e80851854e709a22d943629a7fd48}} 
+virtual double {\bfseries evaluate} (const Sequence \&s, unsigned int begin, unsigned int end, int phase) const
+\item 
+\mbox{\Hypertarget{classtops_1_1MultipleSequentialModel_aa4e45bfb8a970eeb4fca2b4868586b75}\label{classtops_1_1MultipleSequentialModel_aa4e45bfb8a970eeb4fca2b4868586b75}} 
+virtual std\+::string \hyperlink{classtops_1_1MultipleSequentialModel_aa4e45bfb8a970eeb4fca2b4868586b75}{str} () const
+\begin{DoxyCompactList}\small\item\em returns the string representation of the model \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1MultipleSequentialModel_aabb34c6f29a9140c8db99fa323fd001c}\label{classtops_1_1MultipleSequentialModel_aabb34c6f29a9140c8db99fa323fd001c}} 
+virtual Sequence \& {\bfseries choose} (Sequence \&h, int \hyperlink{classtops_1_1ProbabilisticModel_a4e3910e9b9b848b7078e7101909ae82a}{size}) const
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+This class is a model that concatenates multiple models. 
+
+Definition at line 45 of file Multiple\+Sequential\+Model.\+hpp.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/Multiple\+Sequential\+Model.\+hpp\item 
+src/Multiple\+Sequential\+Model.\+cpp\end{DoxyCompactItemize}

@@ -1,0 +1,138 @@
+\hypertarget{classtops_1_1TrainGHMMTransitionsCreator}{}\section{tops\+:\+:Train\+G\+H\+M\+M\+Transitions\+Creator Class Reference}
+\label{classtops_1_1TrainGHMMTransitionsCreator}\index{tops\+::\+Train\+G\+H\+M\+M\+Transitions\+Creator@{tops\+::\+Train\+G\+H\+M\+M\+Transitions\+Creator}}
+
+
+This class is a factory for the Multinomial Distribution.  
+
+
+
+
+{\ttfamily \#include $<$Train\+G\+H\+M\+M\+Transitions.\+hpp$>$}
+
+
+
+Inheritance diagram for tops\+:\+:Train\+G\+H\+M\+M\+Transitions\+Creator\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=223pt]{classtops_1_1TrainGHMMTransitionsCreator__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for tops\+:\+:Train\+G\+H\+M\+M\+Transitions\+Creator\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=223pt]{classtops_1_1TrainGHMMTransitionsCreator__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual Probabilistic\+Model\+Ptr \hyperlink{classtops_1_1TrainGHMMTransitionsCreator_a83d716ee938b4ccbc76b110d4b6b7ae9}{create} (\hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} \&parameters) const
+\begin{DoxyCompactList}\small\item\em Creates a probabilistic model. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1TrainGHMMTransitionsCreator_a39ecdb6afba99b304dc4c4603e310f67}\label{classtops_1_1TrainGHMMTransitionsCreator_a39ecdb6afba99b304dc4c4603e310f67}} 
+virtual std\+::string \hyperlink{classtops_1_1TrainGHMMTransitionsCreator_a39ecdb6afba99b304dc4c4603e310f67}{help} () const
+\begin{DoxyCompactList}\small\item\em This method returns a help message. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+This class is a factory for the Multinomial Distribution. 
+
+Definition at line 37 of file Train\+G\+H\+M\+M\+Transitions.\+hpp.
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classtops_1_1TrainGHMMTransitionsCreator_a83d716ee938b4ccbc76b110d4b6b7ae9}\label{classtops_1_1TrainGHMMTransitionsCreator_a83d716ee938b4ccbc76b110d4b6b7ae9}} 
+\index{tops\+::\+Train\+G\+H\+M\+M\+Transitions\+Creator@{tops\+::\+Train\+G\+H\+M\+M\+Transitions\+Creator}!create@{create}}
+\index{create@{create}!tops\+::\+Train\+G\+H\+M\+M\+Transitions\+Creator@{tops\+::\+Train\+G\+H\+M\+M\+Transitions\+Creator}}
+\subsubsection{\texorpdfstring{create()}{create()}}
+{\footnotesize\ttfamily Probabilistic\+Model\+Ptr tops\+::\+Train\+G\+H\+M\+M\+Transitions\+Creator\+::create (\begin{DoxyParamCaption}\item[{\hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} \&}]{parameters }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Creates a probabilistic model. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em parameters} & is a set of parameters that is utilized to build the model \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented from \hyperlink{classtops_1_1ProbabilisticModelCreator_afed6c8ffa45fff446bdaa8b533da8f7c}{tops\+::\+Probabilistic\+Model\+Creator}.
+
+
+
+Definition at line 38 of file Train\+G\+H\+M\+M\+Transitions.\+cpp.
+
+
+\begin{DoxyCode}
+38                                                                                                            
+      \{
+39     ProbabilisticModelParameterValuePtr ghmm\_model\_par = parameters.getMandatoryParameterValue(\textcolor{stringliteral}{"ghmm\_model"}
+      );
+40     GeneralizedHiddenMarkovModelPtr result = GeneralizedHiddenMarkovModelPtr(\textcolor{keyword}{new} 
+      GeneralizedHiddenMarkovModel());
+41 
+42     \textcolor{keywordflow}{if}(ghmm\_model\_par == NULL)
+43       \{
+44         std::cerr << \hyperlink{classtops_1_1TrainGHMMTransitionsCreator_a39ecdb6afba99b304dc4c4603e310f67}{help}() <<std::endl;
+45         \textcolor{keywordflow}{return} result;
+46       \}
+47 
+48     ProbabilisticModelCreatorClient creator;
+49     std::string ghmm\_file\_name = ghmm\_model\_par->getString();
+50     ProbabilisticModelPtr ghmm = creator.create(ghmm\_file\_name);
+51 
+52     ProbabilisticModelParameters trainFixedMarkovChain;
+53     trainFixedMarkovChain.add(\textcolor{stringliteral}{"training\_algorithm"}, StringParameterValuePtr(\textcolor{keyword}{new} StringParameterValue(\textcolor{stringliteral}{"
+      FixedLengthMarkovChain"})));
+54     trainFixedMarkovChain.add(\textcolor{stringliteral}{"order"}, IntParameterValuePtr(\textcolor{keyword}{new} IntParameterValue(1)));
+55     trainFixedMarkovChain.add(\textcolor{stringliteral}{"training\_set"}, parameters.getMandatoryParameterValue(\textcolor{stringliteral}{"training\_set"}));
+56     trainFixedMarkovChain.add(\textcolor{stringliteral}{"pseudo\_counts"}, IntParameterValuePtr(\textcolor{keyword}{new} IntParameterValue(0)));
+57 
+58 
+59     ProbabilisticModelParameters ghmmParameters = ghmm->parameters();
+60 
+61     trainFixedMarkovChain.add(\textcolor{stringliteral}{"alphabet"}, ghmmParameters.getOptionalParameterValue(\textcolor{stringliteral}{"state\_names"}));
+62     TrainFixedLengthMarkovChainPtr markovChainTraining = TrainFixedLengthMarkovChainPtr(\textcolor{keyword}{new} 
+      TrainFixedLengthMarkovChain());
+63     ProbabilisticModelPtr markovChain  = markovChainTraining->create(trainFixedMarkovChain);
+64     ProbabilisticModelParameters markovChainParameters = markovChain->parameters();
+65     AlphabetPtr states = AlphabetPtr(\textcolor{keyword}{new} Alphabet());
+66     states->initializeFromVector( (ghmmParameters.getOptionalParameterValue(\textcolor{stringliteral}{"state\_names"}))->
+      getStringVector() );
+67     std::map<std::string,double> probs;
+68     probs = (markovChainParameters.getOptionalParameterValue(\textcolor{stringliteral}{"probabilities"}))->getDoubleMap();
+69     std::map<std::string,double> trans;
+70 
+71 
+72     \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} from = 0; from < states->size(); from++)
+73       \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} to = 0; to < states->size(); to++)\{
+74     stringstream aux;
+75     aux << states->getSymbol(to)->name() << \textcolor{stringliteral}{"|"} << states->getSymbol(from)->name();
+76     \textcolor{keywordflow}{if}(!close(0, probs[aux.str()], 1e-10)) 
+77       trans[aux.str()] = probs[aux.str()];
+78       \}
+79 
+80     
+81     ProbabilisticModelParameterValuePtr probabilities\_par = ProbabilisticModelParameterValuePtr(\textcolor{keyword}{new} 
+      DoubleMapParameterValue(trans)); 
+82 
+83     ghmmParameters.set(\textcolor{stringliteral}{"transitions"}, probabilities\_par);
+84 
+85     ProbabilisticModelPtr m= creator.create(ghmmParameters);
+86     \textcolor{keywordflow}{return} m;
+87   \}
+\end{DoxyCode}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/Train\+G\+H\+M\+M\+Transitions.\+hpp\item 
+src/Train\+G\+H\+M\+M\+Transitions.\+cpp\end{DoxyCompactItemize}

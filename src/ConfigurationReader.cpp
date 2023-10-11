@@ -2,7 +2,7 @@
  *       ConfigurationReader.cpp
  *
  *       Copyright 2011 Andre Yoshiaki Kashiwabara <akashiwabara@usp.br>
- *                      Ígor Bonadio <ibonadio@ime.usp.br>
+ *                      ï¿½gor Bonadio <ibonadio@ime.usp.br>
  *                      Vitor Onuchic <vitoronuchic@gmail.com>
  *                      Alan Mitchell Durham <aland@usp.br>
  *
@@ -433,6 +433,36 @@ namespace tops {
   };
 
 
+  /* Deep layer struct parsings */
+
+  struct create_layer_vector
+  {
+    create_layer_vector(ConfigurationReader *c) : _c(c){};
+    void operator()(IteratorT first, IteratorT last) const
+    {
+      LayerVectorParameterValuePtr v = LayerVectorParameterValuePtr(new LayerVectorParameterValue());      
+      _c->setCurrentParameterValue(v);
+    }
+  private:
+    ConfigurationReader * _c;
+  };
+
+  struct create_Conv1d
+  {
+    create_Conv1d(ConfigurationReader *c) : _c(c){};
+    void operator()(IteratorT first, IteratorT last) const
+    {
+      CreateConv1d layer
+      (_c->getCurrentParameterValue()->getLayerVector()).push_back();
+    }
+  private:
+    ConfigurationReader * _c;
+  };
+  
+  /* Deep layer struct parsings */
+
+
+
   struct print_context
   {
     print_context() {};
@@ -472,38 +502,63 @@ namespace tops {
     rule<phrase_scanner_t> config_file, parameter_spec, parameter_value,
       parameter_name,  prob_table, string_vector, double_vector,
       int_vector, word, word_p, string_map, transition_map, nested_configuration, nested_parameter_spec,
-      tree_p, tree;
+      tree_p, tree,
+
+      layer_vector, layer_p, tuple_p, 
+      
+      convolutional_layer,      
+      pooling_layer,      
+      activation_layer, 
+      normalization_layer, 
+      recurrent_layer, 
+      linear_layer, 
+      dropout_layer 
+      ;
+    
+    /* recognizes a string with some special characters: "_./- ,+" (e.g. _Aa1 z) */
     word_p
       = lexeme_d [ +(alnum_p | (ch_p('_') | '.' | '/' | '-' | ' ' | ',' | '+' ))]
       ;
+
+    /* similar to word_p but with parenthesis and : characters (e.g. (_Aa1 z:_Aa1 z:))*/
     tree_p
       = lexeme_d [ +(alnum_p | (ch_p('_') | '.' | '/' | '-' | ' ' | ',' | '+' | '(' | ')' | ':' ))]
       ;
+
+    /* recognizes "word_p" */
     word
       = ch_p('"')
       >> word_p
       >> ch_p('"')
       ;
+
+    /* recognizes "{tree}" */
     tree
       = ch_p('{')
       >> tree_p
       >> ch_p('}')
       ;
+
+    /* recognizes a list of doubles (e.g. (1, 2.6, 0.0001)) */
     double_vector
       = ch_p('(')
       >> real_p[create_double_vector(this)]
       >> * (',' >>  real_p[add_value_to_double_vector(this)])
       >> ')'
       ;
+    
+    /* recognizes a list of (the rule) word (e.g ("e.g. _Aa1 z", "A", "a+A"))*/
     string_vector
       = ch_p('(')
       >> word[create_string_vector(this)]
       >> * (',' >>  word[add_value_to_string_vector(this)])
       >> ')'
       ;
+
+    /* recognizes a list of transitions or emission probabilities (e.g ("A"|"B":0.4; "A":0.4; "A b"|"":0.4)) */
     transition_map
       = ch_p('(')
-      >> '"'
+      >> '"' /* word is not enough?? */
       >> ( + word_p)  [set_first_word(this)]
       >> '"'
       >>
@@ -523,6 +578,8 @@ namespace tops {
             >> real_p [add_prob(this)] )
       >> !( ch_p(';') ) >> ')'
       ;
+
+    /* recognizes a map of strings "<key>":"<value>" (e.g ("A" : "B"; "A a B b" : "z"; "1 0" : "0 1")) */
     string_map
       = ch_p('(')
       >> ('"'
@@ -543,6 +600,75 @@ namespace tops {
       >> !( ch_p(';') ) >> ')'
 
       ;
+
+    // *** Deep layer rules
+
+    /* e.g. (1, 2); (1, 2, 3) */
+    tuple_p 
+      = ch_p('(')
+      >> int_p[create_int_vector(this)]
+      >> + ( ',' >> int_p[add_value_to_int_vector(this)] )
+      >> ')'
+      ;
+
+    /* e.g. Conv2d(100, 200, 4); Conv2d(100, 200, (4, 5)) */
+    convolutional_layer 
+      = ( str_p("Conv1d") 
+        | str_p("Conv2d") 
+        | str_p("Conv3d") 
+        | str_p("ConvTranspose1d") 
+        | str_p("ConvTranspose2d") 
+        | str_p("ConvTranspose3d")  
+        )        
+      >> ch_p('(')
+                >> int_p /* in_channels */ >> ','
+                >> int_p /* out_channels */ >> ','
+                >> (int_p | tuple_p) /* kernel_size */
+      >> ')'
+      ;
+
+    /* e.g. MaxPool1d(100, 200, 4); MaxPool1d(100, 200, (4, 5)) */
+    pooling_layer
+      = ( str_p("MaxPool1d") 
+        | str_p("MaxPool2d") 
+        | str_p("MaxPool3d")
+        | str_p("MaxUnpool1d") 
+        | str_p("MaxUnpool2d") 
+        | str_p("MaxUnpool3d")
+        | str_p("AvgPool1d") 
+        | str_p("AvgPool2d") 
+        | str_p("AvgPool3d") 
+        | str_p("AvgUnpool1d")
+        | str_p("AvgUnpool2d")
+        | str_p("AvgUnpool3d")
+        )
+      >> ch_p('(')
+                >> int_p /* in_channels */ >> ','
+                >> int_p /* out_channels */ >> ','
+                >> (int_p | tuple_p) /* kernel_size */
+      >> ')'
+      ;
+
+    layer_p /* kind of layer */
+      = convolutional_layer 
+      | pooling_layer
+      | activation_layer
+      | normalization_layer
+      | recurrent_layer
+      | linear_layer
+      | dropout_layer 
+      ;
+
+    layer_vector /* list of layers */
+      = ch_p('(')
+      >> layer_p
+      >> * ( ',' >> layer_p )
+      >> ')'
+      ;
+
+    // *** Deep layer rules
+
+
     parameter_name
       = lexeme_d [ alpha_p >> *(alnum_p | (ch_p('_') | '.' | '/'))]
       ;
@@ -557,6 +683,7 @@ namespace tops {
       | int_p [set_parameter_value_int(this)]
       | nested_configuration [set_parameter_value_string(this)]
       | string_map
+      | layer_vector
       ;
 
     nested_parameter_spec

@@ -1,0 +1,90 @@
+\hypertarget{classtops_1_1TrainInterpolatedPhasedMarkovChain}{}\section{tops\+:\+:Train\+Interpolated\+Phased\+Markov\+Chain Class Reference}
+\label{classtops_1_1TrainInterpolatedPhasedMarkovChain}\index{tops\+::\+Train\+Interpolated\+Phased\+Markov\+Chain@{tops\+::\+Train\+Interpolated\+Phased\+Markov\+Chain}}
+
+
+Train a Interpolated\+Phased Markov Chain.  
+
+
+
+
+{\ttfamily \#include $<$Train\+Interpolated\+Phased\+Markov\+Chain.\+hpp$>$}
+
+
+
+Inheritance diagram for tops\+:\+:Train\+Interpolated\+Phased\+Markov\+Chain\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=227pt]{classtops_1_1TrainInterpolatedPhasedMarkovChain__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for tops\+:\+:Train\+Interpolated\+Phased\+Markov\+Chain\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=227pt]{classtops_1_1TrainInterpolatedPhasedMarkovChain__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual Probabilistic\+Model\+Ptr \hyperlink{classtops_1_1TrainInterpolatedPhasedMarkovChain_a218b211bb755e02ffd30e8420d52d949}{create} (\hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} \&parameters) const
+\begin{DoxyCompactList}\small\item\em Creates a probability model. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1TrainInterpolatedPhasedMarkovChain_a57c371713cb3c38d34ce8ce8bc1f714f}\label{classtops_1_1TrainInterpolatedPhasedMarkovChain_a57c371713cb3c38d34ce8ce8bc1f714f}} 
+virtual Probabilistic\+Model\+Ptr \hyperlink{classtops_1_1TrainInterpolatedPhasedMarkovChain_a57c371713cb3c38d34ce8ce8bc1f714f}{create} (\hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} \&parameters, double \&loglikelihood, int \&sample\+\_\+size) const
+\begin{DoxyCompactList}\small\item\em Creates the model and returns the loglikelihood of the training set. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1TrainInterpolatedPhasedMarkovChain_af8b99f337038d50b057112e339a58d81}\label{classtops_1_1TrainInterpolatedPhasedMarkovChain_af8b99f337038d50b057112e339a58d81}} 
+virtual std\+::string \hyperlink{classtops_1_1TrainInterpolatedPhasedMarkovChain_af8b99f337038d50b057112e339a58d81}{help} () const
+\begin{DoxyCompactList}\small\item\em This method returns a help message. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Train a Interpolated\+Phased Markov Chain. 
+
+Definition at line 38 of file Train\+Interpolated\+Phased\+Markov\+Chain.\+hpp.
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classtops_1_1TrainInterpolatedPhasedMarkovChain_a218b211bb755e02ffd30e8420d52d949}\label{classtops_1_1TrainInterpolatedPhasedMarkovChain_a218b211bb755e02ffd30e8420d52d949}} 
+\index{tops\+::\+Train\+Interpolated\+Phased\+Markov\+Chain@{tops\+::\+Train\+Interpolated\+Phased\+Markov\+Chain}!create@{create}}
+\index{create@{create}!tops\+::\+Train\+Interpolated\+Phased\+Markov\+Chain@{tops\+::\+Train\+Interpolated\+Phased\+Markov\+Chain}}
+\subsubsection{\texorpdfstring{create()}{create()}}
+{\footnotesize\ttfamily Probabilistic\+Model\+Ptr tops\+::\+Train\+Interpolated\+Phased\+Markov\+Chain\+::create (\begin{DoxyParamCaption}\item[{\hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} \&}]{parameters }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Creates a probability model. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em parameters} & is a set of parameters that is utilized to build the model \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented from \hyperlink{classtops_1_1ProbabilisticModelCreator_afed6c8ffa45fff446bdaa8b533da8f7c}{tops\+::\+Probabilistic\+Model\+Creator}.
+
+
+
+Definition at line 206 of file Train\+Interpolated\+Phased\+Markov\+Chain.\+cpp.
+
+
+\begin{DoxyCode}
+207                                                                                                            
+                 \{
+208         \textcolor{keywordtype}{int} size;
+209         \textcolor{keywordtype}{double} loglikelihood;
+210         \textcolor{keywordflow}{return} \hyperlink{classtops_1_1TrainInterpolatedPhasedMarkovChain_a218b211bb755e02ffd30e8420d52d949}{create}(parameters, loglikelihood, size);
+211     \}
+\end{DoxyCode}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/Train\+Interpolated\+Phased\+Markov\+Chain.\+hpp\item 
+src/Train\+Interpolated\+Phased\+Markov\+Chain.\+cpp\end{DoxyCompactItemize}

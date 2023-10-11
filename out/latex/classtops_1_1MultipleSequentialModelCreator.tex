@@ -1,0 +1,87 @@
+\hypertarget{classtops_1_1MultipleSequentialModelCreator}{}\section{tops\+:\+:Multiple\+Sequential\+Model\+Creator Class Reference}
+\label{classtops_1_1MultipleSequentialModelCreator}\index{tops\+::\+Multiple\+Sequential\+Model\+Creator@{tops\+::\+Multiple\+Sequential\+Model\+Creator}}
+
+
+This class is a factory for the Target Model.  
+
+
+
+
+{\ttfamily \#include $<$Multiple\+Sequential\+Model\+Creator.\+hpp$>$}
+
+
+
+Inheritance diagram for tops\+:\+:Multiple\+Sequential\+Model\+Creator\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=201pt]{classtops_1_1MultipleSequentialModelCreator__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for tops\+:\+:Multiple\+Sequential\+Model\+Creator\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=201pt]{classtops_1_1MultipleSequentialModelCreator__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual Probabilistic\+Model\+Ptr \hyperlink{classtops_1_1MultipleSequentialModelCreator_acfa2befa902d9dd44ae84cefd2b9c452}{create} (\hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} \&parameters) const
+\begin{DoxyCompactList}\small\item\em Creates a probabilistic model. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1MultipleSequentialModelCreator_a0730eb10c85d73f81c103d8beb70f856}\label{classtops_1_1MultipleSequentialModelCreator_a0730eb10c85d73f81c103d8beb70f856}} 
+virtual std\+::string \hyperlink{classtops_1_1MultipleSequentialModelCreator_a0730eb10c85d73f81c103d8beb70f856}{help} () const
+\begin{DoxyCompactList}\small\item\em This method returns a help message. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+This class is a factory for the Target Model. 
+
+Definition at line 36 of file Multiple\+Sequential\+Model\+Creator.\+hpp.
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classtops_1_1MultipleSequentialModelCreator_acfa2befa902d9dd44ae84cefd2b9c452}\label{classtops_1_1MultipleSequentialModelCreator_acfa2befa902d9dd44ae84cefd2b9c452}} 
+\index{tops\+::\+Multiple\+Sequential\+Model\+Creator@{tops\+::\+Multiple\+Sequential\+Model\+Creator}!create@{create}}
+\index{create@{create}!tops\+::\+Multiple\+Sequential\+Model\+Creator@{tops\+::\+Multiple\+Sequential\+Model\+Creator}}
+\subsubsection{\texorpdfstring{create()}{create()}}
+{\footnotesize\ttfamily Probabilistic\+Model\+Ptr tops\+::\+Multiple\+Sequential\+Model\+Creator\+::create (\begin{DoxyParamCaption}\item[{\hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} \&}]{parameters }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Creates a probabilistic model. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em parameters} & is a set of parameters that is utilized to build the model \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented from \hyperlink{classtops_1_1ProbabilisticModelCreator_afed6c8ffa45fff446bdaa8b533da8f7c}{tops\+::\+Probabilistic\+Model\+Creator}.
+
+
+
+Definition at line 28 of file Multiple\+Sequential\+Model\+Creator.\+cpp.
+
+
+\begin{DoxyCode}
+28                                                                                                            
+         \{
+29     MultipleSequentialModelPtr model = MultipleSequentialModelPtr(\textcolor{keyword}{new} MultipleSequentialModel());
+30     model->initialize(parameters);
+31     \textcolor{keywordflow}{return} model;
+32   \}
+\end{DoxyCode}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/Multiple\+Sequential\+Model\+Creator.\+hpp\item 
+src/Multiple\+Sequential\+Model\+Creator.\+cpp\end{DoxyCompactItemize}

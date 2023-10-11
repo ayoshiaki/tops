@@ -1,0 +1,71 @@
+\hypertarget{classtops_1_1FactorableModel}{}\section{tops\+:\+:Factorable\+Model Class Reference}
+\label{classtops_1_1FactorableModel}\index{tops\+::\+Factorable\+Model@{tops\+::\+Factorable\+Model}}
+
+
+Abstract class defining models in which the likelihood of the sequence is factorable in the sense that they can be expressed as a product of terms evaluated at each position in a sequence.  
+
+
+
+
+{\ttfamily \#include $<$Factorable\+Model.\+hpp$>$}
+
+
+
+Inheritance diagram for tops\+:\+:Factorable\+Model\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classtops_1_1FactorableModel__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for tops\+:\+:Factorable\+Model\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=201pt]{classtops_1_1FactorableModel__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classtops_1_1FactorableModel_a17c0f432b4cfc2e1c020ee1c8e430d8a}\label{classtops_1_1FactorableModel_a17c0f432b4cfc2e1c020ee1c8e430d8a}} 
+virtual double \hyperlink{classtops_1_1FactorableModel_a17c0f432b4cfc2e1c020ee1c8e430d8a}{evaluate} (const Sequence \&s, unsigned int begin, unsigned int end) const
+\begin{DoxyCompactList}\small\item\em Calculates the sequence likelihood given this model. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1FactorableModel_ab9ba9cadb152b0090db9f71e119860c2}\label{classtops_1_1FactorableModel_ab9ba9cadb152b0090db9f71e119860c2}} 
+virtual Sequence \& {\bfseries choose} (Sequence \&h, int \hyperlink{classtops_1_1ProbabilisticModel_a4e3910e9b9b848b7078e7101909ae82a}{size}) const
+\item 
+\mbox{\Hypertarget{classtops_1_1FactorableModel_a472415d5e60ee110433b54e7d1e61d3f}\label{classtops_1_1FactorableModel_a472415d5e60ee110433b54e7d1e61d3f}} 
+virtual Sequence \& {\bfseries choose\+With\+History} (Sequence \&h, int i, int \hyperlink{classtops_1_1ProbabilisticModel_a4e3910e9b9b848b7078e7101909ae82a}{size}) const
+\item 
+\mbox{\Hypertarget{classtops_1_1FactorableModel_a74539e31c71e45590d76fe3173fe0d49}\label{classtops_1_1FactorableModel_a74539e31c71e45590d76fe3173fe0d49}} 
+virtual double \hyperlink{classtops_1_1FactorableModel_a74539e31c71e45590d76fe3173fe0d49}{evaluate\+Position} (const Sequence \&s, unsigned int i) const =0
+\begin{DoxyCompactList}\small\item\em Evaluate the position i of the sequence s. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1FactorableModel_a5d97e3ee9ed36526175a06c9605aab98}\label{classtops_1_1FactorableModel_a5d97e3ee9ed36526175a06c9605aab98}} 
+virtual double \hyperlink{classtops_1_1FactorableModel_a5d97e3ee9ed36526175a06c9605aab98}{choose\+Position} (const Sequence \&s, int i) const =0
+\begin{DoxyCompactList}\small\item\em Choose the position i of the sequence s given the subsequence before the position i. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1FactorableModel_a52a4240058e32f4e6ddf75fdab138a4f}\label{classtops_1_1FactorableModel_a52a4240058e32f4e6ddf75fdab138a4f}} 
+virtual double {\bfseries prefix\+\_\+sum\+\_\+array\+\_\+compute} (int begin, int end)
+\item 
+\mbox{\Hypertarget{classtops_1_1FactorableModel_ae3f8aea76a131eb4b64bd8d9704992ca}\label{classtops_1_1FactorableModel_ae3f8aea76a131eb4b64bd8d9704992ca}} 
+virtual bool {\bfseries initialize\+\_\+prefix\+\_\+sum\+\_\+array} (const Sequence \&s)
+\item 
+\mbox{\Hypertarget{classtops_1_1FactorableModel_afba8e107a95517fac416662c641afe65}\label{classtops_1_1FactorableModel_afba8e107a95517fac416662c641afe65}} 
+virtual \hyperlink{classtops_1_1FactorableModel}{Factorable\+Model} $\ast$ {\bfseries factorable} ()
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Abstract class defining models in which the likelihood of the sequence is factorable in the sense that they can be expressed as a product of terms evaluated at each position in a sequence. 
+
+Definition at line 37 of file Factorable\+Model.\+hpp.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/Factorable\+Model.\+hpp\item 
+src/Factorable\+Model.\+cpp\end{DoxyCompactItemize}

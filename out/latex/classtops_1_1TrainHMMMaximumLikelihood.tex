@@ -1,0 +1,246 @@
+\hypertarget{classtops_1_1TrainHMMMaximumLikelihood}{}\section{tops\+:\+:Train\+H\+M\+M\+Maximum\+Likelihood Class Reference}
+\label{classtops_1_1TrainHMMMaximumLikelihood}\index{tops\+::\+Train\+H\+M\+M\+Maximum\+Likelihood@{tops\+::\+Train\+H\+M\+M\+Maximum\+Likelihood}}
+
+
+Creates a H\+MM using Baum-\/\+Welch.  
+
+
+
+
+{\ttfamily \#include $<$Train\+H\+M\+M\+Maximum\+Likelihood.\+hpp$>$}
+
+
+
+Inheritance diagram for tops\+:\+:Train\+H\+M\+M\+Maximum\+Likelihood\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=253pt]{classtops_1_1TrainHMMMaximumLikelihood__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for tops\+:\+:Train\+H\+M\+M\+Maximum\+Likelihood\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=253pt]{classtops_1_1TrainHMMMaximumLikelihood__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual Probabilistic\+Model\+Ptr \hyperlink{classtops_1_1TrainHMMMaximumLikelihood_a70881378e3f71eba8683df6e5e3d0433}{create} (\hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} \&parameters) const
+\begin{DoxyCompactList}\small\item\em Creates a probability model. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1TrainHMMMaximumLikelihood_a26826dc0cd793cf5d026a4d8b6daa8fc}\label{classtops_1_1TrainHMMMaximumLikelihood_a26826dc0cd793cf5d026a4d8b6daa8fc}} 
+virtual std\+::string \hyperlink{classtops_1_1TrainHMMMaximumLikelihood_a26826dc0cd793cf5d026a4d8b6daa8fc}{help} () const
+\begin{DoxyCompactList}\small\item\em Provides a help. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Creates a H\+MM using Baum-\/\+Welch. 
+
+Definition at line 38 of file Train\+H\+M\+M\+Maximum\+Likelihood.\+hpp.
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classtops_1_1TrainHMMMaximumLikelihood_a70881378e3f71eba8683df6e5e3d0433}\label{classtops_1_1TrainHMMMaximumLikelihood_a70881378e3f71eba8683df6e5e3d0433}} 
+\index{tops\+::\+Train\+H\+M\+M\+Maximum\+Likelihood@{tops\+::\+Train\+H\+M\+M\+Maximum\+Likelihood}!create@{create}}
+\index{create@{create}!tops\+::\+Train\+H\+M\+M\+Maximum\+Likelihood@{tops\+::\+Train\+H\+M\+M\+Maximum\+Likelihood}}
+\subsubsection{\texorpdfstring{create()}{create()}}
+{\footnotesize\ttfamily Probabilistic\+Model\+Ptr tops\+::\+Train\+H\+M\+M\+Maximum\+Likelihood\+::create (\begin{DoxyParamCaption}\item[{\hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} \&}]{parameters }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Creates a probability model. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em parameters} & is a set of parameters that is utilized to build the model \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented from \hyperlink{classtops_1_1ProbabilisticModelCreator_afed6c8ffa45fff446bdaa8b533da8f7c}{tops\+::\+Probabilistic\+Model\+Creator}.
+
+
+
+Definition at line 46 of file Train\+H\+M\+M\+Maximum\+Likelihood.\+cpp.
+
+
+\begin{DoxyCode}
+47   \{
+48     ProbabilisticModelParameterValuePtr initialspecpar = parameters.getMandatoryParameterValue(\textcolor{stringliteral}{"
+      initial\_specification"});
+49     ProbabilisticModelParameterValuePtr trainingsetpar = parameters.getMandatoryParameterValue(\textcolor{stringliteral}{"
+      training\_set"});
+50     ProbabilisticModelParameterValuePtr pseudocontspar = parameters.getOptionalParameterValue(\textcolor{stringliteral}{"
+      pseudo\_counter"});
+51     ProbabilisticModelCreatorClient client;
+52     ProbabilisticModelParameters initialspec = client.readConfigurationFromFile(initialspecpar->getString()
+      );
+53     ProbabilisticModelParameterValuePtr alphabetpar = initialspec.getMandatoryParameterValue(\textcolor{stringliteral}{"
+      observation\_symbols"});
+54     ProbabilisticModelParameterValuePtr statespar = initialspec.getMandatoryParameterValue(\textcolor{stringliteral}{"state\_names"});
+55 
+56     ProbabilisticModelParameterValuePtr aprioriInitpar = initialspec.getOptionalParameterValue(\textcolor{stringliteral}{"
+      initial\_probabilities"});
+57     ProbabilisticModelParameterValuePtr aprioriEmissionpar = initialspec.getOptionalParameterValue(\textcolor{stringliteral}{"
+      emission\_probabilities"});
+58     ProbabilisticModelParameterValuePtr aprioriTransitionspar = initialspec.getOptionalParameterValue(\textcolor{stringliteral}{"
+      transitions"});
+59  
+60     \textcolor{keywordtype}{double} pseudocont = 0.0;
+61     \textcolor{keywordflow}{if}(pseudocontspar != NULL)
+62       pseudocont = pseudocontspar->getDouble();
+63 
+64     \textcolor{keywordflow}{if}((initialspecpar == NULL) || (trainingsetpar == NULL))\{
+65       std::cerr << \hyperlink{classtops_1_1TrainHMMMaximumLikelihood_a26826dc0cd793cf5d026a4d8b6daa8fc}{help}() << std::endl;
+66       exit(-1);
+67     \}
+68 
+69 
+70     AlphabetPtr alphabet = AlphabetPtr (\textcolor{keyword}{new} Alphabet());
+71     AlphabetPtr states = AlphabetPtr (\textcolor{keyword}{new} Alphabet());
+72     alphabet->initializeFromVector (alphabetpar->getStringVector());
+73     states->initializeFromVector(statespar->getStringVector());
+74     std::string filename(trainingsetpar->getString());
+75     std::ifstream input(filename.c\_str());
+76     \textcolor{keywordflow}{if}(!input.good()) \{
+77       std::cerr << \textcolor{stringliteral}{"can not open file "} << trainingsetpar->getString() << std::endl;
+78       exit(-1);
+79     \}
+80     SequenceEntryList stateseqs;
+81     SequenceEntryList obserseqs;
+82     \textcolor{keywordflow}{while}(!input.eof()) \{
+83     SequenceEntryPtr obsseq = SequenceEntryPtr(\textcolor{keyword}{new} SequenceEntry(alphabet));
+84     SequenceEntryPtr stateseq = SequenceEntryPtr(\textcolor{keyword}{new} SequenceEntry(states));
+85     input >> *obsseq;
+86     input >> *stateseq;
+87     \textcolor{keywordflow}{if}((obsseq->getSequence()).size() != (stateseq->getSequence()).size()) \{
+88       std::cerr << \textcolor{stringliteral}{"ERROR: the observation sequence length is not equals to the state sequence length\(\backslash\)n"} <<
+       std::endl;
+89       exit(-1);
+90     \}
+91         stateseqs.push\_back(stateseq);
+92         obserseqs.push\_back(obsseq);
+93     \}
+94     input.close();
+95 
+96     std::map<std::string,double> emisspar;
+97     std::map<std::string,double> transpar;
+98     std::map<std::string,double> initpar;
+99     std::map<std::string,double> aprioriEmiss;
+100     std::map<std::string,double> aprioriTrans; 
+101     std::map<std::string,double> aprioriInit;
+102     std::map<std::string,double>::const\_iterator iter;
+103 
+104     \textcolor{keywordflow}{if} (aprioriEmissionpar != NULL) 
+105       aprioriEmiss = aprioriEmissionpar->getDoubleMap();
+106     \textcolor{keywordflow}{if}(aprioriTransitionspar != NULL)
+107       aprioriTrans = aprioriTransitionspar->getDoubleMap();
+108     \textcolor{keywordflow}{if}(aprioriInitpar != NULL)
+109       aprioriInit = aprioriInitpar->getDoubleMap();
+110 
+111    
+112     std::map<std::string,double>::const\_iterator it;  
+113 
+114     Matrix pi (states->size(), 1);
+115     Matrix A (states->size(), states->size());
+116     Matrix E (states->size(), alphabet->size()); 
+117     
+118     \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} s = 0; s < states->size(); s++) \{
+119       stringstream aux;
+120       aux << states->getSymbol(s)->name();
+121       pi(s, 0) = aprioriInit[aux.str()];
+122     \}
+123     \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} from = 0; from < states->size(); from++) 
+124       \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} to = 0; to < states->size(); to++) \{
+125     stringstream aux;
+126     aux << states->getSymbol(to)->name() << \textcolor{stringliteral}{"|"} << states->getSymbol(from)->name();
+127     A(from, to) = aprioriTrans[aux.str()];
+128       \}
+129 
+130     \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} s = 0; s < states->size(); s++) 
+131       \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} o = 0; o < alphabet->size(); o++)\{
+132     stringstream aux1;
+133     aux1 << alphabet->getSymbol(o)->name() << \textcolor{stringliteral}{"|"} << states->getSymbol(s)->name();
+134     E(s,o) = aprioriEmiss[aux1.str()];
+135       \}
+136 
+137     \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} i = 0; (i < obserseqs.size()) && (i < stateseqs.size()); i++) \{
+138       Sequence obsseq = obserseqs[i]->getSequence();
+139       Sequence staseq = stateseqs[i]->getSequence();
+140       \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} j = 0; j < (j < obsseq.size()) && (j < staseq.size()); j++) \{
+141     pi(staseq[j], 0) += 1.0;
+142     E(staseq[j], obsseq[j]) += 1.0; 
+143     \textcolor{keywordflow}{if}(j < staseq.size() - 1)
+144       A(staseq[j], staseq[j+1]) += 1.0;
+145       \}
+146     \} 
+147 
+148     \textcolor{keywordtype}{double} sum = 0.0;
+149 
+150     \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} s = 0; s < states->size(); s++)
+151        sum += pi(s,0);
+152     \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} s = 0; s < states->size(); s++)
+153       pi(s, 0) /= sum;
+154 
+155     \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} from = 0; from < states->size(); from++)\{
+156       sum = 0;
+157       \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} to = 0; to < states->size(); to++)
+158     sum += A(from,to);
+159       \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} to = 0; to < states->size(); to++)
+160     A(from,to) /= sum;
+161     \}
+162     sum = 0;
+163     \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} s = 0; s < states->size(); s++)\{
+164       \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} o = 0; o < alphabet->size(); o++)
+165     sum += E(s,o);
+166       \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} o = 0; o < alphabet->size(); o++)
+167     E(s,o) /= sum;
+168     \}
+169   
+170     \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} s = 0; s < states->size(); s++)
+171       \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} o = 0; o < alphabet->size(); o++)\{
+172     stringstream aux;
+173     aux << alphabet->getSymbol(o)->name() << \textcolor{stringliteral}{"|"} << states->getSymbol(s)->name();
+174     emisspar[aux.str()] = E(s,o);
+175       \}
+176 
+177     \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} s = 0; s < states->size(); s++) 
+178       initpar[states->getSymbol(s)->name()] = pi(s, 0);
+179 
+180     \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} from = 0; from < states->size(); from++)
+181       \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} to = 0; to < states->size(); to++)\{
+182     stringstream aux;
+183     aux << states->getSymbol(to)->name() << \textcolor{stringliteral}{"|"} << states->getSymbol(from)->name();
+184     transpar[aux.str()] = A(from, to);
+185       \}
+186 
+187     ProbabilisticModelParameters hmm\_parameters;
+188     hmm\_parameters.add(\textcolor{stringliteral}{"model\_name"}, ProbabilisticModelParameterValuePtr(\textcolor{keyword}{new} StringParameterValue(\textcolor{stringliteral}{"
+      HiddenMarkovModel"})));
+189     hmm\_parameters.add(\textcolor{stringliteral}{"observation\_symbols"}, alphabetpar);
+190     hmm\_parameters.add(\textcolor{stringliteral}{"state\_names"}, statespar);
+191     hmm\_parameters.add(\textcolor{stringliteral}{"transitions"}, ProbabilisticModelParameterValuePtr(\textcolor{keyword}{new} DoubleMapParameterValue(
+      transpar)));
+192     hmm\_parameters.add(\textcolor{stringliteral}{"initial\_probabilities"},ProbabilisticModelParameterValuePtr(\textcolor{keyword}{new} 
+      DoubleMapParameterValue (initpar)));
+193     hmm\_parameters.add(\textcolor{stringliteral}{"emission\_probabilities"},ProbabilisticModelParameterValuePtr(\textcolor{keyword}{new} 
+      DoubleMapParameterValue (emisspar)));
+194     ProbabilisticModelPtr m = client.create(hmm\_parameters);
+195     \textcolor{keywordflow}{return} m;
+196 
+197 
+198   \}
+\end{DoxyCode}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/Train\+H\+M\+M\+Maximum\+Likelihood.\+hpp\item 
+src/Train\+H\+M\+M\+Maximum\+Likelihood.\+cpp\end{DoxyCompactItemize}

@@ -1,0 +1,89 @@
+\hypertarget{classtops_1_1TrainPhasedMarkovChain}{}\section{tops\+:\+:Train\+Phased\+Markov\+Chain Class Reference}
+\label{classtops_1_1TrainPhasedMarkovChain}\index{tops\+::\+Train\+Phased\+Markov\+Chain@{tops\+::\+Train\+Phased\+Markov\+Chain}}
+
+
+Train a Phased Markov Chain.  
+
+
+
+
+{\ttfamily \#include $<$Train\+Phased\+Markov\+Chain.\+hpp$>$}
+
+
+
+Inheritance diagram for tops\+:\+:Train\+Phased\+Markov\+Chain\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=234pt]{classtops_1_1TrainPhasedMarkovChain__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for tops\+:\+:Train\+Phased\+Markov\+Chain\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=234pt]{classtops_1_1TrainPhasedMarkovChain__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual Probabilistic\+Model\+Ptr \hyperlink{classtops_1_1TrainPhasedMarkovChain_a31219afb1abf369674c2862a5017a112}{create} (\hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} \&parameters) const
+\begin{DoxyCompactList}\small\item\em Creates a probability model. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1TrainPhasedMarkovChain_a2753aba53966bb707f46e07ad42c4565}\label{classtops_1_1TrainPhasedMarkovChain_a2753aba53966bb707f46e07ad42c4565}} 
+virtual Probabilistic\+Model\+Ptr \hyperlink{classtops_1_1TrainPhasedMarkovChain_a2753aba53966bb707f46e07ad42c4565}{create} (\hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} \&parameters, double \&loglikelihood, int \&sample\+\_\+size) const
+\begin{DoxyCompactList}\small\item\em Creates the model and returns the loglikelihood of the training set. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1TrainPhasedMarkovChain_a4d70ec3fcedf590d46140336b5a7d9e8}\label{classtops_1_1TrainPhasedMarkovChain_a4d70ec3fcedf590d46140336b5a7d9e8}} 
+virtual std\+::string \hyperlink{classtops_1_1TrainPhasedMarkovChain_a4d70ec3fcedf590d46140336b5a7d9e8}{help} () const
+\begin{DoxyCompactList}\small\item\em This method returns a help message. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Train a Phased Markov Chain. 
+
+Definition at line 38 of file Train\+Phased\+Markov\+Chain.\+hpp.
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classtops_1_1TrainPhasedMarkovChain_a31219afb1abf369674c2862a5017a112}\label{classtops_1_1TrainPhasedMarkovChain_a31219afb1abf369674c2862a5017a112}} 
+\index{tops\+::\+Train\+Phased\+Markov\+Chain@{tops\+::\+Train\+Phased\+Markov\+Chain}!create@{create}}
+\index{create@{create}!tops\+::\+Train\+Phased\+Markov\+Chain@{tops\+::\+Train\+Phased\+Markov\+Chain}}
+\subsubsection{\texorpdfstring{create()}{create()}}
+{\footnotesize\ttfamily Probabilistic\+Model\+Ptr tops\+::\+Train\+Phased\+Markov\+Chain\+::create (\begin{DoxyParamCaption}\item[{\hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} \&}]{parameters }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Creates a probability model. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em parameters} & is a set of parameters that is utilized to build the model \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented from \hyperlink{classtops_1_1ProbabilisticModelCreator_afed6c8ffa45fff446bdaa8b533da8f7c}{tops\+::\+Probabilistic\+Model\+Creator}.
+
+
+
+Definition at line 141 of file Train\+Phased\+Markov\+Chain.\+cpp.
+
+
+\begin{DoxyCode}
+142                                                                  \{
+143         \textcolor{keywordtype}{int} size;
+144         \textcolor{keywordtype}{double} loglikelihood;
+145         \textcolor{keywordflow}{return} \hyperlink{classtops_1_1TrainPhasedMarkovChain_a31219afb1abf369674c2862a5017a112}{create}(parameters, loglikelihood, size);
+146 \}
+\end{DoxyCode}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/Train\+Phased\+Markov\+Chain.\+hpp\item 
+src/Train\+Phased\+Markov\+Chain.\+cpp\end{DoxyCompactItemize}

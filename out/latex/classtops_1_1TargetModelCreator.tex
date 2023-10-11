@@ -1,0 +1,97 @@
+\hypertarget{classtops_1_1TargetModelCreator}{}\section{tops\+:\+:Target\+Model\+Creator Class Reference}
+\label{classtops_1_1TargetModelCreator}\index{tops\+::\+Target\+Model\+Creator@{tops\+::\+Target\+Model\+Creator}}
+
+
+This class is a factory for the Target Model.  
+
+
+
+
+{\ttfamily \#include $<$Target\+Model\+Creator.\+hpp$>$}
+
+
+
+Inheritance diagram for tops\+:\+:Target\+Model\+Creator\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=208pt]{classtops_1_1TargetModelCreator__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for tops\+:\+:Target\+Model\+Creator\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=208pt]{classtops_1_1TargetModelCreator__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual Probabilistic\+Model\+Ptr \hyperlink{classtops_1_1TargetModelCreator_ac50e4d0f68f47511d4c5b9683cba11b4}{create} (\hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} \&parameters) const
+\begin{DoxyCompactList}\small\item\em Creates a probabilistic model. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1TargetModelCreator_acb73685f7ad2619fa7faeb6709179f15}\label{classtops_1_1TargetModelCreator_acb73685f7ad2619fa7faeb6709179f15}} 
+virtual std\+::string \hyperlink{classtops_1_1TargetModelCreator_acb73685f7ad2619fa7faeb6709179f15}{help} () const
+\begin{DoxyCompactList}\small\item\em This method returns a help message. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+This class is a factory for the Target Model. 
+
+Definition at line 36 of file Target\+Model\+Creator.\+hpp.
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classtops_1_1TargetModelCreator_ac50e4d0f68f47511d4c5b9683cba11b4}\label{classtops_1_1TargetModelCreator_ac50e4d0f68f47511d4c5b9683cba11b4}} 
+\index{tops\+::\+Target\+Model\+Creator@{tops\+::\+Target\+Model\+Creator}!create@{create}}
+\index{create@{create}!tops\+::\+Target\+Model\+Creator@{tops\+::\+Target\+Model\+Creator}}
+\subsubsection{\texorpdfstring{create()}{create()}}
+{\footnotesize\ttfamily Probabilistic\+Model\+Ptr tops\+::\+Target\+Model\+Creator\+::create (\begin{DoxyParamCaption}\item[{\hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} \&}]{parameters }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Creates a probabilistic model. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em parameters} & is a set of parameters that is utilized to build the model \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented from \hyperlink{classtops_1_1ProbabilisticModelCreator_afed6c8ffa45fff446bdaa8b533da8f7c}{tops\+::\+Probabilistic\+Model\+Creator}.
+
+
+
+Definition at line 28 of file Target\+Model\+Creator.\+cpp.
+
+
+\begin{DoxyCode}
+28                                                                                                   \{
+29     ProbabilisticModelParameterValuePtr alphabet = parameters.getOptionalParameterValue(\textcolor{stringliteral}{"alphabet"});
+30     TargetModelPtr model = TargetModelPtr(\textcolor{keyword}{new} TargetModel());
+31     \textcolor{keywordflow}{if} (alphabet != NULL)
+32       \{
+33         AlphabetPtr alpha = AlphabetPtr(\textcolor{keyword}{new} Alphabet());
+34         alpha->initializeFromVector(alphabet->getStringVector());
+35         model->setAlphabet(alpha);
+36       \} \textcolor{keywordflow}{else}
+37       \{
+38         std::cerr << \hyperlink{classtops_1_1TargetModelCreator_acb73685f7ad2619fa7faeb6709179f15}{help}() << std::endl;
+39         exit(-1);
+40       \}
+41     \textcolor{keywordflow}{return} model;
+42 
+43   \}
+\end{DoxyCode}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/Target\+Model\+Creator.\+hpp\item 
+src/Target\+Model\+Creator.\+cpp\end{DoxyCompactItemize}

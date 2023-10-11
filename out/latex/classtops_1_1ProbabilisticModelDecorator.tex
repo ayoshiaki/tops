@@ -1,0 +1,100 @@
+\hypertarget{classtops_1_1ProbabilisticModelDecorator}{}\section{tops\+:\+:Probabilistic\+Model\+Decorator Class Reference}
+\label{classtops_1_1ProbabilisticModelDecorator}\index{tops\+::\+Probabilistic\+Model\+Decorator@{tops\+::\+Probabilistic\+Model\+Decorator}}
+
+
+Decorator for the probabilistic model.  
+
+
+
+
+{\ttfamily \#include $<$Probabilistic\+Model\+Decorator.\+hpp$>$}
+
+
+
+Inheritance diagram for tops\+:\+:Probabilistic\+Model\+Decorator\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classtops_1_1ProbabilisticModelDecorator__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for tops\+:\+:Probabilistic\+Model\+Decorator\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=201pt]{classtops_1_1ProbabilisticModelDecorator__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classtops_1_1ProbabilisticModelDecorator_ae2e1b9a1a08df28307c99ffe91efb782}\label{classtops_1_1ProbabilisticModelDecorator_ae2e1b9a1a08df28307c99ffe91efb782}} 
+{\bfseries Probabilistic\+Model\+Decorator} (Probabilistic\+Model\+Ptr m)
+\item 
+\mbox{\Hypertarget{classtops_1_1ProbabilisticModelDecorator_a51cb0d8cd86529e061fa4a6ac8774e17}\label{classtops_1_1ProbabilisticModelDecorator_a51cb0d8cd86529e061fa4a6ac8774e17}} 
+virtual double \hyperlink{classtops_1_1ProbabilisticModelDecorator_a51cb0d8cd86529e061fa4a6ac8774e17}{evaluate} (const Sequence \&s, unsigned int begin, unsigned int end) const
+\begin{DoxyCompactList}\small\item\em Calculates the sequence likelihood given this model. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1ProbabilisticModelDecorator_a752b42672c0d8da30a40688e19ef0b69}\label{classtops_1_1ProbabilisticModelDecorator_a752b42672c0d8da30a40688e19ef0b69}} 
+virtual double \hyperlink{classtops_1_1ProbabilisticModelDecorator_a752b42672c0d8da30a40688e19ef0b69}{log\+\_\+probability\+\_\+of} (int s) const
+\begin{DoxyCompactList}\small\item\em Returns the log\+\_\+probability\+\_\+of the number s. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1ProbabilisticModelDecorator_a8168bf444b07139d9908fff513a08e27}\label{classtops_1_1ProbabilisticModelDecorator_a8168bf444b07139d9908fff513a08e27}} 
+virtual double \hyperlink{classtops_1_1ProbabilisticModelDecorator_a8168bf444b07139d9908fff513a08e27}{choose} () const
+\begin{DoxyCompactList}\small\item\em Choose a symbol. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1ProbabilisticModelDecorator_a442006c10fcc4b62c1dfeafc5dc682c7}\label{classtops_1_1ProbabilisticModelDecorator_a442006c10fcc4b62c1dfeafc5dc682c7}} 
+virtual Sequence \& {\bfseries choose} (Sequence \&h, int \hyperlink{classtops_1_1ProbabilisticModel_a4e3910e9b9b848b7078e7101909ae82a}{size}) const
+\item 
+\mbox{\Hypertarget{classtops_1_1ProbabilisticModelDecorator_a07db74cc5d6577e76ac06354047afa86}\label{classtops_1_1ProbabilisticModelDecorator_a07db74cc5d6577e76ac06354047afa86}} 
+virtual Sequence \& {\bfseries choose} (Sequence \&h, int initial\+\_\+phase, int \hyperlink{classtops_1_1ProbabilisticModel_a4e3910e9b9b848b7078e7101909ae82a}{size}) const
+\item 
+\mbox{\Hypertarget{classtops_1_1ProbabilisticModelDecorator_a5221447a9f12c7719794bf9a16c23fd9}\label{classtops_1_1ProbabilisticModelDecorator_a5221447a9f12c7719794bf9a16c23fd9}} 
+virtual Sequence \& {\bfseries choose} (Sequence \&h, Sequence \&path, int \hyperlink{classtops_1_1ProbabilisticModel_a4e3910e9b9b848b7078e7101909ae82a}{size}) const
+\item 
+\mbox{\Hypertarget{classtops_1_1ProbabilisticModelDecorator_a97efb9d561d59a6ce9490749cfb6ca4e}\label{classtops_1_1ProbabilisticModelDecorator_a97efb9d561d59a6ce9490749cfb6ca4e}} 
+virtual Sequence \& {\bfseries choose} (Sequence \&h, Sequence \&path, int i, int \hyperlink{classtops_1_1ProbabilisticModel_a4e3910e9b9b848b7078e7101909ae82a}{size}) const
+\item 
+\mbox{\Hypertarget{classtops_1_1ProbabilisticModelDecorator_a65982032c8b451a9ef0773f7662b0a85}\label{classtops_1_1ProbabilisticModelDecorator_a65982032c8b451a9ef0773f7662b0a85}} 
+virtual Sequence \& {\bfseries choose\+With\+History} (Sequence \&h, int i, int \hyperlink{classtops_1_1ProbabilisticModel_a4e3910e9b9b848b7078e7101909ae82a}{size}) const
+\item 
+\mbox{\Hypertarget{classtops_1_1ProbabilisticModelDecorator_a9ecbad26890a55ab8ca31c892d3cb4e1}\label{classtops_1_1ProbabilisticModelDecorator_a9ecbad26890a55ab8ca31c892d3cb4e1}} 
+virtual Sequence \& {\bfseries choose\+With\+History} (Sequence \&h, int i, int phase, int \hyperlink{classtops_1_1ProbabilisticModel_a4e3910e9b9b848b7078e7101909ae82a}{size}) const
+\item 
+\mbox{\Hypertarget{classtops_1_1ProbabilisticModelDecorator_a5629992735f6c7d9d03b92d769039cc0}\label{classtops_1_1ProbabilisticModelDecorator_a5629992735f6c7d9d03b92d769039cc0}} 
+virtual double {\bfseries prefix\+\_\+sum\+\_\+array\+\_\+compute} (int begin, int end)
+\item 
+\mbox{\Hypertarget{classtops_1_1ProbabilisticModelDecorator_a98d0a7c3959ba17834a469bedf6fc03b}\label{classtops_1_1ProbabilisticModelDecorator_a98d0a7c3959ba17834a469bedf6fc03b}} 
+virtual double {\bfseries prefix\+\_\+sum\+\_\+array\+\_\+compute} (int begin, int end, int phase)
+\item 
+\mbox{\Hypertarget{classtops_1_1ProbabilisticModelDecorator_a5ed45d503653df9e8508197165eeed1b}\label{classtops_1_1ProbabilisticModelDecorator_a5ed45d503653df9e8508197165eeed1b}} 
+virtual bool {\bfseries initialize\+\_\+prefix\+\_\+sum\+\_\+array} (const Sequence \&s, int phase)
+\item 
+\mbox{\Hypertarget{classtops_1_1ProbabilisticModelDecorator_a2a895846bde499b0bd827ae1581596b3}\label{classtops_1_1ProbabilisticModelDecorator_a2a895846bde499b0bd827ae1581596b3}} 
+virtual bool {\bfseries initialize\+\_\+prefix\+\_\+sum\+\_\+array} (const Sequence \&s)
+\item 
+\mbox{\Hypertarget{classtops_1_1ProbabilisticModelDecorator_a116b5636f9c45d50cd8d5631e9437e27}\label{classtops_1_1ProbabilisticModelDecorator_a116b5636f9c45d50cd8d5631e9437e27}} 
+virtual Probabilistic\+Model\+Ptr {\bfseries sub\+Model} () const
+\item 
+\mbox{\Hypertarget{classtops_1_1ProbabilisticModelDecorator_a399a342705d6908bedb41153dd53c94b}\label{classtops_1_1ProbabilisticModelDecorator_a399a342705d6908bedb41153dd53c94b}} 
+virtual void {\bfseries set\+Sub\+Model} (Probabilistic\+Model\+Ptr model)
+\item 
+\mbox{\Hypertarget{classtops_1_1ProbabilisticModelDecorator_a7a08f400761e5bdc237e66d1dfa2c2dd}\label{classtops_1_1ProbabilisticModelDecorator_a7a08f400761e5bdc237e66d1dfa2c2dd}} 
+virtual void {\bfseries sub\+Model\+Name} (std\+::string name)
+\item 
+\mbox{\Hypertarget{classtops_1_1ProbabilisticModelDecorator_a8541470b86c6ed2e9d545b3e6bf6148d}\label{classtops_1_1ProbabilisticModelDecorator_a8541470b86c6ed2e9d545b3e6bf6148d}} 
+virtual std\+::string {\bfseries sub\+Model\+Name} () const
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Decorator for the probabilistic model. 
+
+Definition at line 31 of file Probabilistic\+Model\+Decorator.\+hpp.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/Probabilistic\+Model\+Decorator.\+hpp\end{DoxyCompactItemize}

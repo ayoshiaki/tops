@@ -1,0 +1,8 @@
+model_name="NeuralNetworkModel"
+weight={1, 2}
+bias=1
+
+network (
+    convolution((100, 4), 3, 3),
+    
+)

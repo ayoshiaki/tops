@@ -1,0 +1,6 @@
+<map id="tops::FactorableModel" name="tops::FactorableModel">
+<area shape="rect" id="node3" href="$classtops_1_1DiscreteIIDModel.html" title="This represent probability distributions over a finite set of symbols. " alt="" coords="21,162,178,189"/>
+<area shape="rect" id="node5" href="$classtops_1_1VariableLengthMarkovChain.html" title="This class is a Variable Length Markov Chain. " alt="" coords="202,155,386,196"/>
+<area shape="rect" id="node2" href="$classtops_1_1ProbabilisticModel.html" title="This is an abstract class representing a generative probabilistic model. " alt="" coords="116,5,277,32"/>
+<area shape="rect" id="node4" href="$classtops_1_1DegenerateDistribution.html" title="A probabilistic model that emits a constant integer value. " alt="" coords="5,244,193,271"/>
+</map>

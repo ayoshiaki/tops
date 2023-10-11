@@ -1,0 +1,92 @@
+\hypertarget{classtops_1_1MaximalDependenceDecomposition}{}\section{tops\+:\+:Maximal\+Dependence\+Decomposition Class Reference}
+\label{classtops_1_1MaximalDependenceDecomposition}\index{tops\+::\+Maximal\+Dependence\+Decomposition@{tops\+::\+Maximal\+Dependence\+Decomposition}}
+
+
+Inheritance diagram for tops\+:\+:Maximal\+Dependence\+Decomposition\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=278pt]{classtops_1_1MaximalDependenceDecomposition__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for tops\+:\+:Maximal\+Dependence\+Decomposition\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=278pt]{classtops_1_1MaximalDependenceDecomposition__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classtops_1_1MaximalDependenceDecomposition_afa369733fda96d62999f4221f1a574cb}\label{classtops_1_1MaximalDependenceDecomposition_afa369733fda96d62999f4221f1a574cb}} 
+void \hyperlink{classtops_1_1MaximalDependenceDecomposition_afa369733fda96d62999f4221f1a574cb}{set\+Alphabet} (Alphabet\+Ptr \hyperlink{classtops_1_1MaximalDependenceDecomposition_af0f9784f56be8ae810466de09786d1cf}{alphabet})
+\begin{DoxyCompactList}\small\item\em Setter for the \hyperlink{classtops_1_1Alphabet}{Alphabet}. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1MaximalDependenceDecomposition_af0f9784f56be8ae810466de09786d1cf}\label{classtops_1_1MaximalDependenceDecomposition_af0f9784f56be8ae810466de09786d1cf}} 
+virtual Alphabet\+Ptr \hyperlink{classtops_1_1MaximalDependenceDecomposition_af0f9784f56be8ae810466de09786d1cf}{alphabet} () const
+\begin{DoxyCompactList}\small\item\em Returns the alphabet. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1MaximalDependenceDecomposition_a3b340d8f864664bf7b9efaa3063b8b9b}\label{classtops_1_1MaximalDependenceDecomposition_a3b340d8f864664bf7b9efaa3063b8b9b}} 
+void {\bfseries set\+M\+D\+D\+Tree} (Maximal\+Dependence\+Decomposition\+Node\+Ptr root)
+\item 
+\mbox{\Hypertarget{classtops_1_1MaximalDependenceDecomposition_af6a4e2470180b747d939edfff839d688}\label{classtops_1_1MaximalDependenceDecomposition_af6a4e2470180b747d939edfff839d688}} 
+void {\bfseries set\+Consensus\+Sequence} (Consensus\+Sequence consensus\+\_\+sequence)
+\item 
+\mbox{\Hypertarget{classtops_1_1MaximalDependenceDecomposition_ac0e860c8101228474eea7274531ee996}\label{classtops_1_1MaximalDependenceDecomposition_ac0e860c8101228474eea7274531ee996}} 
+void {\bfseries set\+Consensus\+Model} (Probabilistic\+Model\+Ptr model)
+\item 
+\mbox{\Hypertarget{classtops_1_1MaximalDependenceDecomposition_a09b92cc404ab17d880b407c7839986a3}\label{classtops_1_1MaximalDependenceDecomposition_a09b92cc404ab17d880b407c7839986a3}} 
+Inhomogeneous\+Markov\+Chain\+Ptr {\bfseries train\+Inhomogeneous\+Markov\+Chain} (Sequence\+Entry\+List \&sequences)
+\item 
+\mbox{\Hypertarget{classtops_1_1MaximalDependenceDecomposition_a6ebc731f2525f08fde763f3ae5de2278}\label{classtops_1_1MaximalDependenceDecomposition_a6ebc731f2525f08fde763f3ae5de2278}} 
+int {\bfseries get\+Maximal\+Dependence\+Index} (Inhomogeneous\+Markov\+Chain\+Ptr model, Sequence selected)
+\item 
+\mbox{\Hypertarget{classtops_1_1MaximalDependenceDecomposition_a0df44c81d935c029af9e52000b7f39a5}\label{classtops_1_1MaximalDependenceDecomposition_a0df44c81d935c029af9e52000b7f39a5}} 
+void {\bfseries subset} (int index, Sequence\+Entry\+List \&sequences, Sequence\+Entry\+List \&consensus, Sequence\+Entry\+List \&nonconsensus)
+\item 
+\mbox{\Hypertarget{classtops_1_1MaximalDependenceDecomposition_ab4ea18a665ae197778fa7b6ac4db186b}\label{classtops_1_1MaximalDependenceDecomposition_ab4ea18a665ae197778fa7b6ac4db186b}} 
+Maximal\+Dependence\+Decomposition\+Node\+Ptr {\bfseries new\+Node} (std\+::string node\+\_\+name, Sequence\+Entry\+List \&sequences, int divmin, Sequence selected)
+\item 
+\mbox{\Hypertarget{classtops_1_1MaximalDependenceDecomposition_aed945c7b2f4fa83ac57198ce028bb12b}\label{classtops_1_1MaximalDependenceDecomposition_aed945c7b2f4fa83ac57198ce028bb12b}} 
+void {\bfseries train} (Sequence\+Entry\+List \&sequences, int divmin)
+\item 
+\mbox{\Hypertarget{classtops_1_1MaximalDependenceDecomposition_a62e88dbda53f91076128a5879bb28b19}\label{classtops_1_1MaximalDependenceDecomposition_a62e88dbda53f91076128a5879bb28b19}} 
+virtual double \hyperlink{classtops_1_1MaximalDependenceDecomposition_a62e88dbda53f91076128a5879bb28b19}{evaluate} (const Sequence \&s, unsigned int begin, unsigned int end) const
+\begin{DoxyCompactList}\small\item\em Calculates the sequence likelihood given this model. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1MaximalDependenceDecomposition_ad1a77fe38770bfd76200155c54797122}\label{classtops_1_1MaximalDependenceDecomposition_ad1a77fe38770bfd76200155c54797122}} 
+virtual Sequence \& {\bfseries choose} (Sequence \&h, int \hyperlink{classtops_1_1ProbabilisticModel_a4e3910e9b9b848b7078e7101909ae82a}{size}) const
+\item 
+\mbox{\Hypertarget{classtops_1_1MaximalDependenceDecomposition_afb035c66db350b10b6c621a7dac7fa4f}\label{classtops_1_1MaximalDependenceDecomposition_afb035c66db350b10b6c621a7dac7fa4f}} 
+virtual bool {\bfseries initialize\+\_\+prefix\+\_\+sum\+\_\+array} (const Sequence \&s)
+\item 
+\mbox{\Hypertarget{classtops_1_1MaximalDependenceDecomposition_aa99aeefe2b40c9f4c55a3d646000b4d6}\label{classtops_1_1MaximalDependenceDecomposition_aa99aeefe2b40c9f4c55a3d646000b4d6}} 
+virtual double {\bfseries prefix\+\_\+sum\+\_\+array\+\_\+compute} (int begin, int end)
+\item 
+\mbox{\Hypertarget{classtops_1_1MaximalDependenceDecomposition_a62ef59c66231018c6fed2428a54db1e7}\label{classtops_1_1MaximalDependenceDecomposition_a62ef59c66231018c6fed2428a54db1e7}} 
+virtual std\+::string \hyperlink{classtops_1_1MaximalDependenceDecomposition_a62ef59c66231018c6fed2428a54db1e7}{model\+\_\+name} () const
+\begin{DoxyCompactList}\small\item\em returns the model name \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1MaximalDependenceDecomposition_a31ea645c77342665893b8a5607545bce}\label{classtops_1_1MaximalDependenceDecomposition_a31ea645c77342665893b8a5607545bce}} 
+virtual std\+::string \hyperlink{classtops_1_1MaximalDependenceDecomposition_a31ea645c77342665893b8a5607545bce}{str} () const
+\begin{DoxyCompactList}\small\item\em returns the string representation of the model \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1MaximalDependenceDecomposition_a8eaa2eb26dbf4d3e0aacb52ccfc1b5de}\label{classtops_1_1MaximalDependenceDecomposition_a8eaa2eb26dbf4d3e0aacb52ccfc1b5de}} 
+virtual void {\bfseries initialize} (const \hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} \&parameters)
+\item 
+\mbox{\Hypertarget{classtops_1_1MaximalDependenceDecomposition_a0c0383e58e339315dc5811f9f266fd08}\label{classtops_1_1MaximalDependenceDecomposition_a0c0383e58e339315dc5811f9f266fd08}} 
+Maximal\+Dependence\+Decomposition\+Node\+Ptr {\bfseries initialize\+Tree} (const \hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} \&parameters, std\+::vector$<$ std\+::string $>$ \&tree)
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+
+
+Definition at line 72 of file Maximal\+Dependence\+Decomposition.\+hpp.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/Maximal\+Dependence\+Decomposition.\+hpp\item 
+src/Maximal\+Dependence\+Decomposition.\+cpp\end{DoxyCompactItemize}

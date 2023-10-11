@@ -44,8 +44,10 @@
 #include "SimilarityBasedSequenceWeightingCreator.hpp"
 #include "MultipleSequentialModelCreator.hpp"
 #include "MaximalDependenceDecompositionCreator.hpp"
-#include "util.hpp"
 
+#include "NeuralNetworkModelCreator.hpp"
+
+#include "util.hpp"
 
 #include "TrainHMMBaumWelch.hpp"
 #include "TrainHMMMaximumLikelihood.hpp"
@@ -317,6 +319,9 @@ namespace tops
     _createModelCommand["MultipleSequentialModels"] = MultipleSequentialModelCreatorPtr( new MultipleSequentialModelCreator());
     _createModelCommand["MaximalDependenceDecomposition"] =
       MaximalDependenceDecompositionCreatorPtr(new MaximalDependenceDecompositionCreator());
+
+    _createModelCommand["NeuralNetworkModel"] =
+      NeuralNetworkModelCreatorPtr(new NeuralNetworkModelCreator());
 
   }
 }

@@ -1,4 +1,4 @@
-# Install script for directory: /Users/igorbonadio/Projetos/tops-old/src
+# Install script for directory: /home/waldir/Documents/topsAndre/tops/src
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -12,7 +12,7 @@ if(NOT DEFINED CMAKE_INSTALL_CONFIG_NAME)
     string(REGEX REPLACE "^[^A-Za-z0-9_]+" ""
            CMAKE_INSTALL_CONFIG_NAME "${BUILD_TYPE}")
   else()
-    set(CMAKE_INSTALL_CONFIG_NAME "")
+    set(CMAKE_INSTALL_CONFIG_NAME "RelWithDebInfo")
   endif()
   message(STATUS "Install configuration: \"${CMAKE_INSTALL_CONFIG_NAME}\"")
 endif()
@@ -27,92 +27,100 @@ if(NOT CMAKE_INSTALL_COMPONENT)
   endif()
 endif()
 
-if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/static" TYPE STATIC_LIBRARY FILES "/Users/igorbonadio/Projetos/tops-old/src/libToPS.a")
-  if(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/static/libToPS.a" AND
-     NOT IS_SYMLINK "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/static/libToPS.a")
-    execute_process(COMMAND "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ranlib" "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/static/libToPS.a")
-  endif()
+# Install shared libraries without execute permission?
+if(NOT DEFINED CMAKE_INSTALL_SO_NO_EXE)
+  set(CMAKE_INSTALL_SO_NO_EXE "1")
 endif()
 
-if(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspecified")
+# Is this installation the result of a crosscompile?
+if(NOT DEFINED CMAKE_CROSSCOMPILING)
+  set(CMAKE_CROSSCOMPILING "FALSE")
+endif()
+
+if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/static" TYPE STATIC_LIBRARY FILES "/home/waldir/Documents/topsAndre/tops/src/libToPS.a")
+endif()
+
+if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include/tops" TYPE FILE FILES
-    "/Users/igorbonadio/Projetos/tops-old/src/AkaikeInformationCriteria.hpp"
-    "/Users/igorbonadio/Projetos/tops-old/src/Alphabet.hpp"
-    "/Users/igorbonadio/Projetos/tops-old/src/BayesianInformationCriteria.hpp"
-    "/Users/igorbonadio/Projetos/tops-old/src/ConfigurationReader.hpp"
-    "/Users/igorbonadio/Projetos/tops-old/src/ContextTree.hpp"
-    "/Users/igorbonadio/Projetos/tops-old/src/DecodableModel.hpp"
-    "/Users/igorbonadio/Projetos/tops-old/src/DegenerateDistribution.hpp"
-    "/Users/igorbonadio/Projetos/tops-old/src/FactorableModel.hpp"
-    "/Users/igorbonadio/Projetos/tops-old/src/FactorableModelPrefixSumArray.hpp"
-    "/Users/igorbonadio/Projetos/tops-old/src/DiscreteIIDModel.hpp"
-    "/Users/igorbonadio/Projetos/tops-old/src/DiscreteIIDModelCreator.hpp"
-    "/Users/igorbonadio/Projetos/tops-old/src/FixedSequenceAtPosition.hpp"
-    "/Users/igorbonadio/Projetos/tops-old/src/FixedSequenceAtPositionCreator.hpp"
-    "/Users/igorbonadio/Projetos/tops-old/src/GHMMStates.hpp"
-    "/Users/igorbonadio/Projetos/tops-old/src/GeneralizedHiddenMarkovModel.hpp"
-    "/Users/igorbonadio/Projetos/tops-old/src/GeneralizedHiddenMarkovModelCreator.hpp"
-    "/Users/igorbonadio/Projetos/tops-old/src/HiddenMarkovModel.hpp"
-    "/Users/igorbonadio/Projetos/tops-old/src/HiddenMarkovModelCreator.hpp"
-    "/Users/igorbonadio/Projetos/tops-old/src/InhomogeneousFactorableModel.hpp"
-    "/Users/igorbonadio/Projetos/tops-old/src/InhomogeneousMarkovChain.hpp"
-    "/Users/igorbonadio/Projetos/tops-old/src/InhomogeneousMarkovChainCreator.hpp"
-    "/Users/igorbonadio/Projetos/tops-old/src/MultipleAlignment.hpp"
-    "/Users/igorbonadio/Projetos/tops-old/src/NullPrefixSumArray.hpp"
-    "/Users/igorbonadio/Projetos/tops-old/src/PhasedFactorableModelEvaluationAlgorithm.hpp"
-    "/Users/igorbonadio/Projetos/tops-old/src/PhasedRunLengthDistribution.hpp"
-    "/Users/igorbonadio/Projetos/tops-old/src/PhasedRunLengthDistributionCreator.hpp"
-    "/Users/igorbonadio/Projetos/tops-old/src/PrefixSumArray.hpp"
-    "/Users/igorbonadio/Projetos/tops-old/src/ProbabilisticModel.hpp"
-    "/Users/igorbonadio/Projetos/tops-old/src/ProbabilisticModelCreator.hpp"
-    "/Users/igorbonadio/Projetos/tops-old/src/ProbabilisticModelCreatorClient.hpp"
-    "/Users/igorbonadio/Projetos/tops-old/src/ProbabilisticModelDecorator.hpp"
-    "/Users/igorbonadio/Projetos/tops-old/src/ProbabilisticModelParameter.hpp"
-    "/Users/igorbonadio/Projetos/tops-old/src/RemoveSequenceFromModel.hpp"
-    "/Users/igorbonadio/Projetos/tops-old/src/ReverseComplementDNA.hpp"
-    "/Users/igorbonadio/Projetos/tops-old/src/ReverseComplementDNACreator.hpp"
-    "/Users/igorbonadio/Projetos/tops-old/src/Sequence.hpp"
-    "/Users/igorbonadio/Projetos/tops-old/src/SequenceEntry.hpp"
-    "/Users/igorbonadio/Projetos/tops-old/src/SequenceFactory.hpp"
-    "/Users/igorbonadio/Projetos/tops-old/src/SequenceFormat.hpp"
-    "/Users/igorbonadio/Projetos/tops-old/src/SmoothedHistogramBurge.hpp"
-    "/Users/igorbonadio/Projetos/tops-old/src/SmoothedHistogramKernelDensity.hpp"
-    "/Users/igorbonadio/Projetos/tops-old/src/SmoothedHistogramStanke.hpp"
-    "/Users/igorbonadio/Projetos/tops-old/src/SparseMatrix.hpp"
-    "/Users/igorbonadio/Projetos/tops-old/src/Symbol.hpp"
-    "/Users/igorbonadio/Projetos/tops-old/src/TargetModel.hpp"
-    "/Users/igorbonadio/Projetos/tops-old/src/TargetModelCreator.hpp"
-    "/Users/igorbonadio/Projetos/tops-old/src/TrainDiscreteIIDModel.hpp"
-    "/Users/igorbonadio/Projetos/tops-old/src/TrainFixedLengthMarkovChain.hpp"
-    "/Users/igorbonadio/Projetos/tops-old/src/TrainInterpolatedMarkovChain.hpp"
-    "/Users/igorbonadio/Projetos/tops-old/src/TrainHMMBaumWelch.hpp"
-    "/Users/igorbonadio/Projetos/tops-old/src/TrainHMMMaximumLikelihood.hpp"
-    "/Users/igorbonadio/Projetos/tops-old/src/TrainPhasedMarkovChain.hpp"
-    "/Users/igorbonadio/Projetos/tops-old/src/TrainInterpolatedPhasedMarkovChain.hpp"
-    "/Users/igorbonadio/Projetos/tops-old/src/TrainPhasedMarkovChainContextAlgorithm.hpp"
-    "/Users/igorbonadio/Projetos/tops-old/src/TrainVariableLengthInhomogeneousMarkovChain.hpp"
-    "/Users/igorbonadio/Projetos/tops-old/src/TrainVariableLengthMarkovChain.hpp"
-    "/Users/igorbonadio/Projetos/tops-old/src/TrainWeightArrayModel.hpp"
-    "/Users/igorbonadio/Projetos/tops-old/src/VariableLengthMarkovChain.hpp"
-    "/Users/igorbonadio/Projetos/tops-old/src/VariableLengthMarkovChainCreator.hpp"
-    "/Users/igorbonadio/Projetos/tops-old/src/util.hpp"
-    "/Users/igorbonadio/Projetos/tops-old/src/TrainGHMMTransitions.hpp"
-    "/Users/igorbonadio/Projetos/tops-old/src/BernoulliModelCreator.hpp"
-    "/Users/igorbonadio/Projetos/tops-old/src/SimilarityBasedSequenceWeighting.hpp"
-    "/Users/igorbonadio/Projetos/tops-old/src/SimilarityBasedSequenceWeightingCreator.hpp"
-    "/Users/igorbonadio/Projetos/tops-old/src/TrainSimilarityBasedSequenceWeighting.hpp"
-    "/Users/igorbonadio/Projetos/tops-old/src/MultipleSequentialModel.hpp"
-    "/Users/igorbonadio/Projetos/tops-old/src/MultipleSequentialModelCreator.hpp"
-    "/Users/igorbonadio/Projetos/tops-old/src/StoreLoadedModel.hpp"
-    "/Users/igorbonadio/Projetos/tops-old/src/PairHiddenMarkovModel.hpp"
-    "/Users/igorbonadio/Projetos/tops-old/src/PairHiddenMarkovModelCreator.hpp"
-    "/Users/igorbonadio/Projetos/tops-old/src/TrainPHMMBaumWelch.hpp"
-    "/Users/igorbonadio/Projetos/tops-old/src/MaximumDependenceDecomposition.hpp"
-    "/Users/igorbonadio/Projetos/tops-old/src/ProfileHiddenMarkovModel.hpp"
-    "/Users/igorbonadio/Projetos/tops-old/src/ProfileHiddenMarkovModelCreator.hpp"
-    "/Users/igorbonadio/Projetos/tops-old/src/TrainProfileHMMMaxLikelihood.hpp"
-    "/Users/igorbonadio/Projetos/tops-old/src/TrainProfileHMMBaumWelch.hpp"
+    "/home/waldir/Documents/topsAndre/tops/src/AkaikeInformationCriteria.hpp"
+    "/home/waldir/Documents/topsAndre/tops/src/Alphabet.hpp"
+    "/home/waldir/Documents/topsAndre/tops/src/BayesianInformationCriteria.hpp"
+    "/home/waldir/Documents/topsAndre/tops/src/ConfigurationReader.hpp"
+    "/home/waldir/Documents/topsAndre/tops/src/ContextTree.hpp"
+    "/home/waldir/Documents/topsAndre/tops/src/DecodableModel.hpp"
+    "/home/waldir/Documents/topsAndre/tops/src/DegenerateDistribution.hpp"
+    "/home/waldir/Documents/topsAndre/tops/src/FactorableModel.hpp"
+    "/home/waldir/Documents/topsAndre/tops/src/FactorableModelPrefixSumArray.hpp"
+    "/home/waldir/Documents/topsAndre/tops/src/DiscreteIIDModel.hpp"
+    "/home/waldir/Documents/topsAndre/tops/src/DiscreteIIDModelCreator.hpp"
+    "/home/waldir/Documents/topsAndre/tops/src/FixedSequenceAtPosition.hpp"
+    "/home/waldir/Documents/topsAndre/tops/src/FixedSequenceAtPositionCreator.hpp"
+    "/home/waldir/Documents/topsAndre/tops/src/GHMMStates.hpp"
+    "/home/waldir/Documents/topsAndre/tops/src/GeneralizedHiddenMarkovModel.hpp"
+    "/home/waldir/Documents/topsAndre/tops/src/GeneralizedHiddenMarkovModelCreator.hpp"
+    "/home/waldir/Documents/topsAndre/tops/src/HiddenMarkovModel.hpp"
+    "/home/waldir/Documents/topsAndre/tops/src/HiddenMarkovModelCreator.hpp"
+    "/home/waldir/Documents/topsAndre/tops/src/InhomogeneousFactorableModel.hpp"
+    "/home/waldir/Documents/topsAndre/tops/src/InhomogeneousMarkovChain.hpp"
+    "/home/waldir/Documents/topsAndre/tops/src/InhomogeneousMarkovChainCreator.hpp"
+    "/home/waldir/Documents/topsAndre/tops/src/MultipleAlignment.hpp"
+    "/home/waldir/Documents/topsAndre/tops/src/NullPrefixSumArray.hpp"
+    "/home/waldir/Documents/topsAndre/tops/src/PhasedFactorableModelEvaluationAlgorithm.hpp"
+    "/home/waldir/Documents/topsAndre/tops/src/PhasedRunLengthDistribution.hpp"
+    "/home/waldir/Documents/topsAndre/tops/src/PhasedRunLengthDistributionCreator.hpp"
+    "/home/waldir/Documents/topsAndre/tops/src/PrefixSumArray.hpp"
+    "/home/waldir/Documents/topsAndre/tops/src/ProbabilisticModel.hpp"
+    "/home/waldir/Documents/topsAndre/tops/src/ProbabilisticModelCreator.hpp"
+    "/home/waldir/Documents/topsAndre/tops/src/ProbabilisticModelCreatorClient.hpp"
+    "/home/waldir/Documents/topsAndre/tops/src/ProbabilisticModelDecorator.hpp"
+    "/home/waldir/Documents/topsAndre/tops/src/ProbabilisticModelParameter.hpp"
+    "/home/waldir/Documents/topsAndre/tops/src/RemoveSequenceFromModel.hpp"
+    "/home/waldir/Documents/topsAndre/tops/src/ReverseComplementDNA.hpp"
+    "/home/waldir/Documents/topsAndre/tops/src/ReverseComplementDNACreator.hpp"
+    "/home/waldir/Documents/topsAndre/tops/src/Sequence.hpp"
+    "/home/waldir/Documents/topsAndre/tops/src/SequenceEntry.hpp"
+    "/home/waldir/Documents/topsAndre/tops/src/SequenceFactory.hpp"
+    "/home/waldir/Documents/topsAndre/tops/src/SequenceFormat.hpp"
+    "/home/waldir/Documents/topsAndre/tops/src/SmoothedHistogramBurge.hpp"
+    "/home/waldir/Documents/topsAndre/tops/src/SmoothedHistogramKernelDensity.hpp"
+    "/home/waldir/Documents/topsAndre/tops/src/SmoothedHistogramStanke.hpp"
+    "/home/waldir/Documents/topsAndre/tops/src/SparseMatrix.hpp"
+    "/home/waldir/Documents/topsAndre/tops/src/Symbol.hpp"
+    "/home/waldir/Documents/topsAndre/tops/src/TargetModel.hpp"
+    "/home/waldir/Documents/topsAndre/tops/src/TargetModelCreator.hpp"
+    "/home/waldir/Documents/topsAndre/tops/src/TrainDiscreteIIDModel.hpp"
+    "/home/waldir/Documents/topsAndre/tops/src/TrainFixedLengthMarkovChain.hpp"
+    "/home/waldir/Documents/topsAndre/tops/src/TrainInterpolatedMarkovChain.hpp"
+    "/home/waldir/Documents/topsAndre/tops/src/TrainHMMBaumWelch.hpp"
+    "/home/waldir/Documents/topsAndre/tops/src/TrainHMMMaximumLikelihood.hpp"
+    "/home/waldir/Documents/topsAndre/tops/src/TrainPhasedMarkovChain.hpp"
+    "/home/waldir/Documents/topsAndre/tops/src/TrainInterpolatedPhasedMarkovChain.hpp"
+    "/home/waldir/Documents/topsAndre/tops/src/TrainPhasedMarkovChainContextAlgorithm.hpp"
+    "/home/waldir/Documents/topsAndre/tops/src/TrainVariableLengthInhomogeneousMarkovChain.hpp"
+    "/home/waldir/Documents/topsAndre/tops/src/TrainVariableLengthMarkovChain.hpp"
+    "/home/waldir/Documents/topsAndre/tops/src/TrainWeightArrayModel.hpp"
+    "/home/waldir/Documents/topsAndre/tops/src/VariableLengthMarkovChain.hpp"
+    "/home/waldir/Documents/topsAndre/tops/src/VariableLengthMarkovChainCreator.hpp"
+    "/home/waldir/Documents/topsAndre/tops/src/util.hpp"
+    "/home/waldir/Documents/topsAndre/tops/src/TrainGHMMTransitions.hpp"
+    "/home/waldir/Documents/topsAndre/tops/src/BernoulliModelCreator.hpp"
+    "/home/waldir/Documents/topsAndre/tops/src/SimilarityBasedSequenceWeighting.hpp"
+    "/home/waldir/Documents/topsAndre/tops/src/SimilarityBasedSequenceWeightingCreator.hpp"
+    "/home/waldir/Documents/topsAndre/tops/src/TrainSimilarityBasedSequenceWeighting.hpp"
+    "/home/waldir/Documents/topsAndre/tops/src/MultipleSequentialModel.hpp"
+    "/home/waldir/Documents/topsAndre/tops/src/MultipleSequentialModelCreator.hpp"
+    "/home/waldir/Documents/topsAndre/tops/src/StoreLoadedModel.hpp"
+    "/home/waldir/Documents/topsAndre/tops/src/PairHiddenMarkovModel.hpp"
+    "/home/waldir/Documents/topsAndre/tops/src/PairHiddenMarkovModelCreator.hpp"
+    "/home/waldir/Documents/topsAndre/tops/src/TrainPHMMBaumWelch.hpp"
+    "/home/waldir/Documents/topsAndre/tops/src/MaximumDependenceDecomposition.hpp"
+    "/home/waldir/Documents/topsAndre/tops/src/ProfileHiddenMarkovModel.hpp"
+    "/home/waldir/Documents/topsAndre/tops/src/ProfileHiddenMarkovModelCreator.hpp"
+    "/home/waldir/Documents/topsAndre/tops/src/TrainProfileHMMMaxLikelihood.hpp"
+    "/home/waldir/Documents/topsAndre/tops/src/TrainProfileHMMBaumWelch.hpp"
+    "/home/waldir/Documents/topsAndre/tops/src/NeuralNetworkModel.hpp"
+    "/home/waldir/Documents/topsAndre/tops/src/NeuralNetworkModelCreator.hpp"
     )
 endif()
 

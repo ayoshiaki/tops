@@ -1,0 +1,165 @@
+\hypertarget{classtops_1_1SmoothedHistogramBurge}{}\section{tops\+:\+:Smoothed\+Histogram\+Burge Class Reference}
+\label{classtops_1_1SmoothedHistogramBurge}\index{tops\+::\+Smoothed\+Histogram\+Burge@{tops\+::\+Smoothed\+Histogram\+Burge}}
+
+
+Creates a smoothed histogram using Burge algorithm.  
+
+
+
+
+{\ttfamily \#include $<$Smoothed\+Histogram\+Burge.\+hpp$>$}
+
+
+
+Inheritance diagram for tops\+:\+:Smoothed\+Histogram\+Burge\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=236pt]{classtops_1_1SmoothedHistogramBurge__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for tops\+:\+:Smoothed\+Histogram\+Burge\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=236pt]{classtops_1_1SmoothedHistogramBurge__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual Probabilistic\+Model\+Ptr \hyperlink{classtops_1_1SmoothedHistogramBurge_a7f148c400879d8594da5fedda12641b1}{create} (\hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} \&parameters) const
+\begin{DoxyCompactList}\small\item\em Creates a probability model. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1SmoothedHistogramBurge_a3135346db37989216ee0b5769b670218}\label{classtops_1_1SmoothedHistogramBurge_a3135346db37989216ee0b5769b670218}} 
+virtual std\+::string \hyperlink{classtops_1_1SmoothedHistogramBurge_a3135346db37989216ee0b5769b670218}{help} () const
+\begin{DoxyCompactList}\small\item\em Provides a help. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1SmoothedHistogramBurge_ad13cfd0dfd6fd48d4d54ed7b8add4309}\label{classtops_1_1SmoothedHistogramBurge_ad13cfd0dfd6fd48d4d54ed7b8add4309}} 
+virtual std\+::string {\bfseries factory\+\_\+name} () const
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Creates a smoothed histogram using Burge algorithm. 
+
+Definition at line 36 of file Smoothed\+Histogram\+Burge.\+hpp.
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classtops_1_1SmoothedHistogramBurge_a7f148c400879d8594da5fedda12641b1}\label{classtops_1_1SmoothedHistogramBurge_a7f148c400879d8594da5fedda12641b1}} 
+\index{tops\+::\+Smoothed\+Histogram\+Burge@{tops\+::\+Smoothed\+Histogram\+Burge}!create@{create}}
+\index{create@{create}!tops\+::\+Smoothed\+Histogram\+Burge@{tops\+::\+Smoothed\+Histogram\+Burge}}
+\subsubsection{\texorpdfstring{create()}{create()}}
+{\footnotesize\ttfamily Probabilistic\+Model\+Ptr tops\+::\+Smoothed\+Histogram\+Burge\+::create (\begin{DoxyParamCaption}\item[{\hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} \&}]{parameters }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Creates a probability model. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em parameters} & is a set of parameters that is utilized to build the model \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented from \hyperlink{classtops_1_1ProbabilisticModelCreator_afed6c8ffa45fff446bdaa8b533da8f7c}{tops\+::\+Probabilistic\+Model\+Creator}.
+
+
+
+Definition at line 31 of file Smoothed\+Histogram\+Burge.\+cpp.
+
+
+\begin{DoxyCode}
+32   \{
+33 
+34 
+35     ProbabilisticModelParameterValuePtr training\_set\_parameter =
+36       parameters.getMandatoryParameterValue(\textcolor{stringliteral}{"training\_set"});
+37     ProbabilisticModelParameterValuePtr cpar =
+38       parameters.getMandatoryParameterValue(\textcolor{stringliteral}{"C"});
+39     ProbabilisticModelParameterValuePtr maxlengthp =
+40       parameters.getOptionalParameterValue(\textcolor{stringliteral}{"max\_length"});
+41     \textcolor{keywordtype}{long} max = 15000;
+42     \textcolor{keywordflow}{if}(maxlengthp != NULL)
+43         max = maxlengthp->getInt();
+44 
+45     \textcolor{keywordflow}{if}((training\_set\_parameter == NULL)||(cpar == NULL)) \{
+46       std::cerr << \hyperlink{classtops_1_1SmoothedHistogramBurge_a3135346db37989216ee0b5769b670218}{help} () << std::endl;
+47       ProbabilisticModelPtr nullmodel;
+48       exit(-1);
+49       \textcolor{keywordflow}{return} nullmodel;
+50     \}
+51     \textcolor{keywordtype}{double} C = cpar->getDouble();
+52     DoubleVector data;
+53     AlphabetPtr alpha = AlphabetPtr(\textcolor{keyword}{new} Alphabet());;
+54     SequenceList sample\_set;
+55     readSequencesFromFile(sample\_set, alpha, training\_set\_parameter->getString());
+56 
+57     \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} i = 0; i < (int)sample\_set.size();i++)
+58       \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} j = 0; j < (int) sample\_set[i].size(); j++)
+59         data.push\_back(sample\_set[i][j]);
+60 
+61     \textcolor{keyword}{typedef} std::map<long,double> Lengths;
+62     \textcolor{keywordtype}{int} N = data.size();
+63     Lengths counter;
+64     Lengths sum;
+65     Lengths::const\_iterator iter;
+66     \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} i = 0; i < N; i++)\{
+67       iter = counter.find((\textcolor{keywordtype}{long})data[i]);
+68       \textcolor{keywordflow}{if}(iter == counter.end())
+69         counter[(\textcolor{keywordtype}{long})data[i]] = 1.0;
+70       \textcolor{keywordflow}{else}
+71         counter[(long)data[i]] += 1.0;
+72     \}
+73     \textcolor{keywordtype}{double} total = 0.0;
+74     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} k = 1; k <= max; k++)\{
+75       \textcolor{keywordtype}{int} start = k - 10;
+76       \textcolor{keywordtype}{int} end = k + 10;
+77       \textcolor{keywordflow}{if}(start < 0)  start = 0;
+78       sum[k] = 0.0;
+79       \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} x = start; x < end; x++)\{
+80         iter = counter.find((\textcolor{keywordtype}{long})x);
+81         \textcolor{keywordflow}{if}(iter != counter.end() && iter->second > 0.0)\{
+82           \textcolor{keywordtype}{double} nx = iter->second;
+83           \textcolor{keywordtype}{double} mean = x+1.0;
+84           \textcolor{keywordtype}{double} sd = sqrt(2*((\textcolor{keywordtype}{double})(x+1.0))*C/nx);
+85           \textcolor{keywordtype}{double} px2 = 0.5*(1 + \_erf((((\textcolor{keywordtype}{double})k+1.5) - mean))/ (sd*sqrt(2.0)));
+86           \textcolor{keywordtype}{double} px1 = 0.5*(1 + \_erf((((\textcolor{keywordtype}{double})k+0.5) - mean))/ (sd*sqrt(2.0)));
+87           assert(nx > 0.0);
+88           assert(mean > 0.0);
+89           assert(sd > 0.0);
+90           sum[k] += nx*(px2 - px1);
+91         \}
+92       \}
+93       sum[k] = sum[k]/N;
+94       total = total+ sum[k];
+95     \}
+96     \textcolor{keywordtype}{double} epsilon = 1e-5;
+97     total = total/(1 - max*epsilon);
+98 
+99     DoubleVector prob;
+100     prob.resize(max+1);
+101     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} k = 1; k <= max; k++)\{
+102       prob[k] = epsilon + sum[k]/total;
+103     \}
+104 
+105     ProbabilisticModelParameters pars;
+106     pars.add(\textcolor{stringliteral}{"probabilities"}, ProbabilisticModelParameterValuePtr (\textcolor{keyword}{new} DoubleVectorParameterValue(prob)));
+107     pars.add(\textcolor{stringliteral}{"alphabet"}, alpha->getParameterValue());
+108     DiscreteIIDModelPtr result =
+109       DiscreteIIDModelPtr(\textcolor{keyword}{new} DiscreteIIDModel());
+110     result->initialize(pars);
+111     \textcolor{keywordflow}{return} result;
+112   \}
+\end{DoxyCode}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/Smoothed\+Histogram\+Burge.\+hpp\item 
+src/Smoothed\+Histogram\+Burge.\+cpp\end{DoxyCompactItemize}

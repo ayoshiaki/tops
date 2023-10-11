@@ -1,0 +1,128 @@
+\hypertarget{classtops_1_1DecodableModel}{}\section{tops\+:\+:Decodable\+Model Class Reference}
+\label{classtops_1_1DecodableModel}\index{tops\+::\+Decodable\+Model@{tops\+::\+Decodable\+Model}}
+
+
+Interface defining probabilistic model with the viterbi, forward and backward algorithm.  
+
+
+
+
+{\ttfamily \#include $<$Decodable\+Model.\+hpp$>$}
+
+
+
+Inheritance diagram for tops\+:\+:Decodable\+Model\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classtops_1_1DecodableModel__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for tops\+:\+:Decodable\+Model\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=201pt]{classtops_1_1DecodableModel__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classtops_1_1DecodableModel_aadafde2e7cb86a3d3f261b470e91fbf3}\label{classtops_1_1DecodableModel_aadafde2e7cb86a3d3f261b470e91fbf3}} 
+virtual double \hyperlink{classtops_1_1DecodableModel_aadafde2e7cb86a3d3f261b470e91fbf3}{evaluate} (const Sequence \&s, unsigned int begin, unsigned int end) const
+\begin{DoxyCompactList}\small\item\em Calculates the sequence likelihood given this model. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1DecodableModel_a32ae61a80b1ed6f9f5517b0c791b0d0d}\label{classtops_1_1DecodableModel_a32ae61a80b1ed6f9f5517b0c791b0d0d}} 
+virtual Sequence \& {\bfseries choose} (Sequence \&h, int \hyperlink{classtops_1_1ProbabilisticModel_a4e3910e9b9b848b7078e7101909ae82a}{size}) const
+\item 
+\mbox{\Hypertarget{classtops_1_1DecodableModel_a092776d577c0acec332066dcd88e6ee7}\label{classtops_1_1DecodableModel_a092776d577c0acec332066dcd88e6ee7}} 
+virtual Sequence \& {\bfseries choose} (Sequence \&h, Sequence \&path, int \hyperlink{classtops_1_1ProbabilisticModel_a4e3910e9b9b848b7078e7101909ae82a}{size}) const
+\item 
+\mbox{\Hypertarget{classtops_1_1DecodableModel_a7fec7f394ce01a543913cd7414a5dca4}\label{classtops_1_1DecodableModel_a7fec7f394ce01a543913cd7414a5dca4}} 
+virtual Sequence \& {\bfseries choose} (Sequence \&h, Sequence \&path, int i, int \hyperlink{classtops_1_1ProbabilisticModel_a4e3910e9b9b848b7078e7101909ae82a}{size}) const
+\item 
+\mbox{\Hypertarget{classtops_1_1DecodableModel_a607febee2c00a6fd0ac9582def35dbd9}\label{classtops_1_1DecodableModel_a607febee2c00a6fd0ac9582def35dbd9}} 
+virtual double \hyperlink{classtops_1_1DecodableModel_a607febee2c00a6fd0ac9582def35dbd9}{forward} (const Sequence \&s, Matrix \&alpha) const =0
+\begin{DoxyCompactList}\small\item\em Forward algorithm. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1DecodableModel_ae2339a90c124e65aabbb9887c04239ff}\label{classtops_1_1DecodableModel_ae2339a90c124e65aabbb9887c04239ff}} 
+virtual double \hyperlink{classtops_1_1DecodableModel_ae2339a90c124e65aabbb9887c04239ff}{backward} (const Sequence \&s, Matrix \&beta) const =0
+\begin{DoxyCompactList}\small\item\em Backward algorithm. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1DecodableModel_ab5e3ec33745b4189e8d466895fb51df8}\label{classtops_1_1DecodableModel_ab5e3ec33745b4189e8d466895fb51df8}} 
+virtual double \hyperlink{classtops_1_1DecodableModel_ab5e3ec33745b4189e8d466895fb51df8}{viterbi} (const Sequence \&s, Sequence \&path, Matrix \&gamma) const =0
+\begin{DoxyCompactList}\small\item\em Viterbi algorithm. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1DecodableModel_a487a5950464543c60d748fb637f4ed7f}\label{classtops_1_1DecodableModel_a487a5950464543c60d748fb637f4ed7f}} 
+virtual void \hyperlink{classtops_1_1DecodableModel_a487a5950464543c60d748fb637f4ed7f}{choose\+Path} (const Sequence \&s, Sequence \&path)
+\begin{DoxyCompactList}\small\item\em Choose a path given a sequence. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1DecodableModel_a5836caa71f5566958086c2fb79b93f22}\label{classtops_1_1DecodableModel_a5836caa71f5566958086c2fb79b93f22}} 
+virtual void \hyperlink{classtops_1_1DecodableModel_a5836caa71f5566958086c2fb79b93f22}{posterior\+Probabilities} (const Sequence \&s, Matrix \&probabilities) const
+\begin{DoxyCompactList}\small\item\em Posterior Probabilities\+: P(yi=k$\vert$x) \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1DecodableModel_af30ea49ef786a2477e6f8c1311181dd8}\label{classtops_1_1DecodableModel_af30ea49ef786a2477e6f8c1311181dd8}} 
+virtual void \hyperlink{classtops_1_1DecodableModel_af30ea49ef786a2477e6f8c1311181dd8}{posterior\+Probabilities} (const Sequence \&s, Sparse\+Matrix\+Ptr probabilities) const
+\begin{DoxyCompactList}\small\item\em Posterior Probabilities\+: P(yi=k$\vert$x) \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1DecodableModel_aa11ef25681d465752483d79deb44c0dc}\label{classtops_1_1DecodableModel_aa11ef25681d465752483d79deb44c0dc}} 
+virtual void {\bfseries posterior\+Probabilities} (const Sequence \&s, f\+Matrix \&probabilities) const
+\item 
+\mbox{\Hypertarget{classtops_1_1DecodableModel_a4dc165277061ea987eb994df7fafca6d}\label{classtops_1_1DecodableModel_a4dc165277061ea987eb994df7fafca6d}} 
+virtual float {\bfseries M\+E\+A\+Pred} (const Sequence \&s, Sequence \&path)
+\item 
+\mbox{\Hypertarget{classtops_1_1DecodableModel_a3c2e4577dda5374cac0287e0fc1ec04f}\label{classtops_1_1DecodableModel_a3c2e4577dda5374cac0287e0fc1ec04f}} 
+virtual float {\bfseries M\+E\+A\+Pred} (const Sequence \&s, Sequence \&path, Sparse\+Matrix\+Ptr post\+Probs)
+\item 
+\mbox{\Hypertarget{classtops_1_1DecodableModel_a0e243fa34e02349602faae53cae86a41}\label{classtops_1_1DecodableModel_a0e243fa34e02349602faae53cae86a41}} 
+virtual void \hyperlink{classtops_1_1DecodableModel_a0e243fa34e02349602faae53cae86a41}{posterior\+Decoding} (const Sequence \&s, Sequence \&path, Matrix \&probabilities) const
+\begin{DoxyCompactList}\small\item\em Posterior Decoding\+: $^\wedge$yi = argmax\+\_\+k P(yi=k$\vert$x) \end{DoxyCompactList}\item 
+virtual Sequence \& \hyperlink{classtops_1_1DecodableModel_a9321fd7bca21551b4c5380e1f48ff5c2}{choose\+Observation} (Sequence \&h, int i, int state) const =0
+\begin{DoxyCompactList}\small\item\em Choose the observation given a state. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1DecodableModel_a7bac54cfa355803764cf8677d58cbe70}\label{classtops_1_1DecodableModel_a7bac54cfa355803764cf8677d58cbe70}} 
+virtual int \hyperlink{classtops_1_1DecodableModel_a7bac54cfa355803764cf8677d58cbe70}{choose\+State} (int state) const =0
+\begin{DoxyCompactList}\small\item\em Choose a state. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1DecodableModel_ac31959a6d852e2e00938294bd54f2667}\label{classtops_1_1DecodableModel_ac31959a6d852e2e00938294bd54f2667}} 
+virtual int \hyperlink{classtops_1_1DecodableModel_ac31959a6d852e2e00938294bd54f2667}{choose\+First\+State} () const =0
+\begin{DoxyCompactList}\small\item\em Choose the initial state. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1DecodableModel_aee6d21ab65252b50d335358b05a1aee9}\label{classtops_1_1DecodableModel_aee6d21ab65252b50d335358b05a1aee9}} 
+virtual std\+::string \hyperlink{classtops_1_1DecodableModel_aee6d21ab65252b50d335358b05a1aee9}{get\+State\+Name} (int state) const =0
+\begin{DoxyCompactList}\small\item\em Get state name. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1DecodableModel_aba6a89196c2cb2349349166227fc1e8b}\label{classtops_1_1DecodableModel_aba6a89196c2cb2349349166227fc1e8b}} 
+virtual Alphabet\+Ptr \hyperlink{classtops_1_1DecodableModel_aba6a89196c2cb2349349166227fc1e8b}{get\+State\+Names} () const =0
+\begin{DoxyCompactList}\small\item\em Get the state names. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1DecodableModel_a37326b129c2a20b12c79c1b2488adc93}\label{classtops_1_1DecodableModel_a37326b129c2a20b12c79c1b2488adc93}} 
+virtual \hyperlink{classtops_1_1DecodableModel}{Decodable\+Model} $\ast$ {\bfseries decodable} ()
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Interface defining probabilistic model with the viterbi, forward and backward algorithm. 
+
+Definition at line 38 of file Decodable\+Model.\+hpp.
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classtops_1_1DecodableModel_a9321fd7bca21551b4c5380e1f48ff5c2}\label{classtops_1_1DecodableModel_a9321fd7bca21551b4c5380e1f48ff5c2}} 
+\index{tops\+::\+Decodable\+Model@{tops\+::\+Decodable\+Model}!choose\+Observation@{choose\+Observation}}
+\index{choose\+Observation@{choose\+Observation}!tops\+::\+Decodable\+Model@{tops\+::\+Decodable\+Model}}
+\subsubsection{\texorpdfstring{choose\+Observation()}{chooseObservation()}}
+{\footnotesize\ttfamily virtual Sequence\& tops\+::\+Decodable\+Model\+::choose\+Observation (\begin{DoxyParamCaption}\item[{Sequence \&}]{h,  }\item[{int}]{i,  }\item[{int}]{state }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Choose the observation given a state. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em h} & is the history \\
+\hline
+\end{DoxyParams}
+
+
+Implemented in \hyperlink{classtops_1_1GeneralizedHiddenMarkovModel_a233bb11a876558c449713e274f0f7f6c}{tops\+::\+Generalized\+Hidden\+Markov\+Model}, \hyperlink{classtops_1_1HiddenMarkovModel_af9085a6ee9df355a207b0090d2eae284}{tops\+::\+Hidden\+Markov\+Model}, and \hyperlink{classtops_1_1ProfileHiddenMarkovModel_a369bbe95930890c2460ee1b56b4415f5}{tops\+::\+Profile\+Hidden\+Markov\+Model}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/Decodable\+Model.\+hpp\item 
+src/Decodable\+Model.\+cpp\end{DoxyCompactItemize}

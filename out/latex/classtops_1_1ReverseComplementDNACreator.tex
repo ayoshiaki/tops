@@ -1,0 +1,99 @@
+\hypertarget{classtops_1_1ReverseComplementDNACreator}{}\section{tops\+:\+:Reverse\+Complement\+D\+N\+A\+Creator Class Reference}
+\label{classtops_1_1ReverseComplementDNACreator}\index{tops\+::\+Reverse\+Complement\+D\+N\+A\+Creator@{tops\+::\+Reverse\+Complement\+D\+N\+A\+Creator}}
+
+
+Inheritance diagram for tops\+:\+:Reverse\+Complement\+D\+N\+A\+Creator\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=268pt]{classtops_1_1ReverseComplementDNACreator__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for tops\+:\+:Reverse\+Complement\+D\+N\+A\+Creator\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=268pt]{classtops_1_1ReverseComplementDNACreator__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual Probabilistic\+Model\+Ptr \hyperlink{classtops_1_1ReverseComplementDNACreator_a9928572204114498356297cf0892019b}{create} (\hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} \&parameters) const
+\begin{DoxyCompactList}\small\item\em Creates a probability model. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1ReverseComplementDNACreator_ab50c1dd006aea97ba6727b39935be473}\label{classtops_1_1ReverseComplementDNACreator_ab50c1dd006aea97ba6727b39935be473}} 
+Probabilistic\+Model\+Ptr \hyperlink{classtops_1_1ReverseComplementDNACreator_ab50c1dd006aea97ba6727b39935be473}{create} (\hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} \&parameters, const std\+::map$<$ std\+::string, Probabilistic\+Model\+Ptr $>$ \&models) const
+\begin{DoxyCompactList}\small\item\em Creates the model and returns the loglikelihood of the training set. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+
+
+Definition at line 33 of file Reverse\+Complement\+D\+N\+A\+Creator.\+hpp.
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classtops_1_1ReverseComplementDNACreator_a9928572204114498356297cf0892019b}\label{classtops_1_1ReverseComplementDNACreator_a9928572204114498356297cf0892019b}} 
+\index{tops\+::\+Reverse\+Complement\+D\+N\+A\+Creator@{tops\+::\+Reverse\+Complement\+D\+N\+A\+Creator}!create@{create}}
+\index{create@{create}!tops\+::\+Reverse\+Complement\+D\+N\+A\+Creator@{tops\+::\+Reverse\+Complement\+D\+N\+A\+Creator}}
+\subsubsection{\texorpdfstring{create()}{create()}}
+{\footnotesize\ttfamily Probabilistic\+Model\+Ptr tops\+::\+Reverse\+Complement\+D\+N\+A\+Creator\+::create (\begin{DoxyParamCaption}\item[{\hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} \&}]{parameters }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Creates a probability model. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em parameters} & is a set of parameters that is utilized to build the model \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented from \hyperlink{classtops_1_1ProbabilisticModelCreator_afed6c8ffa45fff446bdaa8b533da8f7c}{tops\+::\+Probabilistic\+Model\+Creator}.
+
+
+
+Definition at line 66 of file Reverse\+Complement\+D\+N\+A\+Creator.\+cpp.
+
+
+\begin{DoxyCode}
+66                                                                                                            
+       \{
+67     ProbabilisticModelParameterValuePtr modelpar = parameters.getMandatoryParameterValue(\textcolor{stringliteral}{"model"});
+68     ProbabilisticModelCreatorClient creator;
+69     ConfigurationReader reader;
+70     std::string modelstr = modelpar->getString();
+71 
+72     ProbabilisticModelPtr m ;
+73     \textcolor{keywordflow}{if}((modelstr.size() > 0) && (modelstr[0] == \textcolor{charliteral}{'['}) )\{
+74       modelstr = modelstr.substr(1, modelstr.size() -2 );
+75       reader.load(modelstr);
+76       ProbabilisticModelParametersPtr par = reader.parameters();
+77       m = creator.create(*par);
+78     \} \textcolor{keywordflow}{else}
+79       \{
+80         m = creator.create(modelstr) ;
+81         \textcolor{keywordflow}{if}(m == NULL) \{
+82           std::cerr << \textcolor{stringliteral}{"Can not load model file "} << modelstr<< \textcolor{stringliteral}{"!"} << std::endl;
+83           exit(-1);
+84         \}
+85       \}
+86     ReverseComplementDNAPtr decorator = ReverseComplementDNAPtr(\textcolor{keyword}{new} ReverseComplementDNA(m));
+87 
+88     decorator->setAlphabet(m->alphabet());
+89 
+90     \textcolor{keywordflow}{return} decorator;
+91   \}
+\end{DoxyCode}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/Reverse\+Complement\+D\+N\+A\+Creator.\+hpp\item 
+src/Reverse\+Complement\+D\+N\+A\+Creator.\+cpp\end{DoxyCompactItemize}

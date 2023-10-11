@@ -1,0 +1,96 @@
+\hypertarget{classtops_1_1GHMMExplicitDurationState}{}\section{tops\+:\+:G\+H\+M\+M\+Explicit\+Duration\+State Class Reference}
+\label{classtops_1_1GHMMExplicitDurationState}\index{tops\+::\+G\+H\+M\+M\+Explicit\+Duration\+State@{tops\+::\+G\+H\+M\+M\+Explicit\+Duration\+State}}
+
+
+G\+H\+MM Explicit duration state.  
+
+
+
+
+{\ttfamily \#include $<$G\+H\+M\+M\+States.\+hpp$>$}
+
+
+
+Inheritance diagram for tops\+:\+:G\+H\+M\+M\+Explicit\+Duration\+State\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=222pt]{classtops_1_1GHMMExplicitDurationState__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for tops\+:\+:G\+H\+M\+M\+Explicit\+Duration\+State\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=222pt]{classtops_1_1GHMMExplicitDurationState__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classtops_1_1GHMMExplicitDurationState_acaaab69ef474200c02382e57b8bdb3d4}\label{classtops_1_1GHMMExplicitDurationState_acaaab69ef474200c02382e57b8bdb3d4}} 
+{\bfseries G\+H\+M\+M\+Explicit\+Duration\+State} (Probabilistic\+Model\+Ptr observation, Discrete\+I\+I\+D\+Model\+Ptr transition, Symbol\+Ptr name)
+\item 
+\mbox{\Hypertarget{classtops_1_1GHMMExplicitDurationState_a0da2aed9eb61e299dae400081b9f9a7e}\label{classtops_1_1GHMMExplicitDurationState_a0da2aed9eb61e299dae400081b9f9a7e}} 
+virtual void {\bfseries find\+Best\+Predecessor} (Matrix \&gamma, Matrix \&psi, Int\+Matrix \&psilen, const Sequence \&s, int base, const G\+H\+M\+M\+States \&all\+\_\+states, std\+::map$<$ int, std\+::list$<$ int $>$ $>$ \&valid\+\_\+positions)
+\item 
+\mbox{\Hypertarget{classtops_1_1GHMMExplicitDurationState_a4a14544406eaf4f67715831954351fee}\label{classtops_1_1GHMMExplicitDurationState_a4a14544406eaf4f67715831954351fee}} 
+virtual void {\bfseries forward\+Sum} (Matrix \&alpha, const Sequence \&s, int base, const G\+H\+M\+M\+States \&all\+\_\+states, std\+::vector$<$ std\+::list$<$ int $>$ $>$ \&valid\+\_\+positions)
+\item 
+\mbox{\Hypertarget{classtops_1_1GHMMExplicitDurationState_add57b92313e42bbaa2e95554a695d4f4}\label{classtops_1_1GHMMExplicitDurationState_add57b92313e42bbaa2e95554a695d4f4}} 
+virtual double {\bfseries backward\+Sum} (Matrix \&beta, const Sequence \&s, int base, std\+::vector$<$ std\+::list$<$ int $>$ $>$ \&valid\+\_\+positions)
+\item 
+\mbox{\Hypertarget{classtops_1_1GHMMExplicitDurationState_ae8c44fa2d21d3846feb7aac7186f9192}\label{classtops_1_1GHMMExplicitDurationState_ae8c44fa2d21d3846feb7aac7186f9192}} 
+virtual void {\bfseries posterior\+Sum} (Matrix \&alpha, Matrix \&beta, f\+Matrix \&post\+Probs, const Sequence \&s, int base, const G\+H\+M\+M\+States \&all\+\_\+states, std\+::vector$<$ std\+::list$<$ int $>$ $>$ \&valid\+\_\+positions, double prob, int state\+Number)
+\item 
+\mbox{\Hypertarget{classtops_1_1GHMMExplicitDurationState_a04add3cac332dde621b22acd44a42507}\label{classtops_1_1GHMMExplicitDurationState_a04add3cac332dde621b22acd44a42507}} 
+virtual void {\bfseries choose\+Predecessor} (Matrix \&alpha, int base, int \&state, int \&position, const G\+H\+M\+M\+States \&all\+\_\+states)
+\item 
+\mbox{\Hypertarget{classtops_1_1GHMMExplicitDurationState_a60dd13ec0578ffac894e680b27f65edc}\label{classtops_1_1GHMMExplicitDurationState_a60dd13ec0578ffac894e680b27f65edc}} 
+virtual void {\bfseries set\+Duration} (Probabilistic\+Model\+Ptr d)
+\item 
+\mbox{\Hypertarget{classtops_1_1GHMMExplicitDurationState_ad445b5122638a134e589549d06bbe696}\label{classtops_1_1GHMMExplicitDurationState_ad445b5122638a134e589549d06bbe696}} 
+virtual Probabilistic\+Model\+Ptr {\bfseries duration} () const
+\item 
+\mbox{\Hypertarget{classtops_1_1GHMMExplicitDurationState_adb7d7b6672a77b003d8e1f9932495ff2}\label{classtops_1_1GHMMExplicitDurationState_adb7d7b6672a77b003d8e1f9932495ff2}} 
+virtual int {\bfseries choose\+Duration} () const
+\item 
+\mbox{\Hypertarget{classtops_1_1GHMMExplicitDurationState_a067bee304527756c03bfc4b7491eb25c}\label{classtops_1_1GHMMExplicitDurationState_a067bee304527756c03bfc4b7491eb25c}} 
+virtual bool {\bfseries is\+Geometric\+Duration} () const
+\item 
+\mbox{\Hypertarget{classtops_1_1GHMMExplicitDurationState_a202a6102d036b92a9c872c7ddeae0156}\label{classtops_1_1GHMMExplicitDurationState_a202a6102d036b92a9c872c7ddeae0156}} 
+virtual double {\bfseries duration\+\_\+probability} (int l) const
+\item 
+\mbox{\Hypertarget{classtops_1_1GHMMExplicitDurationState_a5118ccadbebfb98b74975d5ec7fb48d6}\label{classtops_1_1GHMMExplicitDurationState_a5118ccadbebfb98b74975d5ec7fb48d6}} 
+virtual std\+::string {\bfseries str} () const
+\item 
+\mbox{\Hypertarget{classtops_1_1GHMMExplicitDurationState_ae45559048fc040dcaa022d495f0f01bc}\label{classtops_1_1GHMMExplicitDurationState_ae45559048fc040dcaa022d495f0f01bc}} 
+virtual void {\bfseries duration\+Model\+Name} (std\+::string name)
+\item 
+\mbox{\Hypertarget{classtops_1_1GHMMExplicitDurationState_ae3bd1e5677c8c2781e2efd9a47dcb98c}\label{classtops_1_1GHMMExplicitDurationState_ae3bd1e5677c8c2781e2efd9a47dcb98c}} 
+virtual std\+::string {\bfseries duration\+Model\+Name} () const
+\item 
+\mbox{\Hypertarget{classtops_1_1GHMMExplicitDurationState_a6c164e19ae59980a7122de0126840f84}\label{classtops_1_1GHMMExplicitDurationState_a6c164e19ae59980a7122de0126840f84}} 
+virtual void {\bfseries fix\+Transition\+Distribution} () const
+\item 
+\mbox{\Hypertarget{classtops_1_1GHMMExplicitDurationState_ad0999ee0586318ae9076875421744acc}\label{classtops_1_1GHMMExplicitDurationState_ad0999ee0586318ae9076875421744acc}} 
+virtual \hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} {\bfseries parameters} () const
+\end{DoxyCompactItemize}
+\subsection*{Additional Inherited Members}
+
+
+\subsection{Detailed Description}
+G\+H\+MM Explicit duration state. 
+
+Definition at line 156 of file G\+H\+M\+M\+States.\+hpp.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/G\+H\+M\+M\+States.\+hpp\item 
+src/G\+H\+M\+M\+States.\+cpp\end{DoxyCompactItemize}

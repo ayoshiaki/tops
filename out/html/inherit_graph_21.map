@@ -1,0 +1,5 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="node1" href="$classtops_1_1GHMMState.html" title="Represents a GHMM State. " alt="" coords="5,42,133,69"/>
+<area shape="rect" id="node2" href="$classtops_1_1GHMMExplicitDurationState.html" title="GHMM Explicit duration state. " alt="" coords="181,5,371,47"/>
+<area shape="rect" id="node3" href="$classtops_1_1GHMMSignalState.html" title="GHMM signal states. " alt="" coords="194,71,358,98"/>
+</map>

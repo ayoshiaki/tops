@@ -9,6 +9,11 @@ find_package(Boost 1.50 COMPONENTS date_time REQUIRED)
 find_package(Boost 1.50 COMPONENTS system REQUIRED)
 find_package(Boost 1.50 COMPONENTS filesystem REQUIRED)
 
+# LIBTORCH package
+set(CMAKE_PREFIX_PATH "/home/waldir/libtorch")
+find_package(Torch REQUIRED)
+include_directories(${TORCH_INCLUDE_DIRS})
+
 # Set Linker flags
 SET(CMAKE_FIND_LIBRARY_SUFFIXES .a ${CMAKE_FIND_LIBRARY_SUFFIXES})
 IF(LINUX)
@@ -27,6 +32,9 @@ if(UNIX)
   find_library(BOOST_DATE_TIME_LIBRARY boost_date_time-mt PATHS ${Boost_LIBRARY_DIRS} )
   find_library(BOOST_PROGRAM_OPTIONS_LIBRARY boost_program_options-mt PATHS ${Boost_LIBRARY_DIRS} )
 endif(UNIX)
+
+# DEBUG
+set(CMAKE_BUILD_TYPE RelWithDebInfo)
 
 add_subdirectory(src)
 add_subdirectory(app)

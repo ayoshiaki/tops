@@ -1,0 +1,77 @@
+\hypertarget{classtops_1_1SequenceEntry}{}\section{tops\+:\+:Sequence\+Entry Class Reference}
+\label{classtops_1_1SequenceEntry}\index{tops\+::\+Sequence\+Entry@{tops\+::\+Sequence\+Entry}}
+
+
+Represent a sequence entry.  
+
+
+
+
+{\ttfamily \#include $<$Sequence\+Entry.\+hpp$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classtops_1_1SequenceEntry_a5ed47efa6adc4070477e6e9a3a0a2cd1}\label{classtops_1_1SequenceEntry_a5ed47efa6adc4070477e6e9a3a0a2cd1}} 
+{\bfseries Sequence\+Entry} (Alphabet\+Ptr alphabet)
+\item 
+\mbox{\Hypertarget{classtops_1_1SequenceEntry_a801b50e40bf8685ff792e06fb4971d45}\label{classtops_1_1SequenceEntry_a801b50e40bf8685ff792e06fb4971d45}} 
+Alphabet\+Ptr {\bfseries get\+Alphabet} ()
+\item 
+\mbox{\Hypertarget{classtops_1_1SequenceEntry_a16a09a7ef5c595baae16404d53417f2f}\label{classtops_1_1SequenceEntry_a16a09a7ef5c595baae16404d53417f2f}} 
+void {\bfseries add\+Invalid\+Position} (int i)
+\item 
+\mbox{\Hypertarget{classtops_1_1SequenceEntry_a8a7510d4315be438a33222aa04517c2e}\label{classtops_1_1SequenceEntry_a8a7510d4315be438a33222aa04517c2e}} 
+void {\bfseries set\+Invalid\+Positions} (std\+::vector$<$ int $>$ v)
+\item 
+\mbox{\Hypertarget{classtops_1_1SequenceEntry_a403074de92b4e9a412927c3b1fdc11d8}\label{classtops_1_1SequenceEntry_a403074de92b4e9a412927c3b1fdc11d8}} 
+std\+::vector$<$ int $>$ \& {\bfseries invalid\+Positions} ()
+\item 
+\mbox{\Hypertarget{classtops_1_1SequenceEntry_a1f825e17cd70ba06162470167994e359}\label{classtops_1_1SequenceEntry_a1f825e17cd70ba06162470167994e359}} 
+void {\bfseries set\+Separator} (std\+::string sep)
+\item 
+\mbox{\Hypertarget{classtops_1_1SequenceEntry_a9385b4e8c0f538c845de2c9437e84d94}\label{classtops_1_1SequenceEntry_a9385b4e8c0f538c845de2c9437e84d94}} 
+std\+::string {\bfseries get\+Separator} ()
+\item 
+\mbox{\Hypertarget{classtops_1_1SequenceEntry_ace5e4a7debdaaaa9e310ee4089b18eb8}\label{classtops_1_1SequenceEntry_ace5e4a7debdaaaa9e310ee4089b18eb8}} 
+Sequence \& {\bfseries get\+Sequence} ()
+\item 
+\mbox{\Hypertarget{classtops_1_1SequenceEntry_ad6d909a0d36aa86a4e4dd212baee9e05}\label{classtops_1_1SequenceEntry_ad6d909a0d36aa86a4e4dd212baee9e05}} 
+void {\bfseries set\+Sequence} (Sequence s)
+\item 
+\mbox{\Hypertarget{classtops_1_1SequenceEntry_a82b88e7245367e742b1c6534b18c874f}\label{classtops_1_1SequenceEntry_a82b88e7245367e742b1c6534b18c874f}} 
+std\+::string {\bfseries get\+Name} ()
+\item 
+\mbox{\Hypertarget{classtops_1_1SequenceEntry_a7592040add18af5c75e05840426f8ccd}\label{classtops_1_1SequenceEntry_a7592040add18af5c75e05840426f8ccd}} 
+void {\bfseries set\+Name} (std\+::string name)
+\item 
+\mbox{\Hypertarget{classtops_1_1SequenceEntry_ad3b4a503cb643fb0d6d1a579d7a2bcda}\label{classtops_1_1SequenceEntry_ad3b4a503cb643fb0d6d1a579d7a2bcda}} 
+void {\bfseries set\+Description} (std\+::string description)
+\item 
+\mbox{\Hypertarget{classtops_1_1SequenceEntry_ab681ffbe26d9effe0368b517f794d4d6}\label{classtops_1_1SequenceEntry_ab681ffbe26d9effe0368b517f794d4d6}} 
+std\+::string {\bfseries get\+Description} ()
+\item 
+\mbox{\Hypertarget{classtops_1_1SequenceEntry_af04a5ec6737223cc67613096755ef671}\label{classtops_1_1SequenceEntry_af04a5ec6737223cc67613096755ef671}} 
+void {\bfseries set\+Sequence\+Format} (Sequence\+Format\+Ptr format)
+\end{DoxyCompactItemize}
+\subsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classtops_1_1SequenceEntry_a5e4a9b581eb798b02fdb5fe49808b25c}\label{classtops_1_1SequenceEntry_a5e4a9b581eb798b02fdb5fe49808b25c}} 
+D\+L\+L\+E\+X\+P\+O\+RT friend std\+::ostream \& \hyperlink{classtops_1_1SequenceEntry_a5e4a9b581eb798b02fdb5fe49808b25c}{operator$<$$<$} (std\+::ostream \&stream, \hyperlink{classtops_1_1SequenceEntry}{Sequence\+Entry} \&out)
+\begin{DoxyCompactList}\small\item\em Save the sequence. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1SequenceEntry_ac5abee2d78fdb647906d44854b904182}\label{classtops_1_1SequenceEntry_ac5abee2d78fdb647906d44854b904182}} 
+D\+L\+L\+E\+X\+P\+O\+RT friend std\+::istream \& \hyperlink{classtops_1_1SequenceEntry_ac5abee2d78fdb647906d44854b904182}{operator$>$$>$} (std\+::istream \&stream, \hyperlink{classtops_1_1SequenceEntry}{Sequence\+Entry} \&in)
+\begin{DoxyCompactList}\small\item\em Load the sequence. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Represent a sequence entry. 
+
+Definition at line 41 of file Sequence\+Entry.\+hpp.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/Sequence\+Entry.\+hpp\end{DoxyCompactItemize}

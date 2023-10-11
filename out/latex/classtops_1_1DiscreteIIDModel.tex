@@ -1,0 +1,143 @@
+\hypertarget{classtops_1_1DiscreteIIDModel}{}\section{tops\+:\+:Discrete\+I\+I\+D\+Model Class Reference}
+\label{classtops_1_1DiscreteIIDModel}\index{tops\+::\+Discrete\+I\+I\+D\+Model@{tops\+::\+Discrete\+I\+I\+D\+Model}}
+
+
+This represent probability distributions over a finite set of symbols.  
+
+
+
+
+{\ttfamily \#include $<$Discrete\+I\+I\+D\+Model.\+hpp$>$}
+
+
+
+Inheritance diagram for tops\+:\+:Discrete\+I\+I\+D\+Model\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=221pt]{classtops_1_1DiscreteIIDModel__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for tops\+:\+:Discrete\+I\+I\+D\+Model\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=201pt]{classtops_1_1DiscreteIIDModel__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classtops_1_1DiscreteIIDModel_a229cd565d9c721d9524f3aff2a5a4532}{Discrete\+I\+I\+D\+Model} (const Double\+Vector \&probabilities)
+\begin{DoxyCompactList}\small\item\em Constructor. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1DiscreteIIDModel_a76f0b01fc969d306ea3a4165023e2941}\label{classtops_1_1DiscreteIIDModel_a76f0b01fc969d306ea3a4165023e2941}} 
+{\bfseries Discrete\+I\+I\+D\+Model} (const Matrix \&probabilities)
+\item 
+\mbox{\Hypertarget{classtops_1_1DiscreteIIDModel_a71d8b5b349b073b831fb8a02a6a963b9}\label{classtops_1_1DiscreteIIDModel_a71d8b5b349b073b831fb8a02a6a963b9}} 
+virtual double \hyperlink{classtops_1_1DiscreteIIDModel_a71d8b5b349b073b831fb8a02a6a963b9}{choose} () const
+\begin{DoxyCompactList}\small\item\em Choose. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1DiscreteIIDModel_a944742bf86b64299af198f54c3f5affb}\label{classtops_1_1DiscreteIIDModel_a944742bf86b64299af198f54c3f5affb}} 
+virtual void {\bfseries choose\+Pair} (int $\ast$a, int $\ast$b) const
+\item 
+\mbox{\Hypertarget{classtops_1_1DiscreteIIDModel_a1d932c0abddc9a93430fee7a0e3bd990}\label{classtops_1_1DiscreteIIDModel_a1d932c0abddc9a93430fee7a0e3bd990}} 
+virtual double \hyperlink{classtops_1_1DiscreteIIDModel_a1d932c0abddc9a93430fee7a0e3bd990}{log\+\_\+probability\+\_\+of} (int s) const
+\begin{DoxyCompactList}\small\item\em Returns the log\+\_\+probability\+\_\+of the number s. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1DiscreteIIDModel_a4a4dbdd358d8823892da0a8039c5489a}\label{classtops_1_1DiscreteIIDModel_a4a4dbdd358d8823892da0a8039c5489a}} 
+virtual double {\bfseries log\+\_\+probability\+\_\+of\+\_\+pair} (int s1, int s2) const
+\item 
+\mbox{\Hypertarget{classtops_1_1DiscreteIIDModel_a6792ac1608ed7841b46bf8a4a034e8fe}\label{classtops_1_1DiscreteIIDModel_a6792ac1608ed7841b46bf8a4a034e8fe}} 
+void {\bfseries str\+Matrix} () const
+\item 
+\mbox{\Hypertarget{classtops_1_1DiscreteIIDModel_ab1d33f6f6da4a3c655d7356887635d26}\label{classtops_1_1DiscreteIIDModel_ab1d33f6f6da4a3c655d7356887635d26}} 
+virtual double \hyperlink{classtops_1_1DiscreteIIDModel_ab1d33f6f6da4a3c655d7356887635d26}{log\+\_\+probability\+\_\+of} (int s, double new\+\_\+value)
+\begin{DoxyCompactList}\small\item\em Set the probability value of the number s. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1DiscreteIIDModel_a4e556ccbe56950a4d7dd3fb8aaaff19b}\label{classtops_1_1DiscreteIIDModel_a4e556ccbe56950a4d7dd3fb8aaaff19b}} 
+virtual double \hyperlink{classtops_1_1DiscreteIIDModel_a4e556ccbe56950a4d7dd3fb8aaaff19b}{evaluate\+Position} (const Sequence \&s, unsigned int i) const
+\begin{DoxyCompactList}\small\item\em Evaluate the position i of the sequence s. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1DiscreteIIDModel_abdf5a2ac3291dd78e81bd44d1366ee41}\label{classtops_1_1DiscreteIIDModel_abdf5a2ac3291dd78e81bd44d1366ee41}} 
+virtual double {\bfseries log\+\_\+probability\+\_\+of\+\_\+pair} (int s1, int s2, double new\+\_\+value)
+\item 
+\mbox{\Hypertarget{classtops_1_1DiscreteIIDModel_a2dbe94da17ac80a986a356de7145872b}\label{classtops_1_1DiscreteIIDModel_a2dbe94da17ac80a986a356de7145872b}} 
+virtual double \hyperlink{classtops_1_1DiscreteIIDModel_a2dbe94da17ac80a986a356de7145872b}{choose\+Position} (const Sequence \&s, int i) const
+\begin{DoxyCompactList}\small\item\em Choose the position i of the sequence s given the subsequence before the position i. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1DiscreteIIDModel_a8ae9284850a6277e1eb893dd3fd03498}\label{classtops_1_1DiscreteIIDModel_a8ae9284850a6277e1eb893dd3fd03498}} 
+virtual std\+::string \hyperlink{classtops_1_1DiscreteIIDModel_a8ae9284850a6277e1eb893dd3fd03498}{model\+\_\+name} () const
+\begin{DoxyCompactList}\small\item\em returns the model name \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1DiscreteIIDModel_a62218b116d392f5d64a373d94fb79bbc}\label{classtops_1_1DiscreteIIDModel_a62218b116d392f5d64a373d94fb79bbc}} 
+virtual Probabilistic\+Model\+Creator\+Ptr {\bfseries get\+Factory} () const
+\item 
+\mbox{\Hypertarget{classtops_1_1DiscreteIIDModel_aa486a4a7ba0b77de10160eddce2c8ef5}\label{classtops_1_1DiscreteIIDModel_aa486a4a7ba0b77de10160eddce2c8ef5}} 
+virtual int \hyperlink{classtops_1_1DiscreteIIDModel_aa486a4a7ba0b77de10160eddce2c8ef5}{size} () const
+\begin{DoxyCompactList}\small\item\em Returns the number of parameters of the model. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1DiscreteIIDModel_a789bb1abb116d6d2129b7d2316a9078e}\label{classtops_1_1DiscreteIIDModel_a789bb1abb116d6d2129b7d2316a9078e}} 
+virtual std\+::string \hyperlink{classtops_1_1DiscreteIIDModel_a789bb1abb116d6d2129b7d2316a9078e}{str} () const
+\begin{DoxyCompactList}\small\item\em returns the string representation of the model \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1DiscreteIIDModel_ae13af8f2d01b6c80c2966dec700ebb36}\label{classtops_1_1DiscreteIIDModel_ae13af8f2d01b6c80c2966dec700ebb36}} 
+virtual void {\bfseries initialize\+From\+Map} (const std\+::map$<$ std\+::string, double $>$ \&probabilities, Alphabet\+Ptr \hyperlink{classtops_1_1ProbabilisticModel_acacbfeb9cce968e034b5c18c72f7e217}{alphabet})
+\item 
+\mbox{\Hypertarget{classtops_1_1DiscreteIIDModel_a7304a326d3a637434709648a29226c0e}\label{classtops_1_1DiscreteIIDModel_a7304a326d3a637434709648a29226c0e}} 
+virtual void {\bfseries initialize} (const \hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} \&p)
+\item 
+\mbox{\Hypertarget{classtops_1_1DiscreteIIDModel_aa144ea7f69b42517343170dd44cf50e8}\label{classtops_1_1DiscreteIIDModel_aa144ea7f69b42517343170dd44cf50e8}} 
+virtual \hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} {\bfseries parameters} () const
+\item 
+\mbox{\Hypertarget{classtops_1_1DiscreteIIDModel_a607a50d8fca66f3f71970830cc08c728}\label{classtops_1_1DiscreteIIDModel_a607a50d8fca66f3f71970830cc08c728}} 
+void {\bfseries set\+Probabilities} (const Double\+Vector \&probabilities)
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+This represent probability distributions over a finite set of symbols. 
+
+Definition at line 42 of file Discrete\+I\+I\+D\+Model.\+hpp.
+
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classtops_1_1DiscreteIIDModel_a229cd565d9c721d9524f3aff2a5a4532}\label{classtops_1_1DiscreteIIDModel_a229cd565d9c721d9524f3aff2a5a4532}} 
+\index{tops\+::\+Discrete\+I\+I\+D\+Model@{tops\+::\+Discrete\+I\+I\+D\+Model}!Discrete\+I\+I\+D\+Model@{Discrete\+I\+I\+D\+Model}}
+\index{Discrete\+I\+I\+D\+Model@{Discrete\+I\+I\+D\+Model}!tops\+::\+Discrete\+I\+I\+D\+Model@{tops\+::\+Discrete\+I\+I\+D\+Model}}
+\subsubsection{\texorpdfstring{Discrete\+I\+I\+D\+Model()}{DiscreteIIDModel()}}
+{\footnotesize\ttfamily tops\+::\+Discrete\+I\+I\+D\+Model\+::\+Discrete\+I\+I\+D\+Model (\begin{DoxyParamCaption}\item[{const Double\+Vector \&}]{probabilities }\end{DoxyParamCaption})}
+
+
+
+Constructor. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em probabilities} & is the probabilities value \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 36 of file Discrete\+I\+I\+D\+Model.\+cpp.
+
+
+\begin{DoxyCode}
+37   \{
+38     \_size = probabilities.size() - 1;
+39     \_log\_probabilities.resize(\_size+1);
+40     \textcolor{keywordtype}{double}  sum = 0;
+41     \textcolor{keywordflow}{for}(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} i = 0; i < probabilities.size(); i++)
+42       sum += probabilities[i];
+43     \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} i = 0; (i <= \_size); i++)
+44       \textcolor{keywordflow}{if}(i >= (\textcolor{keywordtype}{int})probabilities.size())
+45         \_log\_probabilities[i] = -HUGE;
+46       \textcolor{keywordflow}{else} \textcolor{keywordflow}{if}(close(probabilities[i], 0.0, 1e-10))
+47         \_log\_probabilities[i] = -HUGE;
+48       \textcolor{keywordflow}{else}
+49         \_log\_probabilities[i] = log(probabilities[i]/sum);
+50      \_geometric\_tail = \textcolor{keyword}{false};
+51   \}
+\end{DoxyCode}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/Discrete\+I\+I\+D\+Model.\+hpp\item 
+src/Discrete\+I\+I\+D\+Model.\+cpp\end{DoxyCompactItemize}

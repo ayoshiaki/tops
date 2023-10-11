@@ -1,0 +1,87 @@
+\hypertarget{classtops_1_1ContextTree}{}\section{tops\+:\+:Context\+Tree Class Reference}
+\label{classtops_1_1ContextTree}\index{tops\+::\+Context\+Tree@{tops\+::\+Context\+Tree}}
+
+
+This class represents a context tree.  
+
+
+
+
+{\ttfamily \#include $<$Context\+Tree.\+hpp$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classtops_1_1ContextTree_a0743623e1668546d767b2c9d0cc00514}\label{classtops_1_1ContextTree_a0743623e1668546d767b2c9d0cc00514}} 
+{\bfseries Context\+Tree} (Alphabet\+Ptr alphabet)
+\item 
+\mbox{\Hypertarget{classtops_1_1ContextTree_a0e2907f85424509d422f130e93e68d7d}\label{classtops_1_1ContextTree_a0e2907f85424509d422f130e93e68d7d}} 
+Context\+Tree\+Node\+Vector \& {\bfseries all\+\_\+context} ()
+\item 
+\mbox{\Hypertarget{classtops_1_1ContextTree_a2809cc06ee322c056cdded01f2667075}\label{classtops_1_1ContextTree_a2809cc06ee322c056cdded01f2667075}} 
+Context\+Tree\+Node\+Ptr \hyperlink{classtops_1_1ContextTree_a2809cc06ee322c056cdded01f2667075}{get\+Root} () const
+\begin{DoxyCompactList}\small\item\em return the root of the tree \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1ContextTree_a7d255bbb69a082f3a61b012650099532}\label{classtops_1_1ContextTree_a7d255bbb69a082f3a61b012650099532}} 
+Context\+Tree\+Node\+Ptr \hyperlink{classtops_1_1ContextTree_a7d255bbb69a082f3a61b012650099532}{create\+Context} ()
+\begin{DoxyCompactList}\small\item\em Create new context. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1ContextTree_a0b2d594ee72cf7e419d013c4dfee7c3d}\label{classtops_1_1ContextTree_a0b2d594ee72cf7e419d013c4dfee7c3d}} 
+Context\+Tree\+Node\+Ptr {\bfseries get\+Context} (int id)
+\item 
+\mbox{\Hypertarget{classtops_1_1ContextTree_ad17e69f26c0a150f712095ece88ea297}\label{classtops_1_1ContextTree_ad17e69f26c0a150f712095ece88ea297}} 
+Context\+Tree\+Node\+Ptr \hyperlink{classtops_1_1ContextTree_ad17e69f26c0a150f712095ece88ea297}{get\+Context} (const Sequence \&s, int i)
+\begin{DoxyCompactList}\small\item\em get the context for the sequence s\mbox{[}i-\/1\mbox{]}, s\mbox{[}i-\/2\mbox{]}, s\mbox{[}i-\/3\mbox{]}... \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1ContextTree_a52a84ec42ab07a959dc5812a51bbe049}\label{classtops_1_1ContextTree_a52a84ec42ab07a959dc5812a51bbe049}} 
+std\+::set$<$ int $>$ {\bfseries get\+Level\+One\+Nodes} ()
+\item 
+\mbox{\Hypertarget{classtops_1_1ContextTree_a89f848bdf5f306c5208f5404fa3c33c3}\label{classtops_1_1ContextTree_a89f848bdf5f306c5208f5404fa3c33c3}} 
+void {\bfseries remove\+Context\+Not\+Used} ()
+\item 
+\mbox{\Hypertarget{classtops_1_1ContextTree_a095e0afc432dfe200e79fe5eaa7262fa}\label{classtops_1_1ContextTree_a095e0afc432dfe200e79fe5eaa7262fa}} 
+void {\bfseries normalize} ()
+\item 
+\mbox{\Hypertarget{classtops_1_1ContextTree_aaf2c8624acd71a9c77bd2873fc7a6160}\label{classtops_1_1ContextTree_aaf2c8624acd71a9c77bd2873fc7a6160}} 
+void \hyperlink{classtops_1_1ContextTree_aaf2c8624acd71a9c77bd2873fc7a6160}{normalize} (Probabilistic\+Model\+Ptr old, double pseudocount, int i)
+\begin{DoxyCompactList}\small\item\em normalize using a tree to get the a priori probabilities \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1ContextTree_adcc817708230cc1d86b5f8447a57bee9}\label{classtops_1_1ContextTree_adcc817708230cc1d86b5f8447a57bee9}} 
+void \hyperlink{classtops_1_1ContextTree_adcc817708230cc1d86b5f8447a57bee9}{normalize} (Probabilistic\+Model\+Ptr old, double pseudocount)
+\begin{DoxyCompactList}\small\item\em normalize using a tree to get the a priori probabilities \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1ContextTree_a56a7adedc56ab527743ebdef0c479fa7}\label{classtops_1_1ContextTree_a56a7adedc56ab527743ebdef0c479fa7}} 
+std\+::string {\bfseries str} () const
+\item 
+\mbox{\Hypertarget{classtops_1_1ContextTree_a27f33d2755c4a88b926b4f62b4e771be}\label{classtops_1_1ContextTree_a27f33d2755c4a88b926b4f62b4e771be}} 
+void {\bfseries initialize\+Counter} (const Sequence\+Entry\+List \&sequences, int order, const std\+::map$<$ std\+::string, double $>$ \&weights)
+\item 
+\mbox{\Hypertarget{classtops_1_1ContextTree_a9cdc3597339e8d2b32a0d119cf6e3a03}\label{classtops_1_1ContextTree_a9cdc3597339e8d2b32a0d119cf6e3a03}} 
+void {\bfseries initialize\+Counter} (const Sequence\+Entry\+List \&sequences, int order, double pseudocounts, const std\+::map$<$ std\+::string, double $>$ \&weights)
+\item 
+\mbox{\Hypertarget{classtops_1_1ContextTree_a95a7c58675d0ce1319d9d80332f39107}\label{classtops_1_1ContextTree_a95a7c58675d0ce1319d9d80332f39107}} 
+void \hyperlink{classtops_1_1ContextTree_a95a7c58675d0ce1319d9d80332f39107}{prune\+Tree} (double delta)
+\begin{DoxyCompactList}\small\item\em Prune similar subtrees. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1ContextTree_a85230f3ea9b9dcde50ab7d43eb211734}\label{classtops_1_1ContextTree_a85230f3ea9b9dcde50ab7d43eb211734}} 
+void \hyperlink{classtops_1_1ContextTree_a85230f3ea9b9dcde50ab7d43eb211734}{prune\+Tree\+Small\+Sample\+Size} (int small\+\_\+)
+\begin{DoxyCompactList}\small\item\em Prune subtrees with small counters. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1ContextTree_a771b4b118995e586d1418de95a546690}\label{classtops_1_1ContextTree_a771b4b118995e586d1418de95a546690}} 
+void \hyperlink{classtops_1_1ContextTree_a771b4b118995e586d1418de95a546690}{initialize\+Context\+Tree\+Rissanen} (const Sequence\+Entry\+List \&sequences)
+\begin{DoxyCompactList}\small\item\em Initialize context tree using the Rissanen algorithm. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1ContextTree_a7fbe880cbe5995544b1bbb6dd16969fd}\label{classtops_1_1ContextTree_a7fbe880cbe5995544b1bbb6dd16969fd}} 
+void {\bfseries initialize\+Context\+Tree\+Rissanen} (const Sequence\+Entry\+List \&sequences, int order)
+\item 
+\mbox{\Hypertarget{classtops_1_1ContextTree_a51fed6554965f68d247d4378e6102825}\label{classtops_1_1ContextTree_a51fed6554965f68d247d4378e6102825}} 
+Double\+Map\+Parameter\+Value\+Ptr {\bfseries get\+Parameter\+Value} () const
+\item 
+\mbox{\Hypertarget{classtops_1_1ContextTree_a444d85429a9dab2c721d100dd48ca6da}\label{classtops_1_1ContextTree_a444d85429a9dab2c721d100dd48ca6da}} 
+int {\bfseries get\+Number\+Of\+Nodes} () const
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+This class represents a context tree. 
+
+Definition at line 123 of file Context\+Tree.\+hpp.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/Context\+Tree.\+hpp\item 
+src/Context\+Tree.\+cpp\end{DoxyCompactItemize}

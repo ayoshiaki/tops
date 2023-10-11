@@ -1,0 +1,45 @@
+\hypertarget{classtops_1_1ProbabilisticModelParameters}{}\section{tops\+:\+:Probabilistic\+Model\+Parameters Class Reference}
+\label{classtops_1_1ProbabilisticModelParameters}\index{tops\+::\+Probabilistic\+Model\+Parameters@{tops\+::\+Probabilistic\+Model\+Parameters}}
+
+
+This class registers a set of parameters.  
+
+
+
+
+{\ttfamily \#include $<$Probabilistic\+Model\+Parameter.\+hpp$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classtops_1_1ProbabilisticModelParameters_a866f6fb9047828914b297e71fadfe798}\label{classtops_1_1ProbabilisticModelParameters_a866f6fb9047828914b297e71fadfe798}} 
+void {\bfseries add} (const char $\ast$name, Probabilistic\+Model\+Parameter\+Value\+Ptr value)
+\item 
+\mbox{\Hypertarget{classtops_1_1ProbabilisticModelParameters_a6da7fcd72e39b13042a581cc40871139}\label{classtops_1_1ProbabilisticModelParameters_a6da7fcd72e39b13042a581cc40871139}} 
+void \hyperlink{classtops_1_1ProbabilisticModelParameters_a6da7fcd72e39b13042a581cc40871139}{add} (std\+::string name, Probabilistic\+Model\+Parameter\+Value\+Ptr value)
+\begin{DoxyCompactList}\small\item\em Adds a new model parameter. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1ProbabilisticModelParameters_ac86325e25ce375f94a31d6209075d298}\label{classtops_1_1ProbabilisticModelParameters_ac86325e25ce375f94a31d6209075d298}} 
+void \hyperlink{classtops_1_1ProbabilisticModelParameters_ac86325e25ce375f94a31d6209075d298}{set} (std\+::string name, Probabilistic\+Model\+Parameter\+Value\+Ptr value)
+\begin{DoxyCompactList}\small\item\em set a model parameter \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1ProbabilisticModelParameters_ae0774fb06eb00f25d2fa335d6ca2fb9b}\label{classtops_1_1ProbabilisticModelParameters_ae0774fb06eb00f25d2fa335d6ca2fb9b}} 
+Probabilistic\+Model\+Parameter\+Value\+Ptr \hyperlink{classtops_1_1ProbabilisticModelParameters_ae0774fb06eb00f25d2fa335d6ca2fb9b}{get\+Mandatory\+Parameter\+Value} (const std\+::string \&name) const
+\begin{DoxyCompactList}\small\item\em Get a mandatory parameter. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1ProbabilisticModelParameters_a0ceb1eef0aa704232687af637973534f}\label{classtops_1_1ProbabilisticModelParameters_a0ceb1eef0aa704232687af637973534f}} 
+Probabilistic\+Model\+Parameter\+Value\+Ptr \hyperlink{classtops_1_1ProbabilisticModelParameters_a0ceb1eef0aa704232687af637973534f}{get\+Optional\+Parameter\+Value} (const std\+::string \&name) const
+\begin{DoxyCompactList}\small\item\em Get a optional parameter. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1ProbabilisticModelParameters_a91b99897da0a4b66299ba882fc9c8e93}\label{classtops_1_1ProbabilisticModelParameters_a91b99897da0a4b66299ba882fc9c8e93}} 
+std\+::map$<$ std\+::string, Probabilistic\+Model\+Parameter\+Value\+Ptr $>$ {\bfseries parameters} () const
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+This class registers a set of parameters. 
+
+Definition at line 51 of file Probabilistic\+Model\+Parameter.\+hpp.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/Probabilistic\+Model\+Parameter.\+hpp\item 
+src/Probabilistic\+Model\+Parameter.\+cpp\end{DoxyCompactItemize}

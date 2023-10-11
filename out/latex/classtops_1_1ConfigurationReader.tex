@@ -1,0 +1,72 @@
+\hypertarget{classtops_1_1ConfigurationReader}{}\section{tops\+:\+:Configuration\+Reader Class Reference}
+\label{classtops_1_1ConfigurationReader}\index{tops\+::\+Configuration\+Reader@{tops\+::\+Configuration\+Reader}}
+
+
+This class reads a configuration file.  
+
+
+
+
+{\ttfamily \#include $<$Configuration\+Reader.\+hpp$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classtops_1_1ConfigurationReader_a148538236b5a821dfcc44feef99a5dc1}\label{classtops_1_1ConfigurationReader_a148538236b5a821dfcc44feef99a5dc1}} 
+bool \hyperlink{classtops_1_1ConfigurationReader_a148538236b5a821dfcc44feef99a5dc1}{load} (std\+::string \&data)
+\begin{DoxyCompactList}\small\item\em Loads the configuration from the data string. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1ConfigurationReader_a830b793b186f7e9fe17bc00eff16e7f1}\label{classtops_1_1ConfigurationReader_a830b793b186f7e9fe17bc00eff16e7f1}} 
+bool \hyperlink{classtops_1_1ConfigurationReader_a830b793b186f7e9fe17bc00eff16e7f1}{load\+From\+File} (const std\+::string \&filename)
+\begin{DoxyCompactList}\small\item\em Loads the configuration from a file. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1ConfigurationReader_a83e683d2e79cf6de5c4e7c617302c786}\label{classtops_1_1ConfigurationReader_a83e683d2e79cf6de5c4e7c617302c786}} 
+void {\bfseries set\+Current\+Parameter\+Value} (Probabilistic\+Model\+Parameter\+Value\+Ptr value)
+\item 
+\mbox{\Hypertarget{classtops_1_1ConfigurationReader_ab12d621df5a3caf48f5e1981a2d2d23c}\label{classtops_1_1ConfigurationReader_ab12d621df5a3caf48f5e1981a2d2d23c}} 
+Probabilistic\+Model\+Parameter\+Value\+Ptr {\bfseries get\+Current\+Parameter\+Value} ()
+\item 
+\mbox{\Hypertarget{classtops_1_1ConfigurationReader_af49b5bdb58a47c5bb1a398ad89168a2e}\label{classtops_1_1ConfigurationReader_af49b5bdb58a47c5bb1a398ad89168a2e}} 
+void {\bfseries set\+Current\+Parameter\+Name} (const std\+::string \&name)
+\item 
+\mbox{\Hypertarget{classtops_1_1ConfigurationReader_a8624fe6b02112a60e5f3c7542efc91aa}\label{classtops_1_1ConfigurationReader_a8624fe6b02112a60e5f3c7542efc91aa}} 
+void {\bfseries set\+Aux\+String} (const std\+::string \&aux)
+\item 
+\mbox{\Hypertarget{classtops_1_1ConfigurationReader_a36e5cc1447a21428ab2628902d22c42b}\label{classtops_1_1ConfigurationReader_a36e5cc1447a21428ab2628902d22c42b}} 
+std\+::string {\bfseries get\+Aux\+String} ()
+\item 
+\mbox{\Hypertarget{classtops_1_1ConfigurationReader_afa314d7735d36bea1a12ae6bb26ec1d8}\label{classtops_1_1ConfigurationReader_afa314d7735d36bea1a12ae6bb26ec1d8}} 
+std\+::string {\bfseries get\+Current\+Parameter\+Name} ()
+\item 
+\mbox{\Hypertarget{classtops_1_1ConfigurationReader_ac8e03c9cdc40def083259aa12f34cdc0}\label{classtops_1_1ConfigurationReader_ac8e03c9cdc40def083259aa12f34cdc0}} 
+void {\bfseries add\+\_\+parameter} ()
+\item 
+\mbox{\Hypertarget{classtops_1_1ConfigurationReader_a0aa802b5da8aeb58aba4efc545605f96}\label{classtops_1_1ConfigurationReader_a0aa802b5da8aeb58aba4efc545605f96}} 
+Probabilistic\+Model\+Parameters\+Ptr {\bfseries parameters} ()
+\item 
+\mbox{\Hypertarget{classtops_1_1ConfigurationReader_a62a3e63f200aaab2bc40632e9f72901a}\label{classtops_1_1ConfigurationReader_a62a3e63f200aaab2bc40632e9f72901a}} 
+std\+::string {\bfseries get\+Aux\+String2} ()
+\item 
+\mbox{\Hypertarget{classtops_1_1ConfigurationReader_ab99963ac7f054d76ebbc460414d42b2a}\label{classtops_1_1ConfigurationReader_ab99963ac7f054d76ebbc460414d42b2a}} 
+std\+::string {\bfseries get\+Aux\+String3} ()
+\item 
+\mbox{\Hypertarget{classtops_1_1ConfigurationReader_a2871b540b10ca59481aba23376cb1956}\label{classtops_1_1ConfigurationReader_a2871b540b10ca59481aba23376cb1956}} 
+void {\bfseries set\+Aux\+String2} (const std\+::string \&aux)
+\item 
+\mbox{\Hypertarget{classtops_1_1ConfigurationReader_aee34b8155b6073c5f5a71ba0566fa9f2}\label{classtops_1_1ConfigurationReader_aee34b8155b6073c5f5a71ba0566fa9f2}} 
+void {\bfseries set\+Aux\+String3} (const std\+::string \&aux)
+\item 
+\mbox{\Hypertarget{classtops_1_1ConfigurationReader_a7388cba24ec0bd639b47cabdbfdca7d8}\label{classtops_1_1ConfigurationReader_a7388cba24ec0bd639b47cabdbfdca7d8}} 
+void {\bfseries reset} ()
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+This class reads a configuration file. 
+
+Definition at line 48 of file Configuration\+Reader.\+hpp.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/Configuration\+Reader.\+hpp\item 
+src/Configuration\+Reader.\+cpp\end{DoxyCompactItemize}

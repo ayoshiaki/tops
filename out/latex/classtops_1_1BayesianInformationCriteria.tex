@@ -1,0 +1,171 @@
+\hypertarget{classtops_1_1BayesianInformationCriteria}{}\section{tops\+:\+:Bayesian\+Information\+Criteria Class Reference}
+\label{classtops_1_1BayesianInformationCriteria}\index{tops\+::\+Bayesian\+Information\+Criteria@{tops\+::\+Bayesian\+Information\+Criteria}}
+
+
+Bayesian Information Criteria.  
+
+
+
+
+{\ttfamily \#include $<$Bayesian\+Information\+Criteria.\+hpp$>$}
+
+
+
+Inheritance diagram for tops\+:\+:Bayesian\+Information\+Criteria\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=211pt]{classtops_1_1BayesianInformationCriteria__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for tops\+:\+:Bayesian\+Information\+Criteria\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=211pt]{classtops_1_1BayesianInformationCriteria__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classtops_1_1BayesianInformationCriteria_ada34ed0f999f017e91a2b5039e75ed42}\label{classtops_1_1BayesianInformationCriteria_ada34ed0f999f017e91a2b5039e75ed42}} 
+{\bfseries Bayesian\+Information\+Criteria} (Probabilistic\+Model\+Creator\+Ptr creator)
+\item 
+virtual Probabilistic\+Model\+Ptr \hyperlink{classtops_1_1BayesianInformationCriteria_a025c7fff02580703f901376eea7db340}{create} (\hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} \&parameters) const
+\begin{DoxyCompactList}\small\item\em Creates a new model using the received parameters. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1BayesianInformationCriteria_ab420897d48ca999b1f8b236cef896b5b}\label{classtops_1_1BayesianInformationCriteria_ab420897d48ca999b1f8b236cef896b5b}} 
+virtual std\+::string \hyperlink{classtops_1_1BayesianInformationCriteria_ab420897d48ca999b1f8b236cef896b5b}{help} () const
+\begin{DoxyCompactList}\small\item\em Returns a help message of this creator. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1BayesianInformationCriteria_a941f1105ec71881d8b30125047374467}\label{classtops_1_1BayesianInformationCriteria_a941f1105ec71881d8b30125047374467}} 
+virtual void \hyperlink{classtops_1_1BayesianInformationCriteria_a941f1105ec71881d8b30125047374467}{set\+Creator} (Probabilistic\+Model\+Creator\+Ptr creator)
+\begin{DoxyCompactList}\small\item\em Set a creator. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Bayesian Information Criteria. 
+
+Definition at line 37 of file Bayesian\+Information\+Criteria.\+hpp.
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classtops_1_1BayesianInformationCriteria_a025c7fff02580703f901376eea7db340}\label{classtops_1_1BayesianInformationCriteria_a025c7fff02580703f901376eea7db340}} 
+\index{tops\+::\+Bayesian\+Information\+Criteria@{tops\+::\+Bayesian\+Information\+Criteria}!create@{create}}
+\index{create@{create}!tops\+::\+Bayesian\+Information\+Criteria@{tops\+::\+Bayesian\+Information\+Criteria}}
+\subsubsection{\texorpdfstring{create()}{create()}}
+{\footnotesize\ttfamily Probabilistic\+Model\+Ptr tops\+::\+Bayesian\+Information\+Criteria\+::create (\begin{DoxyParamCaption}\item[{\hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} \&}]{parameters }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Creates a new model using the received parameters. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em parameters} & of the model\textquotesingle{}s creators \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+An instance of \hyperlink{classtops_1_1ProbabilisticModel}{Probabilistic\+Model} 
+\end{DoxyReturn}
+
+
+Reimplemented from \hyperlink{classtops_1_1ProbabilisticModelCreator_afed6c8ffa45fff446bdaa8b533da8f7c}{tops\+::\+Probabilistic\+Model\+Creator}.
+
+
+
+Definition at line 53 of file Bayesian\+Information\+Criteria.\+cpp.
+
+
+\begin{DoxyCode}
+54   \{
+55     ProbabilisticModelParameterValuePtr beginpar = parameters.getMandatoryParameterValue(\textcolor{stringliteral}{"begin"});
+56     ProbabilisticModelParameterValuePtr endpar = parameters.getMandatoryParameterValue(\textcolor{stringliteral}{"end"});
+57     ProbabilisticModelParameterValuePtr steppar = parameters.getMandatoryParameterValue(\textcolor{stringliteral}{"step"});
+58     ProbabilisticModelParameterValuePtr trainpar = parameters.getMandatoryParameterValue(\textcolor{stringliteral}{"
+      training\_algorithm"});
+59 
+60     \textcolor{keywordflow}{if}((beginpar == NULL) ||
+61        (endpar == NULL) ||
+62        (steppar == NULL))
+63       \{
+64         std::cerr << \hyperlink{classtops_1_1BayesianInformationCriteria_ab420897d48ca999b1f8b236cef896b5b}{help}() << std::endl;
+65         exit(-1);
+66       \}
+67     std::map<std::string, double> beginmap = beginpar->getDoubleMap();
+68     std::map<std::string, double> endmap = endpar->getDoubleMap();
+69     std::map<std::string, double> stepmap = steppar->getDoubleMap();
+70     std::vector <std::string> parnames;
+71     std::map <std::string, double>::const\_iterator it;
+72     \textcolor{keywordflow}{for}(it = beginmap.begin(); it!=beginmap.end(); it++)
+73       parnames.push\_back(it->first);
+74 
+75     \textcolor{comment}{// generates all possible combinations of parameters}
+76     std::vector <std::string>::const\_iterator p;
+77     std::vector <std::vector <double> > combinations;
+78     combinations.resize(1);
+79     \textcolor{keywordflow}{for}(p = parnames.begin(); p != parnames.end(); p++)
+80       \{
+81         std::vector <std::vector <double> > new\_combinations;
+82         \textcolor{keywordflow}{for} (\textcolor{keywordtype}{double} i = beginmap[*p] ; i <= endmap[*p]; i += stepmap[*p])
+83           \{
+84             \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} j = 0; j < (int) combinations.size() ; j++)
+85               \{
+86                 std::vector <double> comb;
+87                 \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} k = 0; k < (int)combinations[j].size(); k++)
+88                   comb.push\_back(combinations[j][k]);
+89                 comb.push\_back(i);
+90                 new\_combinations.push\_back(comb);
+91               \}
+92           \}
+93         combinations = new\_combinations;
+94       \}
+95     \textcolor{keywordtype}{double} bic = -HUGE;
+96     ProbabilisticModelPtr result;
+97     \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} i = 0; i < (int) combinations.size(); i++)
+98       \{
+99         \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} j = 0; j < (int) combinations[i].size(); j++)
+100           \{
+101             DoubleParameterValuePtr value = DoubleParameterValuePtr(\textcolor{keyword}{new} DoubleParameterValue(combinations[i
+      ][j]));
+102 
+103             parameters.set(parnames[j], value);
+104           \}
+105         \textcolor{keywordtype}{double} loglikelihood;
+106         \textcolor{keywordtype}{int} sample\_size;
+107         ProbabilisticModelPtr m = \_creator->create(parameters, loglikelihood, sample\_size);
+108         \textcolor{keywordflow}{if}(m == NULL)
+109             \{
+110                 std::cerr << \textcolor{stringliteral}{"ERROR (BIC): could not estimate the model size using BIC "} << std::endl;
+111                 exit(-1);
+112             \}
+113         \textcolor{keywordtype}{double} model\_bic =  loglikelihood  - 0.5* m->size() * log((\textcolor{keywordtype}{double}) sample\_size);
+114         \textcolor{keywordflow}{if}((bic < model\_bic) || (result == NULL))
+115           \{
+116             bic = model\_bic;
+117             result = m;
+118           \}
+119 
+120         \textcolor{keywordtype}{int} k = 0;
+121         \textcolor{keywordflow}{if}( k < (\textcolor{keywordtype}{int}) combinations[i].size())
+122           \{
+123             std::cerr << combinations[i][k];
+124             \textcolor{keywordflow}{for}(k = 1; k < (int) combinations[i].size(); k++)
+125               std::cerr << \textcolor{stringliteral}{"\(\backslash\)t"} << combinations[i][k];
+126           \}
+127         std::cerr << \textcolor{stringliteral}{"\(\backslash\)t"} << model\_bic  << std::endl;
+128 
+129       \}
+130     std::cout << \textcolor{stringliteral}{"# Model BIC: "} << bic  << std::endl;
+131     \textcolor{keywordflow}{return} result;
+132   \}
+\end{DoxyCode}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/Bayesian\+Information\+Criteria.\+hpp\item 
+src/Bayesian\+Information\+Criteria.\+cpp\end{DoxyCompactItemize}

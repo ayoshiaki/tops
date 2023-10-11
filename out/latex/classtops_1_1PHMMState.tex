@@ -1,0 +1,76 @@
+\hypertarget{classtops_1_1PHMMState}{}\section{tops\+:\+:P\+H\+M\+M\+State Class Reference}
+\label{classtops_1_1PHMMState}\index{tops\+::\+P\+H\+M\+M\+State@{tops\+::\+P\+H\+M\+M\+State}}
+
+
+Inheritance diagram for tops\+:\+:P\+H\+M\+M\+State\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classtops_1_1PHMMState__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for tops\+:\+:P\+H\+M\+M\+State\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=175pt]{classtops_1_1PHMMState__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classtops_1_1PHMMState_a7a5ab6ebeb5802de06f58d74b508770f}\label{classtops_1_1PHMMState_a7a5ab6ebeb5802de06f58d74b508770f}} 
+typedef boost\+::shared\+\_\+ptr$<$ \hyperlink{classtops_1_1PHMMState}{P\+H\+M\+M\+State} $>$ {\bfseries P\+H\+M\+M\+State\+Ptr}
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classtops_1_1PHMMState_aea2ade58a2d7649bebfa04230d0c40df}\label{classtops_1_1PHMMState_aea2ade58a2d7649bebfa04230d0c40df}} 
+{\bfseries P\+H\+M\+M\+State} (int id, Symbol\+Ptr name, Discrete\+I\+I\+D\+Model\+Ptr emission, Discrete\+I\+I\+D\+Model\+Ptr transitions, Int\+Vector i\+Transitions, Int\+Vector o\+Transitions)
+\item 
+\mbox{\Hypertarget{classtops_1_1PHMMState_a83bc27e5d502a0cf0d81b7db8165d39a}\label{classtops_1_1PHMMState_a83bc27e5d502a0cf0d81b7db8165d39a}} 
+virtual void {\bfseries forward\+Sum} (vector$<$ P\+H\+M\+M\+State\+Ptr $>$ \&states, const Sequence \&seq1, const Sequence \&seq2, vector$<$ Matrix $>$ \&a, int i, int j, int gap\+\_\+id, int begin\+\_\+id)
+\item 
+\mbox{\Hypertarget{classtops_1_1PHMMState_a3669ce018f36b9b1eef0353770bac7f5}\label{classtops_1_1PHMMState_a3669ce018f36b9b1eef0353770bac7f5}} 
+virtual void {\bfseries backward\+Sum} (vector$<$ P\+H\+M\+M\+State\+Ptr $>$ \&states, const Sequence \&seq1, const Sequence \&seq2, vector$<$ Matrix $>$ \&a, int i, int j, int gap\+\_\+id, int curr\+State\+Id, double $\ast$accumulator)
+\item 
+\mbox{\Hypertarget{classtops_1_1PHMMState_ad3d366e7a5de1b6b3e93f222e0ea611c}\label{classtops_1_1PHMMState_ad3d366e7a5de1b6b3e93f222e0ea611c}} 
+virtual void {\bfseries post\+Prob\+Sum} (f\+Matrix \&pp\+Match, f\+Matrix \&pp\+Gap1, f\+Matrix \&pp\+Gap2, Matrix \&alpha, Matrix \&beta, double full, int i, int j)
+\item 
+\mbox{\Hypertarget{classtops_1_1PHMMState_abac6fd3d79a32bdfbdba7d4107860764}\label{classtops_1_1PHMMState_abac6fd3d79a32bdfbdba7d4107860764}} 
+virtual bool {\bfseries is\+Silent} ()
+\item 
+\mbox{\Hypertarget{classtops_1_1PHMMState_abd8d1399276aec76728ba46c15ed0ffa}\label{classtops_1_1PHMMState_abd8d1399276aec76728ba46c15ed0ffa}} 
+Int\+Vector \& {\bfseries out\+Transitions} ()
+\item 
+\mbox{\Hypertarget{classtops_1_1PHMMState_a6342b2283ea9df9257eca3f52b9d889e}\label{classtops_1_1PHMMState_a6342b2283ea9df9257eca3f52b9d889e}} 
+void {\bfseries remove\+End\+Id} (int end\+\_\+id)
+\item 
+\mbox{\Hypertarget{classtops_1_1PHMMState_a7b873c1752dccfdca2de28596545d5db}\label{classtops_1_1PHMMState_a7b873c1752dccfdca2de28596545d5db}} 
+void {\bfseries remove\+Begin\+Id} (int begin\+\_\+id)
+\end{DoxyCompactItemize}
+\subsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classtops_1_1PHMMState_a1f03adee3bd0e627010752f8419dd071}\label{classtops_1_1PHMMState_a1f03adee3bd0e627010752f8419dd071}} 
+Int\+Vector {\bfseries \+\_\+outgoing\+Transitions}
+\item 
+\mbox{\Hypertarget{classtops_1_1PHMMState_a63ef55ddeeda44cf108fad3a79f9bf06}\label{classtops_1_1PHMMState_a63ef55ddeeda44cf108fad3a79f9bf06}} 
+Int\+Vector {\bfseries \+\_\+incoming\+Transitions}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+
+
+Definition at line 55 of file Pair\+Hidden\+Markov\+Model.\+hpp.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/Pair\+Hidden\+Markov\+Model.\+hpp\end{DoxyCompactItemize}

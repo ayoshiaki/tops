@@ -1,0 +1,5 @@
+<map id="tops::DegenerateDistribution" name="tops::DegenerateDistribution">
+<area shape="rect" id="node2" href="$classtops_1_1DiscreteIIDModel.html" title="This represent probability distributions over a finite set of symbols. " alt="" coords="21,155,178,181"/>
+<area shape="rect" id="node3" href="$classtops_1_1FactorableModel.html" title="Abstract class defining models in which the likelihood of the sequence is factorable in the sense tha..." alt="" coords="24,80,175,107"/>
+<area shape="rect" id="node4" href="$classtops_1_1ProbabilisticModel.html" title="This is an abstract class representing a generative probabilistic model. " alt="" coords="19,5,180,32"/>
+</map>

@@ -2,7 +2,7 @@
  *       GHMMStates.hpp
  *
  *       Copyright 2011 Andre Yoshiaki Kashiwabara <akashiwabara@usp.br>
- *                      Ígor Bonadio <ibonadio@ime.usp.br>
+ *                      ï¿½gor Bonadio <ibonadio@ime.usp.br>
  *                      Vitor Onuchic <vitoronuchic@gmail.com>
  *                      Alan Mitchell Durham <aland@usp.br>
  *
@@ -33,6 +33,9 @@
 #include <string>
 #include <list>
 #include "ProbabilisticModelParameter.hpp"
+
+#include <limits>
+#define HUGE std::numeric_limits<double>::max()
 
 
 namespace tops {

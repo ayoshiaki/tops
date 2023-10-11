@@ -1,0 +1,57 @@
+\hypertarget{classtops_1_1ProbabilisticModelCreatorClient}{}\section{tops\+:\+:Probabilistic\+Model\+Creator\+Client Class Reference}
+\label{classtops_1_1ProbabilisticModelCreatorClient}\index{tops\+::\+Probabilistic\+Model\+Creator\+Client@{tops\+::\+Probabilistic\+Model\+Creator\+Client}}
+
+
+Creates a new probabilistic model.  
+
+
+
+
+{\ttfamily \#include $<$Probabilistic\+Model\+Creator\+Client.\+hpp$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classtops_1_1ProbabilisticModelCreatorClient_ab72511c606dee9c76172c9de596473dd}\label{classtops_1_1ProbabilisticModelCreatorClient_ab72511c606dee9c76172c9de596473dd}} 
+Probabilistic\+Model\+Ptr {\bfseries create} (\hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} \&parameters)
+\item 
+\mbox{\Hypertarget{classtops_1_1ProbabilisticModelCreatorClient_aa7af63ad3e36d56fc3ca95e7ca897dab}\label{classtops_1_1ProbabilisticModelCreatorClient_aa7af63ad3e36d56fc3ca95e7ca897dab}} 
+Probabilistic\+Model\+Ptr {\bfseries create} (\hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} \&parameters, const std\+::map$<$ std\+::string, Probabilistic\+Model\+Ptr $>$ \&models)
+\item 
+\mbox{\Hypertarget{classtops_1_1ProbabilisticModelCreatorClient_ad0c3a15a2975a130f0a9cb80be8c6c87}\label{classtops_1_1ProbabilisticModelCreatorClient_ad0c3a15a2975a130f0a9cb80be8c6c87}} 
+Probabilistic\+Model\+Ptr {\bfseries create} (const std\+::string \&input\+\_\+file\+\_\+name)
+\item 
+\mbox{\Hypertarget{classtops_1_1ProbabilisticModelCreatorClient_a2908125b1e1dd8c5efd5d1c6c1d506dd}\label{classtops_1_1ProbabilisticModelCreatorClient_a2908125b1e1dd8c5efd5d1c6c1d506dd}} 
+Probabilistic\+Model\+Ptr {\bfseries train} (\hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} \&parameters)
+\item 
+\mbox{\Hypertarget{classtops_1_1ProbabilisticModelCreatorClient_accc336019d2e80d5a4ef6d525e62dd11}\label{classtops_1_1ProbabilisticModelCreatorClient_accc336019d2e80d5a4ef6d525e62dd11}} 
+Probabilistic\+Model\+Ptr {\bfseries train} (const std\+::string \&input\+\_\+file\+\_\+name)
+\item 
+\mbox{\Hypertarget{classtops_1_1ProbabilisticModelCreatorClient_af770af84bd0ef4a3d62bca172b8b529e}\label{classtops_1_1ProbabilisticModelCreatorClient_af770af84bd0ef4a3d62bca172b8b529e}} 
+\hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} \& {\bfseries read\+Configuration\+From\+File} (const std\+::string \&filename)
+\item 
+\mbox{\Hypertarget{classtops_1_1ProbabilisticModelCreatorClient_a0b8139f37c56556da11489e27d8c7c76}\label{classtops_1_1ProbabilisticModelCreatorClient_a0b8139f37c56556da11489e27d8c7c76}} 
+void {\bfseries registry\+\_\+new\+\_\+creator} (std\+::string name, Probabilistic\+Model\+Creator\+Ptr creator)
+\item 
+\mbox{\Hypertarget{classtops_1_1ProbabilisticModelCreatorClient_a0b6681510f4448756fa0950c66c4964f}\label{classtops_1_1ProbabilisticModelCreatorClient_a0b6681510f4448756fa0950c66c4964f}} 
+void {\bfseries registry\+\_\+new\+\_\+training} (std\+::string name, Probabilistic\+Model\+Creator\+Ptr creator)
+\item 
+\mbox{\Hypertarget{classtops_1_1ProbabilisticModelCreatorClient_a071ce848362b2dc58ec07fadfa00518a}\label{classtops_1_1ProbabilisticModelCreatorClient_a071ce848362b2dc58ec07fadfa00518a}} 
+void {\bfseries registry\+\_\+new\+\_\+model\+\_\+selector} (std\+::string name, Probabilistic\+Model\+Creator\+Ptr creator)
+\item 
+\mbox{\Hypertarget{classtops_1_1ProbabilisticModelCreatorClient_a998237a85b601dd57ef37944e239a395}\label{classtops_1_1ProbabilisticModelCreatorClient_a998237a85b601dd57ef37944e239a395}} 
+void {\bfseries registry\+\_\+new\+\_\+decorator} (std\+::string name, Probabilistic\+Model\+Creator\+Ptr creator)
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Creates a new probabilistic model. 
+
+Definition at line 35 of file Probabilistic\+Model\+Creator\+Client.\+hpp.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/Probabilistic\+Model\+Creator\+Client.\+hpp\item 
+src/Probabilistic\+Model\+Creator\+Client.\+cpp\end{DoxyCompactItemize}

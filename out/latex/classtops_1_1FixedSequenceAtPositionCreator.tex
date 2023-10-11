@@ -1,0 +1,114 @@
+\hypertarget{classtops_1_1FixedSequenceAtPositionCreator}{}\section{tops\+:\+:Fixed\+Sequence\+At\+Position\+Creator Class Reference}
+\label{classtops_1_1FixedSequenceAtPositionCreator}\index{tops\+::\+Fixed\+Sequence\+At\+Position\+Creator@{tops\+::\+Fixed\+Sequence\+At\+Position\+Creator}}
+
+
+Inheritance diagram for tops\+:\+:Fixed\+Sequence\+At\+Position\+Creator\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=234pt]{classtops_1_1FixedSequenceAtPositionCreator__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for tops\+:\+:Fixed\+Sequence\+At\+Position\+Creator\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=234pt]{classtops_1_1FixedSequenceAtPositionCreator__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual Probabilistic\+Model\+Ptr \hyperlink{classtops_1_1FixedSequenceAtPositionCreator_af4daf171afbef0494ee98f9877ff1787}{create} (\hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} \&parameters) const
+\begin{DoxyCompactList}\small\item\em Creates a probability model. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+
+
+Definition at line 33 of file Fixed\+Sequence\+At\+Position\+Creator.\+hpp.
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classtops_1_1FixedSequenceAtPositionCreator_af4daf171afbef0494ee98f9877ff1787}\label{classtops_1_1FixedSequenceAtPositionCreator_af4daf171afbef0494ee98f9877ff1787}} 
+\index{tops\+::\+Fixed\+Sequence\+At\+Position\+Creator@{tops\+::\+Fixed\+Sequence\+At\+Position\+Creator}!create@{create}}
+\index{create@{create}!tops\+::\+Fixed\+Sequence\+At\+Position\+Creator@{tops\+::\+Fixed\+Sequence\+At\+Position\+Creator}}
+\subsubsection{\texorpdfstring{create()}{create()}}
+{\footnotesize\ttfamily Probabilistic\+Model\+Ptr tops\+::\+Fixed\+Sequence\+At\+Position\+Creator\+::create (\begin{DoxyParamCaption}\item[{\hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} \&}]{parameters }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Creates a probability model. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em parameters} & is a set of parameters that is utilized to build the model \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented from \hyperlink{classtops_1_1ProbabilisticModelCreator_afed6c8ffa45fff446bdaa8b533da8f7c}{tops\+::\+Probabilistic\+Model\+Creator}.
+
+
+
+Definition at line 32 of file Fixed\+Sequence\+At\+Position\+Creator.\+cpp.
+
+
+\begin{DoxyCode}
+32                                                                                                            
+          \{
+33     ProbabilisticModelParameterValuePtr positionpar = parameters.getMandatoryParameterValue(\textcolor{stringliteral}{"position"});
+34     ProbabilisticModelParameterValuePtr sequencepar = parameters.getMandatoryParameterValue(\textcolor{stringliteral}{"sequence"});
+35     ProbabilisticModelParameterValuePtr probabilitypar = parameters.getMandatoryParameterValue(\textcolor{stringliteral}{"probability
+      "});
+36     ProbabilisticModelParameterValuePtr modelpar = parameters.getMandatoryParameterValue(\textcolor{stringliteral}{"model"});
+37     boost::regex sep(\textcolor{stringliteral}{" "});
+38     std::vector<std::string> seqstr;
+39     split\_regex(sequencepar->getString(), seqstr,  sep);
+40 
+41 
+42     \textcolor{keywordtype}{int} position = positionpar->getInt();
+43     std::vector<double> probs;
+44     probs.push\_back(probabilitypar->getDouble());
+45     probs.push\_back(1.0 - probabilitypar->getDouble());
+46     ProbabilisticModelCreatorClient creator;
+47     ConfigurationReader reader;
+48     std::string modelstr = modelpar->getString();
+49 
+50     ProbabilisticModelPtr m ;
+51     \textcolor{keywordflow}{if}((modelstr.size() > 0) && (modelstr[0] == \textcolor{charliteral}{'['}) )\{
+52       modelstr = modelstr.substr(1, modelstr.size() -2 );
+53       reader.load(modelstr);
+54       ProbabilisticModelParametersPtr par = reader.parameters();
+55       m = creator.create(*par);
+56     \} \textcolor{keywordflow}{else}
+57       \{
+58         m = creator.create(modelstr) ;
+59         \textcolor{keywordflow}{if}(m == NULL) \{
+60           std::cerr << \textcolor{stringliteral}{"Can not load model file "} << modelstr<< \textcolor{stringliteral}{"!"} << std::endl;
+61           exit(-1);
+62         \}
+63       \}
+64     FixedSequenceAtPositionPtr decorator = FixedSequenceAtPositionPtr(\textcolor{keyword}{new} FixedSequenceAtPosition(m));
+65 
+66     DiscreteIIDModelPtr distr = DiscreteIIDModelPtr(\textcolor{keyword}{new} DiscreteIIDModel(probs));
+67     AlphabetPtr alpha = m->alphabet();
+68     SequenceFactory factory(alpha);
+69     Sequence sequence = factory.createSequence(seqstr);
+70     decorator->initialize(position, sequence, distr);
+71     decorator->setAlphabet(m->alphabet());
+72     decorator->subModelName(modelstr);
+73     \textcolor{keywordflow}{return} decorator;
+74   \}
+\end{DoxyCode}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/Fixed\+Sequence\+At\+Position\+Creator.\+hpp\item 
+src/Fixed\+Sequence\+At\+Position\+Creator.\+cpp\end{DoxyCompactItemize}

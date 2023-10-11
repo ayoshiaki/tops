@@ -1,0 +1,129 @@
+\hypertarget{classtops_1_1TrainProfileHMMBaumWelch}{}\section{tops\+:\+:Train\+Profile\+H\+M\+M\+Baum\+Welch Class Reference}
+\label{classtops_1_1TrainProfileHMMBaumWelch}\index{tops\+::\+Train\+Profile\+H\+M\+M\+Baum\+Welch@{tops\+::\+Train\+Profile\+H\+M\+M\+Baum\+Welch}}
+
+
+Creates a Profile\+H\+MM using Baum\+Welch.  
+
+
+
+
+{\ttfamily \#include $<$Train\+Profile\+H\+M\+M\+Baum\+Welch.\+hpp$>$}
+
+
+
+Inheritance diagram for tops\+:\+:Train\+Profile\+H\+M\+M\+Baum\+Welch\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=220pt]{classtops_1_1TrainProfileHMMBaumWelch__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for tops\+:\+:Train\+Profile\+H\+M\+M\+Baum\+Welch\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=220pt]{classtops_1_1TrainProfileHMMBaumWelch__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual Probabilistic\+Model\+Ptr \hyperlink{classtops_1_1TrainProfileHMMBaumWelch_a90acae2f12580eeb2f2010c5321fd6f9}{create} (\hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} \&parameters) const
+\begin{DoxyCompactList}\small\item\em Creates a probability model. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1TrainProfileHMMBaumWelch_a4d824746aca1e5b0173f602d86d79023}\label{classtops_1_1TrainProfileHMMBaumWelch_a4d824746aca1e5b0173f602d86d79023}} 
+virtual void {\bfseries create\+\_\+emiss\+\_\+file} (string fastafile, string datetime) const
+\item 
+\mbox{\Hypertarget{classtops_1_1TrainProfileHMMBaumWelch_ad082b3be1832ef93949e3ffe9a5d90b4}\label{classtops_1_1TrainProfileHMMBaumWelch_ad082b3be1832ef93949e3ffe9a5d90b4}} 
+virtual bool {\bfseries match\+\_\+expression} (string input, string er) const
+\item 
+\mbox{\Hypertarget{classtops_1_1TrainProfileHMMBaumWelch_a99829c7981fcdf582840a4a235d59e33}\label{classtops_1_1TrainProfileHMMBaumWelch_a99829c7981fcdf582840a4a235d59e33}} 
+virtual std\+::string \hyperlink{classtops_1_1TrainProfileHMMBaumWelch_a99829c7981fcdf582840a4a235d59e33}{help} () const
+\begin{DoxyCompactList}\small\item\em Provides a help. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Creates a Profile\+H\+MM using Baum\+Welch. 
+
+Definition at line 41 of file Train\+Profile\+H\+M\+M\+Baum\+Welch.\+hpp.
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classtops_1_1TrainProfileHMMBaumWelch_a90acae2f12580eeb2f2010c5321fd6f9}\label{classtops_1_1TrainProfileHMMBaumWelch_a90acae2f12580eeb2f2010c5321fd6f9}} 
+\index{tops\+::\+Train\+Profile\+H\+M\+M\+Baum\+Welch@{tops\+::\+Train\+Profile\+H\+M\+M\+Baum\+Welch}!create@{create}}
+\index{create@{create}!tops\+::\+Train\+Profile\+H\+M\+M\+Baum\+Welch@{tops\+::\+Train\+Profile\+H\+M\+M\+Baum\+Welch}}
+\subsubsection{\texorpdfstring{create()}{create()}}
+{\footnotesize\ttfamily Probabilistic\+Model\+Ptr tops\+::\+Train\+Profile\+H\+M\+M\+Baum\+Welch\+::create (\begin{DoxyParamCaption}\item[{\hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} \&}]{parameters }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Creates a probability model. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em parameters} & is a set of parameters that is utilized to build the model \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented from \hyperlink{classtops_1_1ProbabilisticModelCreator_afed6c8ffa45fff446bdaa8b533da8f7c}{tops\+::\+Probabilistic\+Model\+Creator}.
+
+
+
+Definition at line 34 of file Train\+Profile\+H\+M\+M\+Baum\+Welch.\+cpp.
+
+
+\begin{DoxyCode}
+34                                                                                                       \{
+35 
+36     \textcolor{keywordtype}{string} datetime = to\_iso\_string(boost::posix\_time::microsec\_clock::local\_time()).substr(0, 15);
+37 
+38     ProbabilisticModelParameterValuePtr initmodelpar = parameters.getMandatoryParameterValue(\textcolor{stringliteral}{"initial\_model
+      "});
+39     ProbabilisticModelParameterValuePtr fastafilepar = parameters.getMandatoryParameterValue(\textcolor{stringliteral}{"training\_set"}
+      );
+40     ProbabilisticModelParameterValuePtr thresholdpar = parameters.getMandatoryParameterValue(\textcolor{stringliteral}{"threshold"});
+41     ProbabilisticModelParameterValuePtr maxiterpar = parameters.getOptionalParameterValue(\textcolor{stringliteral}{"maxiter"});
+42     ProbabilisticModelParameterValuePtr pseudocountpar = parameters.getOptionalParameterValue(\textcolor{stringliteral}{"pseudocounts
+      "});
+43 
+44     create\_emiss\_file(fastafilepar->getString(), datetime);
+45 
+46     \textcolor{keywordtype}{int} pseudocounts = 1;
+47     \textcolor{keywordflow}{if} (pseudocountpar != NULL)
+48         pseudocounts = pseudocountpar->getInt();
+49 
+50     ProbabilisticModelCreatorClient creator;
+51     std::string name = initmodelpar->getString();
+52     ProbabilisticModelPtr m = creator.create(name);
+53     SequenceEntryList states\_sample\_set, emiss\_sample\_set;
+54     AlphabetPtr emiss\_alphabet = m->alphabet();
+55     AlphabetPtr states\_alphabet = m->getStateNames();
+56 
+57     \textcolor{keywordtype}{string} emiss\_filename = \textcolor{stringliteral}{".emiss\_"} + datetime + \textcolor{stringliteral}{".txt"};
+58 
+59     readSequencesFromFile(emiss\_sample\_set, emiss\_alphabet, emiss\_filename);
+60 
+61     SequenceList seqs1;
+62 
+63     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = 0; i < (int) emiss\_sample\_set.size(); i++)
+64         seqs1.push\_back(emiss\_sample\_set[i]->getSequence());
+65     m->profileDecodable()->trainBaumWelch(seqs1, maxiterpar->getInt(), thresholdpar->getDouble(), 
+      pseudocounts);
+66 
+67     \textcolor{keywordtype}{string} remover = \textcolor{stringliteral}{"rm "} + emiss\_filename;
+68 
+69     system(remover.c\_str());
+70     \textcolor{keywordflow}{return} m;
+71 \}
+\end{DoxyCode}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/Train\+Profile\+H\+M\+M\+Baum\+Welch.\+hpp\item 
+src/Train\+Profile\+H\+M\+M\+Baum\+Welch.\+cpp\end{DoxyCompactItemize}

@@ -1,0 +1,148 @@
+\hypertarget{classtops_1_1SmoothedHistogramKernelDensity}{}\section{tops\+:\+:Smoothed\+Histogram\+Kernel\+Density Class Reference}
+\label{classtops_1_1SmoothedHistogramKernelDensity}\index{tops\+::\+Smoothed\+Histogram\+Kernel\+Density@{tops\+::\+Smoothed\+Histogram\+Kernel\+Density}}
+
+
+Estimates a smoothed histogram using kernel density estimation.  
+
+
+
+
+{\ttfamily \#include $<$Smoothed\+Histogram\+Kernel\+Density.\+hpp$>$}
+
+
+
+Inheritance diagram for tops\+:\+:Smoothed\+Histogram\+Kernel\+Density\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=238pt]{classtops_1_1SmoothedHistogramKernelDensity__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for tops\+:\+:Smoothed\+Histogram\+Kernel\+Density\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=238pt]{classtops_1_1SmoothedHistogramKernelDensity__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual Probabilistic\+Model\+Ptr \hyperlink{classtops_1_1SmoothedHistogramKernelDensity_a4d3c3a63d0810ef133a14855fd937a8e}{create} (\hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} \&parameters) const
+\begin{DoxyCompactList}\small\item\em Creates a probability model. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1SmoothedHistogramKernelDensity_aab81791e09e0fac51cf4750258fdc161}\label{classtops_1_1SmoothedHistogramKernelDensity_aab81791e09e0fac51cf4750258fdc161}} 
+virtual std\+::string \hyperlink{classtops_1_1SmoothedHistogramKernelDensity_aab81791e09e0fac51cf4750258fdc161}{help} () const
+\begin{DoxyCompactList}\small\item\em Provides a help. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1SmoothedHistogramKernelDensity_a66ba590123f92be087eb6a51412d512d}\label{classtops_1_1SmoothedHistogramKernelDensity_a66ba590123f92be087eb6a51412d512d}} 
+virtual std\+::string {\bfseries factory\+\_\+name} () const
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Estimates a smoothed histogram using kernel density estimation. 
+
+Definition at line 36 of file Smoothed\+Histogram\+Kernel\+Density.\+hpp.
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classtops_1_1SmoothedHistogramKernelDensity_a4d3c3a63d0810ef133a14855fd937a8e}\label{classtops_1_1SmoothedHistogramKernelDensity_a4d3c3a63d0810ef133a14855fd937a8e}} 
+\index{tops\+::\+Smoothed\+Histogram\+Kernel\+Density@{tops\+::\+Smoothed\+Histogram\+Kernel\+Density}!create@{create}}
+\index{create@{create}!tops\+::\+Smoothed\+Histogram\+Kernel\+Density@{tops\+::\+Smoothed\+Histogram\+Kernel\+Density}}
+\subsubsection{\texorpdfstring{create()}{create()}}
+{\footnotesize\ttfamily Probabilistic\+Model\+Ptr tops\+::\+Smoothed\+Histogram\+Kernel\+Density\+::create (\begin{DoxyParamCaption}\item[{\hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} \&}]{parameters }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Creates a probability model. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em parameters} & is a set of parameters that is utilized to build the model \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented from \hyperlink{classtops_1_1ProbabilisticModelCreator_afed6c8ffa45fff446bdaa8b533da8f7c}{tops\+::\+Probabilistic\+Model\+Creator}.
+
+
+
+Definition at line 33 of file Smoothed\+Histogram\+Kernel\+Density.\+cpp.
+
+
+\begin{DoxyCode}
+34   \{
+35     ProbabilisticModelParameterValuePtr training\_set\_parameter =
+36       parameters.getMandatoryParameterValue(\textcolor{stringliteral}{"training\_set"});
+37     ProbabilisticModelParameterValuePtr maxlengthp =
+38         parameters.getOptionalParameterValue(\textcolor{stringliteral}{"max\_length"});
+39     \textcolor{keywordtype}{long} max = 15000;
+40     \textcolor{keywordflow}{if}(maxlengthp != NULL)
+41         max = maxlengthp->getInt();
+42 
+43 
+44     \textcolor{keywordflow}{if}(training\_set\_parameter == NULL) \{
+45       std::cerr << \hyperlink{classtops_1_1SmoothedHistogramKernelDensity_aab81791e09e0fac51cf4750258fdc161}{help} () << std::endl;
+46       ProbabilisticModelPtr nullmodel;
+47       exit(-1);
+48       \textcolor{keywordflow}{return} nullmodel;
+49     \}
+50 
+51     DoubleVector data;
+52     AlphabetPtr alpha = AlphabetPtr(\textcolor{keyword}{new} Alphabet());;
+53     SequenceEntryList sample\_set;
+54     readSequencesFromFile(sample\_set, alpha, training\_set\_parameter->getString());
+55     \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} i = 0; i < (int)sample\_set.size();i++)
+56       \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} j = 0; j < (int) (sample\_set[i]->getSequence()).size(); j++)
+57         data.push\_back((sample\_set[i]->getSequence())[j]);
+58     std::map<long,double> sum;
+59     \textcolor{keywordtype}{double} total = 0.0;
+60 
+61     \textcolor{keywordflow}{if}(data.size() > 0)
+62       \{
+63         \textcolor{keywordtype}{double} bandwidth = sj\_bandwidth(data);
+64 
+65         \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} pos = 0; pos <= max; pos++) \{
+66           sum[pos] = 0.0;
+67           \textcolor{keywordtype}{double} integral = 0.0;
+68           \textcolor{keywordtype}{double} min = kernel\_density\_estimation(pos-0.5, bandwidth, data);
+69           \textcolor{keywordtype}{double} max2 = kernel\_density\_estimation(pos+0.5, bandwidth, data);
+70           \textcolor{keywordflow}{if}(max2 < min) \{
+71             \textcolor{keywordtype}{double} aux = min;
+72             min = max2;
+73             max2 = aux;
+74           \}
+75           integral += min + (max2 - min)/2;
+76           sum[pos] = integral;
+77           total += integral;
+78         \}
+79       \}
+80 
+81     DoubleVector prob;
+82     prob.resize(max+2);
+83     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} k = 0; k <= max; k++)\{
+84       prob[k] =  sum[k]/total;
+85     \}
+86 
+87 
+88     ProbabilisticModelParameters pars;
+89     pars.add(\textcolor{stringliteral}{"probabilities"}, ProbabilisticModelParameterValuePtr (\textcolor{keyword}{new} DoubleVectorParameterValue(prob)));
+90     pars.add(\textcolor{stringliteral}{"alphabet"}, alpha->getParameterValue());
+91     DiscreteIIDModelPtr result =
+92       DiscreteIIDModelPtr(\textcolor{keyword}{new} DiscreteIIDModel());
+93     result->initialize(pars);
+94 
+95     \textcolor{keywordflow}{return} result;
+96 
+97   \}
+\end{DoxyCode}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/Smoothed\+Histogram\+Kernel\+Density.\+hpp\item 
+src/Smoothed\+Histogram\+Kernel\+Density.\+cpp\end{DoxyCompactItemize}

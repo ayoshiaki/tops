@@ -1,0 +1,97 @@
+\hypertarget{classtops_1_1TrainDiscreteIIDModel}{}\section{tops\+:\+:Train\+Discrete\+I\+I\+D\+Model Class Reference}
+\label{classtops_1_1TrainDiscreteIIDModel}\index{tops\+::\+Train\+Discrete\+I\+I\+D\+Model@{tops\+::\+Train\+Discrete\+I\+I\+D\+Model}}
+
+
+Creates a Multinomial Distribution.  
+
+
+
+
+{\ttfamily \#include $<$Train\+Discrete\+I\+I\+D\+Model.\+hpp$>$}
+
+
+
+Inheritance diagram for tops\+:\+:Train\+Discrete\+I\+I\+D\+Model\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=220pt]{classtops_1_1TrainDiscreteIIDModel__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for tops\+:\+:Train\+Discrete\+I\+I\+D\+Model\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=220pt]{classtops_1_1TrainDiscreteIIDModel__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual Probabilistic\+Model\+Ptr \hyperlink{classtops_1_1TrainDiscreteIIDModel_a072a44dfaeb57cdffea9988f7a053bb8}{create} (\hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} \&parameters) const
+\begin{DoxyCompactList}\small\item\em Creates a probability model. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1TrainDiscreteIIDModel_ad21108b84ecf8a43251800a5b7954bae}\label{classtops_1_1TrainDiscreteIIDModel_ad21108b84ecf8a43251800a5b7954bae}} 
+virtual Probabilistic\+Model\+Ptr \hyperlink{classtops_1_1TrainDiscreteIIDModel_ad21108b84ecf8a43251800a5b7954bae}{create} (\hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} \&parameters, double \&loglikelihood, int \&sample\+\_\+size) const
+\begin{DoxyCompactList}\small\item\em Creates the model and returns the loglikelihood of the training set. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1TrainDiscreteIIDModel_ad140dc14d38d849bc88cdf21a6e4e14c}\label{classtops_1_1TrainDiscreteIIDModel_ad140dc14d38d849bc88cdf21a6e4e14c}} 
+virtual Probabilistic\+Model\+Ptr \hyperlink{classtops_1_1TrainDiscreteIIDModel_ad140dc14d38d849bc88cdf21a6e4e14c}{create} (\hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} \&parameters, const std\+::vector$<$ std\+::string $>$ \&sample\+\_\+set, double \&loglikelihood, int \&sample\+\_\+size) const
+\begin{DoxyCompactList}\small\item\em Creates the model and returns the loglikelihood of the training set. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1TrainDiscreteIIDModel_a365dbb309010a1530c3103b9951df66c}\label{classtops_1_1TrainDiscreteIIDModel_a365dbb309010a1530c3103b9951df66c}} 
+virtual Probabilistic\+Model\+Ptr {\bfseries train} (const Sequence\+Entry\+List \&sample\+\_\+set, Alphabet\+Ptr alphabet) const
+\item 
+\mbox{\Hypertarget{classtops_1_1TrainDiscreteIIDModel_a73e2aebefe4d72698a4f22dfa5246ba2}\label{classtops_1_1TrainDiscreteIIDModel_a73e2aebefe4d72698a4f22dfa5246ba2}} 
+virtual std\+::string \hyperlink{classtops_1_1TrainDiscreteIIDModel_a73e2aebefe4d72698a4f22dfa5246ba2}{help} () const
+\begin{DoxyCompactList}\small\item\em This method returns a help message. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Creates a Multinomial Distribution. 
+
+Definition at line 38 of file Train\+Discrete\+I\+I\+D\+Model.\+hpp.
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classtops_1_1TrainDiscreteIIDModel_a072a44dfaeb57cdffea9988f7a053bb8}\label{classtops_1_1TrainDiscreteIIDModel_a072a44dfaeb57cdffea9988f7a053bb8}} 
+\index{tops\+::\+Train\+Discrete\+I\+I\+D\+Model@{tops\+::\+Train\+Discrete\+I\+I\+D\+Model}!create@{create}}
+\index{create@{create}!tops\+::\+Train\+Discrete\+I\+I\+D\+Model@{tops\+::\+Train\+Discrete\+I\+I\+D\+Model}}
+\subsubsection{\texorpdfstring{create()}{create()}}
+{\footnotesize\ttfamily Probabilistic\+Model\+Ptr tops\+::\+Train\+Discrete\+I\+I\+D\+Model\+::create (\begin{DoxyParamCaption}\item[{\hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} \&}]{parameters }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Creates a probability model. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em parameters} & is a set of parameters that is utilized to build the model \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented from \hyperlink{classtops_1_1ProbabilisticModelCreator_afed6c8ffa45fff446bdaa8b533da8f7c}{tops\+::\+Probabilistic\+Model\+Creator}.
+
+
+
+Definition at line 101 of file Train\+Discrete\+I\+I\+D\+Model.\+cpp.
+
+
+\begin{DoxyCode}
+102                                                                                                            
+            \{
+103     \textcolor{keywordtype}{double} loglike;
+104     \textcolor{keywordtype}{int} samplesize;
+105     \textcolor{keywordflow}{return} \hyperlink{classtops_1_1TrainDiscreteIIDModel_a072a44dfaeb57cdffea9988f7a053bb8}{create}(parameters, loglike, samplesize);
+106 
+107   \}
+\end{DoxyCode}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/Train\+Discrete\+I\+I\+D\+Model.\+hpp\item 
+src/Train\+Discrete\+I\+I\+D\+Model.\+cpp\end{DoxyCompactItemize}

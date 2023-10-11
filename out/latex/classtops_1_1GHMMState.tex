@@ -1,0 +1,202 @@
+\hypertarget{classtops_1_1GHMMState}{}\section{tops\+:\+:G\+H\+M\+M\+State Class Reference}
+\label{classtops_1_1GHMMState}\index{tops\+::\+G\+H\+M\+M\+State@{tops\+::\+G\+H\+M\+M\+State}}
+
+
+Represents a G\+H\+MM State.  
+
+
+
+
+{\ttfamily \#include $<$G\+H\+M\+M\+States.\+hpp$>$}
+
+
+
+Inheritance diagram for tops\+:\+:G\+H\+M\+M\+State\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classtops_1_1GHMMState__inherit__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classtops_1_1GHMMState_a1cb3d607867c47639e56914585624603}\label{classtops_1_1GHMMState_a1cb3d607867c47639e56914585624603}} 
+{\bfseries G\+H\+M\+M\+State} (Probabilistic\+Model\+Ptr observation, Discrete\+I\+I\+D\+Model\+Ptr transition, Symbol\+Ptr name)
+\item 
+\mbox{\Hypertarget{classtops_1_1GHMMState_a5cffd17806bb68c56beb37e8553b5bcd}\label{classtops_1_1GHMMState_a5cffd17806bb68c56beb37e8553b5bcd}} 
+virtual void {\bfseries set\+Observation} (Probabilistic\+Model\+Ptr obs)
+\item 
+\mbox{\Hypertarget{classtops_1_1GHMMState_a173d2e0140e60128e1ef3b9186f1185d}\label{classtops_1_1GHMMState_a173d2e0140e60128e1ef3b9186f1185d}} 
+virtual Probabilistic\+Model\+Ptr {\bfseries observation} () const
+\item 
+\mbox{\Hypertarget{classtops_1_1GHMMState_a49a48dd47af91147ff930fa55f656e38}\label{classtops_1_1GHMMState_a49a48dd47af91147ff930fa55f656e38}} 
+virtual void {\bfseries set\+Transition} (Discrete\+I\+I\+D\+Model\+Ptr trans)
+\item 
+\mbox{\Hypertarget{classtops_1_1GHMMState_a9890351fbd3f312e9be769e324dd274f}\label{classtops_1_1GHMMState_a9890351fbd3f312e9be769e324dd274f}} 
+virtual Discrete\+I\+I\+D\+Model\+Ptr {\bfseries transition} () const
+\item 
+\mbox{\Hypertarget{classtops_1_1GHMMState_a73b2789f91f5631ad64bf80d1a354460}\label{classtops_1_1GHMMState_a73b2789f91f5631ad64bf80d1a354460}} 
+virtual int {\bfseries choose\+Duration} () const
+\item 
+\mbox{\Hypertarget{classtops_1_1GHMMState_a6bd6141cf6f2eaeba1acbaaf84952263}\label{classtops_1_1GHMMState_a6bd6141cf6f2eaeba1acbaaf84952263}} 
+virtual std\+::string {\bfseries name} () const
+\item 
+\mbox{\Hypertarget{classtops_1_1GHMMState_af64f0421ea08e1fe17b485d7de21726b}\label{classtops_1_1GHMMState_af64f0421ea08e1fe17b485d7de21726b}} 
+virtual int {\bfseries id} () const
+\item 
+\mbox{\Hypertarget{classtops_1_1GHMMState_aa0f1cdd4f9f4f54350f6a9fdb1ea6201}\label{classtops_1_1GHMMState_aa0f1cdd4f9f4f54350f6a9fdb1ea6201}} 
+virtual void {\bfseries add\+Predecessor} (int id)
+\item 
+\mbox{\Hypertarget{classtops_1_1GHMMState_a5e429753bcdf0bd8c91e9361ba90e735}\label{classtops_1_1GHMMState_a5e429753bcdf0bd8c91e9361ba90e735}} 
+virtual std\+::vector$<$ int $>$ \& {\bfseries predecessors} ()
+\item 
+\mbox{\Hypertarget{classtops_1_1GHMMState_a7662df37573e3b25f9daadd5e3a643db}\label{classtops_1_1GHMMState_a7662df37573e3b25f9daadd5e3a643db}} 
+virtual void {\bfseries add\+Successor} (int id)
+\item 
+\mbox{\Hypertarget{classtops_1_1GHMMState_af08bcd3ee8206343f63e99cf78f94164}\label{classtops_1_1GHMMState_af08bcd3ee8206343f63e99cf78f94164}} 
+virtual void {\bfseries clear\+Predecessor\+Successor} ()
+\item 
+\mbox{\Hypertarget{classtops_1_1GHMMState_a3da3b418c150ee4eae8d747ea557604c}\label{classtops_1_1GHMMState_a3da3b418c150ee4eae8d747ea557604c}} 
+virtual std\+::vector$<$ int $>$ \& {\bfseries successors} ()
+\item 
+\mbox{\Hypertarget{classtops_1_1GHMMState_a538396303b95638b3de6b5a32b5fb644}\label{classtops_1_1GHMMState_a538396303b95638b3de6b5a32b5fb644}} 
+virtual std\+::vector$<$ int $>$ \& {\bfseries classes} ()
+\item 
+\mbox{\Hypertarget{classtops_1_1GHMMState_a258eeab65d4ce831171fb3ef56eff353}\label{classtops_1_1GHMMState_a258eeab65d4ce831171fb3ef56eff353}} 
+virtual void {\bfseries set\+Classes} (std\+::vector$<$ int $>$ \&classes)
+\item 
+\mbox{\Hypertarget{classtops_1_1GHMMState_a2fad943358b1b695c4a7499522d61823}\label{classtops_1_1GHMMState_a2fad943358b1b695c4a7499522d61823}} 
+virtual double {\bfseries duration\+\_\+probability} (int l) const
+\item 
+\mbox{\Hypertarget{classtops_1_1GHMMState_af96504cfe3967a72b85cea606e0988b6}\label{classtops_1_1GHMMState_af96504cfe3967a72b85cea606e0988b6}} 
+virtual bool {\bfseries is\+Geometric\+Duration} () const
+\item 
+\mbox{\Hypertarget{classtops_1_1GHMMState_a7eb198f5d1460825cf3fd59f987a3440}\label{classtops_1_1GHMMState_a7eb198f5d1460825cf3fd59f987a3440}} 
+virtual std\+::string {\bfseries str} () const
+\item 
+\mbox{\Hypertarget{classtops_1_1GHMMState_aff00289974baefc3dad3ca95b50669ba}\label{classtops_1_1GHMMState_aff00289974baefc3dad3ca95b50669ba}} 
+virtual int {\bfseries get\+Input\+Phase} () const
+\item 
+\mbox{\Hypertarget{classtops_1_1GHMMState_a6bc36d68a563b01db5569a101f1a750a}\label{classtops_1_1GHMMState_a6bc36d68a563b01db5569a101f1a750a}} 
+virtual void {\bfseries set\+Input\+Phase} (int \+\_\+input\+Phase)
+\item 
+\mbox{\Hypertarget{classtops_1_1GHMMState_ae265b35c0f29e8f9e5dc26c20490643e}\label{classtops_1_1GHMMState_ae265b35c0f29e8f9e5dc26c20490643e}} 
+virtual int {\bfseries get\+Output\+Phase} () const
+\item 
+\mbox{\Hypertarget{classtops_1_1GHMMState_a83310d7c4cafe023ae12ea7e8ec52a4f}\label{classtops_1_1GHMMState_a83310d7c4cafe023ae12ea7e8ec52a4f}} 
+virtual void {\bfseries set\+Output\+Phase} (int \+\_\+output\+Phase)
+\item 
+\mbox{\Hypertarget{classtops_1_1GHMMState_a88c726adf531df277ee23ed3bdecdabe}\label{classtops_1_1GHMMState_a88c726adf531df277ee23ed3bdecdabe}} 
+virtual int {\bfseries get\+Start} () const
+\item 
+\mbox{\Hypertarget{classtops_1_1GHMMState_a3fc74623c2cafc82390619508998fd60}\label{classtops_1_1GHMMState_a3fc74623c2cafc82390619508998fd60}} 
+virtual void {\bfseries set\+Start} (int start)
+\item 
+\mbox{\Hypertarget{classtops_1_1GHMMState_ac50009adb860a78432ed14fb1f83ba60}\label{classtops_1_1GHMMState_ac50009adb860a78432ed14fb1f83ba60}} 
+virtual int {\bfseries get\+Stop} () const
+\item 
+\mbox{\Hypertarget{classtops_1_1GHMMState_a16e51ba0cf3426ac5de1c739fcd1f3f6}\label{classtops_1_1GHMMState_a16e51ba0cf3426ac5de1c739fcd1f3f6}} 
+virtual void {\bfseries set\+Stop} (int stop)
+\item 
+\mbox{\Hypertarget{classtops_1_1GHMMState_aba4facd57e95105b2f997082befd672b}\label{classtops_1_1GHMMState_aba4facd57e95105b2f997082befd672b}} 
+virtual void {\bfseries is\+Left\+Joinable} (int joinable)
+\item 
+\mbox{\Hypertarget{classtops_1_1GHMMState_a428a59b0f6958382d34b1e6323b2aa8e}\label{classtops_1_1GHMMState_a428a59b0f6958382d34b1e6323b2aa8e}} 
+virtual int {\bfseries is\+Left\+Joinable} () const
+\item 
+\mbox{\Hypertarget{classtops_1_1GHMMState_a6b3ecb6bd87412895604c7f8cda87d10}\label{classtops_1_1GHMMState_a6b3ecb6bd87412895604c7f8cda87d10}} 
+virtual void {\bfseries is\+Right\+Joinable} (int joinable)
+\item 
+\mbox{\Hypertarget{classtops_1_1GHMMState_a9686860dee6c78bcb24c5b61214a8bec}\label{classtops_1_1GHMMState_a9686860dee6c78bcb24c5b61214a8bec}} 
+virtual int {\bfseries is\+Right\+Joinable} () const
+\item 
+\mbox{\Hypertarget{classtops_1_1GHMMState_ae0545d894a03b676faaf4170af2e4b54}\label{classtops_1_1GHMMState_ae0545d894a03b676faaf4170af2e4b54}} 
+virtual void {\bfseries observation\+Model\+Name} (std\+::string name)
+\item 
+\mbox{\Hypertarget{classtops_1_1GHMMState_a74b5d6f4fc4fc45d102a7f1199c3f147}\label{classtops_1_1GHMMState_a74b5d6f4fc4fc45d102a7f1199c3f147}} 
+virtual void {\bfseries duration\+Model\+Name} (std\+::string name)
+\item 
+\mbox{\Hypertarget{classtops_1_1GHMMState_adf5b5592a4be45f5227932be94d9ec71}\label{classtops_1_1GHMMState_adf5b5592a4be45f5227932be94d9ec71}} 
+virtual std\+::string {\bfseries observation\+Model\+Name} () const
+\item 
+\mbox{\Hypertarget{classtops_1_1GHMMState_a5193759c7ad20b08bda548e208450dae}\label{classtops_1_1GHMMState_a5193759c7ad20b08bda548e208450dae}} 
+virtual std\+::string {\bfseries duration\+Model\+Name} () const
+\item 
+\mbox{\Hypertarget{classtops_1_1GHMMState_a3458044303664790d6b94bedcd93817e}\label{classtops_1_1GHMMState_a3458044303664790d6b94bedcd93817e}} 
+virtual void {\bfseries fix\+Transition\+Distribution} () const
+\item 
+\mbox{\Hypertarget{classtops_1_1GHMMState_ad20832debfe3bdc2b6d596c90f3ebbe6}\label{classtops_1_1GHMMState_ad20832debfe3bdc2b6d596c90f3ebbe6}} 
+virtual \hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} {\bfseries parameters} () const
+\item 
+\mbox{\Hypertarget{classtops_1_1GHMMState_a90571a7a103183c61b548ffa5ad6664a}\label{classtops_1_1GHMMState_a90571a7a103183c61b548ffa5ad6664a}} 
+virtual void {\bfseries find\+Best\+Predecessor} (Matrix \&gamma, Matrix \&psi, Int\+Matrix \&psilen, const Sequence \&s, int base, const G\+H\+M\+M\+States \&all\+\_\+states, std\+::map$<$ int, std\+::list$<$ int $>$ $>$ \&valid\+\_\+positions)
+\item 
+\mbox{\Hypertarget{classtops_1_1GHMMState_a5f3bbebf623a5b8d7bcbdae77f9ff3b8}\label{classtops_1_1GHMMState_a5f3bbebf623a5b8d7bcbdae77f9ff3b8}} 
+virtual void {\bfseries forward\+Sum} (Matrix \&alpha, const Sequence \&s, int base, const G\+H\+M\+M\+States \&all\+\_\+states, std\+::vector$<$ std\+::list$<$ int $>$ $>$ \&valid\+\_\+positions)
+\item 
+\mbox{\Hypertarget{classtops_1_1GHMMState_a99ddf156640eee462b671403df991db0}\label{classtops_1_1GHMMState_a99ddf156640eee462b671403df991db0}} 
+virtual double {\bfseries backward\+Sum} (Matrix \&beta, const Sequence \&s, int base, std\+::vector$<$ std\+::list$<$ int $>$ $>$ \&valid\+\_\+positions)
+\item 
+\mbox{\Hypertarget{classtops_1_1GHMMState_a78b48b998f0bd5ffc4dd8f5df87c4ff3}\label{classtops_1_1GHMMState_a78b48b998f0bd5ffc4dd8f5df87c4ff3}} 
+virtual void {\bfseries posterior\+Sum} (Matrix \&alpha, Matrix \&beta, f\+Matrix \&post\+Probs, const Sequence \&s, int base, const G\+H\+M\+M\+States \&all\+\_\+states, std\+::vector$<$ std\+::list$<$ int $>$ $>$ \&valid\+\_\+positions, double prob, int state\+Number)
+\item 
+\mbox{\Hypertarget{classtops_1_1GHMMState_ac12a60c18dcd0b173fde9833a3dac96a}\label{classtops_1_1GHMMState_ac12a60c18dcd0b173fde9833a3dac96a}} 
+virtual void {\bfseries choose\+Predecessor} (Matrix \&alpha, int base, int \&state, int \&position, const G\+H\+M\+M\+States \&all\+\_\+states)
+\end{DoxyCompactItemize}
+\subsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classtops_1_1GHMMState_a512b76323ad852ef7616bee1375678ec}\label{classtops_1_1GHMMState_a512b76323ad852ef7616bee1375678ec}} 
+Probabilistic\+Model\+Ptr {\bfseries \+\_\+observation}
+\item 
+\mbox{\Hypertarget{classtops_1_1GHMMState_a815932aebe12c59682943754304cdc07}\label{classtops_1_1GHMMState_a815932aebe12c59682943754304cdc07}} 
+Discrete\+I\+I\+D\+Model\+Ptr {\bfseries \+\_\+transition}
+\item 
+\mbox{\Hypertarget{classtops_1_1GHMMState_a4e1c88c494745d40fc83a59795126fe0}\label{classtops_1_1GHMMState_a4e1c88c494745d40fc83a59795126fe0}} 
+Symbol\+Ptr {\bfseries \+\_\+name}
+\item 
+\mbox{\Hypertarget{classtops_1_1GHMMState_aca20bbc5a5886de1ae78fefe31fccd93}\label{classtops_1_1GHMMState_aca20bbc5a5886de1ae78fefe31fccd93}} 
+std\+::vector$<$ int $>$ {\bfseries \+\_\+predecessors}
+\item 
+\mbox{\Hypertarget{classtops_1_1GHMMState_a72621187f503faa9ed1c1ec0a6c65728}\label{classtops_1_1GHMMState_a72621187f503faa9ed1c1ec0a6c65728}} 
+std\+::vector$<$ int $>$ {\bfseries \+\_\+successors}
+\item 
+\mbox{\Hypertarget{classtops_1_1GHMMState_a7ce4fe584be7096e5253947f79ee77bf}\label{classtops_1_1GHMMState_a7ce4fe584be7096e5253947f79ee77bf}} 
+std\+::vector$<$ int $>$ {\bfseries \+\_\+classes}
+\item 
+\mbox{\Hypertarget{classtops_1_1GHMMState_ad75b5b9f8ad5798502bf0bc829c99417}\label{classtops_1_1GHMMState_ad75b5b9f8ad5798502bf0bc829c99417}} 
+int {\bfseries \+\_\+input\+Phase}
+\item 
+\mbox{\Hypertarget{classtops_1_1GHMMState_a3ae936eefb22511d727bdea109395eff}\label{classtops_1_1GHMMState_a3ae936eefb22511d727bdea109395eff}} 
+int {\bfseries \+\_\+output\+Phase}
+\item 
+\mbox{\Hypertarget{classtops_1_1GHMMState_a81ae486f388a02ee3a0314aeb07d7f6d}\label{classtops_1_1GHMMState_a81ae486f388a02ee3a0314aeb07d7f6d}} 
+int {\bfseries \+\_\+start}
+\item 
+\mbox{\Hypertarget{classtops_1_1GHMMState_a805e7a977230e52923e02216b4b6ef24}\label{classtops_1_1GHMMState_a805e7a977230e52923e02216b4b6ef24}} 
+int {\bfseries \+\_\+stop}
+\item 
+\mbox{\Hypertarget{classtops_1_1GHMMState_adcfc81f47c0eff0aafc594116b8a715b}\label{classtops_1_1GHMMState_adcfc81f47c0eff0aafc594116b8a715b}} 
+bool {\bfseries \+\_\+left\+\_\+joinable}
+\item 
+\mbox{\Hypertarget{classtops_1_1GHMMState_afbd53d2ada38b96e3ff071da7c2a7c0b}\label{classtops_1_1GHMMState_afbd53d2ada38b96e3ff071da7c2a7c0b}} 
+bool {\bfseries \+\_\+right\+\_\+joinable}
+\item 
+\mbox{\Hypertarget{classtops_1_1GHMMState_a63e57e38cbe809f071693562d00b3cf0}\label{classtops_1_1GHMMState_a63e57e38cbe809f071693562d00b3cf0}} 
+std\+::string {\bfseries \+\_\+observation\+Model\+Name}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Represents a G\+H\+MM State. 
+
+Definition at line 52 of file G\+H\+M\+M\+States.\+hpp.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/G\+H\+M\+M\+States.\+hpp\item 
+src/G\+H\+M\+M\+States.\+cpp\end{DoxyCompactItemize}

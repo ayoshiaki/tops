@@ -1,0 +1,88 @@
+\hypertarget{classtops_1_1TrainSimilarityBasedSequenceWeighting}{}\section{tops\+:\+:Train\+Similarity\+Based\+Sequence\+Weighting Class Reference}
+\label{classtops_1_1TrainSimilarityBasedSequenceWeighting}\index{tops\+::\+Train\+Similarity\+Based\+Sequence\+Weighting@{tops\+::\+Train\+Similarity\+Based\+Sequence\+Weighting}}
+
+
+Creates a similarity based sequence weighting model.  
+
+
+
+
+{\ttfamily \#include $<$Train\+Similarity\+Based\+Sequence\+Weighting.\+hpp$>$}
+
+
+
+Inheritance diagram for tops\+:\+:Train\+Similarity\+Based\+Sequence\+Weighting\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=211pt]{classtops_1_1TrainSimilarityBasedSequenceWeighting__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for tops\+:\+:Train\+Similarity\+Based\+Sequence\+Weighting\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=211pt]{classtops_1_1TrainSimilarityBasedSequenceWeighting__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual Probabilistic\+Model\+Ptr \hyperlink{classtops_1_1TrainSimilarityBasedSequenceWeighting_afccb17be7a84c13a4e7166a583b3597e}{create} (\hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} \&parameters) const
+\begin{DoxyCompactList}\small\item\em Creates a probability model. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1TrainSimilarityBasedSequenceWeighting_a6a0848bca907b5bc0b05df0cd58db440}\label{classtops_1_1TrainSimilarityBasedSequenceWeighting_a6a0848bca907b5bc0b05df0cd58db440}} 
+virtual Probabilistic\+Model\+Ptr \hyperlink{classtops_1_1TrainSimilarityBasedSequenceWeighting_a6a0848bca907b5bc0b05df0cd58db440}{create} (\hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} \&parameters, double \&loglikelihood, int \&sample\+\_\+size) const
+\begin{DoxyCompactList}\small\item\em Creates the model and returns the loglikelihood of the training set. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Creates a similarity based sequence weighting model. 
+
+Definition at line 38 of file Train\+Similarity\+Based\+Sequence\+Weighting.\+hpp.
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classtops_1_1TrainSimilarityBasedSequenceWeighting_afccb17be7a84c13a4e7166a583b3597e}\label{classtops_1_1TrainSimilarityBasedSequenceWeighting_afccb17be7a84c13a4e7166a583b3597e}} 
+\index{tops\+::\+Train\+Similarity\+Based\+Sequence\+Weighting@{tops\+::\+Train\+Similarity\+Based\+Sequence\+Weighting}!create@{create}}
+\index{create@{create}!tops\+::\+Train\+Similarity\+Based\+Sequence\+Weighting@{tops\+::\+Train\+Similarity\+Based\+Sequence\+Weighting}}
+\subsubsection{\texorpdfstring{create()}{create()}}
+{\footnotesize\ttfamily Probabilistic\+Model\+Ptr tops\+::\+Train\+Similarity\+Based\+Sequence\+Weighting\+::create (\begin{DoxyParamCaption}\item[{\hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} \&}]{parameters }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Creates a probability model. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em parameters} & is a set of parameters that is utilized to build the model \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented from \hyperlink{classtops_1_1ProbabilisticModelCreator_afed6c8ffa45fff446bdaa8b533da8f7c}{tops\+::\+Probabilistic\+Model\+Creator}.
+
+
+
+Definition at line 187 of file Train\+Similarity\+Based\+Sequence\+Weighting.\+cpp.
+
+
+\begin{DoxyCode}
+188                                                                                                            
+                  \{
+189     \textcolor{keywordtype}{double} loglike;
+190     \textcolor{keywordtype}{int} samplesize;
+191     \textcolor{keywordflow}{return} \hyperlink{classtops_1_1TrainSimilarityBasedSequenceWeighting_afccb17be7a84c13a4e7166a583b3597e}{create}(parameters, loglike, samplesize);
+192 
+193   \}
+\end{DoxyCode}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/Train\+Similarity\+Based\+Sequence\+Weighting.\+hpp\item 
+src/Train\+Similarity\+Based\+Sequence\+Weighting.\+cpp\end{DoxyCompactItemize}

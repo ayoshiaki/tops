@@ -1,0 +1,117 @@
+\hypertarget{classtops_1_1PhasedRunLengthDistributionCreator}{}\section{tops\+:\+:Phased\+Run\+Length\+Distribution\+Creator Class Reference}
+\label{classtops_1_1PhasedRunLengthDistributionCreator}\index{tops\+::\+Phased\+Run\+Length\+Distribution\+Creator@{tops\+::\+Phased\+Run\+Length\+Distribution\+Creator}}
+
+
+Inheritance diagram for tops\+:\+:Phased\+Run\+Length\+Distribution\+Creator\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=251pt]{classtops_1_1PhasedRunLengthDistributionCreator__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for tops\+:\+:Phased\+Run\+Length\+Distribution\+Creator\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=251pt]{classtops_1_1PhasedRunLengthDistributionCreator__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual Probabilistic\+Model\+Ptr \hyperlink{classtops_1_1PhasedRunLengthDistributionCreator_aaf3fd1675098f4f5c3e4da8f06056ab1}{create} (\hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} \&parameters) const
+\begin{DoxyCompactList}\small\item\em Creates a probability model. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1PhasedRunLengthDistributionCreator_a8cb0095b931fde4fa86dd6ff1330cb6c}\label{classtops_1_1PhasedRunLengthDistributionCreator_a8cb0095b931fde4fa86dd6ff1330cb6c}} 
+virtual Probabilistic\+Model\+Ptr \hyperlink{classtops_1_1PhasedRunLengthDistributionCreator_a8cb0095b931fde4fa86dd6ff1330cb6c}{create} (\hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} \&parameters, const std\+::map$<$ std\+::string, Probabilistic\+Model\+Ptr $>$ \&models) const
+\begin{DoxyCompactList}\small\item\em Creates the model and returns the loglikelihood of the training set. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+
+
+Definition at line 33 of file Phased\+Run\+Length\+Distribution\+Creator.\+hpp.
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classtops_1_1PhasedRunLengthDistributionCreator_aaf3fd1675098f4f5c3e4da8f06056ab1}\label{classtops_1_1PhasedRunLengthDistributionCreator_aaf3fd1675098f4f5c3e4da8f06056ab1}} 
+\index{tops\+::\+Phased\+Run\+Length\+Distribution\+Creator@{tops\+::\+Phased\+Run\+Length\+Distribution\+Creator}!create@{create}}
+\index{create@{create}!tops\+::\+Phased\+Run\+Length\+Distribution\+Creator@{tops\+::\+Phased\+Run\+Length\+Distribution\+Creator}}
+\subsubsection{\texorpdfstring{create()}{create()}}
+{\footnotesize\ttfamily Probabilistic\+Model\+Ptr tops\+::\+Phased\+Run\+Length\+Distribution\+Creator\+::create (\begin{DoxyParamCaption}\item[{\hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} \&}]{parameters }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Creates a probability model. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em parameters} & is a set of parameters that is utilized to build the model \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented from \hyperlink{classtops_1_1ProbabilisticModelCreator_afed6c8ffa45fff446bdaa8b533da8f7c}{tops\+::\+Probabilistic\+Model\+Creator}.
+
+
+
+Definition at line 71 of file Phased\+Run\+Length\+Distribution\+Creator.\+cpp.
+
+
+\begin{DoxyCode}
+71                                                                                                            
+              \{
+72     ProbabilisticModelParameterValuePtr iphasepar = parameters.getMandatoryParameterValue(\textcolor{stringliteral}{"input\_phase"});
+73     ProbabilisticModelParameterValuePtr ophasepar = parameters.getMandatoryParameterValue(\textcolor{stringliteral}{"output\_phase"});
+74     ProbabilisticModelParameterValuePtr nphasepar = parameters.getMandatoryParameterValue(\textcolor{stringliteral}{"number\_of\_phases
+      "});
+75     ProbabilisticModelParameterValuePtr  deltapar = parameters.getMandatoryParameterValue(\textcolor{stringliteral}{"delta"});
+76     ProbabilisticModelParameterValuePtr  modelpar = parameters.getMandatoryParameterValue(\textcolor{stringliteral}{"model"});
+77     \textcolor{keywordflow}{if}(
+78        (nphasepar == NULL) ||
+79        (deltapar == NULL) ||
+80        (iphasepar == NULL) ||
+81        (ophasepar == NULL) ||
+82        (modelpar == NULL) ) \{
+83       exit(-1);
+84     \}
+85     \textcolor{keywordtype}{int} iphase = iphasepar -> getInt();
+86     \textcolor{keywordtype}{int} ophase = ophasepar -> getInt();
+87     \textcolor{keywordtype}{int} nphase = nphasepar -> getInt();
+88     \textcolor{keywordtype}{int} delta = deltapar -> getInt();
+89     std::string modelstr = modelpar->getString();
+90 
+91     ProbabilisticModelCreatorClient creator;
+92     ConfigurationReader reader;
+93     ProbabilisticModelPtr m ;
+94     \textcolor{keywordflow}{if}((modelstr.size() > 0) && (modelstr[0] == \textcolor{charliteral}{'['}) )\{
+95       modelstr = modelstr.substr(1, modelstr.size() -2 );
+96       reader.load(modelstr);
+97       ProbabilisticModelParametersPtr par = reader.parameters();
+98       m = creator.create(*par);
+99     \} \textcolor{keywordflow}{else}  \{
+100         m = creator.create(modelstr) ;
+101         \textcolor{keywordflow}{if}(m == NULL) \{
+102           std::cerr << \textcolor{stringliteral}{"Can not load model file "} << modelstr<< \textcolor{stringliteral}{"!"} << std::endl;
+103           exit(-1);
+104         \}
+105       \}
+106     PhasedRunLengthDistributionPtr decorator = PhasedRunLengthDistributionPtr(\textcolor{keyword}{new} 
+      PhasedRunLengthDistribution(m));
+107     AlphabetPtr alpha = m->alphabet();
+108     decorator->initialize(delta, iphase, ophase, nphase);
+109     decorator->setAlphabet(m->alphabet());
+110     \textcolor{keywordflow}{return} decorator;
+111 
+112   \}
+\end{DoxyCode}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/Phased\+Run\+Length\+Distribution\+Creator.\+hpp\item 
+src/Phased\+Run\+Length\+Distribution\+Creator.\+cpp\end{DoxyCompactItemize}

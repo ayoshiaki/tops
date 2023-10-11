@@ -1,0 +1,111 @@
+\hypertarget{classtops_1_1SimilarityBasedSequenceWeightingCreator}{}\section{tops\+:\+:Similarity\+Based\+Sequence\+Weighting\+Creator Class Reference}
+\label{classtops_1_1SimilarityBasedSequenceWeightingCreator}\index{tops\+::\+Similarity\+Based\+Sequence\+Weighting\+Creator@{tops\+::\+Similarity\+Based\+Sequence\+Weighting\+Creator}}
+
+
+This class is a factory for the Target Model.  
+
+
+
+
+{\ttfamily \#include $<$Similarity\+Based\+Sequence\+Weighting\+Creator.\+hpp$>$}
+
+
+
+Inheritance diagram for tops\+:\+:Similarity\+Based\+Sequence\+Weighting\+Creator\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=233pt]{classtops_1_1SimilarityBasedSequenceWeightingCreator__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for tops\+:\+:Similarity\+Based\+Sequence\+Weighting\+Creator\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=233pt]{classtops_1_1SimilarityBasedSequenceWeightingCreator__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual Probabilistic\+Model\+Ptr \hyperlink{classtops_1_1SimilarityBasedSequenceWeightingCreator_a8d0c396745a850e8fd2f17df6d4244b5}{create} (\hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} \&parameters) const
+\begin{DoxyCompactList}\small\item\em Creates a probabilistic model. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1SimilarityBasedSequenceWeightingCreator_ac47fccb399179b4406352c76815dbbc4}\label{classtops_1_1SimilarityBasedSequenceWeightingCreator_ac47fccb399179b4406352c76815dbbc4}} 
+virtual std\+::string \hyperlink{classtops_1_1SimilarityBasedSequenceWeightingCreator_ac47fccb399179b4406352c76815dbbc4}{help} () const
+\begin{DoxyCompactList}\small\item\em This method returns a help message. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+This class is a factory for the Target Model. 
+
+Definition at line 36 of file Similarity\+Based\+Sequence\+Weighting\+Creator.\+hpp.
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classtops_1_1SimilarityBasedSequenceWeightingCreator_a8d0c396745a850e8fd2f17df6d4244b5}\label{classtops_1_1SimilarityBasedSequenceWeightingCreator_a8d0c396745a850e8fd2f17df6d4244b5}} 
+\index{tops\+::\+Similarity\+Based\+Sequence\+Weighting\+Creator@{tops\+::\+Similarity\+Based\+Sequence\+Weighting\+Creator}!create@{create}}
+\index{create@{create}!tops\+::\+Similarity\+Based\+Sequence\+Weighting\+Creator@{tops\+::\+Similarity\+Based\+Sequence\+Weighting\+Creator}}
+\subsubsection{\texorpdfstring{create()}{create()}}
+{\footnotesize\ttfamily Probabilistic\+Model\+Ptr tops\+::\+Similarity\+Based\+Sequence\+Weighting\+Creator\+::create (\begin{DoxyParamCaption}\item[{\hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} \&}]{parameters }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Creates a probabilistic model. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em parameters} & is a set of parameters that is utilized to build the model \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented from \hyperlink{classtops_1_1ProbabilisticModelCreator_afed6c8ffa45fff446bdaa8b533da8f7c}{tops\+::\+Probabilistic\+Model\+Creator}.
+
+
+
+Definition at line 28 of file Similarity\+Based\+Sequence\+Weighting\+Creator.\+cpp.
+
+
+\begin{DoxyCode}
+28                                                                                                            
+                  \{
+29     ProbabilisticModelParameterValuePtr alphabet = parameters.getOptionalParameterValue(\textcolor{stringliteral}{"alphabet"});
+30     ProbabilisticModelParameterValuePtr counter = parameters.getOptionalParameterValue(\textcolor{stringliteral}{"counter"});
+31     ProbabilisticModelParameterValuePtr normalizer = parameters.getOptionalParameterValue(\textcolor{stringliteral}{"normalizer"});
+32 
+33 
+34     SimilarityBasedSequenceWeightingPtr model = SimilarityBasedSequenceWeightingPtr(\textcolor{keyword}{new} 
+      SimilarityBasedSequenceWeighting());
+35 
+36     \textcolor{keywordflow}{if}(( alphabet == NULL ) ||
+37        (counter == NULL) ||
+38        (normalizer == NULL) )
+39       \{
+40         \textcolor{keywordflow}{return} model;
+41       \}
+42 
+43     \textcolor{keywordflow}{if} (alphabet != NULL)
+44       \{
+45         AlphabetPtr alpha = AlphabetPtr(\textcolor{keyword}{new} Alphabet());
+46         alpha->initializeFromVector(alphabet->getStringVector());
+47         model->setAlphabet(alpha);
+48       \} \textcolor{keywordflow}{else}
+49       \{
+50         std::cerr << \hyperlink{classtops_1_1SimilarityBasedSequenceWeightingCreator_ac47fccb399179b4406352c76815dbbc4}{help}() << std::endl;
+51         exit(-1);
+52       \}
+53     model->initialize(parameters);
+54     \textcolor{keywordflow}{return} model;
+55   \}
+\end{DoxyCode}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/Similarity\+Based\+Sequence\+Weighting\+Creator.\+hpp\item 
+src/Similarity\+Based\+Sequence\+Weighting\+Creator.\+cpp\end{DoxyCompactItemize}

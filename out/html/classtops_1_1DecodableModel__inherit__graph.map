@@ -1,0 +1,6 @@
+<map id="tops::DecodableModel" name="tops::DecodableModel">
+<area shape="rect" id="node3" href="$classtops_1_1GeneralizedHiddenMarkovModel.html" title="This is a class representing Hidden semi&#45;Markov Models. " alt="" coords="415,5,623,47"/>
+<area shape="rect" id="node4" href="$classtops_1_1HiddenMarkovModel.html" title="This class represents a hidden markov model. " alt="" coords="431,71,606,98"/>
+<area shape="rect" id="node5" href="$classtops_1_1ProfileHiddenMarkovModel.html" title="tops::ProfileHiddenMarkov\lModel" alt="" coords="431,123,607,164"/>
+<area shape="rect" id="node2" href="$classtops_1_1ProbabilisticModel.html" title="This is an abstract class representing a generative probabilistic model. " alt="" coords="5,71,167,98"/>
+</map>

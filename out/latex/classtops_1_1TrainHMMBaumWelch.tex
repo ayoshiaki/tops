@@ -1,0 +1,115 @@
+\hypertarget{classtops_1_1TrainHMMBaumWelch}{}\section{tops\+:\+:Train\+H\+M\+M\+Baum\+Welch Class Reference}
+\label{classtops_1_1TrainHMMBaumWelch}\index{tops\+::\+Train\+H\+M\+M\+Baum\+Welch@{tops\+::\+Train\+H\+M\+M\+Baum\+Welch}}
+
+
+Creates a H\+MM using Baum-\/\+Welch.  
+
+
+
+
+{\ttfamily \#include $<$Train\+H\+M\+M\+Baum\+Welch.\+hpp$>$}
+
+
+
+Inheritance diagram for tops\+:\+:Train\+H\+M\+M\+Baum\+Welch\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=220pt]{classtops_1_1TrainHMMBaumWelch__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for tops\+:\+:Train\+H\+M\+M\+Baum\+Welch\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=220pt]{classtops_1_1TrainHMMBaumWelch__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual Probabilistic\+Model\+Ptr \hyperlink{classtops_1_1TrainHMMBaumWelch_a8c7334a4a970afc9dac9d66c1001999a}{create} (\hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} \&parameters) const
+\begin{DoxyCompactList}\small\item\em Creates a probability model. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1TrainHMMBaumWelch_a2cb37ecbba4eff238cd49a5c3449c315}\label{classtops_1_1TrainHMMBaumWelch_a2cb37ecbba4eff238cd49a5c3449c315}} 
+virtual std\+::string \hyperlink{classtops_1_1TrainHMMBaumWelch_a2cb37ecbba4eff238cd49a5c3449c315}{help} () const
+\begin{DoxyCompactList}\small\item\em Provides a help. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Creates a H\+MM using Baum-\/\+Welch. 
+
+Definition at line 38 of file Train\+H\+M\+M\+Baum\+Welch.\+hpp.
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classtops_1_1TrainHMMBaumWelch_a8c7334a4a970afc9dac9d66c1001999a}\label{classtops_1_1TrainHMMBaumWelch_a8c7334a4a970afc9dac9d66c1001999a}} 
+\index{tops\+::\+Train\+H\+M\+M\+Baum\+Welch@{tops\+::\+Train\+H\+M\+M\+Baum\+Welch}!create@{create}}
+\index{create@{create}!tops\+::\+Train\+H\+M\+M\+Baum\+Welch@{tops\+::\+Train\+H\+M\+M\+Baum\+Welch}}
+\subsubsection{\texorpdfstring{create()}{create()}}
+{\footnotesize\ttfamily Probabilistic\+Model\+Ptr tops\+::\+Train\+H\+M\+M\+Baum\+Welch\+::create (\begin{DoxyParamCaption}\item[{\hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} \&}]{parameters }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Creates a probability model. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em parameters} & is a set of parameters that is utilized to build the model \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented from \hyperlink{classtops_1_1ProbabilisticModelCreator_afed6c8ffa45fff446bdaa8b533da8f7c}{tops\+::\+Probabilistic\+Model\+Creator}.
+
+
+
+Definition at line 33 of file Train\+H\+M\+M\+Baum\+Welch.\+cpp.
+
+
+\begin{DoxyCode}
+34   \{
+35     ProbabilisticModelParameterValuePtr initmodelpar = parameters.getOptionalParameterValue(\textcolor{stringliteral}{"initial\_model"}
+      );
+36     ProbabilisticModelParameterValuePtr initspecificationpar = parameters.getOptionalParameterValue(\textcolor{stringliteral}{"
+      initial\_specification"});
+37 
+38     ProbabilisticModelParameterValuePtr trainpar = parameters.getMandatoryParameterValue(\textcolor{stringliteral}{"training\_set"});
+39     ProbabilisticModelParameterValuePtr thrpar = parameters.getOptionalParameterValue(\textcolor{stringliteral}{"threshold"});
+40     ProbabilisticModelParameterValuePtr maxiterpar = parameters.getOptionalParameterValue(\textcolor{stringliteral}{"maxiter"});
+41 
+42     \textcolor{keywordflow}{if}(initspecificationpar != NULL) 
+43         initmodelpar = initspecificationpar;
+44     \textcolor{keywordflow}{if}((initspecificationpar == NULL) && (initmodelpar == NULL)) 
+45         std::cerr << \textcolor{stringliteral}{"ERROR: initial\_specification is a mandatory paramenter\(\backslash\)n"} << std::endl;
+46 
+47     \textcolor{keywordtype}{double} threshold = 1e-5;
+48     \textcolor{keywordflow}{if}(thrpar != NULL)
+49       threshold = thrpar->getDouble();
+50     \textcolor{keywordtype}{int} maxiter = 500;
+51     \textcolor{keywordflow}{if}(maxiterpar != NULL)
+52       maxiter = maxiterpar->getInt();
+53 
+54     ProbabilisticModelCreatorClient creator;
+55     std::string name = initmodelpar->getString();
+56     ProbabilisticModelPtr m = creator.create(name);
+57     SequenceEntryList sample\_set;
+58     AlphabetPtr alphabet = m->alphabet();
+59     readSequencesFromFile(sample\_set, alphabet, trainpar->getString());
+60     SequenceList seqs;
+61     \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} i = 0; i < (int)sample\_set.size(); i++)
+62       seqs.push\_back(sample\_set[i]->getSequence());
+63     m->trainBaumWelch(seqs, maxiter, threshold);
+64     \textcolor{keywordflow}{return} m;
+65   \}
+\end{DoxyCode}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/Train\+H\+M\+M\+Baum\+Welch.\+hpp\item 
+src/Train\+H\+M\+M\+Baum\+Welch.\+cpp\end{DoxyCompactItemize}

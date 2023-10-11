@@ -1,0 +1,216 @@
+\hypertarget{classtops_1_1SmoothedHistogramStanke}{}\section{tops\+:\+:Smoothed\+Histogram\+Stanke Class Reference}
+\label{classtops_1_1SmoothedHistogramStanke}\index{tops\+::\+Smoothed\+Histogram\+Stanke@{tops\+::\+Smoothed\+Histogram\+Stanke}}
+
+
+Use this to create a smoothed histogram.  
+
+
+
+
+{\ttfamily \#include $<$Smoothed\+Histogram\+Stanke.\+hpp$>$}
+
+
+
+Inheritance diagram for tops\+:\+:Smoothed\+Histogram\+Stanke\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=241pt]{classtops_1_1SmoothedHistogramStanke__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for tops\+:\+:Smoothed\+Histogram\+Stanke\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=241pt]{classtops_1_1SmoothedHistogramStanke__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual Probabilistic\+Model\+Ptr \hyperlink{classtops_1_1SmoothedHistogramStanke_a2d04479a872f3f139652a55632a27e00}{create} (\hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} \&parameters) const
+\begin{DoxyCompactList}\small\item\em Creates a probability model. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1SmoothedHistogramStanke_af10fc71d26da0c61cfa393fdc6f2fac8}\label{classtops_1_1SmoothedHistogramStanke_af10fc71d26da0c61cfa393fdc6f2fac8}} 
+virtual std\+::string \hyperlink{classtops_1_1SmoothedHistogramStanke_af10fc71d26da0c61cfa393fdc6f2fac8}{help} () const
+\begin{DoxyCompactList}\small\item\em Provides a help. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1SmoothedHistogramStanke_a2f452280a2a1b2519952c8df9e5186db}\label{classtops_1_1SmoothedHistogramStanke_a2f452280a2a1b2519952c8df9e5186db}} 
+virtual std\+::string {\bfseries factory\+\_\+name} () const
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Use this to create a smoothed histogram. 
+
+Definition at line 36 of file Smoothed\+Histogram\+Stanke.\+hpp.
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classtops_1_1SmoothedHistogramStanke_a2d04479a872f3f139652a55632a27e00}\label{classtops_1_1SmoothedHistogramStanke_a2d04479a872f3f139652a55632a27e00}} 
+\index{tops\+::\+Smoothed\+Histogram\+Stanke@{tops\+::\+Smoothed\+Histogram\+Stanke}!create@{create}}
+\index{create@{create}!tops\+::\+Smoothed\+Histogram\+Stanke@{tops\+::\+Smoothed\+Histogram\+Stanke}}
+\subsubsection{\texorpdfstring{create()}{create()}}
+{\footnotesize\ttfamily Probabilistic\+Model\+Ptr tops\+::\+Smoothed\+Histogram\+Stanke\+::create (\begin{DoxyParamCaption}\item[{\hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} \&}]{parameters }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Creates a probability model. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em parameters} & is a set of parameters that is utilized to build the model \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented from \hyperlink{classtops_1_1ProbabilisticModelCreator_afed6c8ffa45fff446bdaa8b533da8f7c}{tops\+::\+Probabilistic\+Model\+Creator}.
+
+
+
+Definition at line 31 of file Smoothed\+Histogram\+Stanke.\+cpp.
+
+
+\begin{DoxyCode}
+32   \{
+33     ProbabilisticModelParameterValuePtr training\_set\_parameter =
+34       parameters.getMandatoryParameterValue(\textcolor{stringliteral}{"training\_set"});
+35     ProbabilisticModelParameterValuePtr maxlengthp =
+36       parameters.getOptionalParameterValue(\textcolor{stringliteral}{"max\_length"});
+37     ProbabilisticModelParameterValuePtr mp =
+38       parameters.getOptionalParameterValue(\textcolor{stringliteral}{"m"});
+39     ProbabilisticModelParameterValuePtr slopep =
+40       parameters.getOptionalParameterValue(\textcolor{stringliteral}{"slope"});
+41 
+42     ProbabilisticModelParameterValuePtr weightspar = parameters.getOptionalParameterValue(\textcolor{stringliteral}{"weights"});
+43     std::map <std::string, double> weights;
+44     \textcolor{keywordflow}{if}(weightspar != NULL) \{
+45       readMapFromFile(weights, weightspar->getString());
+46     \}
+47 
+48     \textcolor{keywordtype}{double} a = 0.5;
+49     \textcolor{keywordtype}{int} m = 8;
+50 
+51     \textcolor{keywordflow}{if}(mp != NULL)
+52         m = mp->getInt();
+53 
+54     \textcolor{keywordflow}{if}(slopep != NULL)
+55         a = slopep->getDouble();
+56 
+57     \textcolor{keywordtype}{long} max = 15000;
+58     \textcolor{keywordflow}{if}(maxlengthp != NULL)
+59         max = maxlengthp->getInt();
+60     \textcolor{keywordtype}{int} L = max;
+61     max = max + 4 * a * max;
+62 
+63     \textcolor{keywordflow}{if}(training\_set\_parameter == NULL) \{
+64       ProbabilisticModelPtr nullmodel;
+65       exit(-1);
+66       \textcolor{keywordflow}{return} nullmodel;
+67     \}
+68 
+69     DoubleVector data;
+70     AlphabetPtr alpha = AlphabetPtr(\textcolor{keyword}{new} Alphabet());;
+71     SequenceEntryList sample\_set;
+72     readSequencesFromFile(sample\_set, alpha, training\_set\_parameter->getString());
+73     \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} i = 0; i < (int)sample\_set.size();i++) \{
+74       \textcolor{keywordtype}{int} rep = 1;
+75       \textcolor{keywordflow}{if}(weights.find(sample\_set[i]->getName()) != weights.end())
+76         rep = (weights.find(sample\_set[i]->getName()))->second;
+77 
+78       \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} j = 0; j < (int) (sample\_set[i]->getSequence()).size(); j++) \{
+79         \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} k = 0;k< rep; k++)
+80             data.push\_back((sample\_set[i]->getSequence())[j]);
+81       \}
+82     \}
+83     std::map<long,double> sum;
+84     std::map<long,double> d;
+85     std::map<long,int> counter;
+86     DoubleVector prob;
+87 
+88 
+89     vector<double> pi;
+90     pi.resize(L);
+91 
+92     \textcolor{keywordflow}{if}(data.size() > 0)
+93       \{
+94           \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} i = 0; i < (int)data.size(); i++)\{
+95               \textcolor{keywordflow}{if}(counter.find((\textcolor{keywordtype}{long})data[i]) == counter.end())
+96                   counter[(\textcolor{keywordtype}{long})data[i]] = 1.0;
+97               \textcolor{keywordflow}{else}
+98                   counter[(long)data[i]] += 1.0;
+99           \}
+100 
+101 
+102 
+103         \textcolor{keywordtype}{double} count\_left = 0;
+104         \textcolor{keywordtype}{double} count\_right = 0;
+105 
+106         \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} pos = 0; (pos < L) && (pos < max) ; pos +=1)
+107             \{
+108               \textcolor{keywordtype}{int} bwd = (int) (.01+ (a / pow(L, 1.0/5.0) ) * (\textcolor{keywordtype}{double})pos);
+109               \textcolor{keywordflow}{if}(bwd <= 0)
+110                 bwd = 1;
+111               \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} j = pos - bwd + 1;  (j <= pos + bwd -1)  ; j++)
+112                 \{
+113                   \textcolor{keywordflow}{if} (! (j >= 0 && j < L))
+114                     \textcolor{keywordflow}{continue};
+115                   \textcolor{keywordflow}{if}(j <= pos)
+116                     count\_left += (counter[j]) ? 1: 0;
+117                   \textcolor{keywordflow}{if}(j >= pos)
+118                     count\_right += (counter[j])? 1: 0;
+119                 \}
+120 
+121               \textcolor{keywordflow}{while} (count\_left < m && count\_right < m && bwd < L)
+122                 \{
+123                   bwd ++;
+124                   \textcolor{keywordflow}{if}(pos + bwd -1 < L)
+125                     count\_left += counter[pos + bwd - 1] ? 1:0;
+126                   \textcolor{keywordflow}{if}(pos - bwd + 1 >= 0)
+127                     count\_right += counter[pos + bwd - 1] ? 1:0;
+128                 \}
+129               \textcolor{keywordflow}{if}(pos < L)
+130                 pi[pos] += kernel\_normal((\textcolor{keywordtype}{double})0, (\textcolor{keywordtype}{double})bwd) * counter[pos];
+131               \textcolor{keywordtype}{bool} negligible = \textcolor{keyword}{false};
+132               \textcolor{keywordtype}{int} j=1;
+133               \textcolor{keywordflow}{while} (!negligible && (pos-j>=0 || pos+j<L))\{
+134                 \textcolor{keywordtype}{double}  wj = kernel\_normal(j, bwd) * (counter[pos] );
+135                 \textcolor{keywordflow}{if} (pos-j>=0 && pos-j<(\textcolor{keywordtype}{int})pi.size() ) \{
+136                   pi[pos-j] += wj;
+137                 \}
+138                 \textcolor{keywordflow}{if} (pos+j<(\textcolor{keywordtype}{int})pi.size() && pos+j>=0) \{
+139                   pi[pos+j] += wj;
+140                 \}
+141                 negligible = (wj < 1e-20);
+142                 j++;
+143               \}
+144             \}
+145 \textcolor{preprocessor}{#if 1}
+146         \textcolor{keywordtype}{double} total = 0;
+147         \textcolor{keywordflow}{for} (\textcolor{keywordtype}{long} k = 0; k < (int)pi.size(); k++)\{
+148             total += pi[k];
+149         \}
+150         prob.resize(L);
+151         \textcolor{keywordflow}{for} (\textcolor{keywordtype}{long} k = 0; k < (int)pi.size(); k++)\{
+152             prob[k] =  pi[k]/(total) ;
+153         \}
+154 \textcolor{preprocessor}{#endif}
+155       \}
+156     ProbabilisticModelParameters pars;
+157     pars.add(\textcolor{stringliteral}{"probabilities"}, ProbabilisticModelParameterValuePtr (\textcolor{keyword}{new} DoubleVectorParameterValue(prob)));
+158     pars.add(\textcolor{stringliteral}{"alphabet"}, alpha->getParameterValue());
+159     DiscreteIIDModelPtr result =
+160       DiscreteIIDModelPtr(\textcolor{keyword}{new} DiscreteIIDModel());
+161     result->initialize(pars);
+162     \textcolor{keywordflow}{return} result;
+163   \}
+\end{DoxyCode}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/Smoothed\+Histogram\+Stanke.\+hpp\item 
+src/Smoothed\+Histogram\+Stanke.\+cpp\end{DoxyCompactItemize}

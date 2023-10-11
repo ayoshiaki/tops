@@ -1,0 +1,140 @@
+\hypertarget{classtops_1_1InhomogeneousFactorableModel}{}\section{tops\+:\+:Inhomogeneous\+Factorable\+Model Class Reference}
+\label{classtops_1_1InhomogeneousFactorableModel}\index{tops\+::\+Inhomogeneous\+Factorable\+Model@{tops\+::\+Inhomogeneous\+Factorable\+Model}}
+
+
+Interface defining inhomogeneous models in which the likelihood of the sequence is factorable in the sense that they can be expressed as a product of terms evaluated at each position in a sequence.  
+
+
+
+
+{\ttfamily \#include $<$Inhomogeneous\+Factorable\+Model.\+hpp$>$}
+
+
+
+Inheritance diagram for tops\+:\+:Inhomogeneous\+Factorable\+Model\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=236pt]{classtops_1_1InhomogeneousFactorableModel__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for tops\+:\+:Inhomogeneous\+Factorable\+Model\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=236pt]{classtops_1_1InhomogeneousFactorableModel__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classtops_1_1InhomogeneousFactorableModel_a9e5804a829b9cbbc427f73562ad9a279}\label{classtops_1_1InhomogeneousFactorableModel_a9e5804a829b9cbbc427f73562ad9a279}} 
+virtual double \hyperlink{classtops_1_1InhomogeneousFactorableModel_a9e5804a829b9cbbc427f73562ad9a279}{evaluate} (const Sequence \&s, unsigned int begin, unsigned int end) const
+\begin{DoxyCompactList}\small\item\em Calculates the sequence likelihood given this model. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1InhomogeneousFactorableModel_a697921bf1b5e5800223ee81823e77dce}\label{classtops_1_1InhomogeneousFactorableModel_a697921bf1b5e5800223ee81823e77dce}} 
+virtual double {\bfseries evaluate} (const Sequence \&s, unsigned int begin, unsigned int end, int phase) const
+\item 
+\mbox{\Hypertarget{classtops_1_1InhomogeneousFactorableModel_a6833422c79df88b45d45180c9ac3436c}\label{classtops_1_1InhomogeneousFactorableModel_a6833422c79df88b45d45180c9ac3436c}} 
+virtual Sequence \& {\bfseries choose} (Sequence \&h, int \hyperlink{classtops_1_1ProbabilisticModel_a4e3910e9b9b848b7078e7101909ae82a}{size}) const
+\item 
+\mbox{\Hypertarget{classtops_1_1InhomogeneousFactorableModel_a761218d79449f5ebdedf2459a682c384}\label{classtops_1_1InhomogeneousFactorableModel_a761218d79449f5ebdedf2459a682c384}} 
+virtual Sequence \& {\bfseries choose\+With\+History} (Sequence \&h, int i, int \hyperlink{classtops_1_1ProbabilisticModel_a4e3910e9b9b848b7078e7101909ae82a}{size}) const
+\item 
+\mbox{\Hypertarget{classtops_1_1InhomogeneousFactorableModel_aa7390e7bfcda2dcedd3b1b751ebde767}\label{classtops_1_1InhomogeneousFactorableModel_aa7390e7bfcda2dcedd3b1b751ebde767}} 
+virtual Sequence \& {\bfseries choose\+With\+History} (Sequence \&h, int i, int phase, int \hyperlink{classtops_1_1ProbabilisticModel_a4e3910e9b9b848b7078e7101909ae82a}{size}) const
+\item 
+virtual double \hyperlink{classtops_1_1InhomogeneousFactorableModel_a977e9f2d49affc6beb74c68728a2be1f}{evaluate\+Position} (const Sequence \&s, int i, int t) const =0
+\begin{DoxyCompactList}\small\item\em Evaluate the position i of the sequence s. \end{DoxyCompactList}\item 
+virtual int \hyperlink{classtops_1_1InhomogeneousFactorableModel_ab5cba15522b91a4036e6966f774e9989}{choose\+Position} (const Sequence \&s, int i, int t) const =0
+\begin{DoxyCompactList}\small\item\em Choose the position i of the sequence s given the subsequence before the position i. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1InhomogeneousFactorableModel_a74326afb0110bdebb579fe2d9024d9e9}\label{classtops_1_1InhomogeneousFactorableModel_a74326afb0110bdebb579fe2d9024d9e9}} 
+virtual int \hyperlink{classtops_1_1InhomogeneousFactorableModel_a74326afb0110bdebb579fe2d9024d9e9}{maximum\+Time\+Value} () const =0
+\begin{DoxyCompactList}\small\item\em Returns the maximum value of t. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1InhomogeneousFactorableModel_a403fbd005d03fcfcef1fca4c98068b39}\label{classtops_1_1InhomogeneousFactorableModel_a403fbd005d03fcfcef1fca4c98068b39}} 
+virtual bool \hyperlink{classtops_1_1InhomogeneousFactorableModel_a403fbd005d03fcfcef1fca4c98068b39}{is\+Phased} () const =0
+\begin{DoxyCompactList}\small\item\em Phased. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1InhomogeneousFactorableModel_a2ba1c4308be601cdde635e839f7f0b21}\label{classtops_1_1InhomogeneousFactorableModel_a2ba1c4308be601cdde635e839f7f0b21}} 
+virtual double {\bfseries prefix\+\_\+sum\+\_\+array\+\_\+compute} (int begin, int end)
+\item 
+\mbox{\Hypertarget{classtops_1_1InhomogeneousFactorableModel_a16cfe72f4fca1a22836e75b260486c94}\label{classtops_1_1InhomogeneousFactorableModel_a16cfe72f4fca1a22836e75b260486c94}} 
+virtual double {\bfseries prefix\+\_\+sum\+\_\+array\+\_\+compute} (int begin, int end, int phase)
+\item 
+\mbox{\Hypertarget{classtops_1_1InhomogeneousFactorableModel_a1f98315d7b7ca5a4e6f50c177cae6e8d}\label{classtops_1_1InhomogeneousFactorableModel_a1f98315d7b7ca5a4e6f50c177cae6e8d}} 
+virtual bool {\bfseries initialize\+\_\+prefix\+\_\+sum\+\_\+array} (const Sequence \&s, int phase)
+\item 
+\mbox{\Hypertarget{classtops_1_1InhomogeneousFactorableModel_a01d9b27d2744068d565ff059c72b0279}\label{classtops_1_1InhomogeneousFactorableModel_a01d9b27d2744068d565ff059c72b0279}} 
+virtual bool {\bfseries initialize\+\_\+prefix\+\_\+sum\+\_\+array} (const Sequence \&s)
+\item 
+\mbox{\Hypertarget{classtops_1_1InhomogeneousFactorableModel_a71543266c16733298e17e657f7d1d3ef}\label{classtops_1_1InhomogeneousFactorableModel_a71543266c16733298e17e657f7d1d3ef}} 
+virtual \hyperlink{classtops_1_1InhomogeneousFactorableModel}{Inhomogeneous\+Factorable\+Model} $\ast$ {\bfseries inhomogeneous} ()
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Interface defining inhomogeneous models in which the likelihood of the sequence is factorable in the sense that they can be expressed as a product of terms evaluated at each position in a sequence. 
+
+Definition at line 34 of file Inhomogeneous\+Factorable\+Model.\+hpp.
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{classtops_1_1InhomogeneousFactorableModel_ab5cba15522b91a4036e6966f774e9989}\label{classtops_1_1InhomogeneousFactorableModel_ab5cba15522b91a4036e6966f774e9989}} 
+\index{tops\+::\+Inhomogeneous\+Factorable\+Model@{tops\+::\+Inhomogeneous\+Factorable\+Model}!choose\+Position@{choose\+Position}}
+\index{choose\+Position@{choose\+Position}!tops\+::\+Inhomogeneous\+Factorable\+Model@{tops\+::\+Inhomogeneous\+Factorable\+Model}}
+\subsubsection{\texorpdfstring{choose\+Position()}{choosePosition()}}
+{\footnotesize\ttfamily virtual int tops\+::\+Inhomogeneous\+Factorable\+Model\+::choose\+Position (\begin{DoxyParamCaption}\item[{const Sequence \&}]{s,  }\item[{int}]{i,  }\item[{int}]{t }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Choose the position i of the sequence s given the subsequence before the position i. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em s} & is the sequence \\
+\hline
+{\em i} & is the position of the sequence \\
+\hline
+{\em t} & is the considered time \\
+\hline
+\end{DoxyParams}
+
+
+Implemented in \hyperlink{classtops_1_1InhomogeneousMarkovChain_a55e36090a72a54118e439fe2e5add49b}{tops\+::\+Inhomogeneous\+Markov\+Chain}.
+
+\mbox{\Hypertarget{classtops_1_1InhomogeneousFactorableModel_a977e9f2d49affc6beb74c68728a2be1f}\label{classtops_1_1InhomogeneousFactorableModel_a977e9f2d49affc6beb74c68728a2be1f}} 
+\index{tops\+::\+Inhomogeneous\+Factorable\+Model@{tops\+::\+Inhomogeneous\+Factorable\+Model}!evaluate\+Position@{evaluate\+Position}}
+\index{evaluate\+Position@{evaluate\+Position}!tops\+::\+Inhomogeneous\+Factorable\+Model@{tops\+::\+Inhomogeneous\+Factorable\+Model}}
+\subsubsection{\texorpdfstring{evaluate\+Position()}{evaluatePosition()}}
+{\footnotesize\ttfamily virtual double tops\+::\+Inhomogeneous\+Factorable\+Model\+::evaluate\+Position (\begin{DoxyParamCaption}\item[{const Sequence \&}]{s,  }\item[{int}]{i,  }\item[{int}]{t }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Evaluate the position i of the sequence s. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em s} & is the sequence \\
+\hline
+{\em i} & is the position of the sequence \\
+\hline
+{\em t} & is the considered time \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented from \hyperlink{classtops_1_1ProbabilisticModel_a759335f8c811c1fcc9a64a77f3753420}{tops\+::\+Probabilistic\+Model}.
+
+
+
+Implemented in \hyperlink{classtops_1_1InhomogeneousMarkovChain_a7aebc92c4d85507eefe8b6a505fbe132}{tops\+::\+Inhomogeneous\+Markov\+Chain}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/Inhomogeneous\+Factorable\+Model.\+hpp\item 
+src/Inhomogeneous\+Factorable\+Model.\+cpp\end{DoxyCompactItemize}

@@ -1,0 +1,89 @@
+\hypertarget{classtops_1_1InhomogeneousMarkovChain}{}\section{tops\+:\+:Inhomogeneous\+Markov\+Chain Class Reference}
+\label{classtops_1_1InhomogeneousMarkovChain}\index{tops\+::\+Inhomogeneous\+Markov\+Chain@{tops\+::\+Inhomogeneous\+Markov\+Chain}}
+
+
+Inhomogeneous Markov chain.  
+
+
+
+
+{\ttfamily \#include $<$Inhomogeneous\+Markov\+Chain.\+hpp$>$}
+
+
+
+Inheritance diagram for tops\+:\+:Inhomogeneous\+Markov\+Chain\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=236pt]{classtops_1_1InhomogeneousMarkovChain__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for tops\+:\+:Inhomogeneous\+Markov\+Chain\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=236pt]{classtops_1_1InhomogeneousMarkovChain__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classtops_1_1InhomogeneousMarkovChain_ad54564afb074212e4cf54eb8d53bca3a}\label{classtops_1_1InhomogeneousMarkovChain_ad54564afb074212e4cf54eb8d53bca3a}} 
+virtual void {\bfseries set\+Position\+Specific\+Distribution} (std\+::vector$<$ Context\+Tree\+Ptr $>$ position\+\_\+specific\+\_\+context\+\_\+trees)
+\item 
+\mbox{\Hypertarget{classtops_1_1InhomogeneousMarkovChain_a7aebc92c4d85507eefe8b6a505fbe132}\label{classtops_1_1InhomogeneousMarkovChain_a7aebc92c4d85507eefe8b6a505fbe132}} 
+virtual double \hyperlink{classtops_1_1InhomogeneousMarkovChain_a7aebc92c4d85507eefe8b6a505fbe132}{evaluate\+Position} (const Sequence \&s, int i, int t) const
+\begin{DoxyCompactList}\small\item\em Evaluate the position i of the sequence s. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1InhomogeneousMarkovChain_a55e36090a72a54118e439fe2e5add49b}\label{classtops_1_1InhomogeneousMarkovChain_a55e36090a72a54118e439fe2e5add49b}} 
+virtual int \hyperlink{classtops_1_1InhomogeneousMarkovChain_a55e36090a72a54118e439fe2e5add49b}{choose\+Position} (const Sequence \&s, int i, int t) const
+\begin{DoxyCompactList}\small\item\em Choose the position i of the sequence s given the subsequence before the position i. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1InhomogeneousMarkovChain_a7d9157f4bc965d715a851230351e9c76}\label{classtops_1_1InhomogeneousMarkovChain_a7d9157f4bc965d715a851230351e9c76}} 
+virtual int \hyperlink{classtops_1_1InhomogeneousMarkovChain_a7d9157f4bc965d715a851230351e9c76}{maximum\+Time\+Value} () const
+\begin{DoxyCompactList}\small\item\em Returns the maximum value of t. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1InhomogeneousMarkovChain_a442e4b53a0e21d7ea95668b7366e803f}\label{classtops_1_1InhomogeneousMarkovChain_a442e4b53a0e21d7ea95668b7366e803f}} 
+virtual bool \hyperlink{classtops_1_1InhomogeneousMarkovChain_a442e4b53a0e21d7ea95668b7366e803f}{is\+Phased} () const
+\begin{DoxyCompactList}\small\item\em Phased. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1InhomogeneousMarkovChain_aa0b6965db95c168d64617b60d74a4fd6}\label{classtops_1_1InhomogeneousMarkovChain_aa0b6965db95c168d64617b60d74a4fd6}} 
+virtual void {\bfseries phased} (bool phased)
+\item 
+\mbox{\Hypertarget{classtops_1_1InhomogeneousMarkovChain_ad272109a2c65cbe473939100a93a9552}\label{classtops_1_1InhomogeneousMarkovChain_ad272109a2c65cbe473939100a93a9552}} 
+virtual std\+::string \hyperlink{classtops_1_1InhomogeneousMarkovChain_ad272109a2c65cbe473939100a93a9552}{model\+\_\+name} () const
+\begin{DoxyCompactList}\small\item\em returns the model name \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1InhomogeneousMarkovChain_a77618f8825fead509c2bb7556fe8a78a}\label{classtops_1_1InhomogeneousMarkovChain_a77618f8825fead509c2bb7556fe8a78a}} 
+virtual Probabilistic\+Model\+Creator\+Ptr {\bfseries get\+Factory} () const
+\item 
+\mbox{\Hypertarget{classtops_1_1InhomogeneousMarkovChain_a8c66a9faa82527054d79b91e6ff11a32}\label{classtops_1_1InhomogeneousMarkovChain_a8c66a9faa82527054d79b91e6ff11a32}} 
+virtual \hyperlink{classtops_1_1InhomogeneousFactorableModel}{Inhomogeneous\+Factorable\+Model} $\ast$ {\bfseries inhomogeneous} ()
+\item 
+\mbox{\Hypertarget{classtops_1_1InhomogeneousMarkovChain_a5d371f2201f8711d09ac6e275a3678bd}\label{classtops_1_1InhomogeneousMarkovChain_a5d371f2201f8711d09ac6e275a3678bd}} 
+virtual std\+::string \hyperlink{classtops_1_1InhomogeneousMarkovChain_a5d371f2201f8711d09ac6e275a3678bd}{str} () const
+\begin{DoxyCompactList}\small\item\em returns the string representation of the model \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1InhomogeneousMarkovChain_a6d5c4847aae3bbea0a36732d64a40fbe}\label{classtops_1_1InhomogeneousMarkovChain_a6d5c4847aae3bbea0a36732d64a40fbe}} 
+virtual int \hyperlink{classtops_1_1InhomogeneousMarkovChain_a6d5c4847aae3bbea0a36732d64a40fbe}{size} () const
+\begin{DoxyCompactList}\small\item\em Returns the number of parameters of the model. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classtops_1_1InhomogeneousMarkovChain_a251f04c2250da5f8b1a8ae0df309324f}\label{classtops_1_1InhomogeneousMarkovChain_a251f04c2250da5f8b1a8ae0df309324f}} 
+virtual void {\bfseries remove\+Sequence\+From\+Model} (const Sequence \&s, int phase)
+\item 
+\mbox{\Hypertarget{classtops_1_1InhomogeneousMarkovChain_aaba5bfa5af523fa57de784ee45ac98a2}\label{classtops_1_1InhomogeneousMarkovChain_aaba5bfa5af523fa57de784ee45ac98a2}} 
+virtual void {\bfseries initialize} (const \hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} \&p)
+\item 
+\mbox{\Hypertarget{classtops_1_1InhomogeneousMarkovChain_a8d52df52a4671b1cc34a139183b386ff}\label{classtops_1_1InhomogeneousMarkovChain_a8d52df52a4671b1cc34a139183b386ff}} 
+virtual \hyperlink{classtops_1_1ProbabilisticModelParameters}{Probabilistic\+Model\+Parameters} {\bfseries parameters} () const
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Inhomogeneous Markov chain. 
+
+Definition at line 39 of file Inhomogeneous\+Markov\+Chain.\+hpp.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/Inhomogeneous\+Markov\+Chain.\+hpp\item 
+src/Inhomogeneous\+Markov\+Chain.\+cpp\end{DoxyCompactItemize}
