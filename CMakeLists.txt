@@ -10,7 +10,7 @@ find_package(Boost 1.50 COMPONENTS system REQUIRED)
 find_package(Boost 1.50 COMPONENTS filesystem REQUIRED)
 
 # LIBTORCH package
-set(CMAKE_PREFIX_PATH "/home/waldir/libtorch")
+set(CMAKE_PREFIX_PATH "/home/edisone/Downloads/libtorch")
 find_package(Torch REQUIRED)
 include_directories(${TORCH_INCLUDE_DIRS})
 
@@ -39,3 +39,9 @@ set(CMAKE_BUILD_TYPE RelWithDebInfo)
 add_subdirectory(src)
 add_subdirectory(app)
 add_subdirectory(lang)
+
+
+# ignore BOOST deprecated headers
+  add_definitions("-DBOOST_ALLOW_DEPRECATED_HEADERS")
+  add_definitions("-DBOOST_BIND_GLOBAL_PLACEHOLDERS")
+  add_definitions("-BOOST_TIMER_ENABLE_DEPRECATED")

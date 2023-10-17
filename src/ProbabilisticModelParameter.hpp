@@ -47,8 +47,11 @@ namespace tops {
   typedef boost::numeric::ublas::matrix<double> Matrix;
   typedef std::vector <std::string> StringVector;
   typedef std::map <std::string, std::string> StringMap;
+
   class DLLEXPORT ProbabilisticModelParameterValue;
+  
   typedef boost::shared_ptr <ProbabilisticModelParameterValue> ProbabilisticModelParameterValuePtr;
+  
   //! This class registers a set of parameters
   class DLLEXPORT ProbabilisticModelParameters  {
     std::map <std::string, ProbabilisticModelParameterValuePtr> _parameters;
@@ -185,6 +188,7 @@ namespace tops {
     virtual IntVector & getIntVector()  ;
     virtual std::string str() const;
   };
+
   //! probability table
   class DLLEXPORT DoubleMapParameterValue: public ProbabilisticModelParameterValue {
   private:
@@ -206,6 +210,7 @@ namespace tops {
     virtual std::string str() const;
 
   };
+
   //! double vector parameter value
   class DLLEXPORT DoubleVectorParameterValue: public ProbabilisticModelParameterValue {
   private:
@@ -224,7 +229,7 @@ namespace tops {
 
   };
 
-  //! string vector parameter value
+  //! string map parameter value
   class DLLEXPORT StringMapParameterValue: public ProbabilisticModelParameterValue {
   private:
     std::map<std::string,std::string> _str_map;

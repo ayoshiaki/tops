@@ -27,6 +27,7 @@
 #include <boost/spirit/include/classic_core.hpp>
 #include <fstream>
 #include "util.hpp"
+
 using namespace boost::spirit::classic;
 namespace tops {
 
@@ -435,13 +436,14 @@ namespace tops {
 
   /* Deep layer struct parsings */
 
-  struct create_layer_vector
+  struct create_sequential_architecture
   {
-    create_layer_vector(ConfigurationReader *c) : _c(c){};
+    create_sequential_architecture(ConfigurationReader *c) : _c(c){};
+    template<typename IteratorT>
     void operator()(IteratorT first, IteratorT last) const
     {
-      LayerVectorParameterValuePtr v = LayerVectorParameterValuePtr(new LayerVectorParameterValue());      
-      _c->setCurrentParameterValue(v);
+      ModuleParameterValuePtr architecture = ModuleParameterValuePtr(new ModuleParameterValue());
+      _c->setCurrentParameterValue(architecture);
     }
   private:
     ConfigurationReader * _c;
@@ -450,10 +452,12 @@ namespace tops {
   struct create_Conv1d
   {
     create_Conv1d(ConfigurationReader *c) : _c(c){};
+    template<typename IteratorT>
     void operator()(IteratorT first, IteratorT last) const
     {
-      CreateConv1d layer
-      (_c->getCurrentParameterValue()->getLayerVector()).push_back();
+      torch::nn::Conv1d layer{nullptr};
+      (_c->getCurrentParameterValue()->getModule()).register_module("conv" + std::to_string(_c->getCurrentLayer()), layer);
+      _c->IncCurrentLayer();
     }
   private:
     ConfigurationReader * _c;
@@ -613,7 +617,7 @@ namespace tops {
 
     /* e.g. Conv2d(100, 200, 4); Conv2d(100, 200, (4, 5)) */
     convolutional_layer 
-      = ( str_p("Conv1d") 
+      = ( str_p("Conv1d")[create_Conv1d(this)] 
         | str_p("Conv2d") 
         | str_p("Conv3d") 
         | str_p("ConvTranspose1d") 
@@ -661,7 +665,7 @@ namespace tops {
 
     layer_vector /* list of layers */
       = ch_p('(')
-      >> layer_p
+      >> layer_p[create_sequential_architecture(this)]
       >> * ( ',' >> layer_p )
       >> ')'
       ;
@@ -784,6 +788,14 @@ namespace tops {
     _aux_string_3 = aux;
   }
 
+  int ConfigurationReader::getCurrentLayer(){
+    return _currentLayer;
+  }
+
+  void ConfigurationReader::IncCurrentLayer(){
+    _currentLayer++;
+  }
+
   void ConfigurationReader::reset() {
     ProbabilisticModelParameterValuePtr a;
     _current_value =a ;
@@ -791,6 +803,7 @@ namespace tops {
     _aux_string = "";
     _aux_string_2 = "";
     _aux_string_3  = "";
+    _currentLayer = 1;
 
   }
 };

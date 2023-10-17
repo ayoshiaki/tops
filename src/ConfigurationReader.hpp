@@ -2,7 +2,7 @@
  *       ConfigurationReader.hpp
  *
  *       Copyright 2011 Andre Yoshiaki Kashiwabara <akashiwabara@usp.br>
- *                      Ígor Bonadio <ibonadio@ime.usp.br>
+ *                      ï¿½gor Bonadio <ibonadio@ime.usp.br>
  *                      Vitor Onuchic <vitoronuchic@gmail.com>
  *                      Alan Mitchell Durham <aland@usp.br>
  *
@@ -31,6 +31,7 @@
 #include <iostream>
 #include <string>
 
+#include <torch/torch.h>
 
 using namespace std;
 
@@ -59,25 +60,23 @@ namespace tops {
 
     ProbabilisticModelParameterValuePtr getCurrentParameterValue();
 
+    std::string getCurrentParameterName();
     void setCurrentParameterName(const std::string & name);
 
-    void setAuxString(const std::string & aux) ;
-
-    std::string getAuxString();
-
-    std::string getCurrentParameterName();
-
+    ProbabilisticModelParametersPtr parameters();
     void add_parameter();
 
-    ProbabilisticModelParametersPtr parameters();
-
+    std::string getAuxString();
     std::string getAuxString2();
-
     std::string getAuxString3();
 
+    void setAuxString(const std::string & aux) ;
     void setAuxString2(const std::string & aux);
-
     void setAuxString3(const std::string & aux);
+
+    int getCurrentLayer();
+    void IncCurrentLayer();
+
     void reset();
 
   private:
@@ -87,6 +86,7 @@ namespace tops {
     std::string _aux_string;
     std::string _aux_string_2;
     std::string _aux_string_3;
+    int _currentLayer;
   };
 
 
