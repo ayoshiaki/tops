@@ -455,6 +455,7 @@ namespace tops {
     template<typename IteratorT>
     void operator()(IteratorT first, IteratorT last) const
     {
+
       torch::nn::Conv1d layer{nullptr};
       (_c->getCurrentParameterValue()->getModule()).register_module("conv" + std::to_string(_c->getCurrentLayer()), layer);
       _c->IncCurrentLayer();
@@ -617,14 +618,30 @@ namespace tops {
 
     /* e.g. Conv2d(100, 200, 4); Conv2d(100, 200, (4, 5)) */
     convolutional_layer 
-      = ( str_p("Conv1d")[create_Conv1d(this)] 
-        | str_p("Conv2d") 
-        | str_p("Conv3d") 
-        | str_p("ConvTranspose1d") 
-        | str_p("ConvTranspose2d") 
-        | str_p("ConvTranspose3d")  
-        )        
+      = conv_creator >> conv_parameters []
+      ;
+
+    conv_creator
+      = ( str_p("Conv1d")[prepare_Conv1d(this)] 
+        | str_p("Conv2d")[create_Conv2d(this)] 
+        | str_p("Conv3d")[create_Conv3d(this)] 
+        | str_p("ConvTranspose1d")[create_ConvTranspose1d(this)] 
+        | str_p("ConvTranspose2d")[create_ConvTranspose2d(this)] 
+        | str_p("ConvTranspose3d")[create_ConvTranspose3d(this)] 
+        )
+        ;
+
+    conv_parameters 
       >> ch_p('(')
+                >> int_p /* in_channels */ >> ','
+                >> int_p /* out_channels */ >> ','
+                >> (int_p | tuple_p) /* kernel_size */
+      >> ')'
+      ;
+
+    conv1d_layer 
+        = str_p("Conv1d")
+        >> ch_p('(')
                 >> int_p /* in_channels */ >> ','
                 >> int_p /* out_channels */ >> ','
                 >> (int_p | tuple_p) /* kernel_size */
@@ -796,6 +813,14 @@ namespace tops {
     _currentLayer++;
   }
 
+  std::string ConfigurationReader::getAuxLayer(){
+    return _aux_layer;
+  }
+
+  void ConfigurationReader::setAuxLayer(const std::string & aux){
+    _aux_layer = aux;
+  }
+
   void ConfigurationReader::reset() {
     ProbabilisticModelParameterValuePtr a;
     _current_value =a ;
@@ -803,7 +828,9 @@ namespace tops {
     _aux_string = "";
     _aux_string_2 = "";
     _aux_string_3  = "";
+    
     _currentLayer = 1;
+    _aux_layer = "";
 
   }
 };

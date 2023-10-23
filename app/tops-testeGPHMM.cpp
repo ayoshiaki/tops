@@ -1,5 +1,5 @@
 #include <boost/program_options.hpp>
-#include <boost/timer.hpp>
+#include <boost/timer/timer.hpp>
 #include <map>
 #include <iostream>
 #include <string>
@@ -22,9 +22,9 @@ using namespace boost::program_options;
 
 void testeVector(){
   float t1,t2;
-  boost::timer t;
+  boost::timer::cpu_timer t;
   double sf = 0;
-  t.restart();
+  t.resume();
   vector<Matrix> m(5);
   for(int k = 0; k < 5; k++)
     m[k].resize(1000,1000);
@@ -43,11 +43,11 @@ void testeVector(){
       }
     }
   }
-  t1 = t.elapsed();
+  t1 = std::stof(boost::timer::format(t.elapsed()));
   cout << sf << endl;
 
   sf = 0;
-  t.restart();
+  t.resume();
   vector<double> v(5000000);
   for(int i = 0; i < 5000000; i++){
     v[i] = 1;
@@ -55,7 +55,7 @@ void testeVector(){
   for(int i = 0; i < 5000000; i++){
     sf += v[i];
   }
-  t2 = t.elapsed();
+  t2 = std::stof(boost::timer::format(t.elapsed()));
   cout << sf << endl;
 
   cout << "t1 = " << t1 << " t2 = " << t2 << endl;
