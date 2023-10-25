@@ -78,6 +78,7 @@ namespace tops {
     void IncCurrentLayer();
     std::string getAuxLayer();
     void setAuxLayer(const std::string & aux);
+    void setParametersLayer();
 
     void reset();
 
@@ -91,6 +92,7 @@ namespace tops {
     
     int _currentLayer;
     std::string _aux_layer;
+    map<std::string, vector<int>> _parameters_layer;
   };
 
 
