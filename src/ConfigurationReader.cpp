@@ -456,8 +456,27 @@ namespace tops {
     void operator()(IteratorT first, IteratorT last) const
     {
       if(_c->getAuxLayer() == "Conv1d"){
-        torch::nn::Conv1d layer{nullptr};
-        (_c->getCurrentParameterValue()->getModule()).register_module("conv" + std::to_string(_c->getCurrentLayer()), layer);
+        //torch::nn::Conv1d layer{nullptr};
+        
+        torch::nn::Conv2dOptions conv_options(
+        /*in_channels=*/torch::randint(1, 10).item<int64_t>(),        // Random in_channels between 1 and 10
+        /*out_channels=*/torch::randint(1, 10).item<int64_t>(),       // Random out_channels between 1 and 10
+        /*kernel_size=*/{torch::randint(1, 5).item<int64_t>(), torch::randint(1, 5).item<int64_t>()},  // Random kernel size between 1x1 and 5x5
+        /*stride=*/{torch::randint(1, 3).item<int64_t>(), torch::randint(1, 3).item<int64_t>()},       // Random stride between 1 and 2
+        /*padding=*/{torch::randint(0, 2).item<int64_t>(), torch::randint(0, 2).item<int64_t>()},     // Random padding of 0 or 1
+        /*dilation=*/{torch::randint(1, 3).item<int64_t>(), torch::randint(1, 3).item<int64_t>()},   // Random dilation between 1 and 2
+        /*groups=*/torch::randint(1, 4).item<int64_t>(),              // Random number of groups between 1 and 3
+        /*bias=*/torch::randint(0, 2).item<bool>(),                   // Random boolean for bias
+        /*padding_mode=*/torch::nn::Padding::Circular,                // Random padding mode
+        /*output_padding=*/{torch::randint(0, 2).item<int64_t>(), torch::randint(0, 2).item<int64_t>()},  // Random output padding of 0 or 1
+        /*transposed=*/torch::randint(0, 2).item<bool>()              // Random boolean for transposed convolution
+        )
+
+        (_c->getCurrentParameterValue()->getModule()).register_module("conv" + std::to_string(_c->getCurrentLayer()), 
+                                                                        torch::nn::Conv1dOptions(_parameters_layer["in_channels"],
+                                                                                                 _parameters_layer["out_channels"],
+                                                                                                 _parameters_layer["kernel_size"]).
+                                                                                                 Stride(_parameters_layer["stride"]));
         _c->IncCurrentLayer();
       }
     }
@@ -626,19 +645,22 @@ namespace tops {
         | str_p("ConvTranspose1d")
         | str_p("ConvTranspose2d")
         | str_p("ConvTranspose3d")
-        )[classic::assign_a(this->_aux_layer), this->setParametersLayer()]
+        )[assign_a(this->_aux_layer)]
         ;
+
+    std::string _param_aux;
 
     conv_parameters 
       >> ch_p('(')
-                >> int_p /* in_channels */ >> ','
-                >> int_p /* out_channels */ >> ','
-                >> (int_p | tuple_p) /* kernel_size */
+                >> int_p [assign_a(this->_parameters_layer["in_channels"][0])] /* in_channels */ >> ','
+                >> int_p [assign_a(this->_parameters_layer["out_channels"][0])] /* out_channels */ >> ','
+                >> (int_p | tuple_p) [push_back_a(this->_parameters_layer["kernel_size"])] /* kernel_size */
+                //>> * (',' >> word_p [_param_aux] >> '=' >> (int_p | tuple_p) [assign_a(this->_parameters_layer[_param_aux][0])] /* optional parameter */ )
       >> ')'
       ;
 
     convolutional_layer 
-      = conv_creator 
+      = conv_creator [function_a(this->setParametersLayer())]
       >> conv_parameters 
       ;
 
@@ -816,9 +838,9 @@ namespace tops {
   }
 
   void ConfigurationReader::setParametersLayer(){
-    _parameters_layer["in_channels"] = {1}; //conv, convtrans
-    _parameters_layer["out_channels"] = {1}; //conv, convtrans
-    _parameters_layer["kernel_size"] = {1}; //conv, convtrans, pool
+    _parameters_layer["in_channels"] = {}; //conv, convtrans
+    _parameters_layer["out_channels"] = {}; //conv, convtrans
+    _parameters_layer["kernel_size"] = {}; //conv, convtrans, pool
     
     _parameters_layer["stride"] = {1}; //conv, convtrans, pool
     
