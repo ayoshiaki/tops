@@ -456,34 +456,46 @@ namespace tops {
     void operator()(IteratorT first, IteratorT last) const
     {
       if(_c->getAuxLayer() == "Conv1d"){
-        //torch::nn::Conv1d layer{nullptr};
-        
-        torch::nn::Conv2dOptions conv_options(
-        /*in_channels=*/torch::randint(1, 10).item<int64_t>(),        // Random in_channels between 1 and 10
-        /*out_channels=*/torch::randint(1, 10).item<int64_t>(),       // Random out_channels between 1 and 10
-        /*kernel_size=*/{torch::randint(1, 5).item<int64_t>(), torch::randint(1, 5).item<int64_t>()},  // Random kernel size between 1x1 and 5x5
-        /*stride=*/{torch::randint(1, 3).item<int64_t>(), torch::randint(1, 3).item<int64_t>()},       // Random stride between 1 and 2
-        /*padding=*/{torch::randint(0, 2).item<int64_t>(), torch::randint(0, 2).item<int64_t>()},     // Random padding of 0 or 1
-        /*dilation=*/{torch::randint(1, 3).item<int64_t>(), torch::randint(1, 3).item<int64_t>()},   // Random dilation between 1 and 2
-        /*groups=*/torch::randint(1, 4).item<int64_t>(),              // Random number of groups between 1 and 3
-        /*bias=*/torch::randint(0, 2).item<bool>(),                   // Random boolean for bias
-        /*padding_mode=*/torch::nn::Padding::Circular,                // Random padding mode
-        /*output_padding=*/{torch::randint(0, 2).item<int64_t>(), torch::randint(0, 2).item<int64_t>()},  // Random output padding of 0 or 1
-        /*transposed=*/torch::randint(0, 2).item<bool>()              // Random boolean for transposed convolution
-        )
 
-        (_c->getCurrentParameterValue()->getModule()).register_module("conv" + std::to_string(_c->getCurrentLayer()), 
-                                                                        torch::nn::Conv1dOptions(_parameters_layer["in_channels"],
-                                                                                                 _parameters_layer["out_channels"],
-                                                                                                 _parameters_layer["kernel_size"]).
-                                                                                                 Stride(_parameters_layer["stride"]));
+        torch::nn::Conv1dOptions conv_options = torch::nn::Conv1dOptions(
+        /*in_channels=*/_c->getValueParametersLayer("in_channels"),  
+        /*out_channels=*/_c->getValueParametersLayer("out_channels"),
+        /*kernel_size=*/_c->getVectorValuesParametersLayer<1>("kernel_size"))
+        .stride(_c->getVectorValuesParametersLayer<1>("stride"))
+        .padding(_c->getVectorValuesParametersLayer<1>("padding"))
+        .dilation(_c->getVectorValuesParametersLayer<1>("dilation"))
+        .groups(_c->getValueParametersLayer("groups"))
+        .bias(_c->getValueParametersLayer("bias"))
+        .padding_mode(torch::kCircular);
+        //.output_padding(_c->getValueParametersLayer("output_padding"));
+        //.transposed(_c->getValueParametersLayer("transposed"));
+
+        (_c->getCurrentParameterValue()->getModule()).register_module("conv" + std::to_string(_c->getCurrentLayer()), torch::nn::Conv1d(conv_options));
+        _c->IncCurrentLayer();
+      }
+      else if(_c->getAuxLayer() == "Conv2d"){
+
+        torch::nn::Conv2dOptions conv_options = torch::nn::Conv2dOptions(
+        /*in_channels=*/_c->getValueParametersLayer("in_channels"),  
+        /*out_channels=*/_c->getValueParametersLayer("out_channels"),
+        /*kernel_size=*/_c->getVectorValuesParametersLayer<2>("kernel_size"))
+        .stride(_c->getVectorValuesParametersLayer<2>("stride"))
+        .padding(_c->getVectorValuesParametersLayer<2>("padding"))
+        .dilation(_c->getVectorValuesParametersLayer<2>("dilation"))
+        .groups(_c->getValueParametersLayer("groups"))
+        .bias(_c->getValueParametersLayer("bias"))
+        .padding_mode(torch::kCircular);
+        //.output_padding(_c->getValueParametersLayer("output_padding"));
+        //.transposed(_c->getValueParametersLayer("transposed"));
+
+        (_c->getCurrentParameterValue()->getModule()).register_module("conv" + std::to_string(_c->getCurrentLayer()), torch::nn::Conv2d(conv_options));
         _c->IncCurrentLayer();
       }
     }
   private:
     ConfigurationReader * _c;
   };
-  
+
   /* Deep layer struct parsings */
 
 
@@ -529,17 +541,17 @@ namespace tops {
       int_vector, word, word_p, string_map, transition_map, nested_configuration, nested_parameter_spec,
       tree_p, tree,
 
-      layer_vector, layer_p, tuple_p, 
-      
+      layer_vector, layer_p, tuple_p,
+
       convolutional_layer, conv_creator, conv_parameters,
-      pooling_layer,      
-      activation_layer, 
-      normalization_layer, 
-      recurrent_layer, 
-      linear_layer, 
-      dropout_layer 
+      pooling_layer,
+      activation_layer,
+      normalization_layer,
+      recurrent_layer,
+      linear_layer,
+      dropout_layer
       ;
-    
+
     /* recognizes a string with some special characters: "_./- ,+" (e.g. _Aa1 z) */
     word_p
       = lexeme_d [ +(alnum_p | (ch_p('_') | '.' | '/' | '-' | ' ' | ',' | '+' ))]
@@ -571,7 +583,7 @@ namespace tops {
       >> * (',' >>  real_p[add_value_to_double_vector(this)])
       >> ')'
       ;
-    
+
     /* recognizes a list of (the rule) word (e.g ("e.g. _Aa1 z", "A", "a+A"))*/
     string_vector
       = ch_p('(')
@@ -629,15 +641,15 @@ namespace tops {
     // *** Deep layer rules
 
     /* e.g. (1, 2); (1, 2, 3) */
-    tuple_p 
+    tuple_p
       = ch_p('(')
-      >> int_p[create_int_vector(this)]
-      >> + ( ',' >> int_p[add_value_to_int_vector(this)] )
+      >> int_p //[create_int_vector(this)]
+      >> + ( ',' >> int_p )//[add_value_to_int_vector(this)] ) 
       >> ')'
       ;
 
     /* e.g. Conv2d(100, 200, 4); Conv2d(100, 200, (4, 5)) */
-    
+
     conv_creator
       = ( str_p("Conv1d")
         | str_p("Conv2d")
@@ -648,33 +660,34 @@ namespace tops {
         )[assign_a(this->_aux_layer)]
         ;
 
-    std::string _param_aux;
-
-    conv_parameters 
+    conv_parameters
       >> ch_p('(')
                 >> int_p [assign_a(this->_parameters_layer["in_channels"][0])] /* in_channels */ >> ','
                 >> int_p [assign_a(this->_parameters_layer["out_channels"][0])] /* out_channels */ >> ','
-                >> (int_p | tuple_p) [push_back_a(this->_parameters_layer["kernel_size"])] /* kernel_size */
-                //>> * (',' >> word_p [_param_aux] >> '=' >> (int_p | tuple_p) [assign_a(this->_parameters_layer[_param_aux][0])] /* optional parameter */ )
+                >> (int_p [assign_a(this->_parameters_layer["kernel_size"][0])]
+                  | tuple_p [push_back_a(this->_parameters_layer["kernel_size"])]) /* kernel_size */
+                >> * (',' >> word_p [assign_a(this->_aux_parameter_name)] >> '=' 
+                          >> (int_p [assign_a(this->_parameters_layer[this->_aux_parameter_name][0])]
+                            | tuple_p [push_back_a(this->_parameters_layer[this->_aux_parameter_name])]) /* optional parameter */ )
       >> ')'
       ;
 
-    convolutional_layer 
-      = conv_creator [function_a(this->setParametersLayer())]
-      >> conv_parameters 
+    convolutional_layer
+      = conv_creator //[this->setParametersLayer()]
+      >> conv_parameters
       ;
 
     /* e.g. MaxPool1d(100, 200, 4); MaxPool1d(100, 200, (4, 5)) */
     pooling_layer
-      = ( str_p("MaxPool1d") 
-        | str_p("MaxPool2d") 
+      = ( str_p("MaxPool1d")
+        | str_p("MaxPool2d")
         | str_p("MaxPool3d")
-        | str_p("MaxUnpool1d") 
-        | str_p("MaxUnpool2d") 
+        | str_p("MaxUnpool1d")
+        | str_p("MaxUnpool2d")
         | str_p("MaxUnpool3d")
-        | str_p("AvgPool1d") 
-        | str_p("AvgPool2d") 
-        | str_p("AvgPool3d") 
+        | str_p("AvgPool1d")
+        | str_p("AvgPool2d")
+        | str_p("AvgPool3d")
         | str_p("AvgUnpool1d")
         | str_p("AvgUnpool2d")
         | str_p("AvgUnpool3d")
@@ -687,13 +700,13 @@ namespace tops {
       ;
 
     layer_p /* kind of layer */
-      = convolutional_layer [create_Convolution_layer(this)] 
+      = convolutional_layer [create_Convolution_layer(this)]
       | pooling_layer
       | activation_layer
       | normalization_layer
       | recurrent_layer
       | linear_layer
-      | dropout_layer 
+      | dropout_layer
       ;
 
     layer_vector /* list of layers */
@@ -841,13 +854,13 @@ namespace tops {
     _parameters_layer["in_channels"] = {}; //conv, convtrans
     _parameters_layer["out_channels"] = {}; //conv, convtrans
     _parameters_layer["kernel_size"] = {}; //conv, convtrans, pool
-    
+
     _parameters_layer["stride"] = {1}; //conv, convtrans, pool
-    
+
     _parameters_layer["padding"] = {0}; //conv, convtrans, pool
     _parameters_layer["padding_mode"] = {0}; //conv (0='zeros', 1='reflect', 2='replicate', 3='circular')
     _parameters_layer["output_padding"] = {0}; //convtrans
-    
+
     _parameters_layer["dilation"] = {1}; //conv, convtrans, pool
     _parameters_layer["groups"] = {1}; //conv, convtrans
     _parameters_layer["bias"] = {1}; //conv, convtrans
@@ -867,6 +880,26 @@ namespace tops {
     _parameters_layer["inplace"] = {0}; //ELU, RELU
   }
 
+  int ConfigurationReader::getValueParametersLayer(const std::string & parameter){
+    return (_parameters_layer[parameter])[0];
+  }
+
+  template<size_t D>
+  torch::ExpandingArray<D> ConfigurationReader::getVectorValuesParametersLayer(const std::string & parameter){
+    const int l = _parameters_layer[parameter].size();
+    if(l == 1) return torch::ExpandingArray<D>({(_parameters_layer[parameter])[0]});
+    else if(l == 2) return torch::ExpandingArray<D>({(_parameters_layer[parameter])[0], (_parameters_layer[parameter])[1]});
+    return torch::ExpandingArray<D>({(_parameters_layer[parameter])[0], (_parameters_layer[parameter])[1], (_parameters_layer[parameter])[2]});
+  }
+
+  std::string ConfigurationReader::getAuxParameterName(){
+    return _aux_parameter_name;
+  }
+
+  void ConfigurationReader::setAuxParameterName(const std::string & aux){
+    _aux_parameter_name = aux;
+  }
+
   void ConfigurationReader::reset() {
     ProbabilisticModelParameterValuePtr a;
     _current_value =a ;
@@ -874,10 +907,10 @@ namespace tops {
     _aux_string = "";
     _aux_string_2 = "";
     _aux_string_3  = "";
-    
+
     _currentLayer = 1;
     _aux_layer = "";
+    _aux_parameter_name = "";
     setParametersLayer();
   }
 };
-

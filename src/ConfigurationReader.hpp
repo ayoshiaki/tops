@@ -32,6 +32,7 @@
 #include <string>
 
 #include <torch/torch.h>
+#include <ATen/ATen.h>
 
 using namespace std;
 
@@ -79,6 +80,11 @@ namespace tops {
     std::string getAuxLayer();
     void setAuxLayer(const std::string & aux);
     void setParametersLayer();
+    int getValueParametersLayer(const std::string & parameter);
+    template<size_t D>
+    torch::ExpandingArray<D> getVectorValuesParametersLayer(const std::string & parameter);
+    std::string getAuxParameterName();
+    void setAuxParameterName(const std::string & aux);
 
     void reset();
 
@@ -92,6 +98,7 @@ namespace tops {
     
     int _currentLayer;
     std::string _aux_layer;
+    std::string _aux_parameter_name;
     map<std::string, vector<int>> _parameters_layer;
   };
 
