@@ -1,8 +1,7 @@
 model_name="NeuralNetworkModel"
-weight={1, 2}
-bias=1
-
-network (
-    convolution((100, 4), 3, 3),
-    
+# layers of the network
+layers = (
+    Conv1d(100, 4, 3, padding=2), 
+    Conv2d(100, 4, (300, 201), padding=(2, 50), stride=(1, 1), dilation=(2, 2)), 
+    Conv2d(10, 40, (3, 4), padding=(3, 1))
 )

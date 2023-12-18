@@ -28,9 +28,10 @@ namespace tops {
 
   ProbabilisticModelPtr NeuralNetworkModelCreator::create(ProbabilisticModelParameters & parameters) const {
     
-    ProbabilisticModelParameterValuePtr weight = parameters.getMandatoryParameterValue("weight");
-    ProbabilisticModelParameterValuePtr bias = parameters.getMandatoryParameterValue("bias");
-    if(weight == NULL || bias == NULL) {
+    //ProbabilisticModelParameterValuePtr weight = parameters.getMandatoryParameterValue("weight");
+    //ProbabilisticModelParameterValuePtr bias = parameters.getMandatoryParameterValue("bias");
+    ProbabilisticModelParameterValuePtr layers = parameters.getMandatoryParameterValue("layers");
+    if(layers == NULL) {
         std::cerr << help();
     }
     NeuralNetworkModelPtr model = NeuralNetworkModelPtr(new NeuralNetworkModel());

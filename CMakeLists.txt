@@ -12,7 +12,7 @@ find_package(Boost 1.50 COMPONENTS filesystem REQUIRED)
 find_package(Boost REQUIRED chrono)
 
 # LIBTORCH package
-set(CMAKE_PREFIX_PATH "/home/edisone/Downloads/libtorch")
+set(CMAKE_PREFIX_PATH "/home/waldir/libtorch")
 find_package(Torch REQUIRED)
 include_directories(${TORCH_INCLUDE_DIRS})
 

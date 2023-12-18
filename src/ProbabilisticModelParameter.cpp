@@ -173,8 +173,14 @@ namespace tops {
     return t;
   }
 
-  torch::nn::Module ProbabilisticModelParameterValue::getModule() {
-    return nn;
+  std::shared_ptr<torch::nn::Module> ProbabilisticModelParameterValue::getModule() {
+    std::cout << "GetModule ProbabilisticModelParameterValue:\n" ;
+        auto net = std::make_shared<torch::nn::Module>(nn);
+        for(auto& x : net->named_modules()){
+            std::cout << "Layer: " << x.key() << "\tParameter Shape: " << x.value().get() << std::endl;
+        }
+        std::cout << "END" << std::endl;
+    return std::make_shared<torch::nn::Module>(nn);
   }
 
 
@@ -404,8 +410,14 @@ namespace tops {
   DEFINE MODULE NN PARAMETER VALUE
 */
 
-  void ModuleParameterValue::initialize(torch::nn::Module nn){
-    _nn = nn;
+  void ModuleParameterValue::initialize(std::shared_ptr<torch::nn::Module> nn_ptr){
+    _nn = *nn_ptr;
+    //nn = *nn_ptr; //weir??????
+    auto net = std::make_shared<torch::nn::Module>(_nn);
+      std::cout << "Module created" << std::endl;
+      for (const auto& param : net->named_modules()) {
+          std::cout << "Parameter Name: " << param.key() << "\tShape: " << param.value().get() << std::endl;
+      }
   }
 
   std::string ModuleParameterValue::parameter_type () const {
@@ -413,8 +425,14 @@ namespace tops {
     return type;
   }
 
-  torch::nn::Module ModuleParameterValue::getModule() const {
-    return _nn;
+  std::shared_ptr<torch::nn::Module> ModuleParameterValue::getModule() {
+    std::cout << "GetModule ModuleParameterValue:\n" ;
+        auto net = std::make_shared<torch::nn::Module>(_nn);
+        for(auto& x : net->named_modules()){
+            std::cout << "Layer: " << x.key() << "\tParameter Shape: " << x.value().get() << std::endl;
+        }
+        std::cout << "END" << std::endl;
+    return std::make_shared<torch::nn::Module>(_nn);
   }
 
   std::string ModuleParameterValue::str() const {

@@ -33,7 +33,7 @@ struct Net : torch::nn::Module {
     conv1 = register_module("conv1", torch::nn::Conv2d(torch::nn::Conv2dOptions(1, 6, 4).stride(2).padding(1).bias(false)));//torch::nn::Conv2d(/*input_shape*/1, 70, /*kernel_size=*/(9, 4)));//, /*stride=*/1, /*padding=*/1));
     pool1 = register_module("pool1", torch::nn::MaxPool2d((3, 1)));
     conv2 = register_module("conv2", torch::nn::Conv2d(70, 100, /*kernel_size=*/(7, 1)));
-    conv3 = register_module("conv3", torch::nn::Conv2d(100, 100, /*kernel_size=*/(7, 1)));
+    conv3 = register_module("conv3", torch::nn::Conv2d(100, 100, /*kernel_size=*/1));
     conv4 = register_module("conv4", torch::nn::Conv2d(100, 200, /*kernel_size=*/(7, 1)));
     pool2 = register_module("pool2", torch::nn::MaxPool2d((4,1)));
     conv5 = register_module("conv5", torch::nn::Conv2d(200, 250, /*kernel_size=*/(7, 1)));
@@ -98,6 +98,78 @@ struct BLSTM_Model : torch::nn::Module {
   torch::nn::Linear linear{ nullptr };
 };
 
+
+class Rede {
+  public:
+    Rede() {
+
+    };
+    Rede(torch::nn::Module _architecture){
+      architecture = _architecture;
+      auto net = std::make_shared<torch::nn::Module>(architecture);
+      // Access and print the convolutional layer's parameters
+      for (const auto& param : net->named_modules()) {
+          std::cout << "Parameter Name: " << param.key() << "\tShape: " << param.value().get() << std::endl;
+      }
+    };
+  private:
+    torch::nn::Module architecture;
+};
+
+class EmptyModule {
+  public:
+    EmptyModule() {
+        ptr_mymodule = std::make_shared<torch::nn::Module>(mymodule);      
+        ptr_mymodule->register_module("conv_layer1", torch::nn::Conv2d(3, 64, 3));
+    };
+    
+    torch::nn::Module getModule() {
+      return *ptr_mymodule;
+    };
+
+    void RegisterModule(std::string name){
+      ptr_mymodule->register_module(name, torch::nn::Conv2d(3, 64, 3));
+    }
+
+    void ShowModule(){
+      for (const auto& param : ptr_mymodule->named_modules()) {
+        std::cout << "Parameter Name: " << param.key() << "\tShape: " << param.value().get() << std::endl;
+      }
+    }
+    
+
+  private:
+    torch::nn::Module mymodule;
+    std::shared_ptr<torch::nn::Module> ptr_mymodule;
+};
+
+template <class T>
+std::string
+type_name()
+{
+    typedef typename std::remove_reference<T>::type TR;
+    std::unique_ptr<char, void(*)(void*)> own
+           (
+#ifndef _MSC_VER
+                abi::__cxa_demangle(typeid(TR).name(), nullptr,
+                                           nullptr, nullptr),
+#else
+                nullptr,
+#endif
+                std::free
+           );
+    std::string r = own != nullptr ? own.get() : typeid(TR).name();
+    if (std::is_const<TR>::value)
+        r += " const";
+    if (std::is_volatile<TR>::value)
+        r += " volatile";
+    if (std::is_lvalue_reference<T>::value)
+        r += "&";
+    else if (std::is_rvalue_reference<T>::value)
+        r += "&&";
+    return r;
+}
+
 int main (int argc, char ** argv) {
     
     srand(time(NULL));
@@ -105,18 +177,32 @@ int main (int argc, char ** argv) {
     //torch::Tensor tensor = torch::rand({2, 3, 1});
     //std::cout << tensor << std::endl;
 
+    EmptyModule emptymodule;
+    emptymodule.RegisterModule("conv_layer2");
+    emptymodule.RegisterModule("conv_layer3");
+    
+    emptymodule.ShowModule();
 
-    /* TEST Net STRUCTURE */
+    torch::nn::Module architecture = emptymodule.getModule();
+    
+    Rede rede = Rede(architecture);
+
+    //std::cout << type_name<decltype(architecture)>() << '\n';
+
+
+
+    /* TEST Net STRUCTURE
     auto net = std::make_shared<Net>();
 
-    for (auto& param : net->named_parameters()){
-    	std::cout << param.key() << std::endl;
+    for (auto& param : net->named_modules()){
+    	std::cout << "Module Name: " << param.key() << std::endl;
+      std::cout << "Module Instance: " << param.value().get() << std::endl;
     }
 
     string model_path = "net.csv";
     torch::serialize::OutputArchive output_archive;
     net->save(output_archive);
-    output_archive.save_to(model_path);
+    output_archive.save_to(model_path);*/
 
 
 

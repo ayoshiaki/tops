@@ -50,7 +50,7 @@ namespace tops {
     /*! \param module_nn is the actual neural network referenced by the module libtorch class
      */
     
-    NeuralNetworkModel(torch::nn::Module module_nn) ;
+    NeuralNetworkModel(std::shared_ptr<torch::nn::Module> module_nn_ptr) ;
 
 
     //! Choose
@@ -92,7 +92,7 @@ namespace tops {
 
     virtual ProbabilisticModelParameters parameters() const;
 
-    void setParameters(torch::nn::Module module_nn) ;
+    void setParameters(std::shared_ptr<torch::nn::Module> module_nn_ptr) ;
     
   };
 

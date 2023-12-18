@@ -105,7 +105,7 @@ namespace tops {
     virtual int getInt() const;
     virtual double getDouble()  const;
     virtual torch::Tensor getTensor();
-    virtual torch::nn::Module getModule();
+    virtual std::shared_ptr<torch::nn::Module> getModule();
     virtual std::string str() const;
   };
 
@@ -292,13 +292,14 @@ namespace tops {
     torch::nn::Module _nn;
   public:
     ModuleParameterValue(){}    
-    ModuleParameterValue(torch::nn::Module nn) {
-      _nn = nn;
+    ModuleParameterValue(std::shared_ptr<torch::nn::Module> nn_ptr){
+    	//initialize(nn_ptr);
+      _nn = *nn_ptr;
     }
     virtual ~ModuleParameterValue(){}
-    virtual void initialize(torch::nn::Module nn);
+    virtual void initialize(std::shared_ptr<torch::nn::Module> nn_ptr);
     virtual std::string parameter_type () const;    
-    virtual torch::nn::Module getModule() const;    
+    virtual std::shared_ptr<torch::nn::Module> getModule();  
     virtual std::string str() const;
   };
 

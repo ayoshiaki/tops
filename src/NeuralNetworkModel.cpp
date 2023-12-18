@@ -32,21 +32,29 @@
 namespace tops {
 
     NeuralNetworkModel::NeuralNetworkModel(){
+        this->str();
     }
 
-    NeuralNetworkModel::NeuralNetworkModel(torch::nn::Module module_nn){
-        _module_nn = module_nn;
+    NeuralNetworkModel::NeuralNetworkModel(std::shared_ptr<torch::nn::Module> module_nn_ptr){
+        _module_nn = *module_nn_ptr;
+        this->str();
     }
 
     std::string NeuralNetworkModel::str () const {
         std::stringstream out;
         out << "model_name = \"NeuralNetworkModel\"\n" ;
-        out << "module = " << _module_nn << "\n";
+        out << "architecture = " << _module_nn << "\n";
+        std::cout << "NeuralNetworkModel:\n" ;
+        auto net = std::make_shared<torch::nn::Module>(_module_nn);
+        for(auto& x : net->named_modules()){
+            std::cout << "Layer: " << x.key() << "\tParameter Shape: " << x.value().get() << std::endl;
+        }
+        std::cout << "END" << std::endl;
         return out.str();
     }
 
-    void NeuralNetworkModel::setParameters(torch::nn::Module module_nn) {
-        _module_nn = module_nn;
+    void NeuralNetworkModel::setParameters(std::shared_ptr<torch::nn::Module> module_nn_ptr) {
+        _module_nn = *module_nn_ptr;
     }
 
     ProbabilisticModelCreatorPtr NeuralNetworkModel::getFactory () const{
@@ -56,17 +64,17 @@ namespace tops {
     void NeuralNetworkModel::initialize(const ProbabilisticModelParameters & p) {
         //ProbabilisticModelParameterValuePtr weight = p.getMandatoryParameterValue("weight");
         //ProbabilisticModelParameterValuePtr bias = p.getMandatoryParameterValue("bias");
-        ProbabilisticModelParameterValuePtr module_nn = p.getMandatoryParameterValue("module_nn");
+        ProbabilisticModelParameterValuePtr module_nn_ptr = p.getMandatoryParameterValue("layers");
         
-        setParameters(module_nn->getModule());
+        setParameters(module_nn_ptr->getModule());
     }
 
     ProbabilisticModelParameters NeuralNetworkModel::parameters () const {
         
         ProbabilisticModelParameters par;
         par.add("model_name", StringParameterValuePtr(new StringParameterValue("NeuralNetworkModel")));
-        torch::nn::Module module_nn;
-        par.add("module_nn", ModuleParameterValuePtr(new ModuleParameterValue(module_nn)));
+        auto module_nn = std::make_shared<torch::nn::Module>(_module_nn);
+        par.add("layers", ModuleParameterValuePtr(new ModuleParameterValue(module_nn)));
         return par;
     }
 

@@ -79,12 +79,27 @@ namespace tops {
     void IncCurrentLayer();
     std::string getAuxLayer();
     void setAuxLayer(const std::string & aux);
+    
     void setParametersLayer();
     int getValueParametersLayer(const std::string & parameter);
+    
     template<size_t D>
     torch::ExpandingArray<D> getVectorValuesParametersLayer(const std::string & parameter);
+    
+    void UpdateParametersLayer();
+    
+    void setNewOptionalParameterLayer(const std::string & parameter);
+    
     std::string getAuxParameterName();
     void setAuxParameterName(const std::string & aux);
+    
+    void addValueAuxParametersValues(const int value);
+    vector<int> getAuxParametersValues();
+    void resetAuxParametersValues();
+    
+    std::shared_ptr<torch::nn::Module> getAuxModuleLayers();
+
+    void showParameters();
 
     void reset();
 
@@ -97,12 +112,13 @@ namespace tops {
     std::string _aux_string_3;
     
     int _currentLayer;
-    std::string _aux_layer;
-    std::string _aux_parameter_name;
+    std::string _aux_layer; // name to register the layer e.g. Conv1d, Conv2d
+    std::string _aux_parameter_name; // parameter's name of a layer e.g. kernel_size, padding, stride
+    vector<int> _aux_parameters_values; // list of values of an optional parameter
+    torch::nn::Module _aux_module_layers;
+    std::shared_ptr<torch::nn::Module> _ptr_aux_module_layers;
     map<std::string, vector<int>> _parameters_layer;
   };
-
-
 
 }
 

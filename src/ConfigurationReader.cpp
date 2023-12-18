@@ -85,7 +85,8 @@ namespace tops {
       std::string str;
       std::copy(first, last, std::back_inserter(str));
       _c->setCurrentParameterName(str);
-      //      std::cerr << "NAME: "  << str << std::endl;
+      
+      //std::cerr << "PARAMETER NAME: "  << str << std::endl;
     }
   private:
     ConfigurationReader * _c;
@@ -442,11 +443,105 @@ namespace tops {
     template<typename IteratorT>
     void operator()(IteratorT first, IteratorT last) const
     {
-      ModuleParameterValuePtr architecture = ModuleParameterValuePtr(new ModuleParameterValue());
+      //ModuleParameterValue aux_module = new ModuleParameterValue();
+      ModuleParameterValuePtr architecture = ModuleParameterValuePtr(new ModuleParameterValue(_c->getAuxModuleLayers()));
       _c->setCurrentParameterValue(architecture);
+
+      std::cout << "Current Value [\n" ;
+        //auto net = std::make_shared<torch::nn::Module>(*_c->getCurrentParameterValue()->getModule());
+        for(auto& x : _c->getCurrentParameterValue()->getModule()->named_modules()){
+            std::cout << "Layer Current: " << x.key() << "\tParameter Shape Current: " << x.value().get() << std::endl;
+        }
+        std::cout << "END Current ]" << std::endl;
+
+      std::cerr << "Architecture created\n";
+    }
+    private:
+    ConfigurationReader * _c;
+  };
+
+  struct set_optional_parameter_name {
+    set_optional_parameter_name(ConfigurationReader *c) : _c(c){};
+    template<typename IteratorT>
+    void operator()(IteratorT first, IteratorT last) const {
+      std::string str;
+      std::copy(first, last, std::back_inserter(str));
+      _c->setAuxParameterName(str);
+      //std::cerr << ">> " << _aux_parameter_name << endl;
+    }
+
+    private:
+      ConfigurationReader * _c;
+  };
+
+  struct add_value_to_tuple{
+    add_value_to_tuple(ConfigurationReader *c) : _c(c){};    
+    void operator()(int value) const {
+      _c->addValueAuxParametersValues(value);
+    }
+    private:
+      ConfigurationReader * _c;
+  };
+
+  struct set_int_layer_optional_parameter{
+    set_int_layer_optional_parameter(ConfigurationReader *c) : _c(c){};
+    void operator()(int num) const {
+      _c->resetAuxParametersValues();
+      _c->addValueAuxParametersValues(num);
+      _c->UpdateParametersLayer();
     }
   private:
     ConfigurationReader * _c;
+  };
+
+  struct set_parameter_tuple{
+    set_parameter_tuple(ConfigurationReader *c) : _c(c){};
+    template<typename IteratorT>
+    void operator()(IteratorT first, IteratorT last) const {
+      std::string str;
+      std::copy(first, last, std::back_inserter(str));
+      
+      if(_c->getAuxParameterName() == "") _c->setAuxParameterName("kernel_size");
+      //std::cerr << "parameter -> " << _c->getAuxParameterName() << ": ";
+      //std::cerr << "<<< " << str << " >>>" << endl;
+      
+      _c->UpdateParametersLayer();
+
+      _c->resetAuxParametersValues();
+      _c->setAuxParameterName("");
+    }
+    private:
+      ConfigurationReader * _c;
+  };
+
+  struct create_optional_layer_parameter
+  {
+    create_optional_layer_parameter(ConfigurationReader *c) : _c(c){};
+    template<typename IteratorT>
+    void operator()(IteratorT first, IteratorT last) const
+    {
+      std::string str;
+      std::copy(first, last, std::back_inserter(str));
+      _c->setAuxParameterName(str);
+      _c->setNewOptionalParameterLayer(str);
+    }
+    private:
+      ConfigurationReader * _c;
+  };
+
+  struct start_new_layer {
+    start_new_layer(ConfigurationReader *c) : _c(c){};
+    template<typename IteratorT>
+    void operator()(IteratorT first, IteratorT last) const {
+      std::string str;
+      std::copy(first, last, std::back_inserter(str));
+      _c->setAuxLayer(str); // layer type
+      _c->setParametersLayer(); //layer parameters
+      _c->setAuxParameterName("");
+      _c->resetAuxParametersValues();
+    }
+    private:
+      ConfigurationReader * _c;
   };
 
   struct create_Convolution_layer
@@ -456,7 +551,7 @@ namespace tops {
     void operator()(IteratorT first, IteratorT last) const
     {
       if(_c->getAuxLayer() == "Conv1d"){
-
+        //_c->showParameters();
         torch::nn::Conv1dOptions conv_options = torch::nn::Conv1dOptions(
         /*in_channels=*/_c->getValueParametersLayer("in_channels"),  
         /*out_channels=*/_c->getValueParametersLayer("out_channels"),
@@ -468,13 +563,14 @@ namespace tops {
         .bias(_c->getValueParametersLayer("bias"))
         .padding_mode(torch::kCircular);
         //.output_padding(_c->getValueParametersLayer("output_padding"));
-        //.transposed(_c->getValueParametersLayer("transposed"));
+        //.transposed(_c->getValueParametersLayer("transposed")); 
 
-        (_c->getCurrentParameterValue()->getModule()).register_module("conv" + std::to_string(_c->getCurrentLayer()), torch::nn::Conv1d(conv_options));
+        //(_c->getCurrentParameterValue()->getModule()).register_module("conv" + std::to_string(_c->getCurrentLayer()), torch::nn::Conv1d(conv_options));
+        _c->getAuxModuleLayers()->register_module("conv" + std::to_string(_c->getCurrentLayer()), torch::nn::Conv1d(conv_options));        
+        std::cerr << "conv" + std::to_string(_c->getCurrentLayer()) << endl;
         _c->IncCurrentLayer();
       }
       else if(_c->getAuxLayer() == "Conv2d"){
-
         torch::nn::Conv2dOptions conv_options = torch::nn::Conv2dOptions(
         /*in_channels=*/_c->getValueParametersLayer("in_channels"),  
         /*out_channels=*/_c->getValueParametersLayer("out_channels"),
@@ -488,7 +584,9 @@ namespace tops {
         //.output_padding(_c->getValueParametersLayer("output_padding"));
         //.transposed(_c->getValueParametersLayer("transposed"));
 
-        (_c->getCurrentParameterValue()->getModule()).register_module("conv" + std::to_string(_c->getCurrentLayer()), torch::nn::Conv2d(conv_options));
+        //(_c->getCurrentParameterValue()->getModule()).register_module("conv" + std::to_string(_c->getCurrentLayer()), torch::nn::Conv2d(conv_options));
+        _c->getAuxModuleLayers()->register_module("conv" + std::to_string(_c->getCurrentLayer()), torch::nn::Conv2d(conv_options));
+        std::cerr << "conv" + std::to_string(_c->getCurrentLayer()) << endl;
         _c->IncCurrentLayer();
       }
     }
@@ -532,6 +630,36 @@ namespace tops {
     input.close();
     return load( conf);
   }
+
+/* PRINT ???*/
+  struct print_partial_result
+  {
+    print_partial_result(ConfigurationReader *c) : _c(c){};
+    template<typename IteratorT>
+    void operator()(IteratorT first, IteratorT last) const
+    {
+      std::string str;
+      std::copy(first, last, std::back_inserter(str));
+      std::cout << "Partial result: " << str << endl;
+    }
+  private:
+    ConfigurationReader * _c;
+  };
+
+  struct PrintIntAction {
+    template <typename Iterator, typename Context, typename Skipper, typename Attribute>
+    void operator()(Iterator& first, Iterator const& last, Context& /*context*/, Skipper const& /*skipper*/, Attribute& attr) const {
+        std::cout << "Parsed integer: " << attr << std::endl;
+    }
+};
+struct PrintAction {
+    template <typename Iterator, typename Context, typename Skipper, typename Attribute>
+    void operator()(Iterator& first, Iterator const& last, Context& context, Skipper const& skipper, Attribute& attr) const {
+        std::cout << "Matched content: " << attr << std::endl;
+    }
+};
+
+
 
   bool  ConfigurationReader::load(std::string & data)
   {
@@ -643,8 +771,8 @@ namespace tops {
     /* e.g. (1, 2); (1, 2, 3) */
     tuple_p
       = ch_p('(')
-      >> int_p //[create_int_vector(this)]
-      >> + ( ',' >> int_p )//[add_value_to_int_vector(this)] ) 
+      >> int_p [add_value_to_tuple(this)]
+      >> + ( ',' >> int_p [add_value_to_tuple(this)] )
       >> ')'
       ;
 
@@ -657,23 +785,24 @@ namespace tops {
         | str_p("ConvTranspose1d")
         | str_p("ConvTranspose2d")
         | str_p("ConvTranspose3d")
-        )[assign_a(this->_aux_layer)]
+        )[start_new_layer(this)]
         ;
 
     conv_parameters
-      >> ch_p('(')
-                >> int_p [assign_a(this->_parameters_layer["in_channels"][0])] /* in_channels */ >> ','
-                >> int_p [assign_a(this->_parameters_layer["out_channels"][0])] /* out_channels */ >> ','
-                >> (int_p [assign_a(this->_parameters_layer["kernel_size"][0])]
-                  | tuple_p [push_back_a(this->_parameters_layer["kernel_size"])]) /* kernel_size */
-                >> * (',' >> word_p [assign_a(this->_aux_parameter_name)] >> '=' 
-                          >> (int_p [assign_a(this->_parameters_layer[this->_aux_parameter_name][0])]
-                            | tuple_p [push_back_a(this->_parameters_layer[this->_aux_parameter_name])]) /* optional parameter */ )
+      = ch_p('(') 
+                >> int_p [push_back_a(_parameters_layer["in_channels"])] /* in_channels */ >> ','
+                >> int_p [push_back_a(_parameters_layer["out_channels"])] /* out_channels */ >> ','
+                >> (int_p [push_back_a(_parameters_layer["kernel_size"])]
+                  | tuple_p [set_parameter_tuple(this)]) /* kernel_size */
+                >> * (',' >> word_p [set_optional_parameter_name(this)] 
+                          >> '=' 
+                          >> (int_p [set_int_layer_optional_parameter(this)]
+                            | tuple_p [set_parameter_tuple(this)] ) /* optional parameter */ )
       >> ')'
       ;
 
     convolutional_layer
-      = conv_creator //[this->setParametersLayer()]
+      = conv_creator 
       >> conv_parameters
       ;
 
@@ -700,18 +829,18 @@ namespace tops {
       ;
 
     layer_p /* kind of layer */
-      = convolutional_layer [create_Convolution_layer(this)]
+      = convolutional_layer[create_Convolution_layer(this)]
       | pooling_layer
-      | activation_layer
-      | normalization_layer
-      | recurrent_layer
-      | linear_layer
-      | dropout_layer
+      //| activation_layer
+      //| normalization_layer
+      //| recurrent_layer
+      //| linear_layer
+      //| dropout_layer
       ;
 
     layer_vector /* list of layers */
-      = ch_p('(')
-      >> layer_p[create_sequential_architecture(this)]
+      = ch_p('(') 
+      >> layer_p
       >> * ( ',' >> layer_p )
       >> ')'
       ;
@@ -723,7 +852,8 @@ namespace tops {
       = lexeme_d [ alpha_p >> *(alnum_p | (ch_p('_') | '.' | '/'))]
       ;
     parameter_value
-      = double_vector
+      = layer_vector [create_sequential_architecture(this)]
+      | double_vector
       | parameter_name [set_parameter_value_string(this)]
       | word  [set_parameter_value_word(this)]
       | tree  [set_parameter_value_word(this)]
@@ -733,7 +863,6 @@ namespace tops {
       | int_p [set_parameter_value_int(this)]
       | nested_configuration [set_parameter_value_string(this)]
       | string_map
-      | layer_vector
       ;
 
     nested_parameter_spec
@@ -814,6 +943,7 @@ namespace tops {
 
   ConfigurationReader::ConfigurationReader(){
     _parameters = ProbabilisticModelParametersPtr (new ProbabilisticModelParameters());
+    reset();
   }
 
   std::string ConfigurationReader::getAuxString2(){
@@ -843,6 +973,7 @@ namespace tops {
   }
 
   std::string ConfigurationReader::getAuxLayer(){
+    //std::cout << "AuxLayer Name: " << _aux_layer << std::endl;
     return _aux_layer;
   }
 
@@ -884,12 +1015,20 @@ namespace tops {
     return (_parameters_layer[parameter])[0];
   }
 
+  void ConfigurationReader::setNewOptionalParameterLayer(const std::string & parameter){
+    _parameters_layer[parameter] = {};
+  }
+
   template<size_t D>
   torch::ExpandingArray<D> ConfigurationReader::getVectorValuesParametersLayer(const std::string & parameter){
     const int l = _parameters_layer[parameter].size();
-    if(l == 1) return torch::ExpandingArray<D>({(_parameters_layer[parameter])[0]});
+    if(l == 1) return torch::ExpandingArray<D>((_parameters_layer[parameter])[0]);
     else if(l == 2) return torch::ExpandingArray<D>({(_parameters_layer[parameter])[0], (_parameters_layer[parameter])[1]});
     return torch::ExpandingArray<D>({(_parameters_layer[parameter])[0], (_parameters_layer[parameter])[1], (_parameters_layer[parameter])[2]});
+  }
+
+  void ConfigurationReader::UpdateParametersLayer(){
+    _parameters_layer[_aux_parameter_name] = _aux_parameters_values;
   }
 
   std::string ConfigurationReader::getAuxParameterName(){
@@ -900,9 +1039,39 @@ namespace tops {
     _aux_parameter_name = aux;
   }
 
+  void ConfigurationReader::addValueAuxParametersValues(const int value){
+    _aux_parameters_values.push_back(value);
+  }
+  vector<int> ConfigurationReader::getAuxParametersValues(){
+    return _aux_parameters_values;
+  }
+  void ConfigurationReader::resetAuxParametersValues(){
+    _aux_parameters_values = {};
+  }
+
+  std::shared_ptr<torch::nn::Module> ConfigurationReader::getAuxModuleLayers(){     
+    //auto net = std::make_shared<torch::nn::Module>(_aux_module_layers);
+        for(auto& x : _ptr_aux_module_layers->named_modules()){
+            std::cout << "Layer: " << x.key() << "\tParameter Shape: " << x.value().get() << std::endl;
+        }
+        std::cout << "END" << std::endl;
+    return _ptr_aux_module_layers;
+  }
+
+  void ConfigurationReader::showParameters(){
+    std::cerr << "--------------------------\n";
+    for (auto const& entry : _parameters_layer){
+      std::cerr << "\n" << entry.first << ": \n";
+      for (size_t i = 0; i < (entry.second).size(); i++){
+        std::cerr << (entry.second)[i] << ", ";
+      }      
+    }
+    std::cerr << "--------------------------\n";
+  }
+
   void ConfigurationReader::reset() {
     ProbabilisticModelParameterValuePtr a;
-    _current_value =a ;
+    _current_value = a;
     _current_name = "";
     _aux_string = "";
     _aux_string_2 = "";
@@ -911,6 +1080,8 @@ namespace tops {
     _currentLayer = 1;
     _aux_layer = "";
     _aux_parameter_name = "";
+    _aux_parameters_values = {};
+    _ptr_aux_module_layers = std::make_shared<torch::nn::Module>(_aux_module_layers);
     setParametersLayer();
   }
 };
