@@ -2,7 +2,7 @@
  *       ConfigurationReader.hpp
  *
  *       Copyright 2011 Andre Yoshiaki Kashiwabara <akashiwabara@usp.br>
- *                      Ígor Bonadio <ibonadio@ime.usp.br>
+ *                      ï¿½gor Bonadio <ibonadio@ime.usp.br>
  *                      Vitor Onuchic <vitoronuchic@gmail.com>
  *                      Alan Mitchell Durham <aland@usp.br>
  *
@@ -31,6 +31,8 @@
 #include <iostream>
 #include <string>
 
+#include <torch/torch.h>
+#include <ATen/ATen.h>
 
 using namespace std;
 
@@ -59,25 +61,47 @@ namespace tops {
 
     ProbabilisticModelParameterValuePtr getCurrentParameterValue();
 
+    std::string getCurrentParameterName();
     void setCurrentParameterName(const std::string & name);
 
-    void setAuxString(const std::string & aux) ;
-
-    std::string getAuxString();
-
-    std::string getCurrentParameterName();
-
+    ProbabilisticModelParametersPtr parameters();
     void add_parameter();
 
-    ProbabilisticModelParametersPtr parameters();
-
+    std::string getAuxString();
     std::string getAuxString2();
-
     std::string getAuxString3();
 
+    void setAuxString(const std::string & aux) ;
     void setAuxString2(const std::string & aux);
-
     void setAuxString3(const std::string & aux);
+
+    int getCurrentLayer();
+    void IncCurrentLayer();
+    std::string getAuxLayer();
+    void setAuxLayer(const std::string & aux);
+    
+    void setParametersLayer();
+    int getValueParametersLayer(const std::string & parameter);
+    
+    template<size_t D>
+    torch::ExpandingArray<D> getVectorValuesParametersLayer(const std::string & parameter);
+    
+    void UpdateParametersLayer();
+    
+    void setNewOptionalParameterLayer(const std::string & parameter);
+    
+    std::string getAuxParameterName();
+    void setAuxParameterName(const std::string & aux);
+    
+    void addValueAuxParametersValues(const int value);
+    vector<int> getAuxParametersValues();
+    void resetAuxParametersValues();
+    
+    //std::shared_ptr<torch::nn::Sequential> getAuxModuleLayers();
+    torch::nn::Sequential getAuxModuleLayers();
+
+    void showParameters();
+
     void reset();
 
   private:
@@ -87,9 +111,15 @@ namespace tops {
     std::string _aux_string;
     std::string _aux_string_2;
     std::string _aux_string_3;
+    
+    int _currentLayer;
+    std::string _aux_layer; // name to register the layer e.g. Conv1d, Conv2d
+    std::string _aux_parameter_name; // parameter's name of a layer e.g. kernel_size, padding, stride
+    vector<int> _aux_parameters_values; // list of values of an optional parameter
+    torch::nn::Sequential _aux_module_layers;
+    std::shared_ptr<torch::nn::Sequential> _ptr_aux_module_layers;
+    map<std::string, vector<int>> _parameters_layer;
   };
-
-
 
 }
 

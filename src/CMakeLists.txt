@@ -8,7 +8,7 @@ IF(WIN32)
 ENDIF(WIN32)
 
 IF(UNIX)
-  SET(TOPS_DEP ${BOOST_DATE_TIME_LIBRARY} ${BOOST_REGEX_LIBRARY} ${RMATH_LIBRARY} ${Boost_SYSTEM_LIBRARY} ${Boost_FILESYSTEM_LIBRARY})
+	SET(TOPS_DEP ${BOOST_DATE_TIME_LIBRARY} ${BOOST_TIMER_LIBRARY} ${BOOST_REGEX_LIBRARY} ${RMATH_LIBRARY} ${Boost_SYSTEM_LIBRARY} ${Boost_FILESYSTEM_LIBRARY})
 ENDIF(UNIX)
 
 
@@ -36,4 +36,3 @@ install(TARGETS ToPS
         ARCHIVE DESTINATION lib/static )
 
 install(FILES AkaikeInformationCriteria.hpp Alphabet.hpp BayesianInformationCriteria.hpp  ConfigurationReader.hpp ContextTree.hpp DecodableModel.hpp DegenerateDistribution.hpp FactorableModel.hpp FactorableModelPrefixSumArray.hpp DiscreteIIDModel.hpp DiscreteIIDModelCreator.hpp FixedSequenceAtPosition.hpp FixedSequenceAtPositionCreator.hpp GHMMStates.hpp GeneralizedHiddenMarkovModel.hpp GeneralizedHiddenMarkovModelCreator.hpp HiddenMarkovModel.hpp HiddenMarkovModelCreator.hpp InhomogeneousFactorableModel.hpp InhomogeneousMarkovChain.hpp InhomogeneousMarkovChainCreator.hpp MultipleAlignment.hpp NullPrefixSumArray.hpp PhasedFactorableModelEvaluationAlgorithm.hpp PhasedRunLengthDistribution.hpp PhasedRunLengthDistributionCreator.hpp PrefixSumArray.hpp ProbabilisticModel.hpp ProbabilisticModelCreator.hpp ProbabilisticModelCreatorClient.hpp ProbabilisticModelDecorator.hpp ProbabilisticModelParameter.hpp RemoveSequenceFromModel.hpp ReverseComplementDNA.hpp ReverseComplementDNACreator.hpp Sequence.hpp SequenceEntry.hpp SequenceFactory.hpp SequenceFormat.hpp SmoothedHistogramBurge.hpp SmoothedHistogramKernelDensity.hpp SmoothedHistogramStanke.hpp SparseMatrix.hpp Symbol.hpp TargetModel.hpp TargetModelCreator.hpp TrainDiscreteIIDModel.hpp TrainFixedLengthMarkovChain.hpp  TrainInterpolatedMarkovChain.hpp TrainHMMBaumWelch.hpp TrainHMMMaximumLikelihood.hpp TrainPhasedMarkovChain.hpp TrainInterpolatedPhasedMarkovChain.hpp TrainPhasedMarkovChainContextAlgorithm.hpp TrainVariableLengthInhomogeneousMarkovChain.hpp TrainVariableLengthMarkovChain.hpp TrainWeightArrayModel.hpp VariableLengthMarkovChain.hpp VariableLengthMarkovChainCreator.hpp util.hpp TrainGHMMTransitions.hpp BernoulliModelCreator.hpp SimilarityBasedSequenceWeighting.hpp SimilarityBasedSequenceWeightingCreator.hpp TrainSimilarityBasedSequenceWeighting.hpp MultipleSequentialModel.hpp MultipleSequentialModelCreator.hpp StoreLoadedModel.hpp PairHiddenMarkovModel.hpp PairHiddenMarkovModelCreator.hpp TrainPHMMBaumWelch.hpp MaximumDependenceDecomposition.hpp ProfileHiddenMarkovModel.hpp ProfileHiddenMarkovModelCreator.hpp TrainProfileHMMMaxLikelihood.hpp TrainProfileHMMBaumWelch.hpp NeuralNetworkModel.hpp NeuralNetworkModelCreator.hpp DESTINATION include/tops)
-

@@ -103,12 +103,14 @@ namespace tops
   {
     ProbabilisticModelPtr null;
     ProbabilisticModelParameterValuePtr modelnamepar = parameters.getMandatoryParameterValue("model_name");
+    
     if(modelnamepar == NULL)
       {
         std::cerr << "Cant create model with no name !" << std::endl;
         return null;
       }
     string command = modelnamepar->getString();
+    
     if(_createModelCommand.find(command) == _createModelCommand.end())
       {
         cerr << "ERROR: invalid  model: " << command << endl;
@@ -158,8 +160,10 @@ namespace tops
       }
     input.close();
     // tops::lang::parse(conf);
+    
     if(readConfig.load(conf)){
       _p = *(readConfig.parameters());
+      
       return _p;
     }
 

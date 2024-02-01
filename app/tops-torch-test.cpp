@@ -33,7 +33,7 @@ struct Net : torch::nn::Module {
     conv1 = register_module("conv1", torch::nn::Conv2d(torch::nn::Conv2dOptions(1, 6, 4).stride(2).padding(1).bias(false)));//torch::nn::Conv2d(/*input_shape*/1, 70, /*kernel_size=*/(9, 4)));//, /*stride=*/1, /*padding=*/1));
     pool1 = register_module("pool1", torch::nn::MaxPool2d((3, 1)));
     conv2 = register_module("conv2", torch::nn::Conv2d(70, 100, /*kernel_size=*/(7, 1)));
-    conv3 = register_module("conv3", torch::nn::Conv2d(100, 100, /*kernel_size=*/(7, 1)));
+    conv3 = register_module("conv3", torch::nn::Conv2d(100, 100, /*kernel_size=*/1));
     conv4 = register_module("conv4", torch::nn::Conv2d(100, 200, /*kernel_size=*/(7, 1)));
     pool2 = register_module("pool2", torch::nn::MaxPool2d((4,1)));
     conv5 = register_module("conv5", torch::nn::Conv2d(200, 250, /*kernel_size=*/(7, 1)));
@@ -98,25 +98,168 @@ struct BLSTM_Model : torch::nn::Module {
   torch::nn::Linear linear{ nullptr };
 };
 
+
+class Rede {
+  public:
+    Rede() {
+
+    };
+    Rede(torch::nn::Module _architecture){
+      architecture = _architecture;
+      auto net = std::make_shared<torch::nn::Module>(architecture);
+      // Access and print the convolutional layer's parameters
+      for (const auto& param : net->named_modules()) {
+          std::cout << "Parameter Name: " << param.key() << "\tShape: " << param.value().get() << std::endl;
+      }
+    };
+  private:
+    torch::nn::Module architecture;
+};
+
+class EmptyModule {
+
+  struct Network : torch::nn::Module {
+      Network() {
+      }
+
+      void add_layers(torch::nn::Module module_aux) {
+        auto net = std::make_shared<torch::nn::Module>(module_aux);
+        for(auto& module_i : net->named_modules())            
+          this->register_module(module_i.key(), module_i.value());
+      }
+      
+      //Implement the Net's algorithm.
+      torch::Tensor forward(torch::Tensor x) {
+        for (auto& layer : this->children()){
+          //torch::nn::AnyModule layer_aux = *layer;
+          //x = layer(x);
+        }
+          
+        return x;
+      }
+    };
+
+  public:
+    EmptyModule() {
+    };
+    
+    torch::nn::Module getModule() {
+      return *ptr_mymodule;
+    };
+
+    void RegisterModule(std::string name){
+      ptr_mymodule->register_module(name, torch::nn::Conv2d(3, 64, 3));
+    }
+
+    void ShowModule(){
+      for (const auto& param : ptr_mymodule->named_modules()) {
+        std::cout << "Parameter Name: " << param.key() << "\tShape: " << param.value().get() << std::endl;
+      }
+    }
+    
+
+  private:
+    Network mymodule;
+    std::shared_ptr<Network> ptr_mymodule;
+};
+
+
+template <class T>
+std::string
+type_name()
+{
+    typedef typename std::remove_reference<T>::type TR;
+    std::unique_ptr<char, void(*)(void*)> own
+           (
+#ifndef _MSC_VER
+                abi::__cxa_demangle(typeid(TR).name(), nullptr,
+                                           nullptr, nullptr),
+#else
+                nullptr,
+#endif
+                std::free
+           );
+    std::string r = own != nullptr ? own.get() : typeid(TR).name();
+    if (std::is_const<TR>::value)
+        r += " const";
+    if (std::is_volatile<TR>::value)
+        r += " volatile";
+    if (std::is_lvalue_reference<T>::value)
+        r += "&";
+    else if (std::is_rvalue_reference<T>::value)
+        r += "&&";
+    return r;
+}
+
 int main (int argc, char ** argv) {
     
-    srand(time(NULL));
-
+    //srand(time(NULL));
     //torch::Tensor tensor = torch::rand({2, 3, 1});
     //std::cout << tensor << std::endl;
 
+    // Create a Sequential model with named modules
+    torch::nn::Sequential sequential(
+        torch::nn::Linear(1, 5),
+        torch::nn::ReLU(),
+        torch::nn::Linear(5, 2),
+        torch::nn::Sigmoid()
+    );
 
-    /* TEST Net STRUCTURE */
+    // Iterate over the modules and print their names
+    for (size_t i = 0; i < sequential->size(); ++i) {
+      const std::shared_ptr<torch::nn::Module>& module_ptr = sequential->ptr(i);      
+      std::cout << module_ptr->name() << module_ptr->parameters() << "\n";
+    }    
+
+    torch::Tensor tensor = torch::rand({1});
+    tensor = sequential->forward(tensor);
+    std::cout << tensor << std::endl;
+
+    /*
+    ------------------------------------------------------------------------------------------
+    */
+
+    /* VECTOR of AnyModule to call a sequential forward -> WORKS FINE
+    
+    vector<torch::nn::AnyModule> layers;
+    for (size_t i = 0; i < 5; i++)
+    {
+      torch::nn::AnyModule module_aux(torch::nn::Conv1d(torch::nn::Conv1dOptions(1, 1, 1)));
+      layers.push_back(module_aux);
+    }
+    
+    torch::Tensor x = torch::ones({1,1});
+    for (size_t i = 0; i < layers.size(); i++)
+    {
+      x = layers[i].forward(x);
+    }
+    
+    std::cout << x << std::endl;
+
+    */
+
+   /*
+    ------------------------------------------------------------------------------------------
+    */
+
+    //std::cout << type_name<decltype(architecture)>() << '\n';
+
+/*
+    ------------------------------------------------------------------------------------------
+    */
+
+    /* TEST Net STRUCTURE
     auto net = std::make_shared<Net>();
 
-    for (auto& param : net->named_parameters()){
-    	std::cout << param.key() << std::endl;
+    for (auto& param : net->named_modules()){
+    	std::cout << "Module Name: " << param.key() << std::endl;
+      std::cout << "Module Instance: " << param.value().get() << std::endl;
     }
 
     string model_path = "net.csv";
     torch::serialize::OutputArchive output_archive;
     net->save(output_archive);
-    output_archive.save_to(model_path);
+    output_archive.save_to(model_path);*/
 
 
 
@@ -127,6 +270,10 @@ int main (int argc, char ** argv) {
     for (auto& i : inputs) {
       auto out
     }*/
+
+    /*
+    ------------------------------------------------------------------------------------------
+    */
 
     /*
       TEST BLSTM_Model STRUCTURE
@@ -159,6 +306,10 @@ int main (int argc, char ** argv) {
     //Test: Response should be about (0.4, 0.5, 0.6)
     torch::Tensor output = model.forward(input);
     std::cout << output << std::endl;
+    */
+
+    /*
+    ------------------------------------------------------------------------------------------
     */
 
     /* TEST Neural Network Creator */

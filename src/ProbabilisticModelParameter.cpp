@@ -173,8 +173,9 @@ namespace tops {
     return t;
   }
 
-  torch::nn::Module ProbabilisticModelParameterValue::getModule() {
-    return nn;
+  std::shared_ptr<torch::nn::Sequential> ProbabilisticModelParameterValue::getModule() {
+    
+    return std::make_shared<torch::nn::Sequential>(nn);
   }
 
 
@@ -404,8 +405,8 @@ namespace tops {
   DEFINE MODULE NN PARAMETER VALUE
 */
 
-  void ModuleParameterValue::initialize(torch::nn::Module nn){
-    _nn = nn;
+  void ModuleParameterValue::initialize(std::shared_ptr<torch::nn::Sequential> nn_ptr){
+    _nn = *nn_ptr;    
   }
 
   std::string ModuleParameterValue::parameter_type () const {
@@ -413,8 +414,9 @@ namespace tops {
     return type;
   }
 
-  torch::nn::Module ModuleParameterValue::getModule() const {
-    return _nn;
+  std::shared_ptr<torch::nn::Sequential> ModuleParameterValue::getModule() {
+    
+    return std::make_shared<torch::nn::Sequential>(_nn);
   }
 
   std::string ModuleParameterValue::str() const {

@@ -12,7 +12,7 @@ namespace tops{
   }   
 
   void MultipleAlignment::computeAllAlignments(ProbabilisticModelPtr almodel, SequenceList seqs, vector<string> names, int numit, string alFileName, string outDir){\
-    boost::timer t;
+    boost::timer::cpu_timer t;
     int avg = 0;
     for(int i = 0; i < (int)seqs.size(); i++){
       avg += seqs[i].size();
@@ -23,9 +23,9 @@ namespace tops{
     _names = names;
     
     cerr << "\tComputing posterior probabilities...";
-    t.restart();
+    t.resume();
     postProbAlign(almodel,_ppAlign,_ppGap1,_ppGap2,_eas);
-    cerr << "Done! (" << t.elapsed() << "s)" << endl << endl;
+    cerr << "Done! (" << boost::timer::format(t.elapsed()) << "s)" << endl << endl;
 
     map<string,map<string,SparseMatrixPtr > > consPPAlign;
     map<string,map<string,SparseMatrixPtr > > consPPGap1;
@@ -33,7 +33,7 @@ namespace tops{
 
     cerr << "\tNo consistency." << endl;
     cerr << "\t\tGenerating alignment with modified sequence annealing...";
-    t.restart();
+    t.resume();
     for(int i = 0; i < (int)_names.size(); i++){
       for(int j = i+1; j < (int)_names.size(); j++){
 	_ppAlign[_names[i]][_names[j]]->addGaps(_ppGap1[_names[i]][_names[j]], _ppGap2[_names[i]][_names[j]]);
@@ -53,12 +53,12 @@ namespace tops{
     }
     fout << endl;
     fout.close();
-    cerr << "Done! (" << t.elapsed() << "s)" << endl;
+    cerr << "Done! (" << boost::timer::format(t.elapsed()) << "s)" << endl;
 
     clearAll();
 
     cerr << "\t\tGenerating alignment with original sequence annealing...";
-    t.restart();
+    t.resume();
     for(int i = 0; i < (int)_names.size(); i++){
       for(int j = i+1; j < (int)_names.size(); j++){
 	_ppAlign[_names[i]][_names[j]]->removeLastLine();
@@ -78,7 +78,7 @@ namespace tops{
     }
     fout << endl;
     fout.close();
-    cerr << "Done! (" << t.elapsed() << "s)" << endl << endl;
+    cerr << "Done! (" << boost::timer::format(t.elapsed()) << "s)" << endl << endl;
 
     clearAll();
 
@@ -91,11 +91,11 @@ namespace tops{
     }
 
     cerr << "\tApplying consistency transformation with weights and gaps...";
-    t.restart();
+    t.resume();
     predalignAlConsistencyWithEas(consPPAlign, consPPGap1, consPPGap2, numit, _eas);
-    cerr << "Done! (" << t.elapsed() << "s)" << endl;
+    cerr << "Done! (" << boost::timer::format(t.elapsed()) << "s)" << endl;
     cerr << "\t\tGenerating alignment with modified sequence annealing...";
-    t.restart();
+    t.resume();
     initializePostProbsList(consPPAlign);  
     generateGraph();
     generateAlignment(almodel);
@@ -109,12 +109,12 @@ namespace tops{
     }
     fout << endl;
     fout.close();
-    cerr << "Done! (" << t.elapsed() << "s)" << endl;
+    cerr << "Done! (" << boost::timer::format(t.elapsed()) << "s)" << endl;
 
     clearAll();
 
     cerr << "\t\tGenerating alignment original sequence annealing...";
-    t.restart();
+    t.resume();
     for(int i = 0; i < (int)_names.size(); i++){
       for(int j = i+1; j < (int)_names.size(); j++){
 	consPPAlign[_names[i]][_names[j]]->removeLastLine();
@@ -134,7 +134,7 @@ namespace tops{
     }
     fout << endl;
     fout.close();
-    cerr << "Done! (" << t.elapsed() << "s)" << endl << endl;
+    cerr << "Done! (" << boost::timer::format(t.elapsed()) << "s)" << endl << endl;
 
     clearAll();
 
@@ -147,11 +147,11 @@ namespace tops{
     }
 
     cerr << "\tApplying consistency transformation without weights and with gaps...";
-    t.restart();
+    t.resume();
     predalignAlConsistencyNoEas(consPPAlign, _ppGap1, _ppGap2, numit);
-    cerr << "Done! (" << t.elapsed() << "s)" << endl;
+    cerr << "Done! (" << boost::timer::format(t.elapsed()) << "s)" << endl;
     cerr << "\t\tGenerating alignment with modified sequence annealing...";
-    t.restart();
+    t.resume();
     initializePostProbsList(consPPAlign);  
     generateGraph();
     generateAlignment(almodel);
@@ -165,12 +165,12 @@ namespace tops{
     }
     fout << endl;
     fout.close();
-    cerr << "Done! (" << t.elapsed() << "s)" << endl;
+    cerr << "Done! (" << boost::timer::format(t.elapsed()) << "s)" << endl;
 
     clearAll();
 
     cerr << "\t\tGenerating alignment original sequence annealing...";
-    t.restart();
+    t.resume();
     for(int i = 0; i < (int)_names.size(); i++){
       for(int j = i+1; j < (int)_names.size(); j++){
 	consPPAlign[_names[i]][_names[j]]->removeLastLine();
@@ -190,7 +190,7 @@ namespace tops{
     }
     fout << endl;
     fout.close();
-    cerr << "Done! (" << t.elapsed() << "s)" << endl << endl;
+    cerr << "Done! (" << boost::timer::format(t.elapsed()) << "s)" << endl << endl;
 
     clearAll();
 
@@ -203,11 +203,11 @@ namespace tops{
     }
     
     cerr << "\tApplying picxaa consistency transformation...";
-    t.restart();
+    t.resume();
     picxaaAlConsistency(consPPAlign, _eas, numit);
-    cerr << "Done! (" << t.elapsed() << "s)" << endl;
+    cerr << "Done! (" << boost::timer::format(t.elapsed()) << "s)" << endl;
     cerr << "\t\tGenerating alignment with original sequence annealing...";
-    t.restart();
+    t.resume();
     initializePostProbsList(consPPAlign);  
     generateGraph();
     generateAlignment(almodel);
@@ -221,12 +221,12 @@ namespace tops{
     }
     fout << endl;
     fout.close();
-    cerr << "Done! (" << t.elapsed() << "s)" << endl;
+    cerr << "Done! (" << boost::timer::format(t.elapsed()) << "s)" << endl;
 
     clearAll();
 
     cerr << "\t\tGenerating alignment with modified sequence annealing...";
-    t.restart();
+    t.resume();
     for(int i = 0; i < (int)_names.size(); i++){
       for(int j = i+1; j < (int)_names.size(); j++){
 	consPPAlign[_names[i]][_names[j]]->addGaps(_ppGap1[_names[i]][_names[j]], _ppGap2[_names[i]][_names[j]]);
@@ -245,7 +245,7 @@ namespace tops{
     }
     fout << endl;
     fout.close();
-    cerr << "Done! (" << t.elapsed() << "s)" << endl << endl;
+    cerr << "Done! (" << boost::timer::format(t.elapsed()) << "s)" << endl << endl;
 
     clearAll();
     
@@ -256,11 +256,11 @@ namespace tops{
     }
 
     cerr << "\tApplying classic consistency transformation...";
-    t.restart();
+    t.resume();
     classicAlConsistency(_ppAlign, numit);
-    cerr << "Done! (" << t.elapsed() << "s)" << endl;
+    cerr << "Done! (" << boost::timer::format(t.elapsed()) << "s)" << endl;
     cerr << "\t\tGenerating alignment with original sequence annealing...";
-    t.restart();
+    t.resume();
     initializePostProbsList(_ppAlign);  
     generateGraph();
     generateAlignment(almodel);
@@ -274,12 +274,12 @@ namespace tops{
     }
     fout << endl;
     fout.close();
-    cerr << "Done! (" << t.elapsed() << "s)" << endl;
+    cerr << "Done! (" << boost::timer::format(t.elapsed()) << "s)" << endl;
 
     clearAll();
 
     cerr << "\t\tGenerating alignment with modified sequence annealing...";
-    t.restart();
+    t.resume();
     for(int i = 0; i < (int)_names.size(); i++){
       for(int j = i+1; j < (int)_names.size(); j++){
 	_ppAlign[_names[i]][_names[j]]->addGaps(_ppGap1[_names[i]][_names[j]], _ppGap2[_names[i]][_names[j]]);
@@ -298,7 +298,7 @@ namespace tops{
     }
     fout << endl;
     fout.close();
-    cerr << "Done! (" << t.elapsed() << "s)" << endl << endl;
+    cerr << "Done! (" << boost::timer::format(t.elapsed()) << "s)" << endl << endl;
   }
 
   void MultipleAlignment::computeOneAlignment(ProbabilisticModelPtr almodel, SequenceList seqs, vector<string> names, int numit, int consScheme){

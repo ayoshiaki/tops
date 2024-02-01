@@ -11,7 +11,7 @@ IF(WIN32)
 ENDIF(WIN32)
 
 IF(UNIX)
-  SET(APP_DEP ToPS ${BOOST_REGEX_LIBRARY} ${RMATH_LIBRARY} ${BOOST_PROGRAM_OPTIONS_LIBRARY})
+  SET(APP_DEP ToPS ${BOOST_DATE_TIME_LIBRARY} ${BOOST_REGEX_LIBRARY} ${Boost_TIMER_LIBRARY} ${Boost_CHRONO_LIBRARY} ${RMATH_LIBRARY} ${BOOST_PROGRAM_OPTIONS_LIBRARY})
 ENDIF(UNIX)
 
 ADD_EXECUTABLE(tops-train tops-train.cpp)
@@ -67,7 +67,8 @@ TARGET_LINK_LIBRARIES(tops-teste_mdd ${APP_DEP} )
 
 TARGET_LINK_LIBRARIES(tops-torch-test ${APP_DEP} ${TORCH_LIBRARIES})
 
-install(TARGETS tops-train tops-viterbi_decoding tops-mea_decoding tops-simulate tops-testeFBGHMM tops-testeGPHMM tops-simulateAlignment tops-align tops-predalign tops-runAllPredalignTests tops-bayes_classifier tops-one_file_model tops-sliding_window tops-evaluate tops-kullback_positional tops-posterior_probabilities tops-posterior_decoding tops-print_graph_from_model tops-profileHMMtests tops-torch-test
+install(TARGETS tops-train tops-viterbi_decoding tops-mea_decoding tops-simulate tops-testeFBGHMM tops-simulateAlignment tops-align tops-predalign tops-runAllPredalignTests tops-bayes_classifier tops-one_file_model tops-sliding_window tops-evaluate tops-kullback_positional tops-posterior_probabilities tops-posterior_decoding tops-print_graph_from_model tops-profileHMMtests tops-torch-test tops-testeGPHMM
        RUNTIME DESTINATION bin
        LIBRARY DESTINATION lib
        ARCHIVE DESTINATION lib/static)
+       
