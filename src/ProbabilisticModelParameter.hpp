@@ -88,7 +88,7 @@ namespace tops {
     std::map<std::string,std::string> str_map;
     std::string _str;
     torch::Tensor t;
-    torch::nn::Module nn;
+    torch::nn::Sequential nn;
     ProbabilisticModelParameters  _parameters;
   public:
     virtual void setIsRoot(bool root);
@@ -105,7 +105,7 @@ namespace tops {
     virtual int getInt() const;
     virtual double getDouble()  const;
     virtual torch::Tensor getTensor();
-    virtual std::shared_ptr<torch::nn::Module> getModule();
+    virtual std::shared_ptr<torch::nn::Sequential> getModule();
     virtual std::string str() const;
   };
 
@@ -286,20 +286,20 @@ namespace tops {
     virtual std::string str() const;
   };
 
-  //! torch::nn::Module parameter value
+  //! torch::nn::Sequential parameter value
   class DLLEXPORT ModuleParameterValue: public ProbabilisticModelParameterValue {
   private:
-    torch::nn::Module _nn;
+    torch::nn::Sequential _nn;
   public:
     ModuleParameterValue(){}    
-    ModuleParameterValue(std::shared_ptr<torch::nn::Module> nn_ptr){
+    ModuleParameterValue(std::shared_ptr<torch::nn::Sequential> nn_ptr){
     	//initialize(nn_ptr);
       _nn = *nn_ptr;
     }
     virtual ~ModuleParameterValue(){}
-    virtual void initialize(std::shared_ptr<torch::nn::Module> nn_ptr);
+    virtual void initialize(std::shared_ptr<torch::nn::Sequential> nn_ptr);
     virtual std::string parameter_type () const;    
-    virtual std::shared_ptr<torch::nn::Module> getModule();  
+    virtual std::shared_ptr<torch::nn::Sequential> getModule();  
     virtual std::string str() const;
   };
 

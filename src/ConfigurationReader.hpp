@@ -97,7 +97,8 @@ namespace tops {
     vector<int> getAuxParametersValues();
     void resetAuxParametersValues();
     
-    std::shared_ptr<torch::nn::Module> getAuxModuleLayers();
+    //std::shared_ptr<torch::nn::Sequential> getAuxModuleLayers();
+    torch::nn::Sequential getAuxModuleLayers();
 
     void showParameters();
 
@@ -115,8 +116,8 @@ namespace tops {
     std::string _aux_layer; // name to register the layer e.g. Conv1d, Conv2d
     std::string _aux_parameter_name; // parameter's name of a layer e.g. kernel_size, padding, stride
     vector<int> _aux_parameters_values; // list of values of an optional parameter
-    torch::nn::Module _aux_module_layers;
-    std::shared_ptr<torch::nn::Module> _ptr_aux_module_layers;
+    torch::nn::Sequential _aux_module_layers;
+    std::shared_ptr<torch::nn::Sequential> _ptr_aux_module_layers;
     map<std::string, vector<int>> _parameters_layer;
   };
 

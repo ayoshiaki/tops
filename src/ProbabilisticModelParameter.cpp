@@ -173,14 +173,9 @@ namespace tops {
     return t;
   }
 
-  std::shared_ptr<torch::nn::Module> ProbabilisticModelParameterValue::getModule() {
-    std::cout << "GetModule ProbabilisticModelParameterValue:\n" ;
-        auto net = std::make_shared<torch::nn::Module>(nn);
-        for(auto& x : net->named_modules()){
-            std::cout << "Layer: " << x.key() << "\tParameter Shape: " << x.value().get() << std::endl;
-        }
-        std::cout << "END" << std::endl;
-    return std::make_shared<torch::nn::Module>(nn);
+  std::shared_ptr<torch::nn::Sequential> ProbabilisticModelParameterValue::getModule() {
+    
+    return std::make_shared<torch::nn::Sequential>(nn);
   }
 
 
@@ -410,14 +405,8 @@ namespace tops {
   DEFINE MODULE NN PARAMETER VALUE
 */
 
-  void ModuleParameterValue::initialize(std::shared_ptr<torch::nn::Module> nn_ptr){
-    _nn = *nn_ptr;
-    //nn = *nn_ptr; //weir??????
-    auto net = std::make_shared<torch::nn::Module>(_nn);
-      std::cout << "Module created" << std::endl;
-      for (const auto& param : net->named_modules()) {
-          std::cout << "Parameter Name: " << param.key() << "\tShape: " << param.value().get() << std::endl;
-      }
+  void ModuleParameterValue::initialize(std::shared_ptr<torch::nn::Sequential> nn_ptr){
+    _nn = *nn_ptr;    
   }
 
   std::string ModuleParameterValue::parameter_type () const {
@@ -425,14 +414,9 @@ namespace tops {
     return type;
   }
 
-  std::shared_ptr<torch::nn::Module> ModuleParameterValue::getModule() {
-    std::cout << "GetModule ModuleParameterValue:\n" ;
-        auto net = std::make_shared<torch::nn::Module>(_nn);
-        for(auto& x : net->named_modules()){
-            std::cout << "Layer: " << x.key() << "\tParameter Shape: " << x.value().get() << std::endl;
-        }
-        std::cout << "END" << std::endl;
-    return std::make_shared<torch::nn::Module>(_nn);
+  std::shared_ptr<torch::nn::Sequential> ModuleParameterValue::getModule() {
+    
+    return std::make_shared<torch::nn::Sequential>(_nn);
   }
 
   std::string ModuleParameterValue::str() const {

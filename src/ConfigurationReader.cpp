@@ -444,17 +444,10 @@ namespace tops {
     void operator()(IteratorT first, IteratorT last) const
     {
       //ModuleParameterValue aux_module = new ModuleParameterValue();
-      ModuleParameterValuePtr architecture = ModuleParameterValuePtr(new ModuleParameterValue(_c->getAuxModuleLayers()));
+      ModuleParameterValuePtr architecture = ModuleParameterValuePtr(new ModuleParameterValue(std::make_shared<torch::nn::Sequential>(_c->getAuxModuleLayers())));
       _c->setCurrentParameterValue(architecture);
-
-      std::cout << "Current Value [\n" ;
-        //auto net = std::make_shared<torch::nn::Module>(*_c->getCurrentParameterValue()->getModule());
-        for(auto& x : _c->getCurrentParameterValue()->getModule()->named_modules()){
-            std::cout << "Layer Current: " << x.key() << "\tParameter Shape Current: " << x.value().get() << std::endl;
-        }
-        std::cout << "END Current ]" << std::endl;
-
-      std::cerr << "Architecture created\n";
+    
+      //std::cerr << "Architecture created\n";
     }
     private:
     ConfigurationReader * _c;
@@ -566,8 +559,8 @@ namespace tops {
         //.transposed(_c->getValueParametersLayer("transposed")); 
 
         //(_c->getCurrentParameterValue()->getModule()).register_module("conv" + std::to_string(_c->getCurrentLayer()), torch::nn::Conv1d(conv_options));
-        _c->getAuxModuleLayers()->register_module("conv" + std::to_string(_c->getCurrentLayer()), torch::nn::Conv1d(conv_options));        
-        std::cerr << "conv" + std::to_string(_c->getCurrentLayer()) << endl;
+        _c->getAuxModuleLayers()->push_back(torch::nn::Conv1d(conv_options));        
+        
         _c->IncCurrentLayer();
       }
       else if(_c->getAuxLayer() == "Conv2d"){
@@ -585,8 +578,8 @@ namespace tops {
         //.transposed(_c->getValueParametersLayer("transposed"));
 
         //(_c->getCurrentParameterValue()->getModule()).register_module("conv" + std::to_string(_c->getCurrentLayer()), torch::nn::Conv2d(conv_options));
-        _c->getAuxModuleLayers()->register_module("conv" + std::to_string(_c->getCurrentLayer()), torch::nn::Conv2d(conv_options));
-        std::cerr << "conv" + std::to_string(_c->getCurrentLayer()) << endl;
+        _c->getAuxModuleLayers()->push_back(torch::nn::Conv2d(conv_options));
+        
         _c->IncCurrentLayer();
       }
     }
@@ -1049,13 +1042,8 @@ struct PrintAction {
     _aux_parameters_values = {};
   }
 
-  std::shared_ptr<torch::nn::Module> ConfigurationReader::getAuxModuleLayers(){     
-    //auto net = std::make_shared<torch::nn::Module>(_aux_module_layers);
-        for(auto& x : _ptr_aux_module_layers->named_modules()){
-            std::cout << "Layer: " << x.key() << "\tParameter Shape: " << x.value().get() << std::endl;
-        }
-        std::cout << "END" << std::endl;
-    return _ptr_aux_module_layers;
+  torch::nn::Sequential ConfigurationReader::getAuxModuleLayers(){     
+    return _aux_module_layers;
   }
 
   void ConfigurationReader::showParameters(){
@@ -1081,7 +1069,7 @@ struct PrintAction {
     _aux_layer = "";
     _aux_parameter_name = "";
     _aux_parameters_values = {};
-    _ptr_aux_module_layers = std::make_shared<torch::nn::Module>(_aux_module_layers);
+    _ptr_aux_module_layers = std::make_shared<torch::nn::Sequential>(_aux_module_layers);
     setParametersLayer();
   }
 };

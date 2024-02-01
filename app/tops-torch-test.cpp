@@ -117,10 +117,30 @@ class Rede {
 };
 
 class EmptyModule {
+
+  struct Network : torch::nn::Module {
+      Network() {
+      }
+
+      void add_layers(torch::nn::Module module_aux) {
+        auto net = std::make_shared<torch::nn::Module>(module_aux);
+        for(auto& module_i : net->named_modules())            
+          this->register_module(module_i.key(), module_i.value());
+      }
+      
+      //Implement the Net's algorithm.
+      torch::Tensor forward(torch::Tensor x) {
+        for (auto& layer : this->children()){
+          //torch::nn::AnyModule layer_aux = *layer;
+          //x = layer(x);
+        }
+          
+        return x;
+      }
+    };
+
   public:
     EmptyModule() {
-        ptr_mymodule = std::make_shared<torch::nn::Module>(mymodule);      
-        ptr_mymodule->register_module("conv_layer1", torch::nn::Conv2d(3, 64, 3));
     };
     
     torch::nn::Module getModule() {
@@ -139,9 +159,10 @@ class EmptyModule {
     
 
   private:
-    torch::nn::Module mymodule;
-    std::shared_ptr<torch::nn::Module> ptr_mymodule;
+    Network mymodule;
+    std::shared_ptr<Network> ptr_mymodule;
 };
+
 
 template <class T>
 std::string
@@ -172,24 +193,60 @@ type_name()
 
 int main (int argc, char ** argv) {
     
-    srand(time(NULL));
-
+    //srand(time(NULL));
     //torch::Tensor tensor = torch::rand({2, 3, 1});
     //std::cout << tensor << std::endl;
 
-    EmptyModule emptymodule;
-    emptymodule.RegisterModule("conv_layer2");
-    emptymodule.RegisterModule("conv_layer3");
-    
-    emptymodule.ShowModule();
+    // Create a Sequential model with named modules
+    torch::nn::Sequential sequential(
+        torch::nn::Linear(1, 5),
+        torch::nn::ReLU(),
+        torch::nn::Linear(5, 2),
+        torch::nn::Sigmoid()
+    );
 
-    torch::nn::Module architecture = emptymodule.getModule();
+    // Iterate over the modules and print their names
+    for (size_t i = 0; i < sequential->size(); ++i) {
+      const std::shared_ptr<torch::nn::Module>& module_ptr = sequential->ptr(i);      
+      std::cout << module_ptr->name() << module_ptr->parameters() << "\n";
+    }    
+
+    torch::Tensor tensor = torch::rand({1});
+    tensor = sequential->forward(tensor);
+    std::cout << tensor << std::endl;
+
+    /*
+    ------------------------------------------------------------------------------------------
+    */
+
+    /* VECTOR of AnyModule to call a sequential forward -> WORKS FINE
     
-    Rede rede = Rede(architecture);
+    vector<torch::nn::AnyModule> layers;
+    for (size_t i = 0; i < 5; i++)
+    {
+      torch::nn::AnyModule module_aux(torch::nn::Conv1d(torch::nn::Conv1dOptions(1, 1, 1)));
+      layers.push_back(module_aux);
+    }
+    
+    torch::Tensor x = torch::ones({1,1});
+    for (size_t i = 0; i < layers.size(); i++)
+    {
+      x = layers[i].forward(x);
+    }
+    
+    std::cout << x << std::endl;
+
+    */
+
+   /*
+    ------------------------------------------------------------------------------------------
+    */
 
     //std::cout << type_name<decltype(architecture)>() << '\n';
 
-
+/*
+    ------------------------------------------------------------------------------------------
+    */
 
     /* TEST Net STRUCTURE
     auto net = std::make_shared<Net>();
@@ -213,6 +270,10 @@ int main (int argc, char ** argv) {
     for (auto& i : inputs) {
       auto out
     }*/
+
+    /*
+    ------------------------------------------------------------------------------------------
+    */
 
     /*
       TEST BLSTM_Model STRUCTURE
@@ -245,6 +306,10 @@ int main (int argc, char ** argv) {
     //Test: Response should be about (0.4, 0.5, 0.6)
     torch::Tensor output = model.forward(input);
     std::cout << output << std::endl;
+    */
+
+    /*
+    ------------------------------------------------------------------------------------------
     */
 
     /* TEST Neural Network Creator */

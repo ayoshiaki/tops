@@ -110,7 +110,7 @@ namespace tops
         return null;
       }
     string command = modelnamepar->getString();
-    std::cout << "Trying ... " << command << std::endl;
+    
     if(_createModelCommand.find(command) == _createModelCommand.end())
       {
         cerr << "ERROR: invalid  model: " << command << endl;

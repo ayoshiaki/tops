@@ -41,8 +41,9 @@ namespace tops {
   //! What kind of model is this? factorable? there is a sequence and an alphabet?
   class DLLEXPORT NeuralNetworkModel : public ProbabilisticModel
   {
+
   private:
-    torch::nn::Module _module_nn;
+    torch::nn::Sequential _module_nn;
   public:
     
     NeuralNetworkModel() ;
@@ -50,7 +51,7 @@ namespace tops {
     /*! \param module_nn is the actual neural network referenced by the module libtorch class
      */
     
-    NeuralNetworkModel(std::shared_ptr<torch::nn::Module> module_nn_ptr) ;
+    NeuralNetworkModel(std::shared_ptr<torch::nn::Sequential> module_nn_ptr) ;
 
 
     //! Choose
@@ -92,7 +93,12 @@ namespace tops {
 
     virtual ProbabilisticModelParameters parameters() const;
 
-    void setParameters(std::shared_ptr<torch::nn::Module> module_nn_ptr) ;
+    void setParameters(std::shared_ptr<torch::nn::Sequential> module_nn_ptr) ;
+
+    torch::Tensor sequences_to_Tensor(SequenceList & sample);
+
+    virtual double trainSGDAlgorithm(SequenceList & training_set, int epochs);
+
     
   };
 

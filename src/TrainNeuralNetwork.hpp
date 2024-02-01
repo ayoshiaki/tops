@@ -1,7 +1,9 @@
 /*
- *       NeuralNetworkModelCreator.cpp
+ *       TrainVariableLengthMarkovChain.hpp
  *
- *       Copyright 2011 Waldir Caro <waldirc@ime.usp.br>
+ *       Copyright 2011 Andre Yoshiaki Kashiwabara <akashiwabara@usp.br>
+ *                      �gor Bonadio <ibonadio@ime.usp.br>
+ *                      Vitor Onuchic <vitoronuchic@gmail.com>
  *                      Alan Mitchell Durham <aland@usp.br>
  *
  *       This program is free software; you can redistribute it and/or modify
@@ -20,24 +22,29 @@
  *       MA 02110-1301, USA.
  */
 
-#include "NeuralNetworkModelCreator.hpp"
+#ifndef TRAIN_NEURAL_NETWORK_HPP
+#define TRAIN_NEURAL_NETWORK_HPP
+
+#include "crossplatform.hpp"
+
+#include "ProbabilisticModel.hpp"
+#include "ProbabilisticModelCreator.hpp"
 #include "ConfigurationReader.hpp"
-//#include "NeuralNetworkModel.hpp"
-#include "Alphabet.hpp"
+
+
 namespace tops {
 
-  ProbabilisticModelPtr NeuralNetworkModelCreator::create(ProbabilisticModelParameters & parameters) const {
-    
-    //ProbabilisticModelParameterValuePtr weight = parameters.getMandatoryParameterValue("weight");
-    //ProbabilisticModelParameterValuePtr bias = parameters.getMandatoryParameterValue("bias");
-    ProbabilisticModelParameterValuePtr layers = parameters.getMandatoryParameterValue("layers");
-    if(layers == NULL) {
-        std::cerr << help();
-    }
-    
-    NeuralNetworkModelPtr model = NeuralNetworkModelPtr(new NeuralNetworkModel());
-    model->initialize(parameters);
-    
-    return model;
-  }
-}
+  //! This class trains the Variable Length Markov Chain using the context algorithm.
+  class DLLEXPORT TrainNeuralNetwork : public ProbabilisticModelCreator {
+  public:
+    TrainNeuralNetwork () {}
+    virtual ~TrainNeuralNetwork () {};
+    virtual ProbabilisticModelPtr create( ProbabilisticModelParameters & parameters) const ;    
+    virtual std::string help() const ;
+
+  };
+  typedef boost::shared_ptr <TrainNeuralNetwork> TrainNeuralNetworkPtr ;
+};
+
+
+#endif
