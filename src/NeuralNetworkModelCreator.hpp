@@ -45,9 +45,11 @@ namespace tops {
       std::stringstream out;
       out << "\nUSAGE: " << std::endl;
       out << "Mandatory parameters: " << std::endl;
-      out << "\tweight = <a tensor of doubles>" << std::endl;
-      out << "\tbias = <a tensor of doubles>" << std::endl;
+      out << "\tlayers = <a list of sequential layers>" << std::endl;
+      out << "\tupstream_length = <upstream sequence length supported>" << std::endl;
+      out << "\tdownstream_length = <downstream sequence length supported>" << std::endl;
       out << "Optional parameters: " << std::endl;
+      out << "\ttrained_model_file = <a file containing the trained neural network (layers could be empty)>" << std::endl;
       out << "Example: " << std::endl;
       return out.str();
     }

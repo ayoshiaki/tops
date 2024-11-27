@@ -1,0 +1,9 @@
+model_name = "OverlappedModel"
+
+# the net was trained for this sequence length = left_overlap + signal_size + rigth_overlap
+left_overlap = 300
+rigth_overlap = 98
+signal_size = 2
+
+# this is an optional parameter when loading a previous trained neural network with Torch JitScript
+model = "../neuralnetwork/neuralnetwork.txt"

@@ -37,56 +37,57 @@
 #include <limits>
 #define HUGE std::numeric_limits<double>::max()
 
-
-namespace tops {
+namespace tops
+{
 
   class DLLEXPORT ProbabilisticModel;
-  typedef boost::shared_ptr <ProbabilisticModel> ProbabilisticModelPtr;
+  typedef boost::shared_ptr<ProbabilisticModel> ProbabilisticModelPtr;
   class DLLEXPORT DiscreteIIDModel;
-  typedef boost::shared_ptr <DiscreteIIDModel> DiscreteIIDModelPtr;
+  typedef boost::shared_ptr<DiscreteIIDModel> DiscreteIIDModelPtr;
   class DLLEXPORT Symbol;
   typedef boost::shared_ptr<Symbol> SymbolPtr;
 
-    class DLLEXPORT GHMMState;
-    typedef boost::shared_ptr<GHMMState> GHMMStatePtr;
-    typedef std::vector<GHMMStatePtr> GHMMStates;
+  class DLLEXPORT GHMMState;
+  typedef boost::shared_ptr<GHMMState> GHMMStatePtr;
+  typedef std::vector<GHMMStatePtr> GHMMStates;
   //! Represents a GHMM State
-  class DLLEXPORT GHMMState {
+  class DLLEXPORT GHMMState
+  {
   public:
     GHMMState();
     GHMMState(ProbabilisticModelPtr observation,
-              DiscreteIIDModelPtr transition, SymbolPtr name) :
-      _observation(observation), _transition(transition), _name(name){};
+              DiscreteIIDModelPtr transition, SymbolPtr name) : _observation(observation), _transition(transition), _name(name) {};
     virtual ~GHMMState();
-    virtual void setObservation(ProbabilisticModelPtr obs) ;
-    virtual ProbabilisticModelPtr observation() const ;
-    virtual void setTransition(DiscreteIIDModelPtr trans) ;
-    virtual DiscreteIIDModelPtr transition() const ;
-    virtual int chooseDuration() const ;
-    virtual std::string name() const ;
-    virtual int id() const ;
-    virtual void addPredecessor(int id) ;
-    virtual std::vector<int> & predecessors() ;
-    virtual void addSuccessor(int id) ;
-    virtual void clearPredecessorSuccessor() {
+    virtual void setObservation(ProbabilisticModelPtr obs);
+    virtual ProbabilisticModelPtr observation() const;
+    virtual void setTransition(DiscreteIIDModelPtr trans);
+    virtual DiscreteIIDModelPtr transition() const;
+    virtual int chooseDuration() const;
+    virtual std::string name() const;
+    virtual int id() const;
+    virtual void addPredecessor(int id);
+    virtual std::vector<int> &predecessors();
+    virtual void addSuccessor(int id);
+    virtual void clearPredecessorSuccessor()
+    {
       _successors.clear();
       _predecessors.clear();
     }
-    virtual std::vector<int> & successors() ;
-    virtual std::vector<int> & classes() ;
+    virtual std::vector<int> &successors();
+    virtual std::vector<int> &classes();
     virtual void setClasses(std::vector<int> &classes);
-    virtual double duration_probability(int l) const ;
-    virtual bool isGeometricDuration() const ;
-    virtual std::string str() const ;
-    virtual int getInputPhase() const ;
-    virtual void setInputPhase(int _inputPhase) ;
-    virtual int getOutputPhase() const ;
-    virtual void setOutputPhase(int _outputPhase) ;
+    virtual double duration_probability(int l) const;
+    virtual bool isGeometricDuration() const;
+    virtual std::string str() const;
+    virtual int getInputPhase() const;
+    virtual void setInputPhase(int _inputPhase);
+    virtual int getOutputPhase() const;
+    virtual void setOutputPhase(int _outputPhase);
 
-    virtual int getStart() const ;
-    virtual void setStart(int start) ;
-    virtual int getStop() const ;
-    virtual void setStop(int stop) ;
+    virtual int getStart() const;
+    virtual void setStart(int start);
+    virtual int getStop() const;
+    virtual void setStop(int stop);
 
     virtual void isLeftJoinable(int joinable);
     virtual int isLeftJoinable() const;
@@ -94,19 +95,18 @@ namespace tops {
     virtual void isRightJoinable(int joinable);
     virtual int isRightJoinable() const;
 
-
-    virtual void observationModelName(std::string name) ;
-    virtual void durationModelName(std::string name) ;
+    virtual void observationModelName(std::string name);
+    virtual void durationModelName(std::string name);
     virtual std::string observationModelName() const;
     virtual std::string durationModelName() const;
-    virtual void fixTransitionDistribution () const {} ;
+    virtual void fixTransitionDistribution() const {};
     virtual ProbabilisticModelParameters parameters() const;
-    virtual void findBestPredecessor (Matrix & gamma, Matrix &psi, IntMatrix &psilen, const Sequence & s, int base, const GHMMStates & all_states, std::map < int, std::list<int> >  & valid_positions );
-    virtual void forwardSum (Matrix & alpha, const Sequence & s, int base, const GHMMStates & all_states, std::vector< std::list<int> > &valid_positions);
-    virtual double backwardSum(Matrix &beta, const Sequence &s, int base, std::vector< std::list<int> > &valid_positions);
-    virtual void posteriorSum (Matrix & alpha, Matrix &beta, fMatrix &postProbs, const Sequence & s, int base, const GHMMStates & all_states, std::vector< std::list<int> > &valid_positions, double prob, int stateNumber);
+    virtual void findBestPredecessor(Matrix &gamma, Matrix &psi, IntMatrix &psilen, const Sequence &s, int base, const GHMMStates &all_states, std::map<int, std::list<int>> &valid_positions);
+    virtual void forwardSum(Matrix &alpha, const Sequence &s, int base, const GHMMStates &all_states, std::vector<std::list<int>> &valid_positions);
+    virtual double backwardSum(Matrix &beta, const Sequence &s, int base, std::vector<std::list<int>> &valid_positions);
+    virtual void posteriorSum(Matrix &alpha, Matrix &beta, fMatrix &postProbs, const Sequence &s, int base, const GHMMStates &all_states, std::vector<std::list<int>> &valid_positions, double prob, int stateNumber);
 
-    virtual void choosePredecessor (Matrix & alpha, int base, int & state, int & position , const GHMMStates & all_states);
+    virtual void choosePredecessor(Matrix &alpha, int base, int &state, int &position, const GHMMStates &all_states);
 
   protected:
     ProbabilisticModelPtr _observation;
@@ -124,64 +124,62 @@ namespace tops {
     std::string _observationModelName;
   };
   //! GHMM signal states
-  class DLLEXPORT GHMMSignalState: public GHMMState {
+  class DLLEXPORT GHMMSignalState : public GHMMState
+  {
   public:
-    GHMMSignalState() ;
+    GHMMSignalState();
     GHMMSignalState(ProbabilisticModelPtr observation,
-                    DiscreteIIDModelPtr transition, SymbolPtr name) :
-      GHMMState(observation, transition, name) {};
+                    DiscreteIIDModelPtr transition, SymbolPtr name) : GHMMState(observation, transition, name) {};
 
-    virtual int size() const ;
+    virtual int size() const;
     virtual void setSize(int s);
-    virtual int chooseDuration() const ;
-    virtual double getThreshold() const ;
-    virtual void setThreshold(double threshold) ;
-    virtual double duration_probability(int l) const ;
-    virtual std::string str() const ;
-    virtual bool isGeometricDuration() const ;
+    virtual int chooseDuration() const;
+    virtual double getThreshold() const;
+    virtual void setThreshold(double threshold);
+    virtual double duration_probability(int l) const;
+    virtual std::string str() const;
+    virtual bool isGeometricDuration() const;
 
     virtual ProbabilisticModelParameters parameters() const;
-    virtual void fixTransitionDistribution () const ;
-      virtual void findBestPredecessor (Matrix & gamma, Matrix &psi, IntMatrix &psilen, const Sequence & s, int base, const GHMMStates & all_states, std::map < int, std::list<int> >  & valid_positions );
-      virtual void forwardSum (Matrix & alpha, const Sequence & s, int base, const GHMMStates & all_states, std::vector< std::list<int> > &valid_positions);
-    virtual double backwardSum(Matrix &beta, const Sequence &s, int base, std::vector< std::list<int> > &valid_positions);
-    virtual void posteriorSum (Matrix & alpha, Matrix &beta, fMatrix &postProbs, const Sequence & s, int base, const GHMMStates & all_states, std::vector< std::list<int> > &valid_positions, double prob, int stateNumber);
+    virtual void fixTransitionDistribution() const;
+    virtual void findBestPredecessor(Matrix &gamma, Matrix &psi, IntMatrix &psilen, const Sequence &s, int base, const GHMMStates &all_states, std::map<int, std::list<int>> &valid_positions);
+    virtual void forwardSum(Matrix &alpha, const Sequence &s, int base, const GHMMStates &all_states, std::vector<std::list<int>> &valid_positions);
+    virtual double backwardSum(Matrix &beta, const Sequence &s, int base, std::vector<std::list<int>> &valid_positions);
+    virtual void posteriorSum(Matrix &alpha, Matrix &beta, fMatrix &postProbs, const Sequence &s, int base, const GHMMStates &all_states, std::vector<std::list<int>> &valid_positions, double prob, int stateNumber);
 
-      virtual void choosePredecessor (Matrix & alpha, int base, int & state, int & position, const GHMMStates & all_states);
+    virtual void choosePredecessor(Matrix &alpha, int base, int &state, int &position, const GHMMStates &all_states);
 
   private:
     int _size;
     double _threshold;
-
   };
   //! GHMM Explicit duration state
-  class DLLEXPORT GHMMExplicitDurationState: public GHMMState {
+  class DLLEXPORT GHMMExplicitDurationState : public GHMMState
+  {
   public:
-    virtual ~GHMMExplicitDurationState() ;
+    virtual ~GHMMExplicitDurationState();
 
-    GHMMExplicitDurationState() ;
+    GHMMExplicitDurationState();
 
     GHMMExplicitDurationState(ProbabilisticModelPtr observation,
-                              DiscreteIIDModelPtr transition, SymbolPtr name) :
-      GHMMState(observation, transition, name) {};
-      virtual void findBestPredecessor (Matrix & gamma, Matrix &psi, IntMatrix &psilen, const Sequence & s, int base, const GHMMStates & all_states, std::map < int, std::list<int> >  & valid_positions );
-      virtual void forwardSum (Matrix & alpha, const Sequence & s, int base, const GHMMStates & all_states, std::vector< std::list<int> > &valid_positions);
-    virtual double backwardSum(Matrix &beta, const Sequence &s, int base, std::vector< std::list<int> > &valid_positions);
-    virtual void posteriorSum (Matrix & alpha, Matrix &beta, fMatrix &postProbs, const Sequence & s, int base, const GHMMStates & all_states, std::vector< std::list<int> > &valid_positions, double prob, int stateNumber);
+                              DiscreteIIDModelPtr transition, SymbolPtr name) : GHMMState(observation, transition, name) {};
+    virtual void findBestPredecessor(Matrix &gamma, Matrix &psi, IntMatrix &psilen, const Sequence &s, int base, const GHMMStates &all_states, std::map<int, std::list<int>> &valid_positions);
+    virtual void forwardSum(Matrix &alpha, const Sequence &s, int base, const GHMMStates &all_states, std::vector<std::list<int>> &valid_positions);
+    virtual double backwardSum(Matrix &beta, const Sequence &s, int base, std::vector<std::list<int>> &valid_positions);
+    virtual void posteriorSum(Matrix &alpha, Matrix &beta, fMatrix &postProbs, const Sequence &s, int base, const GHMMStates &all_states, std::vector<std::list<int>> &valid_positions, double prob, int stateNumber);
 
-      virtual void choosePredecessor (Matrix & alpha, int base, int & state, int & position, const GHMMStates & all_states);
+    virtual void choosePredecessor(Matrix &alpha, int base, int &state, int &position, const GHMMStates &all_states);
 
-
-    virtual void setDuration(ProbabilisticModelPtr d) ;
-    virtual ProbabilisticModelPtr duration() const ;
-    virtual int chooseDuration() const ;
-    virtual bool isGeometricDuration() const ;
-    virtual double duration_probability(int l) const ;
-    virtual std::string str() const ;
+    virtual void setDuration(ProbabilisticModelPtr d);
+    virtual ProbabilisticModelPtr duration() const;
+    virtual int chooseDuration() const;
+    virtual bool isGeometricDuration() const;
+    virtual double duration_probability(int l) const;
+    virtual std::string str() const;
 
     virtual void durationModelName(std::string name);
-    virtual std::string durationModelName() const ;
-    virtual void fixTransitionDistribution () const;
+    virtual std::string durationModelName() const;
+    virtual void fixTransitionDistribution() const;
 
     virtual ProbabilisticModelParameters parameters() const;
 
@@ -191,11 +189,9 @@ namespace tops {
     int _number_of_phases;
   };
 
-
   typedef boost::shared_ptr<GHMMSignalState> GHMMSignalStatePtr;
   typedef boost::shared_ptr<GHMMExplicitDurationState>
-  GHMMExplicitDurationStatePtr;
-
+      GHMMExplicitDurationStatePtr;
 
   typedef std::vector<GHMMSignalStatePtr> GHMMSignalStates;
   typedef std::vector<GHMMExplicitDurationStatePtr> GHMMExplicitDurationStates;

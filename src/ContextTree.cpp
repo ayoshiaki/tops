@@ -2,7 +2,7 @@
  *       ContextTree.cpp
  *
  *       Copyright 2011 Andre Yoshiaki Kashiwabara <akashiwabara@usp.br>
- *                      Ígor Bonadio <ibonadio@ime.usp.br>
+ *                      ï¿½gor Bonadio <ibonadio@ime.usp.br>
  *                      Vitor Onuchic <vitoronuchic@gmail.com>
  *                      Alan Mitchell Durham <aland@usp.br>
  *
@@ -176,8 +176,6 @@ namespace tops
     std::stringstream out;
     return out.str();
   }
-
-
 
   void ContextTree::printTree(ContextTreeNodePtr node, std::stringstream & out) const
   {

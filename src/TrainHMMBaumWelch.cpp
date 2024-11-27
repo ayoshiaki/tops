@@ -36,6 +36,7 @@ namespace tops {
     ProbabilisticModelParameterValuePtr initspecificationpar = parameters.getOptionalParameterValue("initial_specification");
 
     ProbabilisticModelParameterValuePtr trainpar = parameters.getMandatoryParameterValue("training_set");
+    
     ProbabilisticModelParameterValuePtr thrpar = parameters.getOptionalParameterValue("threshold");
     ProbabilisticModelParameterValuePtr maxiterpar = parameters.getOptionalParameterValue("maxiter");
 

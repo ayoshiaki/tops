@@ -88,13 +88,14 @@ int main (int argc, char ** argv)
       SequenceFormatManager::instance()->setFormat(SequenceFormatPtr(new SequenceFormat()));
       SequenceEntry output(model->decodable()->getStateNames());
       std::cin.rdbuf()->pubsetbuf(0, 0); // make it unbuffered
+      
       while(!cin.eof()) {
         cin >> entry;
         if(entry.getSequence().size() == 0)
           continue;
         Matrix v;
         Sequence states;
-        clock_t begin = clock();
+        clock_t begin = clock();        
 
         double score = model->decodable()->viterbi(entry.getSequence(), states, v);
     //    double score = model->decodable()->forward(entry.getSequence(),  v);
@@ -102,7 +103,7 @@ int main (int argc, char ** argv)
         clock_t end = clock();
         std::cerr << "TIME: " << (double)(end - begin)/CLOCKS_PER_SEC << std::endl;
         stringstream new_name;
-        new_name <<     entry.getName() <<  ": " << score;
+        new_name << entry.getName() <<  ": " << score;
         output.setName(new_name.str());
         output.setSequence(states);
         std::cout.rdbuf()->pubsetbuf(0, 0); // make it unbuffered

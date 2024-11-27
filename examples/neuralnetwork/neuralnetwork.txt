@@ -1,8 +1,41 @@
 model_name="NeuralNetworkModel"
-weight={1, 2}
-bias=1
 
-network (
-    convolution((100, 4), 3, 3),
-    
+# layers of the network
+layers = (
+    Conv1d(10, 4, 3, padding=2),
+    Softmax(),
+    MaxPool1d(10),
+    Dropout(0.4),
+    Conv2d(10, 4, (3, 2), padding=(2, 1), stride=(1, 2), dilation=(2, 2)), 
+    MaxPool2d(10, stride=1),
+    Conv3d(10, 4, (3, 1, 4), padding=(3, 2, 1)),
+    Sigmoid(),
+    AvgPool3d((2,2,2), stride=(2,2,2)),
+    Linear(20, 30)
 )
+#layers = (
+#Conv1d(10, 4, kernel_size=3, stride=1, padding=2, padding_mode=0),
+#Softmax(dim=1),
+#MaxPool1d(kernel_size=10, stride=1, padding=0, dilation=1, ceil_mode=0),
+#Dropout(p=0.4, inplace=0),
+#Conv2d(10, 4, kernel_size=(3, 2), stride=(1, 2), padding=(2, 1), dilation=(2, 2), padding_mode=0),
+#MaxPool2d(kernel_size=(10, 10), stride=(1, 1), padding=(0, 0), dilation=(1, 1), ceil_mode=0),
+#Conv3d(10, 4, kernel_size=(3, 1, 4), stride=(1, 1, 1), padding=(3, 2, 1), padding_mode=0),
+#Sigmoid(),
+#AvgPool3d(kernel_size=(2, 2, 2), stride=(2, 2, 2), padding=(0, 0, 0)),
+#Linear(in_features=20, out_features=30, bias=1)
+#)
+
+
+# the net was trained for this sequence length = upstream + downstream
+upstream_length = 301
+downstream_length = 99
+
+# this will be the alphabet for the one_hot encoding procedure
+alphabet=("A", "C", "G", "T")
+
+# this is an optional parameter when loading a previous trained neural network with Torch JitScript
+
+trained_model_file = "../neuralnetwork/acceptor_400_torch.pt"
+#trained_model_file = "../neuralnetwork/imbalanced_acceptor_fold_5_aux_jit.pt"
+#imbalanced_acceptor_d_mel_fold_1_jit_1-4.pt"

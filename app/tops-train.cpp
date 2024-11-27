@@ -51,6 +51,7 @@
 #include "TrainPhasedMarkovChainContextAlgorithm.hpp"
 #include "TrainMaximalDependenceDecomposition.hpp"
 #include "TrainHMMMaximumLikelihood.hpp"
+#include "TrainNeuralNetwork.hpp"
 #include "RemoveSequenceFromModel.hpp"
 #include "SequenceFormat.hpp"
 #include "version.hpp"
@@ -64,7 +65,7 @@ using namespace std;
 using namespace boost::program_options;
 
 int main(int argc, char ** argv) {
-
+        
         options_description desc("Allowed options");
         desc.add_options()
           ("help,h", "produce help message")
@@ -116,7 +117,9 @@ int main(int argc, char ** argv) {
         createModelCommand["SmoothedHistogramBurge"] = SmoothedHistogramBurgePtr(new SmoothedHistogramBurge());
         createModelCommand["DiscreteIIDModel"] = TrainDiscreteIIDModelPtr(new TrainDiscreteIIDModel());
         createModelCommand["MaximalDependenceDecomposition"] = TrainMaximalDependenceDecompositionPtr(new TrainMaximalDependenceDecomposition());
-
+        
+        // training NeuralNetwork
+        createModelCommand["SGDNeuralNetwork"] = TrainNeuralNetworkPtr(new TrainNeuralNetwork());
 
         modelSelectionCommand["BIC"] = BayesianInformationCriteriaPtr(
                         new BayesianInformationCriteria());
@@ -125,6 +128,7 @@ int main(int argc, char ** argv) {
 
         decoratorCommand["RemoveSequence"] = RemoveSequenceFromModelPtr(new RemoveSequenceFromModel());
         try {
+                
                 variables_map vm;
                 store(parse_command_line(argc, argv, desc), vm);
                 notify(vm);
@@ -143,7 +147,7 @@ int main(int argc, char ** argv) {
                   exit(0);
                   return 1;
                 }
-
+                
                 if (vm.count("configuration")) {
                         string file = vm["configuration"].as<string> ();
                         ConfigurationReader readConfig;
@@ -163,8 +167,9 @@ int main(int argc, char ** argv) {
                                 conf.append(line);
                         }
                         input.close();
+                        
                         if (readConfig.load(conf)) {
-
+                                
                                 ProbabilisticModelParameterValuePtr create_model =
                                   (readConfig.parameters())->getMandatoryParameterValue(
                                                                 "training_algorithm");
@@ -181,6 +186,7 @@ int main(int argc, char ** argv) {
                                 }
 
                                 string command = create_model->getString();
+                                
 
                                 ProbabilisticModelCreatorPtr creator;
                                 if (createModelCommand.find(command)
@@ -233,6 +239,7 @@ int main(int argc, char ** argv) {
 
                                 }
                                 clock_t begin = clock();
+                                std::cerr << "[INFO] Creating" << std::endl;
                                 ProbabilisticModelPtr model = creator->create( *(readConfig.parameters()));
                                 clock_t end = clock();
                                 std::cerr << "TIME: " << (double)(end - begin)/CLOCKS_PER_SEC << std::endl;

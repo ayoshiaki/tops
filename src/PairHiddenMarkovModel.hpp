@@ -2,8 +2,8 @@
  *       PairHiddenMarkovModel.hpp
  *
  *       Copyright 2011 Vitor Onuchic <vitoronuchic@gmail.com>
- *                      André Yoshiaki Kashiwabara <akashiwabara@usp.br>
- *                      Ígor Bonádio <ibonadio@ime.usp.br>
+ *                      Andrï¿½ Yoshiaki Kashiwabara <akashiwabara@usp.br>
+ *                      ï¿½gor Bonï¿½dio <ibonadio@ime.usp.br>
  *                      Vitor Onuchic <vitoronuchic@gmail.com>
  *                      Alan Mitchell Durham <aland@usp.br>
  *
@@ -49,7 +49,7 @@
 #include <iterator>
 #include <stdio.h>
 #include <algorithm>
-#include <boost/timer.hpp>
+#include <boost/timer/timer.hpp>
 
 namespace tops{
   class DLLEXPORT PHMMState: public HMMState {

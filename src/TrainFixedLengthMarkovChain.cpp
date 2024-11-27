@@ -66,11 +66,17 @@ ProbabilisticModelPtr TrainFixedLengthMarkovChain::create(
           std::cerr << help() << std::endl;
           exit(-1);
         }
+
+        
+
         AlphabetPtr alphabet = AlphabetPtr(new Alphabet());
         alphabet ->initializeFromVector(alphapar->getStringVector());
         SequenceEntryList sample_set;
         readSequencesFromFile(sample_set, alphabet, trainpar->getString());
         ContextTreePtr tree = ContextTreePtr(new ContextTree(alphabet));
+
+        std::cout << "READY TREE TO TRAIN" << std::endl;
+        //std::cout << tree->str() << std::endl;
 
         if(apriori != NULL ){
           tree->initializeCounter(sample_set, orderpar->getInt(), 0, weights);

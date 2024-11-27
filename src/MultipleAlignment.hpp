@@ -7,7 +7,7 @@
 #include <iostream>
 #include <fstream>
 #include <stack>
-#include <boost/timer.hpp>
+#include <boost/timer/timer.hpp>
 #include "ProbabilisticModel.hpp"
 #include "PairHiddenMarkovModel.hpp"
 #include "SequenceEntry.hpp"

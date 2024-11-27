@@ -47,8 +47,11 @@ namespace tops {
   typedef boost::numeric::ublas::matrix<double> Matrix;
   typedef std::vector <std::string> StringVector;
   typedef std::map <std::string, std::string> StringMap;
+
   class DLLEXPORT ProbabilisticModelParameterValue;
+  
   typedef boost::shared_ptr <ProbabilisticModelParameterValue> ProbabilisticModelParameterValuePtr;
+  
   //! This class registers a set of parameters
   class DLLEXPORT ProbabilisticModelParameters  {
     std::map <std::string, ProbabilisticModelParameterValuePtr> _parameters;
@@ -85,7 +88,7 @@ namespace tops {
     std::map<std::string,std::string> str_map;
     std::string _str;
     torch::Tensor t;
-    torch::nn::Module nn;
+    torch::nn::Sequential nn;
     ProbabilisticModelParameters  _parameters;
   public:
     virtual void setIsRoot(bool root);
@@ -102,7 +105,7 @@ namespace tops {
     virtual int getInt() const;
     virtual double getDouble()  const;
     virtual torch::Tensor getTensor();
-    virtual torch::nn::Module getModule();
+    virtual std::shared_ptr<torch::nn::Sequential> getModule();
     virtual std::string str() const;
   };
 
@@ -185,6 +188,7 @@ namespace tops {
     virtual IntVector & getIntVector()  ;
     virtual std::string str() const;
   };
+
   //! probability table
   class DLLEXPORT DoubleMapParameterValue: public ProbabilisticModelParameterValue {
   private:
@@ -206,6 +210,7 @@ namespace tops {
     virtual std::string str() const;
 
   };
+
   //! double vector parameter value
   class DLLEXPORT DoubleVectorParameterValue: public ProbabilisticModelParameterValue {
   private:
@@ -224,7 +229,7 @@ namespace tops {
 
   };
 
-  //! string vector parameter value
+  //! string map parameter value
   class DLLEXPORT StringMapParameterValue: public ProbabilisticModelParameterValue {
   private:
     std::map<std::string,std::string> _str_map;
@@ -281,19 +286,20 @@ namespace tops {
     virtual std::string str() const;
   };
 
-  //! torch::nn::Module parameter value
+  //! torch::nn::Sequential parameter value
   class DLLEXPORT ModuleParameterValue: public ProbabilisticModelParameterValue {
   private:
-    torch::nn::Module _nn;
+    torch::nn::Sequential _nn;
   public:
     ModuleParameterValue(){}    
-    ModuleParameterValue(torch::nn::Module nn) {
-      _nn = nn;
+    ModuleParameterValue(std::shared_ptr<torch::nn::Sequential> nn_ptr){
+    	//initialize(nn_ptr);
+      _nn = *nn_ptr;
     }
     virtual ~ModuleParameterValue(){}
-    virtual void initialize(torch::nn::Module nn);
+    virtual void initialize(std::shared_ptr<torch::nn::Sequential> nn_ptr);
     virtual std::string parameter_type () const;    
-    virtual torch::nn::Module getModule() const;    
+    virtual std::shared_ptr<torch::nn::Sequential> getModule();  
     virtual std::string str() const;
   };
 

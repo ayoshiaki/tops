@@ -2,7 +2,7 @@
  *       DecodableModel.cpp
  *
  *       Copyright 2011 Andre Yoshiaki Kashiwabara <akashiwabara@usp.br>
- *                      Ígor Bonadio <ibonadio@ime.usp.br>
+ *                      ï¿½gor Bonadio <ibonadio@ime.usp.br>
  *                      Vitor Onuchic <vitoronuchic@gmail.com>
  *                      Alan Mitchell Durham <aland@usp.br>
  *
@@ -82,7 +82,7 @@ namespace tops {
   void DecodableModel::posteriorProbabilities (const Sequence &sequence, fMatrix &probabilities) const{
     return;
   }
-    
+
   float DecodableModel::MEAPred(const Sequence &s, Sequence &path){
     cerr << "This model does not implement MEAPred" << endl;
     exit(-1);

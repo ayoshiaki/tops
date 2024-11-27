@@ -2,7 +2,7 @@
  *       PhasedRunLengthDistribution.hpp
  *
  *       Copyright 2011 Andre Yoshiaki Kashiwabara <akashiwabara@usp.br>
- *                      Ígor Bonadio <ibonadio@ime.usp.br>
+ *                      ï¿½gor Bonadio <ibonadio@ime.usp.br>
  *                      Vitor Onuchic <vitoronuchic@gmail.com>
  *                      Alan Mitchell Durham <aland@usp.br>
  *
@@ -47,7 +47,7 @@ namespace tops {
     virtual double evaluate(const Sequence & s, unsigned int begin, unsigned int end) const;
     virtual double  log_probability_of(int s) const;
     virtual Sequence & choose(Sequence & h, int size) const;
-      virtual int size() const ;
+    virtual int size() const ;
     virtual ProbabilisticModelParameters parameters() const ;
     virtual void initialize(const ProbabilisticModelParameters & p) ;
 

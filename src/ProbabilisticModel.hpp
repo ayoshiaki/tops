@@ -2,7 +2,7 @@
  *       ProbabilisticModel.hpp
  *
  *       Copyright 2011 Andre Yoshiaki Kashiwabara <akashiwabara@usp.br>
- *                      Ígor Bonadio <ibonadio@ime.usp.br>
+ *                      ï¿½gor Bonadio <ibonadio@ime.usp.br>
  *                      Vitor Onuchic <vitoronuchic@gmail.com>
  *                      Alan Mitchell Durham <aland@usp.br>
  *
@@ -216,6 +216,11 @@ namespace tops {
     //! Train baum Welch
     virtual void trainBaumWelch (SequenceList & training_set, int maxiterations, double diff) {
       not_implemented("trainBaumWelch");
+    }
+
+    //! Train SGD Neural Network
+    virtual double trainSGDAlgorithm (SequenceList & training_set, int epochs, int batch_size, double learning_rate) {
+      not_implemented("trainSGDAlgorithm");
     }
 
 

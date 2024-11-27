@@ -92,25 +92,31 @@ int main (int argc, char ** argv)
 
       map<std::string,std::string>::const_iterator it;
       AlphabetPtr alphabet;
-      alphabet = m->alphabet();
+      alphabet = m->alphabet();      
 
       SequenceEntry entry(alphabet);
       while(!cin.eof()) {
-        cin >> entry;
-        if(entry.getSequence().size() == 0)
-          continue;
+        cin >> entry; 
         Sequence s = entry.getSequence();
-        double prob =  m->evaluate(s, 0, s.size() -1, phase);
+        if(s.size() == 0)
+          continue;        
+	//std::cerr << "[TEST] " << entry.getName() << std::endl;
+	double prob =  m->evaluate(s, 0, s.size(), phase);
+        //double prob =  m->evaluatePosition(s, 301, phase); //301-1
 
-#if 0
-  m->initialize_prefix_sum_array(s,0);
-  double prob2 = m->prefix_sum_array_compute(0, s.size()-1,0);
-        std::cout << entry.getName() << "\t"
-            << exp(prob) << " " << exp(prob2) <<std::endl;
+#if 0  
+  //double prob2 = m->prefix_sum_array_compute(0, s.size()-1,0);
+  //double prob2 = m->prefix_sum_array_compute(300,301,0);
+  //double prob3 = m->prefix_sum_array_compute(301,302,0);
+  bool initialize = m->initialize_prefix_sum_array(s);
+  std::cout << entry.getName() << "\t"
+            << "eval:" << exp(prob) << std::endl;
+            //<< "\tprefix300:" << exp(prob2) << "\tprefix301:" << exp(prob3) <<std::endl;
 #else
-        std::cout << entry.getName() << "\t"
+  std::cout << entry.getName() << "\t"
             << prob << std::endl;
 #endif
+      	//std::cerr << "[END TEST]\n\n";
       }
     }
   catch (boost::program_options::invalid_command_line_syntax &e)
@@ -132,6 +138,6 @@ int main (int argc, char ** argv)
         cout << argv[0] << ": ToPS version " << APP_VERSION << std::endl;
         cout << std::endl;
         cout << desc << endl;
-    }
+    } 
   return 0;
 }

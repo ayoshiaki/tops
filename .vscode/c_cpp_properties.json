@@ -6,10 +6,14 @@
                 "${workspaceFolder}/**"
             ],
             "defines": [],
-            "compilerPath": "/usr/bin/clang",
+            "compilerPath": "/usr/bin/g++",
             "cStandard": "c17",
             "cppStandard": "c++14",
-            "intelliSenseMode": "linux-clang-x64"
+            "intelliSenseMode": "linux-clang-x64",
+            "configurationProvider": "ms-vscode.cpptools",
+            "compilerArgs": [
+                "-DCMAKE_PREFIX_PATH=\"/home/waldir/libtorch\""
+            ]
         }
     ],
     "version": 4

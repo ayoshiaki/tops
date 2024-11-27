@@ -1,0 +1,6 @@
+training_algorithm="SGDNeuralNetwork"
+training_set="examples/neuralnetwork/sequence_from_hmm.txt"
+initial_model="examples/neuralnetwork/neuralnetwork.txt"
+epochs=50
+batch_size=64
+# learning_rate=0.01

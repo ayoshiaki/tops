@@ -36,6 +36,8 @@
 
 namespace tops {
   ProbabilisticModelPtr TrainGHMMTransitionsCreator::create(ProbabilisticModelParameters & parameters) const {
+    std::cout << "training GHMM" << std::endl;
+
     ProbabilisticModelParameterValuePtr ghmm_model_par = parameters.getMandatoryParameterValue("ghmm_model");
     GeneralizedHiddenMarkovModelPtr result = GeneralizedHiddenMarkovModelPtr(new GeneralizedHiddenMarkovModel());
 
@@ -47,6 +49,7 @@ namespace tops {
 
     ProbabilisticModelCreatorClient creator;
     std::string ghmm_file_name = ghmm_model_par->getString();
+    
     ProbabilisticModelPtr ghmm = creator.create(ghmm_file_name);
 
     ProbabilisticModelParameters trainFixedMarkovChain;
@@ -55,10 +58,10 @@ namespace tops {
     trainFixedMarkovChain.add("training_set", parameters.getMandatoryParameterValue("training_set"));
     trainFixedMarkovChain.add("pseudo_counts", IntParameterValuePtr(new IntParameterValue(0)));
 
-
     ProbabilisticModelParameters ghmmParameters = ghmm->parameters();
 
     trainFixedMarkovChain.add("alphabet", ghmmParameters.getOptionalParameterValue("state_names"));
+
     TrainFixedLengthMarkovChainPtr markovChainTraining = TrainFixedLengthMarkovChainPtr(new TrainFixedLengthMarkovChain());
     ProbabilisticModelPtr markovChain  = markovChainTraining->create(trainFixedMarkovChain);
     ProbabilisticModelParameters markovChainParameters = markovChain->parameters();
@@ -71,13 +74,12 @@ namespace tops {
 
     for(int from = 0; from < states->size(); from++)
       for(int to = 0; to < states->size(); to++){
-	stringstream aux;
-	aux << states->getSymbol(to)->name() << "|" << states->getSymbol(from)->name();
-	if(!close(0, probs[aux.str()], 1e-10)) 
-	  trans[aux.str()] = probs[aux.str()];
+        stringstream aux;
+        aux << states->getSymbol(to)->name() << "|" << states->getSymbol(from)->name();
+        if(!close(0, probs[aux.str()], 1e-10)) 
+          trans[aux.str()] = probs[aux.str()];
       }
 
-	
     ProbabilisticModelParameterValuePtr probabilities_par = ProbabilisticModelParameterValuePtr(new DoubleMapParameterValue(trans)); 
 
     ghmmParameters.set("transitions", probabilities_par);
